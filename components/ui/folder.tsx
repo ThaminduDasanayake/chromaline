@@ -148,16 +148,18 @@ export function Folder({
       />
 
       {/* 2. Top Header Divider Line below the tab */}
-      <line
-        x1="6"
-        y1="19"
-        x2="78"
-        y2="19"
-        stroke={darkOutline}
-        strokeWidth={dividerStrokeWidth}
-        vectorEffect="non-scaling-stroke"
-        strokeLinecap="round"
-      />
+      {showLines && (
+        <line
+          x1="6"
+          y1="19"
+          x2="78"
+          y2="19"
+          stroke={darkOutline}
+          strokeWidth={dividerStrokeWidth}
+          vectorEffect="non-scaling-stroke"
+          strokeLinecap="round"
+        />
+      )}
 
       {/* 3. Four Horizontal Ruled Lines */}
       {showLines &&

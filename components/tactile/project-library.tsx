@@ -225,15 +225,50 @@ export function ProjectLibrary() {
               bodyColor={modalFolder.bodyColor}
               darkOutline={modalFolder.darkOutline}
               lightOutline={modalFolder.lightOutline}
-              borderWidth={1}
+              borderWidth={2}
               folderIndex={activeIndex >= 0 ? activeIndex : 0}
               showLines={false}
               className="h-full w-full"
             >
-              {/* Folder Interior */}
-              <div className="absolute inset-0 flex flex-col justify-between px-[8%] pt-[33%] pb-[7%]">
-                {/* Title & Close Button */}
-                <div className="flex items-start justify-between gap-4">
+              {/* Corner Close Button - Inside the folder */}
+              <button
+                type="button"
+                onClick={() => setModalFolder(null)}
+                className={`absolute top-[17%] right-[7%] z-20 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full transition-all active:scale-95 sm:h-9 sm:w-9 ${
+                  isDark
+                    ? "border border-white/25 bg-black/25 text-white/80 shadow-xs hover:bg-black/45 hover:text-white"
+                    : "border border-black/15 bg-black/10 text-slate-900 shadow-xs hover:bg-black/20 hover:text-slate-950"
+                }`}
+                title="Close (Esc)"
+                aria-label="Close dialog"
+              >
+                <svg
+                  className="h-3.5 w-3.5 sm:h-4 sm:w-4"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <line x1="18" y1="6" x2="6" y2="18" />
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+              </button>
+
+              {/* Folder Interior Content */}
+              <div className="absolute inset-0 flex flex-col justify-between px-[8%] pt-[17%] pb-[7%]">
+                {/* Header: Category + Title */}
+                <div className="pr-12">
+                  {modalFolder.category && (
+                    <div
+                      className={`mb-1 font-mono text-[11px] font-semibold tracking-widest uppercase sm:text-xs ${
+                        isDark ? "text-white/60" : "text-slate-700"
+                      }`}
+                    >
+                      {modalFolder.category}
+                    </div>
+                  )}
                   <h3
                     className={`font-mono text-2xl font-bold tracking-tight sm:text-3xl md:text-4xl ${
                       isDark ? "text-white" : "text-slate-950"
@@ -241,43 +276,33 @@ export function ProjectLibrary() {
                   >
                     {modalFolder.name}
                   </h3>
-
-                  <button
-                    type="button"
-                    onClick={() => setModalFolder(null)}
-                    className={`flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full font-mono text-sm transition-colors ${
-                      isDark
-                        ? "border border-white/20 bg-black/20 text-white/80 hover:bg-black/40 hover:text-white"
-                        : "border border-black/15 bg-black/10 text-slate-800 hover:bg-black/20 hover:text-slate-950"
-                    }`}
-                    title="Close (Esc)"
-                  >
-                    ✕
-                  </button>
                 </div>
 
-                {/* Description */}
-                <p
-                  className={`max-w-xl font-sans text-sm leading-relaxed sm:text-base md:text-lg ${
-                    isDark ? "text-white/85" : "text-slate-800"
-                  }`}
-                >
-                  {modalFolder.description}
-                </p>
-
-                {/* Close Button */}
-                <div className="flex justify-end">
-                  <button
-                    type="button"
-                    onClick={() => setModalFolder(null)}
-                    className={`cursor-pointer rounded-lg px-4 py-2 font-mono text-xs font-medium transition-colors sm:text-sm ${
-                      isDark
-                        ? "border border-white/20 bg-black/25 text-white hover:bg-black/40"
-                        : "border border-black/15 bg-black/10 text-slate-900 hover:bg-black/20"
+                {/* Body: Description */}
+                <div className="my-auto py-3">
+                  <p
+                    className={`max-w-xl font-sans text-sm leading-relaxed sm:text-base md:text-lg ${
+                      isDark ? "text-white/85" : "text-slate-800"
                     }`}
                   >
-                    Close
-                  </button>
+                    {modalFolder.description}
+                  </p>
+                </div>
+
+                {/* Footer: Subtle details & Esc hint */}
+                <div
+                  className={`flex items-center justify-between border-t pt-3 font-mono text-[11px] sm:text-xs ${
+                    isDark ? "border-white/15 text-white/60" : "border-black/10 text-slate-700"
+                  }`}
+                >
+                  <div className="flex items-center gap-2">
+                    <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500" />
+                    <span>{modalFolder.data?.branch || "main"}</span>
+                    <span>•</span>
+                    <span>{modalFolder.data?.filesCount || 0} files</span>
+                  </div>
+
+                  <span className="hidden opacity-75 sm:inline">Press Esc to close</span>
                 </div>
               </div>
             </Folder>
