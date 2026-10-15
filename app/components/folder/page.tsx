@@ -126,7 +126,7 @@ export default function FolderPage() {
   const activeColor = COLOR_PRESETS[selectedColorIdx];
 
   return (
-    <div className="min-h-screen bg-[#FAFAFA] font-sans text-slate-900 selection:bg-slate-200">
+    <div className="flex min-h-screen flex-col bg-[#FAFAFA] font-sans text-slate-900 selection:bg-slate-200">
       {/* Top Header Navbar */}
       <header className="sticky top-0 z-40 flex h-14 items-center justify-between border-b border-slate-200/80 bg-white/90 px-6 backdrop-blur-md md:px-12">
         <div className="flex items-center gap-3">
@@ -162,7 +162,7 @@ export default function FolderPage() {
       </header>
 
       {/* Main Container */}
-      <main className="mx-auto max-w-4xl px-4 py-8 sm:px-6 md:px-8 md:py-12">
+      <main className="mx-auto w-full max-w-4xl flex-1 px-4 py-8 sm:px-6 md:px-8 md:py-12">
         {/* Back Link */}
         <Link
           href="/"
@@ -456,7 +456,7 @@ export default function FolderPage() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-slate-200/80 bg-white px-6 py-8 text-center font-mono text-xs text-slate-400">
+      <footer className="mt-auto border-t border-slate-200/80 bg-white px-6 py-8 text-center font-mono text-xs text-slate-400">
         <p>Chromaline · Vibrant line-art components for modern React.</p>
       </footer>
     </div>

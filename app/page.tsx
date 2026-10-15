@@ -20,7 +20,7 @@ export default function ChromalineHomePage() {
   const [selectedFolderTab, setSelectedFolderTab] = useState<"left" | "center" | "right">("center");
 
   return (
-    <div className="min-h-screen bg-[#FAFAFA] font-sans text-slate-900 selection:bg-slate-200">
+    <div className="flex min-h-screen flex-col bg-[#FAFAFA] font-sans text-slate-900 selection:bg-slate-200">
       {/* Top Minimal Navbar */}
       <header className="sticky top-0 z-40 flex h-14 items-center justify-between border-b border-slate-200/80 bg-white/90 px-6 backdrop-blur-md md:px-12">
         <div className="flex items-center gap-2.5">
@@ -57,7 +57,7 @@ export default function ChromalineHomePage() {
       </header>
 
       {/* Main Grid Canvas */}
-      <main className="mx-auto max-w-5xl px-4 py-10 sm:px-6 md:px-8 md:py-16">
+      <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-10 sm:px-6 md:px-8 md:py-16">
         {/* Minimal Section Header */}
         <div className="mb-10 text-center sm:text-left">
           <h1 className="text-2xl font-bold tracking-tight text-slate-950 sm:text-3xl">
@@ -185,7 +185,7 @@ export default function ChromalineHomePage() {
       </main>
 
       {/* Clean Minimal Footer */}
-      <footer className="border-t border-slate-200/80 bg-white px-6 py-8 text-center font-mono text-xs text-slate-400">
+      <footer className="mt-auto border-t border-slate-200/80 bg-white px-6 py-8 text-center font-mono text-xs text-slate-400">
         <p>Chromaline · Vibrant line-art components for modern React.</p>
       </footer>
     </div>
