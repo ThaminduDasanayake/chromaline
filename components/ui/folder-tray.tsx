@@ -2,12 +2,7 @@
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Riffle } from "@lucasmarkes/hairline/react";
-export {
-  Folder,
-  type FolderProps,
-  TactileSingleFolder,
-  type TactileSingleFolderProps,
-} from "./folder";
+export { Folder, type FolderProps } from "./folder";
 
 export interface FolderItem<T = unknown> {
   id: string;
@@ -51,11 +46,6 @@ export interface FolderTrayProps<T = unknown> {
   intensity?: number;
   className?: string;
 }
-
-// Aliases for compatibility
-export type RolodexProps<T = unknown> = FolderTrayProps<T>;
-export type TactileRolodexProps<T = unknown> = FolderTrayProps<T>;
-export type TactileFolder<T = unknown> = FolderItem<T>;
 
 export function FolderTray<T = unknown>({
   folders,
@@ -166,9 +156,25 @@ export function FolderTray<T = unknown>({
     }
   }, []);
 
-  const handleContainerClick = () => {
-    const targetIdx = lastReportedCard.current !== null ? lastReportedCard.current : selectedIndex;
-    if (folders[targetIdx]) {
+  const handleContainerClick = (e: React.MouseEvent) => {
+    // Only open if clicking on an actual folder card
+    if (lastReportedCard.current === null) {
+      return;
+    }
+
+    const target = e.target as HTMLElement | SVGElement | null;
+    const cardEl = target?.closest?.("[data-card-index]");
+    if (!cardEl) {
+      return;
+    }
+
+    const cardIndexAttr = cardEl.getAttribute("data-card-index");
+    const targetIdx =
+      cardIndexAttr !== null && cardIndexAttr !== undefined
+        ? parseInt(cardIndexAttr, 10)
+        : lastReportedCard.current;
+
+    if (targetIdx !== null && folders[targetIdx]) {
       setSelectedIndex(targetIdx);
       onSelect?.(folders[targetIdx]);
       onOpen?.(folders[targetIdx]);
@@ -446,11 +452,7 @@ export function FolderTray<T = unknown>({
         onClick={handleContainerClick}
         onMouseLeave={handleContainerLeave}
         className={`h-full w-full ${hoverIndex !== null ? "cursor-pointer" : "cursor-default"}`}
-        title={
-          hoverIndex !== null
-            ? `Click to open ${displayedFolder?.name}`
-            : "Hover and click any folder"
-        }
+        title={hoverIndex !== null ? `Click to open ${displayedFolder?.name}` : undefined}
       >
         <Riffle
           intensity={intensity}
@@ -462,7 +464,3 @@ export function FolderTray<T = unknown>({
     </div>
   );
 }
-
-// Compatibility aliases
-export const Rolodex = FolderTray;
-export const TactileRolodex = FolderTray;

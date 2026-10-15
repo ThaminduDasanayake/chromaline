@@ -11,9 +11,6 @@ export interface FolderProps {
   className?: string;
 }
 
-// Backwards compatibility alias
-export type TactileSingleFolderProps = FolderProps;
-
 // Geometric constants matching @lucasmarkes/hairline riffle-geometry.ts
 const W = 84;
 const H = 54;
@@ -160,6 +157,3 @@ export function Folder({
     </svg>
   );
 }
-
-// Backwards compatibility alias
-export const TactileSingleFolder = Folder;

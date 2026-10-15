@@ -87,7 +87,7 @@ const WORKSPACE_FOLDERS: FolderItem<WorkspaceData>[] = [
       status: "synced",
       updated: "4h ago",
       filesCount: 312,
-      files: ["app/page.tsx", "app/layout.tsx", "components/ui/tactile-rolodex.tsx"],
+      files: ["app/page.tsx", "app/layout.tsx", "components/ui/folder-tray.tsx"],
       envVars: [
         { key: "NEXT_PUBLIC_API_URL", value: "https://api.internal.corp" },
         { key: "ANALYTICS_ID", value: "agt_prod_77192" },

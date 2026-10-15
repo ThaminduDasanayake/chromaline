@@ -78,20 +78,6 @@ function buildRegistry() {
     JSON.stringify(singleFolderRegistryItem, null, 2)
   );
 
-  // Compatibility aliases
-  fs.writeFileSync(
-    path.join(outDir, "rolodex.json"),
-    JSON.stringify({ ...trayRegistryItem, name: "rolodex" }, null, 2)
-  );
-  fs.writeFileSync(
-    path.join(outDir, "tactile-rolodex.json"),
-    JSON.stringify({ ...trayRegistryItem, name: "tactile-rolodex" }, null, 2)
-  );
-  fs.writeFileSync(
-    path.join(outDir, "tactile-folder.json"),
-    JSON.stringify({ ...singleFolderRegistryItem, name: "tactile-folder" }, null, 2)
-  );
-
   const indexRegistry = {
     $schema: "https://ui.shadcn.com/schema/registry.json",
     name: "chromaline",

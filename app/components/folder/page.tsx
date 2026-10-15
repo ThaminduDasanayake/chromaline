@@ -330,7 +330,7 @@ export default function FolderPage() {
                 </span>
                 <button
                   type="button"
-                  onClick={() => copyToClipboard("components/ui/tactile-folder.tsx", "manual-dep")}
+                  onClick={() => copyToClipboard("components/ui/folder.tsx", "manual-dep")}
                   className="cursor-pointer rounded p-1 text-slate-500 hover:bg-slate-100 hover:text-slate-900"
                 >
                   {copiedKey === "manual-dep" ? (
@@ -343,7 +343,7 @@ export default function FolderPage() {
               <div className="font-sans text-[11px] text-slate-500">
                 Zero dependencies required. Copy the standalone component file to{" "}
                 <code className="rounded bg-slate-100 px-1 py-0.5 font-mono text-slate-800">
-                  components/ui/tactile-folder.tsx
+                  components/ui/folder.tsx
                 </code>
                 .
               </div>
