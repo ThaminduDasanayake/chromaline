@@ -1,90 +1,82 @@
 "use client";
 
-import { useState } from "react";
-import { DocsSidebar } from "@/components/docs-sidebar";
+import React, { useState } from "react";
 import { ProjectLibrary } from "@/components/tactile/project-library";
+import { TactileSingleFolder } from "@/components/ui/tactile-folder";
 
 type PackageManager = "pnpm" | "npm" | "yarn" | "bun";
 
-const INSTALL_COMMANDS: Record<PackageManager, string> = {
-  pnpm: "pnpm dlx shadcn@latest add http://localhost:3000/r/tactile-rolodex.json",
-  npm: "npx shadcn@latest add http://localhost:3000/r/tactile-rolodex.json",
-  yarn: "npx shadcn@latest add http://localhost:3000/r/tactile-rolodex.json",
-  bun: "bunx --bun shadcn@latest add http://localhost:3000/r/tactile-rolodex.json",
-};
+interface ComponentCardItem {
+  id: string;
+  title: string;
+  description: string;
+  badge?: string;
+  installCommand: string;
+  codeSnippet: string;
+  registryUrl: string;
+}
 
-const CODE_PREVIEW_LINES = [
-  { num: 1, parts: [{ text: "import", cls: "text-[#f43f5e]" }, { text: " { " }, { text: "TactileRolodex", cls: "text-slate-900 font-semibold" }, { text: " } " }, { text: "from", cls: "text-[#f43f5e]" }, { text: " \"@/components/ui/tactile-rolodex\"", cls: "text-[#0284c7]" }] },
-  { num: 2, parts: [{ text: "" }] },
-  { num: 3, parts: [{ text: "export default function", cls: "text-[#f43f5e]" }, { text: " Workspace() {" }] },
-  { num: 4, parts: [{ text: "  const", cls: "text-[#f43f5e]" }, { text: " folders = [" }] },
-  { num: 5, parts: [{ text: "    { " }, { text: "id", cls: "text-purple-600" }, { text: ": " }, { text: "\"p1\"", cls: "text-[#0284c7]" }, { text: ", " }, { text: "name", cls: "text-purple-600" }, { text: ": " }, { text: "\"Project 1\"", cls: "text-[#0284c7]" }, { text: ", " }, { text: "bodyColor", cls: "text-purple-600" }, { text: ": " }, { text: "\"#E54F10\"", cls: "text-[#0284c7]" }, { text: ", " }, { text: "darkOutline", cls: "text-purple-600" }, { text: ": " }, { text: "\"#7C2D12\"", cls: "text-[#0284c7]" }, { text: ", " }, { text: "lightOutline", cls: "text-purple-600" }, { text: ": " }, { text: "\"#FED7AA\"", cls: "text-[#0284c7]" }, { text: " }," }] },
-  { num: 6, parts: [{ text: "    { " }, { text: "id", cls: "text-purple-600" }, { text: ": " }, { text: "\"p2\"", cls: "text-[#0284c7]" }, { text: ", " }, { text: "name", cls: "text-purple-600" }, { text: ": " }, { text: "\"Project 2\"", cls: "text-[#0284c7]" }, { text: ", " }, { text: "bodyColor", cls: "text-purple-600" }, { text: ": " }, { text: "\"#0A90D2\"", cls: "text-[#0284c7]" }, { text: ", " }, { text: "darkOutline", cls: "text-purple-600" }, { text: ": " }, { text: "\"#075985\"", cls: "text-[#0284c7]" }, { text: ", " }, { text: "lightOutline", cls: "text-purple-600" }, { text: ": " }, { text: "\"#BAE6FD\"", cls: "text-[#0284c7]" }, { text: " }," }] },
-  { num: 7, parts: [{ text: "    { " }, { text: "id", cls: "text-purple-600" }, { text: ": " }, { text: "\"p3\"", cls: "text-[#0284c7]" }, { text: ", " }, { text: "name", cls: "text-purple-600" }, { text: ": " }, { text: "\"Project 3\"", cls: "text-[#0284c7]" }, { text: ", " }, { text: "bodyColor", cls: "text-purple-600" }, { text: ": " }, { text: "\"#53F399\"", cls: "text-[#0284c7]" }, { text: ", " }, { text: "darkOutline", cls: "text-purple-600" }, { text: ": " }, { text: "\"#047857\"", cls: "text-[#0284c7]" }, { text: ", " }, { text: "lightOutline", cls: "text-purple-600" }, { text: ": " }, { text: "\"#D1FAE5\"", cls: "text-[#0284c7]" }, { text: " }," }] },
-  { num: 8, parts: [{ text: "  ];" }] },
-  { num: 9, parts: [{ text: "" }] },
-  { num: 10, parts: [{ text: "  return", cls: "text-[#f43f5e]" }, { text: " (" }] },
-  { num: 11, parts: [{ text: "    <", cls: "text-slate-500" }, { text: "TactileRolodex", cls: "text-[#16a34a] font-semibold" }] },
-  { num: 12, parts: [{ text: "      " }, { text: "folders", cls: "text-purple-600" }, { text: "={folders}" }] },
-  { num: 13, parts: [{ text: "      " }, { text: "onOpen", cls: "text-purple-600" }, { text: "={(folder) => console.log(folder)}" }] },
-  { num: 14, parts: [{ text: "    />", cls: "text-slate-500" }] },
-  { num: 15, parts: [{ text: "  );" }] },
-  { num: 16, parts: [{ text: "}" }] },
-];
+const COMPONENTS: ComponentCardItem[] = [
+  {
+    id: "rolodex",
+    title: "Rolodex Tray",
+    description: "An interactive 3D isometric tray of folders with kinematic lean physics and solid colorways.",
+    badge: "Interactive 3D",
+    installCommand: "npx shadcn@latest add http://localhost:3000/r/tactile-rolodex.json",
+    registryUrl: "/r/tactile-rolodex.json",
+    codeSnippet: `import { TactileRolodex } from "@/components/ui/tactile-rolodex";
 
-const CODE_PREVIEW_TEXT = `import { TactileRolodex } from "@/components/ui/tactile-rolodex";
-
-export default function Workspace() {
+export default function Example() {
   const folders = [
-    { id: "p1", name: "Project 1", bodyColor: "#E54F10", darkOutline: "#7C2D12", lightOutline: "#FED7AA" },
-    { id: "p2", name: "Project 2", bodyColor: "#0A90D2", darkOutline: "#075985", lightOutline: "#BAE6FD" },
-    { id: "p3", name: "Project 3", bodyColor: "#53F399", darkOutline: "#047857", lightOutline: "#D1FAE5" },
+    { id: "1", name: "Project 1", bodyColor: "#E54F10", darkOutline: "#7C2D12", lightOutline: "#FED7AA" },
+    { id: "2", name: "Project 2", bodyColor: "#0A90D2", darkOutline: "#075985", lightOutline: "#BAE6FD" },
+    { id: "3", name: "Project 3", bodyColor: "#53F399", darkOutline: "#047857", lightOutline: "#D1FAE5" },
   ];
 
   return (
     <TactileRolodex
       folders={folders}
-      onOpen={(folder) => console.log(folder)}
+      onOpen={(folder) => console.log("Open folder", folder.name)}
     />
   );
-}`;
+}`,
+  },
+  {
+    id: "folder",
+    title: "Tactile Folder",
+    description: "A standalone forward-facing folder card with tab fillets, ruled lines, and punch dots.",
+    badge: "2D Vector",
+    installCommand: "npx shadcn@latest add http://localhost:3000/r/tactile-folder.json",
+    registryUrl: "/r/tactile-folder.json",
+    codeSnippet: `import { TactileSingleFolder } from "@/components/ui/tactile-folder";
 
-const USAGE_IMPORT_LINES = [
-  { num: 1, parts: [{ text: "import", cls: "text-[#f43f5e]" }, { text: " {" }] },
-  { num: 2, parts: [{ text: "  TactileRolodex,", cls: "text-slate-900 font-semibold" }] },
-  { num: 3, parts: [{ text: "  TactileFolder,", cls: "text-slate-900 font-semibold" }] },
-  { num: 4, parts: [{ text: "} " }, { text: "from", cls: "text-[#f43f5e]" }, { text: " \"@/components/ui/tactile-rolodex\"", cls: "text-[#0284c7]" }] },
+export default function Example() {
+  return (
+    <TactileSingleFolder
+      bodyColor="#E54F10"
+      darkOutline="#7C2D12"
+      lightOutline="#FED7AA"
+      tabPosition="center"
+      className="w-52 h-auto"
+    />
+  );
+}`,
+  },
 ];
 
-const USAGE_IMPORT_TEXT = `import {
-  TactileRolodex,
-  TactileFolder,
-} from "@/components/ui/tactile-rolodex"`;
-
-const USAGE_JSX_LINES = [
-  { num: 1, parts: [{ text: "<", cls: "text-slate-500" }, { text: "TactileRolodex", cls: "text-[#16a34a] font-semibold" }] },
-  { num: 2, parts: [{ text: "  " }, { text: "folders", cls: "text-purple-600" }, { text: "={[" }] },
-  { num: 3, parts: [{ text: "    { " }, { text: "id", cls: "text-purple-600" }, { text: ": " }, { text: "\"1\"", cls: "text-[#0284c7]" }, { text: ", " }, { text: "name", cls: "text-purple-600" }, { text: ": " }, { text: "\"Project 1\"", cls: "text-[#0284c7]" }, { text: ", " }, { text: "bodyColor", cls: "text-purple-600" }, { text: ": " }, { text: "\"#E54F10\"", cls: "text-[#0284c7]" }, { text: ", " }, { text: "darkOutline", cls: "text-purple-600" }, { text: ": " }, { text: "\"#7C2D12\"", cls: "text-[#0284c7]" }, { text: ", " }, { text: "lightOutline", cls: "text-purple-600" }, { text: ": " }, { text: "\"#FED7AA\"", cls: "text-[#0284c7]" }, { text: " }," }] },
-  { num: 4, parts: [{ text: "    { " }, { text: "id", cls: "text-purple-600" }, { text: ": " }, { text: "\"2\"", cls: "text-[#0284c7]" }, { text: ", " }, { text: "name", cls: "text-purple-600" }, { text: ": " }, { text: "\"Project 2\"", cls: "text-[#0284c7]" }, { text: ", " }, { text: "bodyColor", cls: "text-purple-600" }, { text: ": " }, { text: "\"#0A90D2\"", cls: "text-[#0284c7]" }, { text: ", " }, { text: "darkOutline", cls: "text-purple-600" }, { text: ": " }, { text: "\"#075985\"", cls: "text-[#0284c7]" }, { text: ", " }, { text: "lightOutline", cls: "text-purple-600" }, { text: ": " }, { text: "\"#BAE6FD\"", cls: "text-[#0284c7]" }, { text: " }," }] },
-  { num: 5, parts: [{ text: "    { " }, { text: "id", cls: "text-purple-600" }, { text: ": " }, { text: "\"3\"", cls: "text-[#0284c7]" }, { text: ", " }, { text: "name", cls: "text-purple-600" }, { text: ": " }, { text: "\"Project 3\"", cls: "text-[#0284c7]" }, { text: ", " }, { text: "bodyColor", cls: "text-purple-600" }, { text: ": " }, { text: "\"#53F399\"", cls: "text-[#0284c7]" }, { text: ", " }, { text: "darkOutline", cls: "text-purple-600" }, { text: ": " }, { text: "\"#047857\"", cls: "text-[#0284c7]" }, { text: ", " }, { text: "lightOutline", cls: "text-purple-600" }, { text: ": " }, { text: "\"#D1FAE5\"", cls: "text-[#0284c7]" }, { text: " }," }] },
-  { num: 6, parts: [{ text: "  ]}" }] },
-  { num: 7, parts: [{ text: "  " }, { text: "onOpen", cls: "text-purple-600" }, { text: "={(folder) => console.log(\"Open folder\", folder.name)}" }] },
-  { num: 8, parts: [{ text: "/>", cls: "text-slate-500" }] },
+const FOLDER_COLOR_PRESETS = [
+  { name: "Orange", body: "#E54F10", dark: "#7C2D12", light: "#FED7AA" },
+  { name: "Electric Blue", body: "#0A90D2", dark: "#075985", light: "#BAE6FD" },
+  { name: "Mint Green", body: "#53F399", dark: "#047857", light: "#D1FAE5" },
+  { name: "Violet", body: "#8B5CF6", dark: "#4C1D95", light: "#DDD6FE" },
+  { name: "Amber", body: "#F59E0B", dark: "#92400E", light: "#FEF08A" },
+  { name: "Rose", body: "#F43F5E", dark: "#881337", light: "#FECDD3" },
 ];
 
-const USAGE_JSX_TEXT = `<TactileRolodex
-  folders={[
-    { id: "1", name: "Project 1", bodyColor: "#E54F10", darkOutline: "#7C2D12", lightOutline: "#FED7AA" },
-    { id: "2", name: "Project 2", bodyColor: "#0A90D2", darkOutline: "#075985", lightOutline: "#BAE6FD" },
-    { id: "3", name: "Project 3", bodyColor: "#53F399", darkOutline: "#047857", lightOutline: "#D1FAE5" },
-  ]}
-  onOpen={(folder) => console.log("Open folder", folder.name)}
-/>`;
-
-export default function ComponentLibraryPage() {
-  const [activeSection, setActiveSection] = useState<string>("rolodex");
-  const [isCodeExpanded, setIsCodeExpanded] = useState(false);
-  const [installTab, setInstallTab] = useState<"command" | "manual">("command");
+export default function ChromalinePage() {
+  const [selectedFolderColor, setSelectedFolderColor] = useState(0);
+  const [selectedFolderTab, setSelectedFolderTab] = useState<"left" | "center" | "right">("center");
+  const [detailModalItem, setDetailModalItem] = useState<ComponentCardItem | null>(null);
   const [packageManager, setPackageManager] = useState<PackageManager>("pnpm");
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
 
@@ -94,30 +86,28 @@ export default function ComponentLibraryPage() {
     setTimeout(() => setCopiedKey(null), 2000);
   };
 
-  const handleSelectSection = (id: string) => {
-    setActiveSection(id);
-    const elem = document.getElementById(id);
-    if (elem) {
-      elem.scrollIntoView({ behavior: "smooth" });
-    }
+  const getCliCommand = (cmd: string, pm: PackageManager) => {
+    if (pm === "pnpm") return cmd.replace("npx", "pnpm dlx");
+    if (pm === "bun") return cmd.replace("npx", "bunx --bun");
+    return cmd;
   };
 
   return (
-    <div className="min-h-screen bg-white text-slate-900 font-sans selection:bg-slate-200">
-      {/* Top Navbar */}
-      <header className="sticky top-0 z-40 h-14 border-b border-slate-200 bg-white/95 backdrop-blur-md px-6 md:px-12 flex items-center justify-between">
-        <div className="flex items-center gap-3">
+    <div className="min-h-screen bg-[#FAFAFA] text-slate-900 font-sans selection:bg-slate-200">
+      {/* Top Minimal Navbar */}
+      <header className="sticky top-0 z-40 h-14 border-b border-slate-200/80 bg-white/90 backdrop-blur-md px-6 md:px-12 flex items-center justify-between">
+        <div className="flex items-center gap-2.5">
           <span className="font-bold text-sm tracking-tight text-slate-950 font-mono">
             Chromaline
           </span>
-          <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-100 text-slate-600 border border-slate-200 font-medium">
+          <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 font-medium">
             v0.1.0
           </span>
         </div>
 
         <div className="flex items-center gap-3">
           <a
-            href="/r/tactile-rolodex.json"
+            href="/r/index.json"
             target="_blank"
             rel="noopener noreferrer"
             className="text-xs font-mono px-2.5 py-1 rounded-md text-slate-600 hover:text-slate-900 transition-colors"
@@ -136,357 +126,259 @@ export default function ComponentLibraryPage() {
         </div>
       </header>
 
-      {/* Main Layout */}
-      <div className="max-w-5xl mx-auto px-6 md:px-12 py-10 flex gap-12 items-start bg-white">
-        {/* Left Sidebar */}
-        <DocsSidebar
-          activeSection={activeSection}
-          onSelectSection={handleSelectSection}
-        />
+      {/* Main Grid Canvas */}
+      <main className="max-w-5xl mx-auto px-4 sm:px-6 md:px-8 py-10 md:py-16">
+        {/* Minimal Section Header */}
+        <div className="mb-10 text-center sm:text-left">
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-950">
+            Components
+          </h1>
+          <p className="text-xs sm:text-sm text-slate-500 mt-1">
+            Physical line-art components built with vector mathematics, solid colorways, and pointer physics.
+          </p>
+        </div>
 
-        {/* Content Column */}
-        <main className="flex-1 min-w-0 max-w-3xl bg-white pb-24">
-          {/* Component Header */}
-          <header className="mb-6">
-            <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-slate-950">
-              Rolodex
-            </h1>
-            <p className="text-sm text-slate-600 mt-2 leading-relaxed">
-              Interactive 3D isometric folder rolodex with custom solid colors and click-to-open callbacks.
-            </p>
-          </header>
+        {/* 2-Column Component Showcase Grid (Matching user reference layout) */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {/* Card 1: Rolodex Tray */}
+          <div className="rounded-2xl border border-slate-200/90 bg-white shadow-2xs hover:border-slate-300 transition-all overflow-hidden flex flex-col justify-between group">
+            {/* Interactive Preview Canvas */}
+            <div className="h-80 sm:h-88 bg-[#F9FAFB] flex flex-col items-center justify-center p-6 relative overflow-hidden">
+              <ProjectLibrary />
+            </div>
 
-          {/* 1. COMPONENT PREVIEW WITH BASIC CODE UNDERNEATH (SCREENSHOT 1) */}
-          <section id="rolodex" className="mb-12 scroll-mt-20">
-            <div className="rounded-2xl border border-slate-200 overflow-hidden bg-white shadow-2xs">
-              {/* Component Preview Container */}
-              <div className="p-8 md:p-12 bg-white flex flex-col items-center justify-center min-h-[380px]">
-                <ProjectLibrary />
+            {/* Bottom Card Footer */}
+            <div
+              onClick={() => setDetailModalItem(COMPONENTS[0])}
+              className="p-5 sm:p-6 bg-white border-t border-slate-100 cursor-pointer"
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <h2 className="text-sm sm:text-base font-semibold text-slate-900 group-hover:text-slate-950">
+                    {COMPONENTS[0].title}
+                  </h2>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-100 text-slate-600 border border-slate-200 font-medium">
+                    {COMPONENTS[0].badge}
+                  </span>
+                </div>
+                <span className="text-slate-400 group-hover:text-slate-950 group-hover:translate-x-0.5 transition-all text-base font-mono">
+                  &rarr;
+                </span>
+              </div>
+              <p className="text-xs text-slate-500 mt-1.5 leading-relaxed">
+                {COMPONENTS[0].description}
+              </p>
+            </div>
+          </div>
+
+          {/* Card 2: Tactile Folder */}
+          <div className="rounded-2xl border border-slate-200/90 bg-white shadow-2xs hover:border-slate-300 transition-all overflow-hidden flex flex-col justify-between group">
+            {/* Interactive Preview Canvas */}
+            <div className="h-80 sm:h-88 bg-[#F9FAFB] flex flex-col items-center justify-center p-6 relative">
+              <TactileSingleFolder
+                bodyColor={FOLDER_COLOR_PRESETS[selectedFolderColor].body}
+                darkOutline={FOLDER_COLOR_PRESETS[selectedFolderColor].dark}
+                lightOutline={FOLDER_COLOR_PRESETS[selectedFolderColor].light}
+                tabPosition={selectedFolderTab}
+                className="w-52 h-auto drop-shadow-sm transition-all"
+              />
+
+              {/* Quick Interactive Color & Tab Controls */}
+              <div className="absolute bottom-4 inset-x-0 flex items-center justify-center gap-2">
+                <div className="flex items-center gap-2 bg-white/95 backdrop-blur-xs px-3 py-1.5 rounded-full border border-slate-200/90 shadow-2xs">
+                  {/* Color Swatches */}
+                  <div className="flex items-center gap-1.5 pr-2 border-r border-slate-200">
+                    {FOLDER_COLOR_PRESETS.map((preset, idx) => (
+                      <button
+                        key={preset.name}
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSelectedFolderColor(idx);
+                        }}
+                        className={`cursor-pointer w-4 h-4 rounded-full border transition-all ${
+                          selectedFolderColor === idx
+                            ? "scale-110 ring-2 ring-slate-900"
+                            : "opacity-80 hover:opacity-100"
+                        }`}
+                        style={{ backgroundColor: preset.body, borderColor: preset.dark }}
+                        title={preset.name}
+                      />
+                    ))}
+                  </div>
+
+                  {/* Tab Position Switcher */}
+                  <div className="flex items-center gap-1 text-[10px] font-mono">
+                    {(["left", "center", "right"] as const).map((pos) => (
+                      <button
+                        key={pos}
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSelectedFolderTab(pos);
+                        }}
+                        className={`cursor-pointer px-2 py-0.5 rounded capitalize transition-all ${
+                          selectedFolderTab === pos
+                            ? "bg-slate-900 text-white font-semibold"
+                            : "text-slate-500 hover:text-slate-900"
+                        }`}
+                      >
+                        {pos}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Bottom Card Footer */}
+            <div
+              onClick={() => setDetailModalItem(COMPONENTS[1])}
+              className="p-5 sm:p-6 bg-white border-t border-slate-100 cursor-pointer"
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <h2 className="text-sm sm:text-base font-semibold text-slate-900 group-hover:text-slate-950">
+                    {COMPONENTS[1].title}
+                  </h2>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-100 text-slate-600 border border-slate-200 font-medium">
+                    {COMPONENTS[1].badge}
+                  </span>
+                </div>
+                <span className="text-slate-400 group-hover:text-slate-950 group-hover:translate-x-0.5 transition-all text-base font-mono">
+                  &rarr;
+                </span>
+              </div>
+              <p className="text-xs text-slate-500 mt-1.5 leading-relaxed">
+                {COMPONENTS[1].description}
+              </p>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      {/* COMPONENT INSTALL & CODE MODAL (Opens on click) */}
+      {detailModalItem && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/40 backdrop-blur-xs animate-in fade-in duration-150"
+          onClick={() => setDetailModalItem(null)}
+        >
+          <div
+            className="w-full max-w-xl bg-white rounded-2xl border border-slate-200 shadow-xl overflow-hidden animate-in zoom-in-95 duration-150"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header */}
+            <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
+              <div>
+                <h3 className="text-base font-bold text-slate-950 font-mono flex items-center gap-2">
+                  <span>{detailModalItem.title}</span>
+                  {detailModalItem.badge && (
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-100 text-slate-600 border border-slate-200 font-semibold">
+                      {detailModalItem.badge}
+                    </span>
+                  )}
+                </h3>
+                <p className="text-xs text-slate-500 mt-0.5">{detailModalItem.description}</p>
               </div>
 
-              {/* Code Preview Underneath Component (Screenshot 1 Layout) */}
-              <div className="border-t border-slate-200/90 bg-slate-50/60 p-4 font-mono text-xs relative">
-                <div
-                  className={`transition-all duration-200 overflow-hidden ${
-                    isCodeExpanded ? "max-h-[600px]" : "max-h-20"
-                  }`}
-                >
-                  <div className="space-y-1">
-                    {(isCodeExpanded ? CODE_PREVIEW_LINES : CODE_PREVIEW_LINES.slice(0, 3)).map((line) => (
-                      <div key={line.num} className="flex items-center">
-                        <span className="w-8 shrink-0 text-right pr-4 text-slate-400 select-none text-[11px]">
-                          {line.num}
-                        </span>
-                        <div className="text-slate-800">
-                          {line.parts.map((p, idx) => (
-                            <span key={idx} className={p.cls || "text-slate-800"}>
-                              {p.text}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
+              <button
+                type="button"
+                onClick={() => setDetailModalItem(null)}
+                className="cursor-pointer text-slate-400 hover:text-slate-800 w-7 h-7 rounded-lg hover:bg-slate-100 flex items-center justify-center text-xs font-mono"
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* Modal Body */}
+            <div className="p-6 space-y-5 text-xs font-mono">
+              {/* CLI Command */}
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-slate-600 font-sans font-medium">Install Command</span>
+                  <div className="flex items-center gap-1">
+                    {(["pnpm", "npm", "yarn", "bun"] as PackageManager[]).map((pm) => (
+                      <button
+                        key={pm}
+                        type="button"
+                        onClick={() => setPackageManager(pm)}
+                        className={`cursor-pointer px-2 py-0.5 rounded text-[10px] ${
+                          packageManager === pm
+                            ? "bg-slate-900 text-white font-semibold"
+                            : "bg-slate-100 text-slate-600 hover:text-slate-900"
+                        }`}
+                      >
+                        {pm}
+                      </button>
                     ))}
                   </div>
                 </div>
 
-                {/* Collapsed Fade Overlay & View Code Pill */}
-                {!isCodeExpanded ? (
-                  <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-slate-50/95 via-slate-50/80 to-transparent flex items-center justify-center">
-                    <button
-                      type="button"
-                      onClick={() => setIsCodeExpanded(true)}
-                      className="px-4 py-1.5 rounded-md border border-slate-200 bg-white shadow-xs text-xs font-medium text-slate-800 hover:bg-slate-50 hover:border-slate-300 transition-all cursor-pointer"
-                    >
-                      View Code
-                    </button>
-                  </div>
-                ) : (
-                  <div className="mt-4 pt-3 border-t border-slate-200/70 flex items-center justify-between">
-                    <button
-                      type="button"
-                      onClick={() => copyToClipboard(CODE_PREVIEW_TEXT, "preview-code")}
-                      className="cursor-pointer text-[11px] text-slate-500 hover:text-slate-900 transition-colors flex items-center gap-1.5"
-                    >
-                      <span>{copiedKey === "preview-code" ? "✓ Copied" : "Copy full code"}</span>
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setIsCodeExpanded(false)}
-                      className="cursor-pointer px-3 py-1 rounded-md border border-slate-200 bg-white text-xs font-medium text-slate-800 hover:bg-slate-50 shadow-2xs transition-all"
-                    >
-                      Collapse Code
-                    </button>
-                  </div>
-                )}
-              </div>
-            </div>
-          </section>
-
-          {/* 2. INSTALLATION SECTION (SCREENSHOT 2) */}
-          <section id="installation" className="mb-12 scroll-mt-20">
-            <h2 className="text-xl font-bold tracking-tight text-slate-950 mb-3">
-              Installation
-            </h2>
-
-            {/* Command / Manual Tabs */}
-            <div className="flex gap-4 border-b border-slate-200 text-sm font-medium mb-3">
-              <button
-                type="button"
-                onClick={() => setInstallTab("command")}
-                className={`cursor-pointer pb-2 transition-all ${
-                  installTab === "command"
-                    ? "border-b-2 border-slate-950 text-slate-950 font-semibold"
-                    : "text-slate-500 hover:text-slate-800"
-                }`}
-              >
-                Command
-              </button>
-              <button
-                type="button"
-                onClick={() => setInstallTab("manual")}
-                className={`cursor-pointer pb-2 transition-all ${
-                  installTab === "manual"
-                    ? "border-b-2 border-slate-950 text-slate-950 font-semibold"
-                    : "text-slate-500 hover:text-slate-800"
-                }`}
-              >
-                Manual
-              </button>
-            </div>
-
-            {installTab === "command" ? (
-              /* Command Box with Package Manager Switcher (Screenshot 2) */
-              <div className="rounded-xl border border-slate-200/90 bg-slate-50/70 p-3.5 font-mono text-xs">
-                {/* Header row with >_ icon, package manager buttons, and copy icon button */}
-                <div className="flex items-center justify-between pb-3 border-b border-slate-200/60">
-                  <div className="flex items-center gap-2">
-                    {/* Terminal Prompt Icon */}
-                    <span className="text-slate-400 select-none text-[11px] font-bold px-1.5 py-0.5 rounded bg-slate-200/50">
-                      &gt;_
-                    </span>
-
-                    {/* Package Manager Buttons */}
-                    <div className="flex items-center gap-1">
-                      {(["pnpm", "npm", "yarn", "bun"] as PackageManager[]).map((pm) => (
-                        <button
-                          key={pm}
-                          type="button"
-                          onClick={() => setPackageManager(pm)}
-                          className={`cursor-pointer px-2 py-0.5 rounded text-[11px] transition-all ${
-                            packageManager === pm
-                              ? "bg-white text-slate-950 font-semibold shadow-2xs border border-slate-200/80"
-                              : "text-slate-500 hover:text-slate-800"
-                          }`}
-                        >
-                          {pm}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Copy Button Icon */}
-                  <button
-                    type="button"
-                    onClick={() => copyToClipboard(INSTALL_COMMANDS[packageManager], "install-cli")}
-                    className="cursor-pointer p-1 rounded hover:bg-slate-200/60 text-slate-500 hover:text-slate-900 transition-colors"
-                    title="Copy command"
-                  >
-                    {copiedKey === "install-cli" ? (
-                      <span className="text-[10px] text-emerald-600 font-medium">Copied!</span>
-                    ) : (
-                      <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.5">
-                        <rect x="5.25" y="5.25" width="8.5" height="8.5" rx="2" />
-                        <path d="M10.75 5.25V4.25a2 2 0 0 0-2-2h-4.5a2 2 0 0 0-2 2v4.5a2 2 0 0 0 2 2h1" />
-                      </svg>
-                    )}
-                  </button>
-                </div>
-
-                {/* Command Text */}
-                <div className="pt-3 text-[12px] text-slate-800 select-all overflow-x-auto whitespace-nowrap">
-                  {INSTALL_COMMANDS[packageManager]}
-                </div>
-              </div>
-            ) : (
-              /* Manual Installation Instructions */
-              <div className="rounded-xl border border-slate-200 bg-slate-50/70 p-4 font-mono text-xs space-y-3">
-                <div className="flex items-center justify-between pb-2 border-b border-slate-200/60">
-                  <span className="text-slate-600 font-sans font-medium text-[12px]">
-                    1. Install core dependency:
+                <div className="p-3 bg-slate-50 rounded-xl border border-slate-200/80 flex items-center justify-between text-slate-800">
+                  <span className="truncate select-all pr-3">
+                    {getCliCommand(detailModalItem.installCommand, packageManager)}
                   </span>
                   <button
                     type="button"
-                    onClick={() => copyToClipboard("npm i @lucasmarkes/hairline", "manual-dep")}
-                    className="cursor-pointer p-1 rounded hover:bg-slate-200/60 text-slate-500 hover:text-slate-900"
+                    onClick={() =>
+                      copyToClipboard(
+                        getCliCommand(detailModalItem.installCommand, packageManager),
+                        "modal-cli"
+                      )
+                    }
+                    className="cursor-pointer shrink-0 text-slate-500 hover:text-slate-900 text-[11px] font-medium"
                   >
-                    {copiedKey === "manual-dep" ? <span className="text-[10px] text-emerald-600">Copied!</span> : "Copy"}
+                    {copiedKey === "modal-cli" ? "✓ Copied" : "Copy"}
                   </button>
                 </div>
-                <div className="text-[12px] text-slate-800">
-                  npm i @lucasmarkes/hairline
-                </div>
-                <div className="pt-2 text-slate-500 text-[11px] font-sans">
-                  2. Component code is generated at <code className="bg-slate-200/60 px-1 py-0.5 rounded text-slate-800 font-mono">components/ui/tactile-rolodex.tsx</code>.
-                </div>
-              </div>
-            )}
-          </section>
-
-          {/* 3. USAGE SECTION (SCREENSHOT 2) */}
-          <section id="usage" className="mb-12 scroll-mt-20">
-            <h2 className="text-xl font-bold tracking-tight text-slate-950 mb-3">
-              Usage
-            </h2>
-
-            <div className="space-y-4">
-              {/* Import Block with Line Numbers & Copy Button (Screenshot 2) */}
-              <div className="rounded-xl border border-slate-200/90 bg-slate-50/60 p-4 font-mono text-xs relative">
-                {/* Top Right Copy Button */}
-                <button
-                  type="button"
-                  onClick={() => copyToClipboard(USAGE_IMPORT_TEXT, "usage-import")}
-                  className="cursor-pointer absolute top-3 right-3 p-1 rounded hover:bg-slate-200/60 text-slate-500 hover:text-slate-900 transition-colors"
-                  title="Copy import"
-                >
-                  {copiedKey === "usage-import" ? (
-                    <span className="text-[10px] text-emerald-600 font-medium">Copied!</span>
-                  ) : (
-                    <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.5">
-                      <rect x="5.25" y="5.25" width="8.5" height="8.5" rx="2" />
-                      <path d="M10.75 5.25V4.25a2 2 0 0 0-2-2h-4.5a2 2 0 0 0-2 2v4.5a2 2 0 0 0 2 2h1" />
-                    </svg>
-                  )}
-                </button>
-
-                {/* Line numbered import code */}
-                <div className="space-y-1">
-                  {USAGE_IMPORT_LINES.map((line) => (
-                    <div key={line.num} className="flex items-center">
-                      <span className="w-6 shrink-0 text-right pr-4 text-slate-400 select-none text-[11px]">
-                        {line.num}
-                      </span>
-                      <div>
-                        {line.parts.map((p, idx) => (
-                          <span key={idx} className={p.cls || "text-slate-800"}>
-                            {p.text}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
-                </div>
               </div>
 
-              {/* Component JSX Usage with Line Numbers & Copy Button (Screenshot 2) */}
-              <div className="rounded-xl border border-slate-200/90 bg-slate-50/60 p-4 font-mono text-xs relative">
-                {/* Top Right Copy Button */}
-                <button
-                  type="button"
-                  onClick={() => copyToClipboard(USAGE_JSX_TEXT, "usage-jsx")}
-                  className="cursor-pointer absolute top-3 right-3 p-1 rounded hover:bg-slate-200/60 text-slate-500 hover:text-slate-900 transition-colors"
-                  title="Copy JSX code"
-                >
-                  {copiedKey === "usage-jsx" ? (
-                    <span className="text-[10px] text-emerald-600 font-medium">Copied!</span>
-                  ) : (
-                    <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.5">
-                      <rect x="5.25" y="5.25" width="8.5" height="8.5" rx="2" />
-                      <path d="M10.75 5.25V4.25a2 2 0 0 0-2-2h-4.5a2 2 0 0 0-2 2v4.5a2 2 0 0 0 2 2h1" />
-                    </svg>
-                  )}
-                </button>
-
-                {/* Line numbered JSX code */}
-                <div className="space-y-1 overflow-x-auto">
-                  {USAGE_JSX_LINES.map((line) => (
-                    <div key={line.num} className="flex items-center">
-                      <span className="w-6 shrink-0 text-right pr-4 text-slate-400 select-none text-[11px]">
-                        {line.num}
-                      </span>
-                      <div className="whitespace-pre">
-                        {line.parts.map((p, idx) => (
-                          <span key={idx} className={p.cls || "text-slate-800"}>
-                            {p.text}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
+              {/* Code Snippet */}
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-slate-600 font-sans font-medium">Usage Example</span>
+                  <button
+                    type="button"
+                    onClick={() => copyToClipboard(detailModalItem.codeSnippet, "modal-code")}
+                    className="cursor-pointer text-slate-500 hover:text-slate-900 text-[11px]"
+                  >
+                    {copiedKey === "modal-code" ? "✓ Copied" : "Copy Code"}
+                  </button>
                 </div>
+                <pre className="p-4 bg-slate-950 text-slate-100 rounded-xl overflow-x-auto text-[11px] leading-relaxed">
+                  <code>{detailModalItem.codeSnippet}</code>
+                </pre>
               </div>
             </div>
-          </section>
 
-          {/* 4. PROPS REFERENCE TABLE */}
-          <section id="props" className="mb-14 scroll-mt-20">
-            <h2 className="text-xl font-bold tracking-tight text-slate-950 mb-3">
-              Props Reference
-            </h2>
+            {/* Modal Footer */}
+            <div className="px-6 py-3.5 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
+              <a
+                href={detailModalItem.registryUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[11px] text-slate-500 hover:text-slate-900 font-mono underline"
+              >
+                View JSON schema &rarr;
+              </a>
 
-            <div className="rounded-xl border border-slate-200 overflow-hidden bg-white">
-              <table className="w-full text-left text-xs font-mono">
-                <thead>
-                  <tr className="border-b border-slate-200 bg-slate-50 text-slate-600 text-[11px]">
-                    <th className="p-3 font-semibold">Prop</th>
-                    <th className="p-3 font-semibold">Type</th>
-                    <th className="p-3 font-semibold">Default</th>
-                    <th className="p-3 font-semibold">Description</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-100 text-slate-700">
-                  <tr>
-                    <td className="p-3 font-semibold text-slate-900">folders</td>
-                    <td className="p-3 text-purple-700">TactileFolder[]</td>
-                    <td className="p-3 text-slate-400">required</td>
-                    <td className="p-3 font-sans text-slate-600">
-                      Array of 1 to 8 folder items. Each folder accepts 3 colors:
-                      <ul className="list-disc pl-4 mt-1 space-y-0.5 text-[11px] font-mono text-slate-500">
-                        <li><strong className="text-slate-800">bodyColor</strong>: Hex string for folder paper body fill (default: <code className="text-[#E54F10]">#E54F10</code>)</li>
-                        <li><strong className="text-slate-800">darkOutline</strong>: Hex string for silhouette, tab line &amp; active dot (default: <code className="text-[#7C2D12]">#7C2D12</code>)</li>
-                        <li><strong className="text-slate-800">lightOutline</strong>: Hex string for 5 ruled lines, inactive dots &amp; back (default: <code className="text-[#FED7AA]">#FED7AA</code>)</li>
-                      </ul>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="p-3 font-semibold text-slate-900">onOpen</td>
-                    <td className="p-3 text-purple-700">(folder) =&gt; void</td>
-                    <td className="p-3 text-slate-400">undefined</td>
-                    <td className="p-3 font-sans text-slate-600">Triggered when any folder is clicked.</td>
-                  </tr>
-                  <tr>
-                    <td className="p-3 font-semibold text-slate-900">onSelect</td>
-                    <td className="p-3 text-purple-700">(folder) =&gt; void</td>
-                    <td className="p-3 text-slate-400">undefined</td>
-                    <td className="p-3 font-sans text-slate-600">Fired whenever folder selection changes.</td>
-                  </tr>
-                  <tr>
-                    <td className="p-3 font-semibold text-slate-900">defaultSelected</td>
-                    <td className="p-3 text-purple-700">number</td>
-                    <td className="p-3">0</td>
-                    <td className="p-3 font-sans text-slate-600">Index of the initially active card (0 to 7).</td>
-                  </tr>
-                  <tr>
-                    <td className="p-3 font-semibold text-slate-900">intensity</td>
-                    <td className="p-3 text-purple-700">number</td>
-                    <td className="p-3">0.65</td>
-                    <td className="p-3 font-sans text-slate-600">Kinematic spring lean intensity (0 to 1).</td>
-                  </tr>
-                  <tr>
-                    <td className="p-3 font-semibold text-slate-900">className</td>
-                    <td className="p-3 text-purple-700">string</td>
-                    <td className="p-3">&quot;&quot;</td>
-                    <td className="p-3 font-sans text-slate-600">Optional Tailwind CSS container classes.</td>
-                  </tr>
-                </tbody>
-              </table>
+              <button
+                type="button"
+                onClick={() => setDetailModalItem(null)}
+                className="cursor-pointer px-4 py-1.5 rounded-lg border border-slate-200 bg-white text-slate-700 hover:bg-slate-100 text-xs font-mono font-medium"
+              >
+                Close
+              </button>
             </div>
-          </section>
-        </main>
-      </div>
+          </div>
+        </div>
+      )}
 
-      {/* Footer */}
-      <footer className="border-t border-slate-200 py-6 px-6 text-center text-xs text-slate-400 font-mono bg-white">
-        <p>Chromaline · Vibrant line-art components for Next.js and React.</p>
+      {/* Clean Minimal Footer */}
+      <footer className="border-t border-slate-200/80 py-8 px-6 text-center text-xs text-slate-400 font-mono bg-white">
+        <p>Chromaline · Vibrant line-art components for modern React.</p>
       </footer>
     </div>
   );
