@@ -36,6 +36,19 @@
           "target": "components/ui/folder.tsx"
         }
       ]
+    },
+    {
+      "name": "button",
+      "type": "registry:ui",
+      "title": "Button",
+      "description": "Tactile 3D push button engineered with physical extrusion depth and click kinematics.",
+      "files": [
+        {
+          "path": "components/ui/button.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/button.tsx"
+        }
+      ]
     }
   ]
 }

@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { ProjectLibrary } from "@/components/tactile/project-library";
 import { Folder } from "@/components/ui/folder";
+import { Button } from "@/components/ui/button";
 
 const FOLDER_COLOR_PRESETS = [
   { name: "Orange", body: "#E54F10", dark: "#7C2D12", light: "#FED7AA" },
@@ -18,6 +19,9 @@ const FOLDER_COLOR_PRESETS = [
 export default function ChromalineHomePage() {
   const [selectedFolderColor, setSelectedFolderColor] = useState(0);
   const [selectedFolderTab, setSelectedFolderTab] = useState<"left" | "center" | "right">("center");
+  const [buttonVariant, setButtonVariant] = useState<"default" | "dark" | "orange" | "emerald">(
+    "default"
+  );
 
   return (
     <div className="flex min-h-screen flex-col bg-[#FAFAFA] font-sans text-slate-900 selection:bg-slate-200">
@@ -36,23 +40,10 @@ export default function ChromalineHomePage() {
         </div>
 
         <div className="flex items-center gap-3">
-          <a
-            href="/r/index.json"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="rounded-md px-2.5 py-1 font-mono text-xs text-slate-600 transition-colors hover:text-slate-900"
-          >
-            Registry JSON
-          </a>
-          <a
-            href="https://github.com/lucasmarkes/hairline"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-1.5 rounded-md bg-slate-900 px-3 py-1 font-mono text-xs text-white transition-colors hover:bg-slate-800"
-          >
+          <Button href="https://github.com/lucasmarkes/hairline" target="_blank" size="sm">
             <Image src="/github.svg" alt="GitHub" width={14} height={14} className="h-3.5 w-3.5" />
             <span>GitHub</span>
-          </a>
+          </Button>
         </div>
       </header>
 
@@ -173,6 +164,70 @@ export default function ChromalineHomePage() {
                 <p className="mt-1.5 text-xs leading-relaxed text-slate-500">
                   A standalone forward-facing folder card with tab fillets, ruled lines, and punch
                   dots.
+                </p>
+              </div>
+
+              <span className="ml-4 shrink-0 font-mono text-base text-slate-400 transition-all group-hover:translate-x-1 group-hover:text-slate-950">
+                &rarr;
+              </span>
+            </Link>
+          </div>
+
+          {/* Card 3: Tactile Button */}
+          <div className="group flex flex-col justify-between overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-2xs transition-all hover:border-slate-300">
+            {/* Interactive Preview Canvas */}
+            <div className="relative flex h-80 flex-col items-center justify-center bg-[#F9FAFB] p-6 sm:h-88">
+              <Button variant={buttonVariant}>
+                <span>Continue</span>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="14"
+                  height="14"
+                  fill="currentColor"
+                  viewBox="0 0 256 256"
+                  aria-hidden="true"
+                >
+                  <path d="M224.49,136.49l-72,72a12,12,0,0,1-17-17L187,140H40a12,12,0,0,1,0-24H187L135.51,64.48a12,12,0,0,1,17-17l72,72A12,12,0,0,1,224.49,136.49Z" />
+                </svg>
+              </Button>
+
+              {/* Quick Interactive Variant Controls */}
+              <div className="absolute inset-x-0 bottom-4 flex items-center justify-center gap-2">
+                <div className="flex items-center gap-1.5 rounded-full border border-slate-200/90 bg-white/95 px-3 py-1.5 font-mono text-[10px] shadow-2xs backdrop-blur-xs">
+                  {(["default", "dark", "orange", "emerald"] as const).map((v) => (
+                    <button
+                      key={v}
+                      type="button"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        setButtonVariant(v);
+                      }}
+                      className={`cursor-pointer rounded px-2 py-0.5 capitalize transition-all ${
+                        buttonVariant === v
+                          ? "bg-slate-900 font-semibold text-white"
+                          : "text-slate-500 hover:text-slate-900"
+                      }`}
+                    >
+                      {v}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Bottom Card Footer - Links to /components/button */}
+            <Link
+              href="/components/button"
+              className="block flex cursor-pointer items-center justify-between border-t border-slate-100 bg-white p-5 transition-colors hover:bg-slate-50/60 sm:p-6"
+            >
+              <div>
+                <h2 className="text-sm font-semibold text-slate-900 group-hover:text-slate-950 sm:text-base">
+                  Button
+                </h2>
+                <p className="mt-1.5 text-xs leading-relaxed text-slate-500">
+                  A tactile 3D push button engineered with physical extrusion depth, inset bevel
+                  highlights, and click kinematics.
                 </p>
               </div>
 

@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Folder } from "@/components/ui/folder";
+import { Button } from "@/components/ui/button";
 
 type PackageManager = "pnpm" | "npm" | "yarn" | "bun";
 
@@ -141,23 +142,10 @@ export default function FolderPage() {
         </div>
 
         <div className="flex items-center gap-3">
-          <a
-            href="/r/folder.json"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="rounded-md px-2.5 py-1 font-mono text-xs text-slate-600 transition-colors hover:text-slate-900"
-          >
-            Registry JSON
-          </a>
-          <a
-            href="https://github.com/lucasmarkes/hairline"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-1.5 rounded-md bg-slate-900 px-3 py-1 font-mono text-xs text-white transition-colors hover:bg-slate-800"
-          >
+          <Button href="https://github.com/lucasmarkes/hairline" target="_blank" size="sm">
             <Image src="/github.svg" alt="GitHub" width={14} height={14} className="h-3.5 w-3.5" />
             <span>GitHub</span>
-          </a>
+          </Button>
         </div>
       </header>
 
