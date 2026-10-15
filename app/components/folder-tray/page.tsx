@@ -216,14 +216,9 @@ export default function FolderTrayPage() {
           <span>Back to Components</span>
         </Link>
 
-        {/* Page Title & Badges */}
+        {/* Page Title & Description */}
         <div className="mb-6">
-          <div className="mb-2 flex items-center gap-2">
-            <h1 className="text-3xl font-bold tracking-tight text-slate-950">Folder Tray</h1>
-            <span className="rounded border border-slate-200 bg-slate-100 px-2 py-0.5 font-mono text-[10px] font-medium text-slate-600">
-              Interactive 3D
-            </span>
-          </div>
+          <h1 className="mb-2 text-3xl font-bold tracking-tight text-slate-950">Folder Tray</h1>
           <p className="max-w-2xl text-sm leading-relaxed text-slate-500">
             An interactive 3D isometric tray of folders with kinematic lean physics, solid folder
             colorways, and click-to-open dialog callbacks.

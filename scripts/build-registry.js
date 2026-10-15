@@ -20,8 +20,7 @@ function buildRegistry() {
     name: "folder-tray",
     type: "registry:ui",
     title: "Folder Tray",
-    description:
-      "Interactive 3D isometric tray of folders with custom solid colors and click-to-open actions.",
+    description: "Isometric tray of folders with custom solid colors and click-to-open actions.",
     dependencies: ["@lucasmarkes/hairline@^0.5.0"],
     devDependencies: [],
     registryDependencies: [],

@@ -172,17 +172,12 @@ export default function FolderPage() {
           <span>Back to Components</span>
         </Link>
 
-        {/* Page Title & Badges */}
+        {/* Page Title & Description */}
         <div className="mb-6">
-          <div className="mb-2 flex items-center gap-2">
-            <h1 className="text-3xl font-bold tracking-tight text-slate-950">Folder</h1>
-            <span className="rounded border border-slate-200 bg-slate-100 px-2 py-0.5 font-mono text-[10px] font-medium text-slate-600">
-              2D Vector
-            </span>
-          </div>
+          <h1 className="mb-2 text-3xl font-bold tracking-tight text-slate-950">Folder</h1>
           <p className="max-w-2xl text-sm leading-relaxed text-slate-500">
-            A standalone forward-facing tactile folder card with exact 84×61 vector proportions,
-            filleted tabs, 4 ruled lines, and 8 punch dots.
+            A standalone forward-facing folder card with exact 84×61 vector proportions, filleted
+            tabs, 4 ruled lines, and 8 punch dots.
           </p>
         </div>
 
