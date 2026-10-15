@@ -5,6 +5,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { Folder } from "@/components/ui/folder";
 import { Button } from "@/components/ui/button";
+import { SelectBar } from "@/components/ui/select-bar";
+import { TextAlignLeftIcon, TextAlignCenterIcon, TextAlignRightIcon } from "@phosphor-icons/react";
 
 type PackageManager = "pnpm" | "npm" | "yarn" | "bun";
 
@@ -22,6 +24,24 @@ const COLOR_PRESETS = [
   { name: "Violet", body: "#8B5CF6", dark: "#4C1D95", light: "#DDD6FE" },
   { name: "Amber", body: "#F59E0B", dark: "#92400E", light: "#FEF08A" },
   { name: "Rose", body: "#F43F5E", dark: "#881337", light: "#FECDD3" },
+];
+
+const TAB_POSITIONS = [
+  {
+    key: "left" as const,
+    label: "Left",
+    icon: <TextAlignLeftIcon size={14} weight="bold" />,
+  },
+  {
+    key: "center" as const,
+    label: "Center",
+    icon: <TextAlignCenterIcon size={14} weight="bold" />,
+  },
+  {
+    key: "right" as const,
+    label: "Right",
+    icon: <TextAlignRightIcon size={14} weight="bold" />,
+  },
 ];
 
 const CODE_EXAMPLE_LINES = [
@@ -186,43 +206,31 @@ export default function FolderPage() {
               {/* Color Swatches */}
               <div className="flex items-center gap-2 border-r border-slate-200 pr-4">
                 <span className="text-[11px] text-slate-400">Color:</span>
-                <div className="flex items-center gap-1.5">
-                  {COLOR_PRESETS.map((preset, idx) => (
-                    <button
-                      key={preset.name}
-                      type="button"
-                      onClick={() => setSelectedColorIdx(idx)}
-                      className={`h-5 w-5 cursor-pointer rounded-full border transition-all ${
-                        selectedColorIdx === idx
-                          ? "scale-110 ring-2 ring-slate-900"
-                          : "opacity-80 hover:opacity-100"
-                      }`}
-                      style={{ backgroundColor: preset.body, borderColor: preset.dark }}
-                      title={preset.name}
-                    />
-                  ))}
-                </div>
+                <SelectBar
+                  variant="swatches"
+                  size="sm"
+                  items={COLOR_PRESETS.map((preset, idx) => ({
+                    key: String(idx),
+                    color: preset.body,
+                    darkOutline: preset.dark,
+                    label: preset.name,
+                  }))}
+                  value={String(selectedColorIdx)}
+                  onChange={(k) => setSelectedColorIdx(Number(k))}
+                  ariaLabel="Select folder color"
+                />
               </div>
 
               {/* Tab Position Switcher */}
               <div className="flex items-center gap-2">
                 <span className="text-[11px] text-slate-400">Tab:</span>
-                <div className="flex items-center gap-1 rounded-lg border border-slate-200/80 bg-slate-100 p-0.5">
-                  {(["left", "center", "right"] as const).map((pos) => (
-                    <button
-                      key={pos}
-                      type="button"
-                      onClick={() => setSelectedTabPos(pos)}
-                      className={`cursor-pointer rounded px-3 py-1 capitalize transition-all ${
-                        selectedTabPos === pos
-                          ? "border border-slate-200 bg-white font-semibold text-slate-900 shadow-2xs"
-                          : "text-slate-500 hover:text-slate-800"
-                      }`}
-                    >
-                      {pos}
-                    </button>
-                  ))}
-                </div>
+                <SelectBar<"left" | "center" | "right">
+                  size="sm"
+                  items={TAB_POSITIONS}
+                  value={selectedTabPos}
+                  onChange={setSelectedTabPos}
+                  ariaLabel="Select tab position"
+                />
               </div>
             </div>
           </div>

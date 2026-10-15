@@ -49,6 +49,19 @@
           "target": "components/ui/button.tsx"
         }
       ]
+    },
+    {
+      "name": "select-bar",
+      "type": "registry:ui",
+      "title": "Select Bar",
+      "description": "Elastic kinetic segmented pill and color swatch selector with two-phase mercury dilation and overshoot landing.",
+      "files": [
+        {
+          "path": "components/ui/select-bar.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/select-bar.tsx"
+        }
+      ]
     }
   ]
 }

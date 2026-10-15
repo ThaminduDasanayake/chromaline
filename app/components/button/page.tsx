@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
+import { SelectBar } from "@/components/ui/select-bar";
 
 type PackageManager = "pnpm" | "npm" | "yarn" | "bun";
 
@@ -273,43 +274,35 @@ export default function ButtonPage() {
               {/* Variant Picker */}
               <div className="flex items-center gap-2 border-r border-slate-200 pr-4">
                 <span className="text-[11px] text-slate-400">Variant:</span>
-                <div className="flex items-center gap-1">
-                  {(["default", "dark", "orange", "emerald"] as const).map((v) => (
-                    <button
-                      key={v}
-                      type="button"
-                      onClick={() => setVariant(v)}
-                      className={`cursor-pointer rounded px-2 py-0.5 capitalize transition-all ${
-                        variant === v
-                          ? "bg-slate-900 font-semibold text-white"
-                          : "text-slate-600 hover:text-slate-900"
-                      }`}
-                    >
-                      {v}
-                    </button>
-                  ))}
-                </div>
+                <SelectBar<"default" | "dark" | "orange" | "emerald">
+                  variant="swatches"
+                  size="xs"
+                  items={[
+                    { key: "default", label: "Default", color: "#4a4a46", darkOutline: "#292926" },
+                    { key: "dark", label: "Dark", color: "#1e2024", darkOutline: "#111215" },
+                    { key: "orange", label: "Orange", color: "#e54f10", darkOutline: "#9a3412" },
+                    { key: "emerald", label: "Emerald", color: "#059669", darkOutline: "#047857" },
+                  ]}
+                  value={variant}
+                  onChange={setVariant}
+                  ariaLabel="Select button variant"
+                />
               </div>
 
               {/* Size Picker */}
               <div className="flex items-center gap-2 border-r border-slate-200 pr-4">
                 <span className="text-[11px] text-slate-400">Size:</span>
-                <div className="flex items-center gap-1">
-                  {(["sm", "default", "lg"] as const).map((s) => (
-                    <button
-                      key={s}
-                      type="button"
-                      onClick={() => setSize(s)}
-                      className={`cursor-pointer rounded px-2 py-0.5 capitalize transition-all ${
-                        size === s
-                          ? "bg-slate-900 font-semibold text-white"
-                          : "text-slate-600 hover:text-slate-900"
-                      }`}
-                    >
-                      {s}
-                    </button>
-                  ))}
-                </div>
+                <SelectBar<"sm" | "default" | "lg">
+                  size="xs"
+                  items={[
+                    { key: "sm", label: "S" },
+                    { key: "default", label: "M" },
+                    { key: "lg", label: "L" },
+                  ]}
+                  value={size}
+                  onChange={setSize}
+                  ariaLabel="Select button size"
+                />
               </div>
 
               {/* Disabled Toggle */}

@@ -6,6 +6,8 @@ import Image from "next/image";
 import { ProjectLibrary } from "@/components/tactile/project-library";
 import { Folder } from "@/components/ui/folder";
 import { Button } from "@/components/ui/button";
+import { SelectBar } from "@/components/ui/select-bar";
+import { TextAlignLeftIcon, TextAlignCenterIcon, TextAlignRightIcon } from "@phosphor-icons/react";
 
 const FOLDER_COLOR_PRESETS = [
   { name: "Orange", body: "#E54F10", dark: "#7C2D12", light: "#FED7AA" },
@@ -14,6 +16,31 @@ const FOLDER_COLOR_PRESETS = [
   { name: "Violet", body: "#8B5CF6", dark: "#4C1D95", light: "#DDD6FE" },
   { name: "Amber", body: "#F59E0B", dark: "#92400E", light: "#FEF08A" },
   { name: "Rose", body: "#F43F5E", dark: "#881337", light: "#FECDD3" },
+];
+
+const BUTTON_VARIANTS = [
+  { key: "default" as const, label: "Default", color: "#4a4a46", darkOutline: "#292926" },
+  { key: "dark" as const, label: "Dark", color: "#1e2024", darkOutline: "#111215" },
+  { key: "orange" as const, label: "Orange", color: "#e54f10", darkOutline: "#9a3412" },
+  { key: "emerald" as const, label: "Emerald", color: "#059669", darkOutline: "#047857" },
+];
+
+const TAB_POSITIONS = [
+  {
+    key: "left" as const,
+    label: "Left",
+    icon: <TextAlignLeftIcon size={13} weight="bold" />,
+  },
+  {
+    key: "center" as const,
+    label: "Center",
+    icon: <TextAlignCenterIcon size={13} weight="bold" />,
+  },
+  {
+    key: "right" as const,
+    label: "Right",
+    icon: <TextAlignRightIcon size={13} weight="bold" />,
+  },
 ];
 
 export default function ChromalineHomePage() {
@@ -103,52 +130,30 @@ export default function ChromalineHomePage() {
               />
 
               {/* Quick Interactive Color & Tab Controls */}
-              <div className="absolute inset-x-0 bottom-4 flex items-center justify-center gap-2">
-                <div className="flex items-center gap-2 rounded-full border border-slate-200/90 bg-white/95 px-3 py-1.5 shadow-2xs backdrop-blur-xs">
-                  {/* Color Swatches */}
-                  <div className="flex items-center gap-1.5 border-r border-slate-200 pr-2">
-                    {FOLDER_COLOR_PRESETS.map((preset, idx) => (
-                      <button
-                        key={preset.name}
-                        type="button"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          setSelectedFolderColor(idx);
-                        }}
-                        className={`h-4 w-4 cursor-pointer rounded-full border transition-all ${
-                          selectedFolderColor === idx
-                            ? "scale-110 ring-2 ring-slate-900"
-                            : "opacity-80 hover:opacity-100"
-                        }`}
-                        style={{ backgroundColor: preset.body, borderColor: preset.dark }}
-                        title={preset.name}
-                      />
-                    ))}
-                  </div>
+              <div className="absolute inset-x-0 bottom-4 flex flex-wrap items-center justify-center gap-2 px-2">
+                {/* Color Swatches with Elastic Indicator */}
+                <SelectBar
+                  variant="swatches"
+                  size="xs"
+                  items={FOLDER_COLOR_PRESETS.map((preset, idx) => ({
+                    key: String(idx),
+                    color: preset.body,
+                    darkOutline: preset.dark,
+                    label: preset.name,
+                  }))}
+                  value={String(selectedFolderColor)}
+                  onChange={(key) => setSelectedFolderColor(Number(key))}
+                  ariaLabel="Select folder color"
+                />
 
-                  {/* Tab Position Switcher */}
-                  <div className="flex items-center gap-1 font-mono text-[10px]">
-                    {(["left", "center", "right"] as const).map((pos) => (
-                      <button
-                        key={pos}
-                        type="button"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          setSelectedFolderTab(pos);
-                        }}
-                        className={`cursor-pointer rounded px-2 py-0.5 capitalize transition-all ${
-                          selectedFolderTab === pos
-                            ? "bg-slate-900 font-semibold text-white"
-                            : "text-slate-500 hover:text-slate-900"
-                        }`}
-                      >
-                        {pos}
-                      </button>
-                    ))}
-                  </div>
-                </div>
+                {/* Tab Position Switcher with Elastic Indicator */}
+                <SelectBar<"left" | "center" | "right">
+                  size="xs"
+                  items={TAB_POSITIONS}
+                  value={selectedFolderTab}
+                  onChange={setSelectedFolderTab}
+                  ariaLabel="Select tab position"
+                />
               </div>
             </div>
 
@@ -193,26 +198,14 @@ export default function ChromalineHomePage() {
 
               {/* Quick Interactive Variant Controls */}
               <div className="absolute inset-x-0 bottom-4 flex items-center justify-center gap-2">
-                <div className="flex items-center gap-1.5 rounded-full border border-slate-200/90 bg-white/95 px-3 py-1.5 font-mono text-[10px] shadow-2xs backdrop-blur-xs">
-                  {(["default", "dark", "orange", "emerald"] as const).map((v) => (
-                    <button
-                      key={v}
-                      type="button"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        setButtonVariant(v);
-                      }}
-                      className={`cursor-pointer rounded px-2 py-0.5 capitalize transition-all ${
-                        buttonVariant === v
-                          ? "bg-slate-900 font-semibold text-white"
-                          : "text-slate-500 hover:text-slate-900"
-                      }`}
-                    >
-                      {v}
-                    </button>
-                  ))}
-                </div>
+                <SelectBar<"default" | "dark" | "orange" | "emerald">
+                  variant="swatches"
+                  size="xs"
+                  items={BUTTON_VARIANTS}
+                  value={buttonVariant}
+                  onChange={setButtonVariant}
+                  ariaLabel="Select button variant"
+                />
               </div>
             </div>
 
