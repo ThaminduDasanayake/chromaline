@@ -26,16 +26,16 @@ export function DocsSidebar({ activeSection, onSelectSection }: DocsSidebarProps
             <li>
               <button
                 type="button"
-                onClick={() => onSelectSection("rolodex")}
+                onClick={() => onSelectSection("folder-tray")}
                 className={`flex w-full cursor-pointer items-center justify-between py-1.5 text-left transition-colors ${
-                  activeSection === "rolodex"
+                  activeSection === "folder-tray"
                     ? "font-bold text-slate-950"
                     : "text-slate-600 hover:text-slate-950"
                 }`}
               >
                 <div className="flex items-center gap-2">
                   <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-                  <span>Rolodex</span>
+                  <span>Folder Tray</span>
                 </div>
                 <span className="py-0.2 rounded border border-emerald-200 bg-emerald-50 px-1.5 font-mono text-[10px] font-semibold text-emerald-700 uppercase">
                   v0.1

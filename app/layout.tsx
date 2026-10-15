@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Chromaline · Tactile Line-Art Components for Modern React",
+  title: "Chromaline · Line-Art Components for Modern React",
   description:
-    "Vibrant, tactile line-art components and isometric figures with customizable colorways. Built for React, Next.js, and shadcn.",
+    "Vibrant line-art components and isometric figures with customizable colorways. Built for React, Next.js, and shadcn.",
 };
 
 export default function RootLayout({

@@ -3,15 +3,15 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { TactileSingleFolder } from "@/components/ui/tactile-folder";
+import { Folder } from "@/components/ui/folder";
 
 type PackageManager = "pnpm" | "npm" | "yarn" | "bun";
 
 const INSTALL_COMMANDS: Record<PackageManager, string> = {
-  pnpm: "pnpm dlx shadcn@latest add http://localhost:3000/r/tactile-folder.json",
-  npm: "npx shadcn@latest add http://localhost:3000/r/tactile-folder.json",
-  yarn: "npx shadcn@latest add http://localhost:3000/r/tactile-folder.json",
-  bun: "bunx --bun shadcn@latest add http://localhost:3000/r/tactile-folder.json",
+  pnpm: "pnpm dlx shadcn@latest add http://localhost:3000/r/folder.json",
+  npm: "npx shadcn@latest add http://localhost:3000/r/folder.json",
+  yarn: "npx shadcn@latest add http://localhost:3000/r/folder.json",
+  bun: "bunx --bun shadcn@latest add http://localhost:3000/r/folder.json",
 };
 
 const COLOR_PRESETS = [
@@ -29,10 +29,10 @@ const CODE_EXAMPLE_LINES = [
     parts: [
       { text: "import", cls: "text-[#f43f5e]" },
       { text: " { " },
-      { text: "TactileSingleFolder", cls: "text-slate-900 font-semibold" },
+      { text: "Folder", cls: "text-slate-900 font-semibold" },
       { text: " } " },
       { text: "from", cls: "text-[#f43f5e]" },
-      { text: ' "@/components/ui/tactile-folder"', cls: "text-[#0284c7]" },
+      { text: ' "@/components/ui/folder"', cls: "text-[#0284c7]" },
     ],
   },
   { num: 2, parts: [{ text: "" }] },
@@ -48,7 +48,7 @@ const CODE_EXAMPLE_LINES = [
     num: 5,
     parts: [
       { text: "    <", cls: "text-slate-500" },
-      { text: "TactileSingleFolder", cls: "text-[#16a34a] font-semibold" },
+      { text: "Folder", cls: "text-[#16a34a] font-semibold" },
     ],
   },
   {
@@ -96,11 +96,11 @@ const CODE_EXAMPLE_LINES = [
   { num: 13, parts: [{ text: "}" }] },
 ];
 
-const CODE_EXAMPLE_TEXT = `import { TactileSingleFolder } from "@/components/ui/tactile-folder";
+const CODE_EXAMPLE_TEXT = `import { Folder } from "@/components/ui/folder";
 
 export default function FolderDemo() {
   return (
-    <TactileSingleFolder
+    <Folder
       bodyColor="#E54F10"
       darkOutline="#7C2D12"
       lightOutline="#FED7AA"
@@ -137,12 +137,12 @@ export default function FolderPage() {
             Chromaline
           </Link>
           <span className="text-slate-300 select-none">/</span>
-          <span className="font-mono text-xs text-slate-600">Tactile Folder</span>
+          <span className="font-mono text-xs text-slate-600">Folder</span>
         </div>
 
         <div className="flex items-center gap-3">
           <a
-            href="/r/tactile-folder.json"
+            href="/r/folder.json"
             target="_blank"
             rel="noopener noreferrer"
             className="rounded-md px-2.5 py-1 font-mono text-xs text-slate-600 transition-colors hover:text-slate-900"
@@ -175,7 +175,7 @@ export default function FolderPage() {
         {/* Page Title & Badges */}
         <div className="mb-6">
           <div className="mb-2 flex items-center gap-2">
-            <h1 className="text-3xl font-bold tracking-tight text-slate-950">Tactile Folder</h1>
+            <h1 className="text-3xl font-bold tracking-tight text-slate-950">Folder</h1>
             <span className="rounded border border-slate-200 bg-slate-100 px-2 py-0.5 font-mono text-[10px] font-medium text-slate-600">
               2D Vector
             </span>
@@ -190,7 +190,7 @@ export default function FolderPage() {
         <div className="mb-12 overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-2xs">
           <div className="flex min-h-[380px] flex-col items-center justify-center space-y-8 bg-[#F9FAFB] p-8 sm:p-14">
             {/* Folder Graphic */}
-            <TactileSingleFolder
+            <Folder
               bodyColor={activeColor.body}
               darkOutline={activeColor.dark}
               lightOutline={activeColor.light}

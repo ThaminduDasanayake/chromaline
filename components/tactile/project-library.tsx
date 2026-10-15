@@ -1,11 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import {
-  TactileRolodex,
-  TactileFolder,
-  TactileSingleFolder,
-} from "@/components/ui/tactile-rolodex";
+import { FolderTray, FolderItem, Folder } from "@/components/ui/folder-tray";
 
 export interface WorkspaceData {
   branch: string;
@@ -17,7 +13,7 @@ export interface WorkspaceData {
 }
 
 // 8 Folders using Project 1 through Project 8 with bright saturated body colors
-const WORKSPACE_FOLDERS: TactileFolder<WorkspaceData>[] = [
+const WORKSPACE_FOLDERS: FolderItem<WorkspaceData>[] = [
   {
     id: "project-1",
     name: "Project 1",
@@ -172,13 +168,13 @@ const WORKSPACE_FOLDERS: TactileFolder<WorkspaceData>[] = [
 ];
 
 export function ProjectLibrary() {
-  const [modalFolder, setModalFolder] = useState<TactileFolder<WorkspaceData> | null>(null);
+  const [modalFolder, setModalFolder] = useState<FolderItem<WorkspaceData> | null>(null);
 
   return (
     <div className="flex w-full flex-col items-center">
-      {/* 3D Rolodex Preview Container */}
+      {/* 3D Folder Tray Preview Container */}
       <div className="flex w-full justify-center py-4">
-        <TactileRolodex<WorkspaceData>
+        <FolderTray<WorkspaceData>
           folders={WORKSPACE_FOLDERS}
           intensity={0.65}
           defaultSelected={0}
@@ -232,7 +228,7 @@ export function ProjectLibrary() {
 
               {/* Single Folder Graphic Facing Front (exact geometry from the stack) */}
               <div className="mb-4 flex items-center justify-center rounded-xl border border-slate-100 bg-slate-50/70 py-4">
-                <TactileSingleFolder
+                <Folder
                   bodyColor={modalFolder.bodyColor}
                   darkOutline={modalFolder.darkOutline}
                   lightOutline={modalFolder.lightOutline}

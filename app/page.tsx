@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ProjectLibrary } from "@/components/tactile/project-library";
-import { TactileSingleFolder } from "@/components/ui/tactile-folder";
+import { Folder } from "@/components/ui/folder";
 
 const FOLDER_COLOR_PRESETS = [
   { name: "Orange", body: "#E54F10", dark: "#7C2D12", light: "#FED7AA" },
@@ -71,22 +71,22 @@ export default function ChromalineHomePage() {
 
         {/* 2-Column Component Showcase Grid */}
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-          {/* Card 1: Rolodex Tray */}
+          {/* Card 1: Folder Tray */}
           <div className="group flex flex-col justify-between overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-2xs transition-all hover:border-slate-300">
             {/* Interactive Preview Canvas */}
             <div className="relative flex h-80 flex-col items-center justify-center overflow-hidden bg-[#F9FAFB] p-6 sm:h-88">
               <ProjectLibrary />
             </div>
 
-            {/* Bottom Card Footer - Links to /components/rolodex */}
+            {/* Bottom Card Footer - Links to /components/folder-tray */}
             <Link
-              href="/components/rolodex"
+              href="/components/folder-tray"
               className="block flex cursor-pointer items-center justify-between border-t border-slate-100 bg-white p-5 transition-colors hover:bg-slate-50/60 sm:p-6"
             >
               <div>
                 <div className="flex items-center gap-2">
                   <h2 className="text-sm font-semibold text-slate-900 group-hover:text-slate-950 sm:text-base">
-                    Rolodex Tray
+                    Folder Tray
                   </h2>
                   <span className="rounded border border-slate-200 bg-slate-100 px-2 py-0.5 font-mono text-[10px] font-medium text-slate-600">
                     Interactive 3D
@@ -104,11 +104,11 @@ export default function ChromalineHomePage() {
             </Link>
           </div>
 
-          {/* Card 2: Tactile Folder */}
+          {/* Card 2: Folder */}
           <div className="group flex flex-col justify-between overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-2xs transition-all hover:border-slate-300">
             {/* Interactive Preview Canvas */}
             <div className="relative flex h-80 flex-col items-center justify-center bg-[#F9FAFB] p-6 sm:h-88">
-              <TactileSingleFolder
+              <Folder
                 bodyColor={FOLDER_COLOR_PRESETS[selectedFolderColor].body}
                 darkOutline={FOLDER_COLOR_PRESETS[selectedFolderColor].dark}
                 lightOutline={FOLDER_COLOR_PRESETS[selectedFolderColor].light}
@@ -174,7 +174,7 @@ export default function ChromalineHomePage() {
               <div>
                 <div className="flex items-center gap-2">
                   <h2 className="text-sm font-semibold text-slate-900 group-hover:text-slate-950 sm:text-base">
-                    Tactile Folder
+                    Folder
                   </h2>
                   <span className="rounded border border-slate-200 bg-slate-100 px-2 py-0.5 font-mono text-[10px] font-medium text-slate-600">
                     2D Vector

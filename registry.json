@@ -4,36 +4,36 @@
   "homepage": "https://github.com/lucasmarkes/hairline",
   "items": [
     {
-      "name": "tactile-rolodex",
+      "name": "folder-tray",
       "type": "registry:ui",
-      "title": "Tactile Rolodex",
-      "description": "Interactive 3D isometric folder rolodex with custom solid colors and click-to-open actions.",
+      "title": "Folder Tray",
+      "description": "Interactive 3D isometric tray of folders with custom solid colors and click-to-open actions.",
       "dependencies": [
         "@lucasmarkes/hairline@^0.5.0"
       ],
       "files": [
         {
-          "path": "components/ui/tactile-rolodex.tsx",
+          "path": "components/ui/folder-tray.tsx",
           "type": "registry:ui",
-          "target": "components/ui/tactile-rolodex.tsx"
+          "target": "components/ui/folder-tray.tsx"
         },
         {
-          "path": "components/ui/tactile-folder.tsx",
+          "path": "components/ui/folder.tsx",
           "type": "registry:ui",
-          "target": "components/ui/tactile-folder.tsx"
+          "target": "components/ui/folder.tsx"
         }
       ]
     },
     {
-      "name": "tactile-folder",
+      "name": "folder",
       "type": "registry:ui",
-      "title": "Tactile Single Folder",
-      "description": "Standalone forward-facing tactile folder card.",
+      "title": "Folder",
+      "description": "Standalone forward-facing folder card.",
       "files": [
         {
-          "path": "components/ui/tactile-folder.tsx",
+          "path": "components/ui/folder.tsx",
           "type": "registry:ui",
-          "target": "components/ui/tactile-folder.tsx"
+          "target": "components/ui/folder.tsx"
         }
       ]
     }
