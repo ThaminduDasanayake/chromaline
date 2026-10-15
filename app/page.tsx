@@ -7,7 +7,12 @@ import { ProjectLibrary } from "@/components/tactile/project-library";
 import { Folder } from "@/components/ui/folder";
 import { Button } from "@/components/ui/button";
 import { SelectBar } from "@/components/ui/select-bar";
-import { TextAlignLeftIcon, TextAlignCenterIcon, TextAlignRightIcon } from "@phosphor-icons/react";
+import {
+  ArrowRightIcon,
+  TextAlignCenterIcon,
+  TextAlignLeftIcon,
+  TextAlignRightIcon,
+} from "@phosphor-icons/react";
 
 const FOLDER_COLOR_PRESETS = [
   { name: "Orange", body: "#E54F10", dark: "#7C2D12", light: "#FED7AA" },
@@ -112,7 +117,7 @@ export default function ChromalineHomePage() {
               </div>
 
               <span className="ml-4 shrink-0 font-mono text-base text-slate-400 transition-all group-hover:translate-x-1 group-hover:text-slate-950">
-                &rarr;
+                <ArrowRightIcon />
               </span>
             </Link>
           </div>
@@ -173,7 +178,7 @@ export default function ChromalineHomePage() {
               </div>
 
               <span className="ml-4 shrink-0 font-mono text-base text-slate-400 transition-all group-hover:translate-x-1 group-hover:text-slate-950">
-                &rarr;
+                <ArrowRightIcon />
               </span>
             </Link>
           </div>
@@ -184,16 +189,7 @@ export default function ChromalineHomePage() {
             <div className="relative flex h-80 flex-col items-center justify-center bg-[#F9FAFB] p-6 sm:h-88">
               <Button variant={buttonVariant}>
                 <span>Continue</span>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="14"
-                  height="14"
-                  fill="currentColor"
-                  viewBox="0 0 256 256"
-                  aria-hidden="true"
-                >
-                  <path d="M224.49,136.49l-72,72a12,12,0,0,1-17-17L187,140H40a12,12,0,0,1,0-24H187L135.51,64.48a12,12,0,0,1,17-17l72,72A12,12,0,0,1,224.49,136.49Z" />
-                </svg>
+                <ArrowRightIcon size={14} weight="bold" />
               </Button>
 
               {/* Quick Interactive Variant Controls */}
@@ -225,7 +221,7 @@ export default function ChromalineHomePage() {
               </div>
 
               <span className="ml-4 shrink-0 font-mono text-base text-slate-400 transition-all group-hover:translate-x-1 group-hover:text-slate-950">
-                &rarr;
+                <ArrowRightIcon />
               </span>
             </Link>
           </div>

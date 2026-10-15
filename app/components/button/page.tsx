@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { SelectBar } from "@/components/ui/select-bar";
+import { ArrowRightIcon } from "@phosphor-icons/react";
 
 type PackageManager = "pnpm" | "npm" | "yarn" | "bun";
 
@@ -27,14 +28,25 @@ const CODE_EXAMPLE_LINES = [
       { text: ' "@/components/ui/button"', cls: "text-[#0284c7]" },
     ],
   },
-  { num: 2, parts: [{ text: "" }] },
   {
-    num: 3,
+    num: 2,
+    parts: [
+      { text: "import", cls: "text-[#f43f5e]" },
+      { text: " { " },
+      { text: "ArrowRightIcon", cls: "text-slate-900 font-semibold" },
+      { text: " } " },
+      { text: "from", cls: "text-[#f43f5e]" },
+      { text: ' "@phosphor-icons/react"', cls: "text-[#0284c7]" },
+    ],
+  },
+  { num: 3, parts: [{ text: "" }] },
+  {
+    num: 4,
     parts: [{ text: "export default function", cls: "text-[#f43f5e]" }, { text: " Demo() {" }],
   },
-  { num: 4, parts: [{ text: "  return", cls: "text-[#f43f5e]" }, { text: " (" }] },
+  { num: 5, parts: [{ text: "  return", cls: "text-[#f43f5e]" }, { text: " (" }] },
   {
-    num: 5,
+    num: 6,
     parts: [
       { text: "    <", cls: "text-slate-500" },
       { text: "Button", cls: "text-[#16a34a] font-semibold" },
@@ -48,7 +60,7 @@ const CODE_EXAMPLE_LINES = [
     ],
   },
   {
-    num: 6,
+    num: 7,
     parts: [
       { text: "      <span>" },
       { text: "Continue", cls: "text-slate-900" },
@@ -56,49 +68,41 @@ const CODE_EXAMPLE_LINES = [
     ],
   },
   {
-    num: 7,
-    parts: [
-      { text: "      <svg" },
-      { text: ' width="14" height="14" fill="currentColor" viewBox="0 0 256 256"' },
-      { text: ">" },
-    ],
-  },
-  {
     num: 8,
     parts: [
-      {
-        text: '        <path d="M224.49,136.49l-72,72a12,12,0,0,1-17-17L187,140H40a12,12,0,0,1,0-24H187L135.51,64.48a12,12,0,0,1,17-17l72,72A12,12,0,0,1,224.49,136.49Z" />',
-      },
+      { text: "      <", cls: "text-slate-500" },
+      { text: "ArrowRightIcon", cls: "text-[#16a34a] font-semibold" },
+      { text: " " },
+      { text: "size", cls: "text-purple-600" },
+      { text: "={14} " },
+      { text: "weight", cls: "text-purple-600" },
+      { text: '="bold"' },
+      { text: " />" },
     ],
   },
   {
     num: 9,
-    parts: [{ text: "      </svg>" }],
-  },
-  {
-    num: 10,
     parts: [
       { text: "    </", cls: "text-slate-500" },
       { text: "Button", cls: "text-[#16a34a] font-semibold" },
       { text: ">", cls: "text-slate-500" },
     ],
   },
-  { num: 11, parts: [{ text: "  );" }] },
-  { num: 12, parts: [{ text: "}" }] },
+  { num: 10, parts: [{ text: "  );" }] },
+  { num: 11, parts: [{ text: "}" }] },
 ];
 
 const CODE_EXAMPLE_TEXT = `import { Button } from "@/components/ui/button";
+import { ArrowRightIcon } from "@phosphor-icons/react";
 
 export default function Demo() {
   return (
     <Button variant="default" size="default">
       <span>Continue</span>
-      <svg width="14" height="14" fill="currentColor" viewBox="0 0 256 256">
-        <path d="M224.49,136.49l-72,72a12,12,0,0,1-17-17L187,140H40a12,12,0,0,1,0-24H187L135.51,64.48a12,12,0,0,1,17-17l72,72A12,12,0,0,1,224.49,136.49Z" />
-      </svg>
+      <ArrowRightIcon size={14} weight="bold" />
     </Button>
   );
-}`;
+};`;
 
 const PROPS_DATA = [
   {
@@ -248,16 +252,7 @@ export default function ButtonPage() {
                 onClick={() => setClickCount((c) => c + 1)}
               >
                 <span>Continue</span>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="14"
-                  height="14"
-                  fill="currentColor"
-                  viewBox="0 0 256 256"
-                  aria-hidden="true"
-                >
-                  <path d="M224.49,136.49l-72,72a12,12,0,0,1-17-17L187,140H40a12,12,0,0,1,0-24H187L135.51,64.48a12,12,0,0,1,17-17l72,72A12,12,0,0,1,224.49,136.49Z" />
-                </svg>
+                <ArrowRightIcon size={14} weight="bold" />
               </Button>
 
               {clickCount > 0 && (
