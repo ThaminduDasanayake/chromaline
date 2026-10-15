@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { FolderTray, FolderItem, Folder } from "@/components/ui/folder-tray";
 import { Button } from "@/components/ui/button";
+import { ArrowRight, X } from "@phosphor-icons/react";
 
 export interface WorkspaceData {
   branch: string;
@@ -243,18 +244,7 @@ export function ProjectLibrary() {
                 title="Close (Esc)"
                 aria-label="Close dialog"
               >
-                <svg
-                  className="h-3.5 w-3.5 sm:h-4 sm:w-4"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <line x1="18" y1="6" x2="6" y2="18" />
-                  <line x1="6" y1="6" x2="18" y2="18" />
-                </svg>
+                <X size={15} weight="bold" />
               </button>
 
               {/* Folder Interior Content */}
@@ -295,16 +285,7 @@ export function ProjectLibrary() {
                       onClick={() => setModalFolder(null)}
                     >
                       <span>Continue</span>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="14"
-                        height="14"
-                        fill="currentColor"
-                        viewBox="0 0 256 256"
-                        aria-hidden="true"
-                      >
-                        <path d="M224.49,136.49l-72,72a12,12,0,0,1-17-17L187,140H40a12,12,0,0,1,0-24H187L135.51,64.48a12,12,0,0,1,17-17l72,72A12,12,0,0,1,224.49,136.49Z" />
-                      </svg>
+                      <ArrowRight size={14} weight="bold" />
                     </Button>
                   </div>
                 </div>

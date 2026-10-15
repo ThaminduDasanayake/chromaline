@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { SelectBar } from "@/components/ui/select-bar";
-import { ArrowRightIcon } from "@phosphor-icons/react";
+import { ArrowRight, Copy, Check } from "@phosphor-icons/react";
 
 type PackageManager = "pnpm" | "npm" | "yarn" | "bun";
 
@@ -33,7 +33,7 @@ const CODE_EXAMPLE_LINES = [
     parts: [
       { text: "import", cls: "text-[#f43f5e]" },
       { text: " { " },
-      { text: "ArrowRightIcon", cls: "text-slate-900 font-semibold" },
+      { text: "ArrowRight", cls: "text-slate-900 font-semibold" },
       { text: " } " },
       { text: "from", cls: "text-[#f43f5e]" },
       { text: ' "@phosphor-icons/react"', cls: "text-[#0284c7]" },
@@ -71,7 +71,7 @@ const CODE_EXAMPLE_LINES = [
     num: 8,
     parts: [
       { text: "      <", cls: "text-slate-500" },
-      { text: "ArrowRightIcon", cls: "text-[#16a34a] font-semibold" },
+      { text: "ArrowRight", cls: "text-[#16a34a] font-semibold" },
       { text: " " },
       { text: "size", cls: "text-purple-600" },
       { text: "={14} " },
@@ -93,13 +93,13 @@ const CODE_EXAMPLE_LINES = [
 ];
 
 const CODE_EXAMPLE_TEXT = `import { Button } from "@/components/ui/button";
-import { ArrowRightIcon } from "@phosphor-icons/react";
+import { ArrowRight } from "@phosphor-icons/react";
 
 export default function Demo() {
   return (
     <Button variant="default" size="default">
       <span>Continue</span>
-      <ArrowRightIcon size={14} weight="bold" />
+      <ArrowRight size={14} weight="bold" />
     </Button>
   );
 };`;
@@ -252,7 +252,7 @@ export default function ButtonPage() {
                 onClick={() => setClickCount((c) => c + 1)}
               >
                 <span>Continue</span>
-                <ArrowRightIcon size={14} weight="bold" />
+                <ArrowRight size={14} weight="bold" />
               </Button>
 
               {clickCount > 0 && (
@@ -377,19 +377,11 @@ export default function ButtonPage() {
                   title="Copy command"
                 >
                   {copiedKey === "cli-copy" ? (
-                    <span className="text-[10px] font-medium text-emerald-600">Copied!</span>
+                    <span className="flex items-center gap-1 text-[10px] font-medium text-emerald-600">
+                      <Check size={13} weight="bold" /> Copied!
+                    </span>
                   ) : (
-                    <svg
-                      viewBox="0 0 16 16"
-                      width="14"
-                      height="14"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                    >
-                      <rect x="5.25" y="5.25" width="8.5" height="8.5" rx="2" />
-                      <path d="M10.75 5.25V4.25a2 2 0 0 0-2-2h-4.5a2 2 0 0 0-2 2v4.5a2 2 0 0 0 2 2h1" />
-                    </svg>
+                    <Copy size={14} />
                   )}
                 </button>
               </div>
@@ -411,19 +403,11 @@ export default function ButtonPage() {
                   title="Copy code"
                 >
                   {copiedKey === "manual-copy" ? (
-                    <span className="text-[10px] font-medium text-emerald-600">Copied!</span>
+                    <span className="flex items-center gap-1 text-[10px] font-medium text-emerald-600">
+                      <Check size={13} weight="bold" /> Copied!
+                    </span>
                   ) : (
-                    <svg
-                      viewBox="0 0 16 16"
-                      width="14"
-                      height="14"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                    >
-                      <rect x="5.25" y="5.25" width="8.5" height="8.5" rx="2" />
-                      <path d="M10.75 5.25V4.25a2 2 0 0 0-2-2h-4.5a2 2 0 0 0-2 2v4.5a2 2 0 0 0 2 2h1" />
-                    </svg>
+                    <Copy size={14} />
                   )}
                 </button>
               </div>
@@ -442,23 +426,15 @@ export default function ButtonPage() {
             <button
               type="button"
               onClick={() => copyToClipboard(CODE_EXAMPLE_TEXT, "usage-copy")}
-              className="flex cursor-pointer items-center gap-1 font-mono text-xs text-slate-500 hover:text-slate-900"
+              className="flex cursor-pointer items-center gap-1.5 font-mono text-xs text-slate-500 hover:text-slate-900"
             >
               {copiedKey === "usage-copy" ? (
-                <span className="font-medium text-emerald-600">Copied!</span>
+                <span className="flex items-center gap-1 font-medium text-emerald-600">
+                  <Check size={13} weight="bold" /> Copied!
+                </span>
               ) : (
                 <>
-                  <svg
-                    viewBox="0 0 16 16"
-                    width="12"
-                    height="12"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                  >
-                    <rect x="5.25" y="5.25" width="8.5" height="8.5" rx="2" />
-                    <path d="M10.75 5.25V4.25a2 2 0 0 0-2-2h-4.5a2 2 0 0 0-2 2v4.5a2 2 0 0 0 2 2h1" />
-                  </svg>
+                  <Copy size={13} />
                   <span>Copy code</span>
                 </>
               )}

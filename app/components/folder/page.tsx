@@ -6,7 +6,13 @@ import Image from "next/image";
 import { Folder } from "@/components/ui/folder";
 import { Button } from "@/components/ui/button";
 import { SelectBar } from "@/components/ui/select-bar";
-import { TextAlignLeftIcon, TextAlignCenterIcon, TextAlignRightIcon } from "@phosphor-icons/react";
+import {
+  TextAlignLeftIcon,
+  TextAlignCenterIcon,
+  TextAlignRightIcon,
+  Copy,
+  Check,
+} from "@phosphor-icons/react";
 
 type PackageManager = "pnpm" | "npm" | "yarn" | "bun";
 
@@ -297,19 +303,11 @@ export default function FolderPage() {
                   title="Copy command"
                 >
                   {copiedKey === "cli-copy" ? (
-                    <span className="text-[10px] font-medium text-emerald-600">Copied!</span>
+                    <span className="flex items-center gap-1 text-[10px] font-medium text-emerald-600">
+                      <Check size={13} weight="bold" /> Copied!
+                    </span>
                   ) : (
-                    <svg
-                      viewBox="0 0 16 16"
-                      width="14"
-                      height="14"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                    >
-                      <rect x="5.25" y="5.25" width="8.5" height="8.5" rx="2" />
-                      <path d="M10.75 5.25V4.25a2 2 0 0 0-2-2h-4.5a2 2 0 0 0-2 2v4.5a2 2 0 0 0 2 2h1" />
-                    </svg>
+                    <Copy size={14} />
                   )}
                 </button>
               </div>
@@ -356,7 +354,16 @@ export default function FolderPage() {
               onClick={() => copyToClipboard(CODE_EXAMPLE_TEXT, "usage-code")}
               className="flex cursor-pointer items-center gap-1.5 font-mono text-xs text-slate-500 transition-colors hover:text-slate-900"
             >
-              <span>{copiedKey === "usage-code" ? "✓ Copied" : "Copy code"}</span>
+              {copiedKey === "usage-code" ? (
+                <span className="flex items-center gap-1 font-medium text-emerald-600">
+                  <Check size={13} weight="bold" /> Copied!
+                </span>
+              ) : (
+                <>
+                  <Copy size={13} />
+                  <span>Copy code</span>
+                </>
+              )}
             </button>
           </div>
 

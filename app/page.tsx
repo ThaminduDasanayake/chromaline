@@ -8,7 +8,7 @@ import { Folder } from "@/components/ui/folder";
 import { Button } from "@/components/ui/button";
 import { SelectBar } from "@/components/ui/select-bar";
 import {
-  ArrowRightIcon,
+  ArrowRight,
   TextAlignCenterIcon,
   TextAlignLeftIcon,
   TextAlignRightIcon,
@@ -116,8 +116,8 @@ export default function ChromalineHomePage() {
                 </p>
               </div>
 
-              <span className="ml-4 shrink-0 font-mono text-base text-slate-400 transition-all group-hover:translate-x-1 group-hover:text-slate-950">
-                <ArrowRightIcon />
+              <span className="ml-4 shrink-0 text-slate-400 transition-all group-hover:translate-x-1 group-hover:text-slate-950">
+                <ArrowRight size={16} />
               </span>
             </Link>
           </div>
@@ -177,8 +177,8 @@ export default function ChromalineHomePage() {
                 </p>
               </div>
 
-              <span className="ml-4 shrink-0 font-mono text-base text-slate-400 transition-all group-hover:translate-x-1 group-hover:text-slate-950">
-                <ArrowRightIcon />
+              <span className="ml-4 shrink-0 text-slate-400 transition-all group-hover:translate-x-1 group-hover:text-slate-950">
+                <ArrowRight size={16} />
               </span>
             </Link>
           </div>
@@ -189,7 +189,7 @@ export default function ChromalineHomePage() {
             <div className="relative flex h-80 flex-col items-center justify-center bg-[#F9FAFB] p-6 sm:h-88">
               <Button variant={buttonVariant}>
                 <span>Continue</span>
-                <ArrowRightIcon size={14} weight="bold" />
+                <ArrowRight size={14} weight="bold" />
               </Button>
 
               {/* Quick Interactive Variant Controls */}
@@ -220,8 +220,8 @@ export default function ChromalineHomePage() {
                 </p>
               </div>
 
-              <span className="ml-4 shrink-0 font-mono text-base text-slate-400 transition-all group-hover:translate-x-1 group-hover:text-slate-950">
-                <ArrowRightIcon />
+              <span className="ml-4 shrink-0 text-slate-400 transition-all group-hover:translate-x-1 group-hover:text-slate-950">
+                <ArrowRight size={16} />
               </span>
             </Link>
           </div>
