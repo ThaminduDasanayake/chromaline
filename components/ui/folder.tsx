@@ -6,9 +6,13 @@ export interface FolderProps {
   bodyColor?: string;
   darkOutline?: string;
   lightOutline?: string;
+  borderWidth?: number | string; // Thickness of the silhouette outline and divider lines (e.g. 1.2, 1, or "1px")
+  depth?: boolean | number; // 3D cardstock thickness with offset back face (default: true)
   folderIndex?: number; // 0 to 7 to determine exact tab position and active punch dot
   tabPosition?: "left" | "center" | "right";
+  showLines?: boolean; // Set to false to hide the 4 horizontal ruled lines
   className?: string;
+  children?: React.ReactNode;
 }
 
 // Geometric constants matching @lucasmarkes/hairline riffle-geometry.ts
@@ -82,9 +86,13 @@ export function Folder({
   bodyColor = "#E54F10",
   darkOutline = "#7C2D12",
   lightOutline = "#FED7AA",
+  borderWidth = 1.2,
+  depth = true,
   folderIndex = 0,
   tabPosition,
+  showLines = true,
   className = "w-44 h-auto drop-shadow-sm",
+  children,
 }: FolderProps) {
   // Determine tab index: 0 = left, 1 = center, 2 = right
   let tabIdx = 1;
@@ -101,14 +109,41 @@ export function Folder({
   // Active dot index matching hairline (k === n - 1 where n = 8 - i)
   const activeDotIndex = 7 - (folderIndex % 8);
 
-  return (
-    <svg viewBox="-2 -1 88 65" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
-      {/* 1. Main Folder Silhouette Face */}
+  const dividerStrokeWidth =
+    typeof borderWidth === "number" ? Math.max(0.75, borderWidth * 0.75) : borderWidth;
+
+  // 3D cardstock thickness offset (back face shifted up and to the right)
+  const depthValue = typeof depth === "number" ? depth : depth ? 1 : 0;
+  const depthOffsetX = depthValue * 0.95;
+  const depthOffsetY = -depthValue * 0.95;
+
+  const svgContent = (
+    <svg
+      viewBox={depthValue > 0 ? "-2 -2 89 66" : "-2 -1 88 65"}
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={children ? "h-full w-full" : className}
+    >
+      {/* 0. 3D Back Face (Cardstock Thickness Bevel with Light Outline) */}
+      {depthValue > 0 && (
+        <path
+          d={silhouettePath}
+          transform={`translate(${depthOffsetX}, ${depthOffsetY})`}
+          fill={bodyColor}
+          stroke={lightOutline}
+          strokeWidth={borderWidth}
+          vectorEffect="non-scaling-stroke"
+          strokeLinejoin="round"
+        />
+      )}
+
+      {/* 1. Main Folder Silhouette Face (Front Face with Dark Outline) */}
       <path
         d={silhouettePath}
         fill={bodyColor}
         stroke={darkOutline}
-        strokeWidth="1.2"
+        strokeWidth={borderWidth}
+        vectorEffect="non-scaling-stroke"
         strokeLinejoin="round"
       />
 
@@ -119,23 +154,26 @@ export function Folder({
         x2="78"
         y2="19"
         stroke={darkOutline}
-        strokeWidth="0.8"
+        strokeWidth={dividerStrokeWidth}
+        vectorEffect="non-scaling-stroke"
         strokeLinecap="round"
       />
 
       {/* 3. Four Horizontal Ruled Lines */}
-      {[26, 33, 40, 47].map((y) => (
-        <line
-          key={y}
-          x1="6"
-          y1={y}
-          x2="78"
-          y2={y}
-          stroke={lightOutline}
-          strokeWidth="0.9"
-          strokeLinecap="round"
-        />
-      ))}
+      {showLines &&
+        [26, 33, 40, 47].map((y) => (
+          <line
+            key={y}
+            x1="6"
+            y1={y}
+            x2="78"
+            y2={y}
+            stroke={lightOutline}
+            strokeWidth={dividerStrokeWidth}
+            vectorEffect="non-scaling-stroke"
+            strokeLinecap="round"
+          />
+        ))}
 
       {/* 4. Eight Punch Dots on the Tab (2 rows of 4) */}
       {Array.from({ length: 8 }).map((_, k) => {
@@ -155,5 +193,16 @@ export function Folder({
         );
       })}
     </svg>
+  );
+
+  if (!children) {
+    return svgContent;
+  }
+
+  return (
+    <div className={`relative ${className}`}>
+      {svgContent}
+      <div className="absolute inset-0 flex flex-col">{children}</div>
+    </div>
   );
 }

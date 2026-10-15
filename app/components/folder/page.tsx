@@ -434,6 +434,24 @@ export default function FolderPage() {
                   </td>
                 </tr>
                 <tr>
+                  <td className="p-3 font-semibold text-slate-900">depth</td>
+                  <td className="p-3 text-purple-700">boolean | number</td>
+                  <td className="p-3 text-slate-700">true</td>
+                  <td className="p-3 font-sans text-slate-600">
+                    Renders an offset back face with light outline to create a realistic 3D
+                    cardstock thickness and bevel.
+                  </td>
+                </tr>
+                <tr>
+                  <td className="p-3 font-semibold text-slate-900">borderWidth</td>
+                  <td className="p-3 text-purple-700">number | string</td>
+                  <td className="p-3 text-slate-700">1.2</td>
+                  <td className="p-3 font-sans text-slate-600">
+                    Stroke thickness for the folder silhouette outline and divider lines. Uses
+                    non-scaling stroke for consistent crispness at any size.
+                  </td>
+                </tr>
+                <tr>
                   <td className="p-3 font-semibold text-slate-900">folderIndex</td>
                   <td className="p-3 text-purple-700">number</td>
                   <td className="p-3 text-slate-700">0</td>
@@ -442,11 +460,28 @@ export default function FolderPage() {
                   </td>
                 </tr>
                 <tr>
+                  <td className="p-3 font-semibold text-slate-900">showLines</td>
+                  <td className="p-3 text-purple-700">boolean</td>
+                  <td className="p-3 text-slate-700">true</td>
+                  <td className="p-3 font-sans text-slate-600">
+                    Whether to display the 4 horizontal ruled lines. Set to false for a clean canvas
+                    or modal chassis.
+                  </td>
+                </tr>
+                <tr>
+                  <td className="p-3 font-semibold text-slate-900">children</td>
+                  <td className="p-3 text-purple-700">ReactNode</td>
+                  <td className="p-3 text-slate-700">-</td>
+                  <td className="p-3 font-sans text-slate-600">
+                    Optional content rendered inside the folder container.
+                  </td>
+                </tr>
+                <tr>
                   <td className="p-3 font-semibold text-slate-900">className</td>
                   <td className="p-3 text-purple-700">string</td>
                   <td className="p-3 text-slate-700">&quot;w-44 h-auto&quot;</td>
                   <td className="p-3 font-sans text-slate-600">
-                    Optional styling and dimension classes for the SVG.
+                    Optional styling and dimension classes for the container or SVG.
                   </td>
                 </tr>
               </tbody>

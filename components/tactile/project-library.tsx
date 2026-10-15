@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FolderTray, FolderItem, Folder } from "@/components/ui/folder-tray";
 
 export interface WorkspaceData {
@@ -167,8 +167,34 @@ const WORKSPACE_FOLDERS: FolderItem<WorkspaceData>[] = [
   },
 ];
 
+function isDarkColor(hex?: string): boolean {
+  if (!hex) return true;
+  const clean = hex.replace("#", "");
+  const r = parseInt(clean.substring(0, 2), 16) || 0;
+  const g = parseInt(clean.substring(2, 4), 16) || 0;
+  const b = parseInt(clean.substring(4, 6), 16) || 0;
+  const yiq = (r * 299 + g * 587 + b * 114) / 1000;
+  return yiq < 160;
+}
+
 export function ProjectLibrary() {
   const [modalFolder, setModalFolder] = useState<FolderItem<WorkspaceData> | null>(null);
+
+  // Close on Escape key
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setModalFolder(null);
+      }
+    };
+    if (modalFolder) {
+      window.addEventListener("keydown", handleKeyDown);
+      return () => window.removeEventListener("keydown", handleKeyDown);
+    }
+  }, [modalFolder]);
+
+  const activeIndex = modalFolder ? WORKSPACE_FOLDERS.findIndex((f) => f.id === modalFolder.id) : 0;
+  const isDark = modalFolder ? isDarkColor(modalFolder.bodyColor) : true;
 
   return (
     <div className="flex w-full flex-col items-center">
@@ -182,77 +208,79 @@ export function ProjectLibrary() {
         />
       </div>
 
-      {/* Folder Preview Modal */}
+      {/* Folder Preview Modal - Shaped as the Folder Itself without Ruled Lines */}
       {modalFolder && (
         <div
           role="dialog"
           aria-modal="true"
-          className="animate-in fade-in fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 p-4 backdrop-blur-xs duration-150"
+          aria-label={`${modalFolder.name} Details`}
+          className="animate-in fade-in fixed inset-0 z-50 flex items-center justify-center bg-slate-950/45 p-4 backdrop-blur-xs duration-200"
           onClick={() => setModalFolder(null)}
         >
           <div
-            className="animate-in zoom-in-95 w-full max-w-sm overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xl duration-150"
+            className="animate-in zoom-in-95 relative aspect-[88/65] w-full max-w-[700px] drop-shadow-[0_30px_50px_rgba(0,0,0,0.45)] filter duration-200 select-none"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Top Color Accent Line */}
-            <div
-              className="h-1.5 w-full"
-              style={{ backgroundColor: modalFolder.bodyColor || "#E54F10" }}
-            />
-
-            <div className="p-6">
-              {/* Header: Name + Close Button */}
-              <div className="mb-3 flex items-center justify-between gap-3">
-                <div className="flex items-center gap-2.5">
-                  <span
-                    className="h-3 w-3 shrink-0 rounded-full border"
-                    style={{
-                      backgroundColor: modalFolder.bodyColor || "#E54F10",
-                      borderColor: modalFolder.darkOutline || "#7C2D12",
-                    }}
-                  />
-                  <h3 className="font-mono text-base font-bold tracking-tight text-slate-900">
+            <Folder
+              bodyColor={modalFolder.bodyColor}
+              darkOutline={modalFolder.darkOutline}
+              lightOutline={modalFolder.lightOutline}
+              borderWidth={1}
+              folderIndex={activeIndex >= 0 ? activeIndex : 0}
+              showLines={false}
+              className="h-full w-full"
+            >
+              {/* Folder Interior */}
+              <div className="absolute inset-0 flex flex-col justify-between px-[8%] pt-[33%] pb-[7%]">
+                {/* Title & Close Button */}
+                <div className="flex items-start justify-between gap-4">
+                  <h3
+                    className={`font-mono text-2xl font-bold tracking-tight sm:text-3xl md:text-4xl ${
+                      isDark ? "text-white" : "text-slate-950"
+                    }`}
+                  >
                     {modalFolder.name}
                   </h3>
+
+                  <button
+                    type="button"
+                    onClick={() => setModalFolder(null)}
+                    className={`flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full font-mono text-sm transition-colors ${
+                      isDark
+                        ? "border border-white/20 bg-black/20 text-white/80 hover:bg-black/40 hover:text-white"
+                        : "border border-black/15 bg-black/10 text-slate-800 hover:bg-black/20 hover:text-slate-950"
+                    }`}
+                    title="Close (Esc)"
+                  >
+                    ✕
+                  </button>
                 </div>
 
-                <button
-                  type="button"
-                  onClick={() => setModalFolder(null)}
-                  className="flex h-6 w-6 cursor-pointer items-center justify-center rounded-md font-mono text-xs text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-700"
-                  title="Close dialog"
+                {/* Description */}
+                <p
+                  className={`max-w-xl font-sans text-sm leading-relaxed sm:text-base md:text-lg ${
+                    isDark ? "text-white/85" : "text-slate-800"
+                  }`}
                 >
-                  ✕
-                </button>
-              </div>
+                  {modalFolder.description}
+                </p>
 
-              {/* Single Folder Graphic Facing Front (exact geometry from the stack) */}
-              <div className="mb-4 flex items-center justify-center rounded-xl border border-slate-100 bg-slate-50/70 py-4">
-                <Folder
-                  bodyColor={modalFolder.bodyColor}
-                  darkOutline={modalFolder.darkOutline}
-                  lightOutline={modalFolder.lightOutline}
-                  folderIndex={WORKSPACE_FOLDERS.findIndex((f) => f.id === modalFolder.id)}
-                  className="h-auto w-48 drop-shadow-sm"
-                />
+                {/* Close Button */}
+                <div className="flex justify-end">
+                  <button
+                    type="button"
+                    onClick={() => setModalFolder(null)}
+                    className={`cursor-pointer rounded-lg px-4 py-2 font-mono text-xs font-medium transition-colors sm:text-sm ${
+                      isDark
+                        ? "border border-white/20 bg-black/25 text-white hover:bg-black/40"
+                        : "border border-black/15 bg-black/10 text-slate-900 hover:bg-black/20"
+                    }`}
+                  >
+                    Close
+                  </button>
+                </div>
               </div>
-
-              {/* Description */}
-              <p className="mb-5 text-center font-sans text-xs leading-relaxed text-slate-600">
-                {modalFolder.description}
-              </p>
-
-              {/* Close Button */}
-              <div className="flex justify-end">
-                <button
-                  type="button"
-                  onClick={() => setModalFolder(null)}
-                  className="cursor-pointer rounded-lg border border-slate-200 bg-slate-900 px-4 py-1.5 font-mono text-xs font-medium text-white transition-colors hover:bg-slate-800"
-                >
-                  Close
-                </button>
-              </div>
-            </div>
+            </Folder>
           </div>
         </div>
       )}
