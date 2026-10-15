@@ -1,26 +1,134 @@
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@1&display=swap');
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: light !important;
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-serif: "Instrument Serif", Georgia, serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  
+  --color-canvas: #ffffff;
+  --color-stone: #f8f8f9;
+  --color-ink: #0f172a;
+  --color-muted: #64748b;
+  --color-faint: #94a3b8;
+  --color-line: rgba(0, 0, 0, 0.08);
+  
+  --topbar: 54px;
+  --gutter: clamp(18px, 5vw, 28px);
+  --card: 0 0 0 1px rgba(0, 0, 0, 0.06), 0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 4px 12px 0 rgba(0, 0, 0, 0.02);
+  --lift: 0 1px 2px rgba(0, 0, 0, 0.04), 0 8px 24px -12px rgba(0, 0, 0, 0.1);
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+html, body {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  font-family: var(--font-sans);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Force Light Theme Throughout */
+* {
+  border-color: rgba(0, 0, 0, 0.08);
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+button,
+[role="button"],
+input[type="button"],
+input[type="submit"],
+input[type="reset"] {
+  cursor: pointer !important;
+}
+
+.font-serif {
+  font-family: var(--font-serif);
+}
+
+.isocraft-card {
+  box-shadow: var(--card);
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.07);
+}
+
+.isocraft-pill {
+  height: 44px;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.03);
+  font: 400 13px/1 var(--font-mono);
+  background: #ffffff;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.09);
+  display: flex;
+  align-items: center;
+  padding: 0 8px 0 14px;
+  gap: 8px;
+}
+
+/* Sidebar Tree Rails */
+.rail-group {
+  gap: 6px;
+  display: grid;
+}
+
+.rail-title {
+  color: var(--color-ink);
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.5;
+  display: flex;
+}
+
+.rail ul {
+  padding-left: 20px;
+  position: relative;
+}
+
+.rail li {
+  position: relative;
+}
+
+.rail li:before {
+  content: "";
+  pointer-events: none;
+  border: 0 solid #e2e8f0;
+  border-width: 0 0 1px 1px;
+  border-bottom-left-radius: 6px;
+  width: 11px;
+  position: absolute;
+  left: -17px;
+  top: calc(-50% - 6px);
+  bottom: 50%;
+}
+
+.rail li:first-child:before {
+  top: -2px;
+}
+
+/* Slider Controls */
+.isocraft-slider {
+  appearance: none;
+  cursor: pointer;
+  background: transparent;
+  width: 100%;
+  height: 20px;
+}
+
+.isocraft-slider::-webkit-slider-runnable-track {
+  background: #e2e8f0;
+  border-radius: 2px;
+  height: 2px;
+}
+
+.isocraft-slider::-webkit-slider-thumb {
+  width: 14px;
+  height: 14px;
+  box-shadow: 0 0 0 1.5px #0f172a;
+  -webkit-appearance: none;
+  background: #ffffff;
+  border-radius: 50%;
+  margin-top: -6px;
 }

@@ -1,0 +1,41 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "chromaline",
+  "homepage": "https://github.com/lucasmarkes/hairline",
+  "items": [
+    {
+      "name": "tactile-rolodex",
+      "type": "registry:ui",
+      "title": "Tactile Rolodex",
+      "description": "Interactive 3D isometric folder rolodex with custom solid colors and click-to-open actions.",
+      "dependencies": [
+        "@lucasmarkes/hairline@^0.5.0"
+      ],
+      "files": [
+        {
+          "path": "components/ui/tactile-rolodex.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/tactile-rolodex.tsx"
+        },
+        {
+          "path": "components/ui/tactile-folder.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/tactile-folder.tsx"
+        }
+      ]
+    },
+    {
+      "name": "tactile-folder",
+      "type": "registry:ui",
+      "title": "Tactile Single Folder",
+      "description": "Standalone forward-facing tactile folder card.",
+      "files": [
+        {
+          "path": "components/ui/tactile-folder.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/tactile-folder.tsx"
+        }
+      ]
+    }
+  ]
+}
