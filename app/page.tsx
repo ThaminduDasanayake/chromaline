@@ -1,68 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
+import Link from "next/link";
 import { ProjectLibrary } from "@/components/tactile/project-library";
 import { TactileSingleFolder } from "@/components/ui/tactile-folder";
-
-type PackageManager = "pnpm" | "npm" | "yarn" | "bun";
-
-interface ComponentCardItem {
-  id: string;
-  title: string;
-  description: string;
-  badge?: string;
-  installCommand: string;
-  codeSnippet: string;
-  registryUrl: string;
-}
-
-const COMPONENTS: ComponentCardItem[] = [
-  {
-    id: "rolodex",
-    title: "Rolodex Tray",
-    description: "An interactive 3D isometric tray of folders with kinematic lean physics and solid colorways.",
-    badge: "Interactive 3D",
-    installCommand: "npx shadcn@latest add http://localhost:3000/r/tactile-rolodex.json",
-    registryUrl: "/r/tactile-rolodex.json",
-    codeSnippet: `import { TactileRolodex } from "@/components/ui/tactile-rolodex";
-
-export default function Example() {
-  const folders = [
-    { id: "1", name: "Project 1", bodyColor: "#E54F10", darkOutline: "#7C2D12", lightOutline: "#FED7AA" },
-    { id: "2", name: "Project 2", bodyColor: "#0A90D2", darkOutline: "#075985", lightOutline: "#BAE6FD" },
-    { id: "3", name: "Project 3", bodyColor: "#53F399", darkOutline: "#047857", lightOutline: "#D1FAE5" },
-  ];
-
-  return (
-    <TactileRolodex
-      folders={folders}
-      onOpen={(folder) => console.log("Open folder", folder.name)}
-    />
-  );
-}`,
-  },
-  {
-    id: "folder",
-    title: "Tactile Folder",
-    description: "A standalone forward-facing folder card with tab fillets, ruled lines, and punch dots.",
-    badge: "2D Vector",
-    installCommand: "npx shadcn@latest add http://localhost:3000/r/tactile-folder.json",
-    registryUrl: "/r/tactile-folder.json",
-    codeSnippet: `import { TactileSingleFolder } from "@/components/ui/tactile-folder";
-
-export default function Example() {
-  return (
-    <TactileSingleFolder
-      bodyColor="#E54F10"
-      darkOutline="#7C2D12"
-      lightOutline="#FED7AA"
-      tabPosition="center"
-      className="w-52 h-auto"
-    />
-  );
-}`,
-  },
-];
 
 const FOLDER_COLOR_PRESETS = [
   { name: "Orange", body: "#E54F10", dark: "#7C2D12", light: "#FED7AA" },
@@ -73,33 +14,18 @@ const FOLDER_COLOR_PRESETS = [
   { name: "Rose", body: "#F43F5E", dark: "#881337", light: "#FECDD3" },
 ];
 
-export default function ChromalinePage() {
+export default function ChromalineHomePage() {
   const [selectedFolderColor, setSelectedFolderColor] = useState(0);
   const [selectedFolderTab, setSelectedFolderTab] = useState<"left" | "center" | "right">("center");
-  const [detailModalItem, setDetailModalItem] = useState<ComponentCardItem | null>(null);
-  const [packageManager, setPackageManager] = useState<PackageManager>("pnpm");
-  const [copiedKey, setCopiedKey] = useState<string | null>(null);
-
-  const copyToClipboard = (text: string, key: string) => {
-    navigator.clipboard.writeText(text);
-    setCopiedKey(key);
-    setTimeout(() => setCopiedKey(null), 2000);
-  };
-
-  const getCliCommand = (cmd: string, pm: PackageManager) => {
-    if (pm === "pnpm") return cmd.replace("npx", "pnpm dlx");
-    if (pm === "bun") return cmd.replace("npx", "bunx --bun");
-    return cmd;
-  };
 
   return (
     <div className="min-h-screen bg-[#FAFAFA] text-slate-900 font-sans selection:bg-slate-200">
       {/* Top Minimal Navbar */}
       <header className="sticky top-0 z-40 h-14 border-b border-slate-200/80 bg-white/90 backdrop-blur-md px-6 md:px-12 flex items-center justify-between">
         <div className="flex items-center gap-2.5">
-          <span className="font-bold text-sm tracking-tight text-slate-950 font-mono">
+          <Link href="/" className="font-bold text-sm tracking-tight text-slate-950 font-mono hover:opacity-80 transition-opacity">
             Chromaline
-          </span>
+          </Link>
           <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 font-medium">
             v0.1.0
           </span>
@@ -138,7 +64,7 @@ export default function ChromalinePage() {
           </p>
         </div>
 
-        {/* 2-Column Component Showcase Grid (Matching user reference layout) */}
+        {/* 2-Column Component Showcase Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Card 1: Rolodex Tray */}
           <div className="rounded-2xl border border-slate-200/90 bg-white shadow-2xs hover:border-slate-300 transition-all overflow-hidden flex flex-col justify-between group">
@@ -147,28 +73,29 @@ export default function ChromalinePage() {
               <ProjectLibrary />
             </div>
 
-            {/* Bottom Card Footer */}
-            <div
-              onClick={() => setDetailModalItem(COMPONENTS[0])}
-              className="p-5 sm:p-6 bg-white border-t border-slate-100 cursor-pointer"
+            {/* Bottom Card Footer - Links to /components/rolodex */}
+            <Link
+              href="/components/rolodex"
+              className="p-5 sm:p-6 bg-white border-t border-slate-100 flex items-center justify-between cursor-pointer block hover:bg-slate-50/60 transition-colors"
             >
-              <div className="flex items-center justify-between">
+              <div>
                 <div className="flex items-center gap-2">
                   <h2 className="text-sm sm:text-base font-semibold text-slate-900 group-hover:text-slate-950">
-                    {COMPONENTS[0].title}
+                    Rolodex Tray
                   </h2>
                   <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-100 text-slate-600 border border-slate-200 font-medium">
-                    {COMPONENTS[0].badge}
+                    Interactive 3D
                   </span>
                 </div>
-                <span className="text-slate-400 group-hover:text-slate-950 group-hover:translate-x-0.5 transition-all text-base font-mono">
-                  &rarr;
-                </span>
+                <p className="text-xs text-slate-500 mt-1.5 leading-relaxed">
+                  An interactive 3D isometric tray of folders with kinematic lean physics and solid colorways.
+                </p>
               </div>
-              <p className="text-xs text-slate-500 mt-1.5 leading-relaxed">
-                {COMPONENTS[0].description}
-              </p>
-            </div>
+
+              <span className="text-slate-400 group-hover:text-slate-950 group-hover:translate-x-1 transition-all text-base font-mono ml-4 shrink-0">
+                &rarr;
+              </span>
+            </Link>
           </div>
 
           {/* Card 2: Tactile Folder */}
@@ -193,6 +120,7 @@ export default function ChromalinePage() {
                         key={preset.name}
                         type="button"
                         onClick={(e) => {
+                          e.preventDefault();
                           e.stopPropagation();
                           setSelectedFolderColor(idx);
                         }}
@@ -214,6 +142,7 @@ export default function ChromalinePage() {
                         key={pos}
                         type="button"
                         onClick={(e) => {
+                          e.preventDefault();
                           e.stopPropagation();
                           setSelectedFolderTab(pos);
                         }}
@@ -231,150 +160,32 @@ export default function ChromalinePage() {
               </div>
             </div>
 
-            {/* Bottom Card Footer */}
-            <div
-              onClick={() => setDetailModalItem(COMPONENTS[1])}
-              className="p-5 sm:p-6 bg-white border-t border-slate-100 cursor-pointer"
+            {/* Bottom Card Footer - Links to /components/folder */}
+            <Link
+              href="/components/folder"
+              className="p-5 sm:p-6 bg-white border-t border-slate-100 flex items-center justify-between cursor-pointer block hover:bg-slate-50/60 transition-colors"
             >
-              <div className="flex items-center justify-between">
+              <div>
                 <div className="flex items-center gap-2">
                   <h2 className="text-sm sm:text-base font-semibold text-slate-900 group-hover:text-slate-950">
-                    {COMPONENTS[1].title}
+                    Tactile Folder
                   </h2>
                   <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-100 text-slate-600 border border-slate-200 font-medium">
-                    {COMPONENTS[1].badge}
+                    2D Vector
                   </span>
                 </div>
-                <span className="text-slate-400 group-hover:text-slate-950 group-hover:translate-x-0.5 transition-all text-base font-mono">
-                  &rarr;
-                </span>
+                <p className="text-xs text-slate-500 mt-1.5 leading-relaxed">
+                  A standalone forward-facing folder card with tab fillets, ruled lines, and punch dots.
+                </p>
               </div>
-              <p className="text-xs text-slate-500 mt-1.5 leading-relaxed">
-                {COMPONENTS[1].description}
-              </p>
-            </div>
+
+              <span className="text-slate-400 group-hover:text-slate-950 group-hover:translate-x-1 transition-all text-base font-mono ml-4 shrink-0">
+                &rarr;
+              </span>
+            </Link>
           </div>
         </div>
       </main>
-
-      {/* COMPONENT INSTALL & CODE MODAL (Opens on click) */}
-      {detailModalItem && (
-        <div
-          role="dialog"
-          aria-modal="true"
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/40 backdrop-blur-xs animate-in fade-in duration-150"
-          onClick={() => setDetailModalItem(null)}
-        >
-          <div
-            className="w-full max-w-xl bg-white rounded-2xl border border-slate-200 shadow-xl overflow-hidden animate-in zoom-in-95 duration-150"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Modal Header */}
-            <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
-              <div>
-                <h3 className="text-base font-bold text-slate-950 font-mono flex items-center gap-2">
-                  <span>{detailModalItem.title}</span>
-                  {detailModalItem.badge && (
-                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-100 text-slate-600 border border-slate-200 font-semibold">
-                      {detailModalItem.badge}
-                    </span>
-                  )}
-                </h3>
-                <p className="text-xs text-slate-500 mt-0.5">{detailModalItem.description}</p>
-              </div>
-
-              <button
-                type="button"
-                onClick={() => setDetailModalItem(null)}
-                className="cursor-pointer text-slate-400 hover:text-slate-800 w-7 h-7 rounded-lg hover:bg-slate-100 flex items-center justify-center text-xs font-mono"
-              >
-                ✕
-              </button>
-            </div>
-
-            {/* Modal Body */}
-            <div className="p-6 space-y-5 text-xs font-mono">
-              {/* CLI Command */}
-              <div>
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-slate-600 font-sans font-medium">Install Command</span>
-                  <div className="flex items-center gap-1">
-                    {(["pnpm", "npm", "yarn", "bun"] as PackageManager[]).map((pm) => (
-                      <button
-                        key={pm}
-                        type="button"
-                        onClick={() => setPackageManager(pm)}
-                        className={`cursor-pointer px-2 py-0.5 rounded text-[10px] ${
-                          packageManager === pm
-                            ? "bg-slate-900 text-white font-semibold"
-                            : "bg-slate-100 text-slate-600 hover:text-slate-900"
-                        }`}
-                      >
-                        {pm}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="p-3 bg-slate-50 rounded-xl border border-slate-200/80 flex items-center justify-between text-slate-800">
-                  <span className="truncate select-all pr-3">
-                    {getCliCommand(detailModalItem.installCommand, packageManager)}
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() =>
-                      copyToClipboard(
-                        getCliCommand(detailModalItem.installCommand, packageManager),
-                        "modal-cli"
-                      )
-                    }
-                    className="cursor-pointer shrink-0 text-slate-500 hover:text-slate-900 text-[11px] font-medium"
-                  >
-                    {copiedKey === "modal-cli" ? "✓ Copied" : "Copy"}
-                  </button>
-                </div>
-              </div>
-
-              {/* Code Snippet */}
-              <div>
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-slate-600 font-sans font-medium">Usage Example</span>
-                  <button
-                    type="button"
-                    onClick={() => copyToClipboard(detailModalItem.codeSnippet, "modal-code")}
-                    className="cursor-pointer text-slate-500 hover:text-slate-900 text-[11px]"
-                  >
-                    {copiedKey === "modal-code" ? "✓ Copied" : "Copy Code"}
-                  </button>
-                </div>
-                <pre className="p-4 bg-slate-950 text-slate-100 rounded-xl overflow-x-auto text-[11px] leading-relaxed">
-                  <code>{detailModalItem.codeSnippet}</code>
-                </pre>
-              </div>
-            </div>
-
-            {/* Modal Footer */}
-            <div className="px-6 py-3.5 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
-              <a
-                href={detailModalItem.registryUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-[11px] text-slate-500 hover:text-slate-900 font-mono underline"
-              >
-                View JSON schema &rarr;
-              </a>
-
-              <button
-                type="button"
-                onClick={() => setDetailModalItem(null)}
-                className="cursor-pointer px-4 py-1.5 rounded-lg border border-slate-200 bg-white text-slate-700 hover:bg-slate-100 text-xs font-mono font-medium"
-              >
-                Close
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Clean Minimal Footer */}
       <footer className="border-t border-slate-200/80 py-8 px-6 text-center text-xs text-slate-400 font-mono bg-white">
