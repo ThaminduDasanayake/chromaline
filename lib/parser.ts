@@ -68,7 +68,10 @@ export function validateEnvs(
       });
     }
 
-    if (key.endsWith("_URL") && !/^(https?|postgres(ql)?|mysql|mongodb(\+srv)?|redis(s)?):\/\//i.test(item.value)) {
+    if (
+      key.endsWith("_URL") &&
+      !/^(https?|postgres(ql)?|mysql|mongodb(\+srv)?|redis(s)?):\/\//i.test(item.value)
+    ) {
       issues.push({
         key,
         type: "format",

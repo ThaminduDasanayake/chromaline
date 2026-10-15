@@ -1,0 +1,14 @@
+.next
+node_modules
+dist
+build
+out
+.turbo
+pnpm-lock.yaml
+package-lock.json
+yarn.lock
+bun.lockb
+public/r
+registry.json
+next-env.d.ts
+AGENTS.md

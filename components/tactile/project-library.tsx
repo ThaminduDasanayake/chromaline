@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { TactileRolodex, TactileFolder, TactileSingleFolder } from "@/components/ui/tactile-rolodex";
+import { FolderTray, FolderItem, Folder } from "@/components/ui/folder-tray";
 
 export interface WorkspaceData {
   branch: string;
@@ -13,12 +13,12 @@ export interface WorkspaceData {
 }
 
 // 8 Folders using Project 1 through Project 8 with bright saturated body colors
-const WORKSPACE_FOLDERS: TactileFolder<WorkspaceData>[] = [
+const WORKSPACE_FOLDERS: FolderItem<WorkspaceData>[] = [
   {
     id: "project-1",
     name: "Project 1",
-    bodyColor: "#E54F10",    // rgb(229, 79, 16) - Vivid Terracotta Orange
-    darkOutline: "#7C2D12",  // Dark Rust Outline
+    bodyColor: "#E54F10", // rgb(229, 79, 16) - Vivid Terracotta Orange
+    darkOutline: "#7C2D12", // Dark Rust Outline
     lightOutline: "#FED7AA", // Cream Light Ruled Lines & Dots
     category: "Design",
     description: "Brand identity, design system primitives, and UI component assets.",
@@ -37,8 +37,8 @@ const WORKSPACE_FOLDERS: TactileFolder<WorkspaceData>[] = [
   {
     id: "project-2",
     name: "Project 2",
-    bodyColor: "#0A90D2",    // rgb(10, 144, 210) - Vivid Electric Blue
-    darkOutline: "#075985",  // Deep Navy Outline
+    bodyColor: "#0A90D2", // rgb(10, 144, 210) - Vivid Electric Blue
+    darkOutline: "#075985", // Deep Navy Outline
     lightOutline: "#BAE6FD", // Soft Sky Light Ruled Lines & Dots
     category: "Development",
     description: "Core web application built with Next.js, React, and Tailwind CSS.",
@@ -57,8 +57,8 @@ const WORKSPACE_FOLDERS: TactileFolder<WorkspaceData>[] = [
   {
     id: "project-3",
     name: "Project 3",
-    bodyColor: "#53F399",    // rgb(83, 243, 153) - Vivid Mint Spring Green
-    darkOutline: "#047857",  // Deep Emerald Outline
+    bodyColor: "#53F399", // rgb(83, 243, 153) - Vivid Mint Spring Green
+    darkOutline: "#047857", // Deep Emerald Outline
     lightOutline: "#D1FAE5", // Soft Mint Light Ruled Lines & Dots
     category: "Mobile App",
     description: "Cross-platform mobile client for iOS and Android.",
@@ -77,8 +77,8 @@ const WORKSPACE_FOLDERS: TactileFolder<WorkspaceData>[] = [
   {
     id: "project-4",
     name: "Project 4",
-    bodyColor: "#8B5CF6",    // Vivid Bright Violet
-    darkOutline: "#4C1D95",  // Deep Violet Outline
+    bodyColor: "#8B5CF6", // Vivid Bright Violet
+    darkOutline: "#4C1D95", // Deep Violet Outline
     lightOutline: "#DDD6FE", // Lavender Light Ruled Lines & Dots
     category: "Analytics",
     description: "Telemetry, user analytics tracking, and performance reporting.",
@@ -97,8 +97,8 @@ const WORKSPACE_FOLDERS: TactileFolder<WorkspaceData>[] = [
   {
     id: "project-5",
     name: "Project 5",
-    bodyColor: "#F59E0B",    // Vivid Bright Amber / Gold
-    darkOutline: "#92400E",  // Deep Bronze Outline
+    bodyColor: "#F59E0B", // Vivid Bright Amber / Gold
+    darkOutline: "#92400E", // Deep Bronze Outline
     lightOutline: "#FEF08A", // Soft Yellow Light Ruled Lines & Dots
     category: "Marketing",
     description: "Campaign landing pages, email templates, and conversion funnels.",
@@ -117,8 +117,8 @@ const WORKSPACE_FOLDERS: TactileFolder<WorkspaceData>[] = [
   {
     id: "project-6",
     name: "Project 6",
-    bodyColor: "#F43F5E",    // Vivid Bright Rose
-    darkOutline: "#881337",  // Deep Wine Outline
+    bodyColor: "#F43F5E", // Vivid Bright Rose
+    darkOutline: "#881337", // Deep Wine Outline
     lightOutline: "#FECDD3", // Soft Rose Light Ruled Lines & Dots
     category: "Documentation",
     description: "API references, onboarding guides, and architecture documentation.",
@@ -134,8 +134,8 @@ const WORKSPACE_FOLDERS: TactileFolder<WorkspaceData>[] = [
   {
     id: "project-7",
     name: "Project 7",
-    bodyColor: "#06B6D4",    // Vivid Bright Cyan
-    darkOutline: "#155E75",  // Deep Teal Outline
+    bodyColor: "#06B6D4", // Vivid Bright Cyan
+    darkOutline: "#155E75", // Deep Teal Outline
     lightOutline: "#CFFAFE", // Soft Cyan Light Ruled Lines & Dots
     category: "Backend API",
     description: "REST and GraphQL endpoints for user authentication and data storage.",
@@ -151,8 +151,8 @@ const WORKSPACE_FOLDERS: TactileFolder<WorkspaceData>[] = [
   {
     id: "project-8",
     name: "Project 8",
-    bodyColor: "#6366F1",    // Vivid Bright Indigo
-    darkOutline: "#312E81",  // Deep Indigo Outline
+    bodyColor: "#6366F1", // Vivid Bright Indigo
+    darkOutline: "#312E81", // Deep Indigo Outline
     lightOutline: "#E0E7FF", // Soft Indigo Light Ruled Lines & Dots
     category: "Operations",
     description: "Deployment configurations, monitoring alerts, and CI/CD automation.",
@@ -168,13 +168,13 @@ const WORKSPACE_FOLDERS: TactileFolder<WorkspaceData>[] = [
 ];
 
 export function ProjectLibrary() {
-  const [modalFolder, setModalFolder] = useState<TactileFolder<WorkspaceData> | null>(null);
+  const [modalFolder, setModalFolder] = useState<FolderItem<WorkspaceData> | null>(null);
 
   return (
-    <div className="w-full flex flex-col items-center">
-      {/* 3D Rolodex Preview Container */}
-      <div className="w-full flex justify-center py-4">
-        <TactileRolodex<WorkspaceData>
+    <div className="flex w-full flex-col items-center">
+      {/* 3D Folder Tray Preview Container */}
+      <div className="flex w-full justify-center py-4">
+        <FolderTray<WorkspaceData>
           folders={WORKSPACE_FOLDERS}
           intensity={0.65}
           defaultSelected={0}
@@ -187,11 +187,11 @@ export function ProjectLibrary() {
         <div
           role="dialog"
           aria-modal="true"
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs animate-in fade-in duration-150"
+          className="animate-in fade-in fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 p-4 backdrop-blur-xs duration-150"
           onClick={() => setModalFolder(null)}
         >
           <div
-            className="w-full max-w-sm bg-white rounded-2xl border border-slate-200 shadow-xl overflow-hidden animate-in zoom-in-95 duration-150"
+            className="animate-in zoom-in-95 w-full max-w-sm overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xl duration-150"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Top Color Accent Line */}
@@ -202,16 +202,16 @@ export function ProjectLibrary() {
 
             <div className="p-6">
               {/* Header: Name + Close Button */}
-              <div className="flex items-center justify-between gap-3 mb-3">
+              <div className="mb-3 flex items-center justify-between gap-3">
                 <div className="flex items-center gap-2.5">
                   <span
-                    className="w-3 h-3 rounded-full shrink-0 border"
+                    className="h-3 w-3 shrink-0 rounded-full border"
                     style={{
                       backgroundColor: modalFolder.bodyColor || "#E54F10",
                       borderColor: modalFolder.darkOutline || "#7C2D12",
                     }}
                   />
-                  <h3 className="font-mono text-base font-bold text-slate-900 tracking-tight">
+                  <h3 className="font-mono text-base font-bold tracking-tight text-slate-900">
                     {modalFolder.name}
                   </h3>
                 </div>
@@ -219,7 +219,7 @@ export function ProjectLibrary() {
                 <button
                   type="button"
                   onClick={() => setModalFolder(null)}
-                  className="cursor-pointer text-slate-400 hover:text-slate-700 w-6 h-6 flex items-center justify-center rounded-md hover:bg-slate-100 text-xs font-mono transition-colors"
+                  className="flex h-6 w-6 cursor-pointer items-center justify-center rounded-md font-mono text-xs text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-700"
                   title="Close dialog"
                 >
                   ✕
@@ -227,18 +227,18 @@ export function ProjectLibrary() {
               </div>
 
               {/* Single Folder Graphic Facing Front (exact geometry from the stack) */}
-              <div className="py-4 flex justify-center items-center bg-slate-50/70 rounded-xl border border-slate-100 mb-4">
-                <TactileSingleFolder
+              <div className="mb-4 flex items-center justify-center rounded-xl border border-slate-100 bg-slate-50/70 py-4">
+                <Folder
                   bodyColor={modalFolder.bodyColor}
                   darkOutline={modalFolder.darkOutline}
                   lightOutline={modalFolder.lightOutline}
                   folderIndex={WORKSPACE_FOLDERS.findIndex((f) => f.id === modalFolder.id)}
-                  className="w-48 h-auto drop-shadow-sm"
+                  className="h-auto w-48 drop-shadow-sm"
                 />
               </div>
 
               {/* Description */}
-              <p className="text-xs text-slate-600 leading-relaxed font-sans mb-5 text-center">
+              <p className="mb-5 text-center font-sans text-xs leading-relaxed text-slate-600">
                 {modalFolder.description}
               </p>
 
@@ -247,7 +247,7 @@ export function ProjectLibrary() {
                 <button
                   type="button"
                   onClick={() => setModalFolder(null)}
-                  className="cursor-pointer px-4 py-1.5 rounded-lg border border-slate-200 bg-slate-900 text-white hover:bg-slate-800 text-xs font-mono font-medium transition-colors"
+                  className="cursor-pointer rounded-lg border border-slate-200 bg-slate-900 px-4 py-1.5 font-mono text-xs font-medium text-white transition-colors hover:bg-slate-800"
                 >
                   Close
                 </button>
