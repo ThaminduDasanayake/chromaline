@@ -65,7 +65,7 @@ export function TactileRolodex<T = unknown>({
   const lastReportedCard = useRef<number | null>(null);
 
   const activeFolder = folders[selectedIndex] || folders[0];
-  const displayedFolder = hoverIndex !== null ? (folders[hoverIndex] || activeFolder) : activeFolder;
+  const displayedFolder = hoverIndex !== null ? folders[hoverIndex] || activeFolder : activeFolder;
 
   // Set card indexes and attach click listeners to the SVG card groups
   useEffect(() => {
@@ -184,82 +184,250 @@ export function TactileRolodex<T = unknown>({
 
   return (
     <div
-      className={`relative w-full max-w-[460px] aspect-[5/4] select-none tactile-rolodex ${className}`}
+      className={`tactile-rolodex relative aspect-[5/4] w-full max-w-[460px] select-none ${className}`}
       style={cssColorVariables as React.CSSProperties}
     >
       {/* 3-Color hairline riffle architecture: body of folder, dark outline, and light outline */}
       <style jsx global>{`
         /* Folder 1 */
-        .tactile-rolodex [data-card-index="0"] path.sil { fill: var(--folder-body-0, #fff) !important; stroke: var(--folder-dark-0, #232327) !important; }
-        .tactile-rolodex [data-card-index="0"] path.lo:not(.nf) { fill: var(--folder-body-0, #fff) !important; stroke: var(--folder-light-0, #e0e0e4) !important; }
-        .tactile-rolodex [data-card-index="0"] path.nf:not(.lo) { fill: none !important; stroke: var(--folder-dark-0, #232327) !important; }
-        .tactile-rolodex [data-card-index="0"] path.nf.lo { fill: none !important; stroke: var(--folder-light-0, #e0e0e4) !important; }
-        .tactile-rolodex [data-card-index="0"] circle.dot { fill: var(--folder-dark-0, #232327) !important; stroke: none !important; }
-        .tactile-rolodex [data-card-index="0"] circle.dot.off { fill: var(--folder-light-0, #e0e0e4) !important; stroke: none !important; }
-        .tactile-rolodex [data-card-index="0"] circle.dot.m { fill: var(--folder-dark-0, #232327) !important; stroke: none !important; }
+        .tactile-rolodex [data-card-index="0"] path.sil {
+          fill: var(--folder-body-0, #fff) !important;
+          stroke: var(--folder-dark-0, #232327) !important;
+        }
+        .tactile-rolodex [data-card-index="0"] path.lo:not(.nf) {
+          fill: var(--folder-body-0, #fff) !important;
+          stroke: var(--folder-light-0, #e0e0e4) !important;
+        }
+        .tactile-rolodex [data-card-index="0"] path.nf:not(.lo) {
+          fill: none !important;
+          stroke: var(--folder-dark-0, #232327) !important;
+        }
+        .tactile-rolodex [data-card-index="0"] path.nf.lo {
+          fill: none !important;
+          stroke: var(--folder-light-0, #e0e0e4) !important;
+        }
+        .tactile-rolodex [data-card-index="0"] circle.dot {
+          fill: var(--folder-dark-0, #232327) !important;
+          stroke: none !important;
+        }
+        .tactile-rolodex [data-card-index="0"] circle.dot.off {
+          fill: var(--folder-light-0, #e0e0e4) !important;
+          stroke: none !important;
+        }
+        .tactile-rolodex [data-card-index="0"] circle.dot.m {
+          fill: var(--folder-dark-0, #232327) !important;
+          stroke: none !important;
+        }
 
         /* Folder 2 */
-        .tactile-rolodex [data-card-index="1"] path.sil { fill: var(--folder-body-1, #fff) !important; stroke: var(--folder-dark-1, #232327) !important; }
-        .tactile-rolodex [data-card-index="1"] path.lo:not(.nf) { fill: var(--folder-body-1, #fff) !important; stroke: var(--folder-light-1, #e0e0e4) !important; }
-        .tactile-rolodex [data-card-index="1"] path.nf:not(.lo) { fill: none !important; stroke: var(--folder-dark-1, #232327) !important; }
-        .tactile-rolodex [data-card-index="1"] path.nf.lo { fill: none !important; stroke: var(--folder-light-1, #e0e0e4) !important; }
-        .tactile-rolodex [data-card-index="1"] circle.dot { fill: var(--folder-dark-1, #232327) !important; stroke: none !important; }
-        .tactile-rolodex [data-card-index="1"] circle.dot.off { fill: var(--folder-light-1, #e0e0e4) !important; stroke: none !important; }
-        .tactile-rolodex [data-card-index="1"] circle.dot.m { fill: var(--folder-dark-1, #232327) !important; stroke: none !important; }
+        .tactile-rolodex [data-card-index="1"] path.sil {
+          fill: var(--folder-body-1, #fff) !important;
+          stroke: var(--folder-dark-1, #232327) !important;
+        }
+        .tactile-rolodex [data-card-index="1"] path.lo:not(.nf) {
+          fill: var(--folder-body-1, #fff) !important;
+          stroke: var(--folder-light-1, #e0e0e4) !important;
+        }
+        .tactile-rolodex [data-card-index="1"] path.nf:not(.lo) {
+          fill: none !important;
+          stroke: var(--folder-dark-1, #232327) !important;
+        }
+        .tactile-rolodex [data-card-index="1"] path.nf.lo {
+          fill: none !important;
+          stroke: var(--folder-light-1, #e0e0e4) !important;
+        }
+        .tactile-rolodex [data-card-index="1"] circle.dot {
+          fill: var(--folder-dark-1, #232327) !important;
+          stroke: none !important;
+        }
+        .tactile-rolodex [data-card-index="1"] circle.dot.off {
+          fill: var(--folder-light-1, #e0e0e4) !important;
+          stroke: none !important;
+        }
+        .tactile-rolodex [data-card-index="1"] circle.dot.m {
+          fill: var(--folder-dark-1, #232327) !important;
+          stroke: none !important;
+        }
 
         /* Folder 3 */
-        .tactile-rolodex [data-card-index="2"] path.sil { fill: var(--folder-body-2, #fff) !important; stroke: var(--folder-dark-2, #232327) !important; }
-        .tactile-rolodex [data-card-index="2"] path.lo:not(.nf) { fill: var(--folder-body-2, #fff) !important; stroke: var(--folder-light-2, #e0e0e4) !important; }
-        .tactile-rolodex [data-card-index="2"] path.nf:not(.lo) { fill: none !important; stroke: var(--folder-dark-2, #232327) !important; }
-        .tactile-rolodex [data-card-index="2"] path.nf.lo { fill: none !important; stroke: var(--folder-light-2, #e0e0e4) !important; }
-        .tactile-rolodex [data-card-index="2"] circle.dot { fill: var(--folder-dark-2, #232327) !important; stroke: none !important; }
-        .tactile-rolodex [data-card-index="2"] circle.dot.off { fill: var(--folder-light-2, #e0e0e4) !important; stroke: none !important; }
-        .tactile-rolodex [data-card-index="2"] circle.dot.m { fill: var(--folder-dark-2, #232327) !important; stroke: none !important; }
+        .tactile-rolodex [data-card-index="2"] path.sil {
+          fill: var(--folder-body-2, #fff) !important;
+          stroke: var(--folder-dark-2, #232327) !important;
+        }
+        .tactile-rolodex [data-card-index="2"] path.lo:not(.nf) {
+          fill: var(--folder-body-2, #fff) !important;
+          stroke: var(--folder-light-2, #e0e0e4) !important;
+        }
+        .tactile-rolodex [data-card-index="2"] path.nf:not(.lo) {
+          fill: none !important;
+          stroke: var(--folder-dark-2, #232327) !important;
+        }
+        .tactile-rolodex [data-card-index="2"] path.nf.lo {
+          fill: none !important;
+          stroke: var(--folder-light-2, #e0e0e4) !important;
+        }
+        .tactile-rolodex [data-card-index="2"] circle.dot {
+          fill: var(--folder-dark-2, #232327) !important;
+          stroke: none !important;
+        }
+        .tactile-rolodex [data-card-index="2"] circle.dot.off {
+          fill: var(--folder-light-2, #e0e0e4) !important;
+          stroke: none !important;
+        }
+        .tactile-rolodex [data-card-index="2"] circle.dot.m {
+          fill: var(--folder-dark-2, #232327) !important;
+          stroke: none !important;
+        }
 
         /* Folder 4 */
-        .tactile-rolodex [data-card-index="3"] path.sil { fill: var(--folder-body-3, #fff) !important; stroke: var(--folder-dark-3, #232327) !important; }
-        .tactile-rolodex [data-card-index="3"] path.lo:not(.nf) { fill: var(--folder-body-3, #fff) !important; stroke: var(--folder-light-3, #e0e0e4) !important; }
-        .tactile-rolodex [data-card-index="3"] path.nf:not(.lo) { fill: none !important; stroke: var(--folder-dark-3, #232327) !important; }
-        .tactile-rolodex [data-card-index="3"] path.nf.lo { fill: none !important; stroke: var(--folder-light-3, #e0e0e4) !important; }
-        .tactile-rolodex [data-card-index="3"] circle.dot { fill: var(--folder-dark-3, #232327) !important; stroke: none !important; }
-        .tactile-rolodex [data-card-index="3"] circle.dot.off { fill: var(--folder-light-3, #e0e0e4) !important; stroke: none !important; }
-        .tactile-rolodex [data-card-index="3"] circle.dot.m { fill: var(--folder-dark-3, #232327) !important; stroke: none !important; }
+        .tactile-rolodex [data-card-index="3"] path.sil {
+          fill: var(--folder-body-3, #fff) !important;
+          stroke: var(--folder-dark-3, #232327) !important;
+        }
+        .tactile-rolodex [data-card-index="3"] path.lo:not(.nf) {
+          fill: var(--folder-body-3, #fff) !important;
+          stroke: var(--folder-light-3, #e0e0e4) !important;
+        }
+        .tactile-rolodex [data-card-index="3"] path.nf:not(.lo) {
+          fill: none !important;
+          stroke: var(--folder-dark-3, #232327) !important;
+        }
+        .tactile-rolodex [data-card-index="3"] path.nf.lo {
+          fill: none !important;
+          stroke: var(--folder-light-3, #e0e0e4) !important;
+        }
+        .tactile-rolodex [data-card-index="3"] circle.dot {
+          fill: var(--folder-dark-3, #232327) !important;
+          stroke: none !important;
+        }
+        .tactile-rolodex [data-card-index="3"] circle.dot.off {
+          fill: var(--folder-light-3, #e0e0e4) !important;
+          stroke: none !important;
+        }
+        .tactile-rolodex [data-card-index="3"] circle.dot.m {
+          fill: var(--folder-dark-3, #232327) !important;
+          stroke: none !important;
+        }
 
         /* Folder 5 */
-        .tactile-rolodex [data-card-index="4"] path.sil { fill: var(--folder-body-4, #fff) !important; stroke: var(--folder-dark-4, #232327) !important; }
-        .tactile-rolodex [data-card-index="4"] path.lo:not(.nf) { fill: var(--folder-body-4, #fff) !important; stroke: var(--folder-light-4, #e0e0e4) !important; }
-        .tactile-rolodex [data-card-index="4"] path.nf:not(.lo) { fill: none !important; stroke: var(--folder-dark-4, #232327) !important; }
-        .tactile-rolodex [data-card-index="4"] path.nf.lo { fill: none !important; stroke: var(--folder-light-4, #e0e0e4) !important; }
-        .tactile-rolodex [data-card-index="4"] circle.dot { fill: var(--folder-dark-4, #232327) !important; stroke: none !important; }
-        .tactile-rolodex [data-card-index="4"] circle.dot.off { fill: var(--folder-light-4, #e0e0e4) !important; stroke: none !important; }
-        .tactile-rolodex [data-card-index="4"] circle.dot.m { fill: var(--folder-dark-4, #232327) !important; stroke: none !important; }
+        .tactile-rolodex [data-card-index="4"] path.sil {
+          fill: var(--folder-body-4, #fff) !important;
+          stroke: var(--folder-dark-4, #232327) !important;
+        }
+        .tactile-rolodex [data-card-index="4"] path.lo:not(.nf) {
+          fill: var(--folder-body-4, #fff) !important;
+          stroke: var(--folder-light-4, #e0e0e4) !important;
+        }
+        .tactile-rolodex [data-card-index="4"] path.nf:not(.lo) {
+          fill: none !important;
+          stroke: var(--folder-dark-4, #232327) !important;
+        }
+        .tactile-rolodex [data-card-index="4"] path.nf.lo {
+          fill: none !important;
+          stroke: var(--folder-light-4, #e0e0e4) !important;
+        }
+        .tactile-rolodex [data-card-index="4"] circle.dot {
+          fill: var(--folder-dark-4, #232327) !important;
+          stroke: none !important;
+        }
+        .tactile-rolodex [data-card-index="4"] circle.dot.off {
+          fill: var(--folder-light-4, #e0e0e4) !important;
+          stroke: none !important;
+        }
+        .tactile-rolodex [data-card-index="4"] circle.dot.m {
+          fill: var(--folder-dark-4, #232327) !important;
+          stroke: none !important;
+        }
 
         /* Folder 6 */
-        .tactile-rolodex [data-card-index="5"] path.sil { fill: var(--folder-body-5, #fff) !important; stroke: var(--folder-dark-5, #232327) !important; }
-        .tactile-rolodex [data-card-index="5"] path.lo:not(.nf) { fill: var(--folder-body-5, #fff) !important; stroke: var(--folder-light-5, #e0e0e4) !important; }
-        .tactile-rolodex [data-card-index="5"] path.nf:not(.lo) { fill: none !important; stroke: var(--folder-dark-5, #232327) !important; }
-        .tactile-rolodex [data-card-index="5"] path.nf.lo { fill: none !important; stroke: var(--folder-light-5, #e0e0e4) !important; }
-        .tactile-rolodex [data-card-index="5"] circle.dot { fill: var(--folder-dark-5, #232327) !important; stroke: none !important; }
-        .tactile-rolodex [data-card-index="5"] circle.dot.off { fill: var(--folder-light-5, #e0e0e4) !important; stroke: none !important; }
-        .tactile-rolodex [data-card-index="5"] circle.dot.m { fill: var(--folder-dark-5, #232327) !important; stroke: none !important; }
+        .tactile-rolodex [data-card-index="5"] path.sil {
+          fill: var(--folder-body-5, #fff) !important;
+          stroke: var(--folder-dark-5, #232327) !important;
+        }
+        .tactile-rolodex [data-card-index="5"] path.lo:not(.nf) {
+          fill: var(--folder-body-5, #fff) !important;
+          stroke: var(--folder-light-5, #e0e0e4) !important;
+        }
+        .tactile-rolodex [data-card-index="5"] path.nf:not(.lo) {
+          fill: none !important;
+          stroke: var(--folder-dark-5, #232327) !important;
+        }
+        .tactile-rolodex [data-card-index="5"] path.nf.lo {
+          fill: none !important;
+          stroke: var(--folder-light-5, #e0e0e4) !important;
+        }
+        .tactile-rolodex [data-card-index="5"] circle.dot {
+          fill: var(--folder-dark-5, #232327) !important;
+          stroke: none !important;
+        }
+        .tactile-rolodex [data-card-index="5"] circle.dot.off {
+          fill: var(--folder-light-5, #e0e0e4) !important;
+          stroke: none !important;
+        }
+        .tactile-rolodex [data-card-index="5"] circle.dot.m {
+          fill: var(--folder-dark-5, #232327) !important;
+          stroke: none !important;
+        }
 
         /* Folder 7 */
-        .tactile-rolodex [data-card-index="6"] path.sil { fill: var(--folder-body-6, #fff) !important; stroke: var(--folder-dark-6, #232327) !important; }
-        .tactile-rolodex [data-card-index="6"] path.lo:not(.nf) { fill: var(--folder-body-6, #fff) !important; stroke: var(--folder-light-6, #e0e0e4) !important; }
-        .tactile-rolodex [data-card-index="6"] path.nf:not(.lo) { fill: none !important; stroke: var(--folder-dark-6, #232327) !important; }
-        .tactile-rolodex [data-card-index="6"] path.nf.lo { fill: none !important; stroke: var(--folder-light-6, #e0e0e4) !important; }
-        .tactile-rolodex [data-card-index="6"] circle.dot { fill: var(--folder-dark-6, #232327) !important; stroke: none !important; }
-        .tactile-rolodex [data-card-index="6"] circle.dot.off { fill: var(--folder-light-6, #e0e0e4) !important; stroke: none !important; }
-        .tactile-rolodex [data-card-index="6"] circle.dot.m { fill: var(--folder-dark-6, #232327) !important; stroke: none !important; }
+        .tactile-rolodex [data-card-index="6"] path.sil {
+          fill: var(--folder-body-6, #fff) !important;
+          stroke: var(--folder-dark-6, #232327) !important;
+        }
+        .tactile-rolodex [data-card-index="6"] path.lo:not(.nf) {
+          fill: var(--folder-body-6, #fff) !important;
+          stroke: var(--folder-light-6, #e0e0e4) !important;
+        }
+        .tactile-rolodex [data-card-index="6"] path.nf:not(.lo) {
+          fill: none !important;
+          stroke: var(--folder-dark-6, #232327) !important;
+        }
+        .tactile-rolodex [data-card-index="6"] path.nf.lo {
+          fill: none !important;
+          stroke: var(--folder-light-6, #e0e0e4) !important;
+        }
+        .tactile-rolodex [data-card-index="6"] circle.dot {
+          fill: var(--folder-dark-6, #232327) !important;
+          stroke: none !important;
+        }
+        .tactile-rolodex [data-card-index="6"] circle.dot.off {
+          fill: var(--folder-light-6, #e0e0e4) !important;
+          stroke: none !important;
+        }
+        .tactile-rolodex [data-card-index="6"] circle.dot.m {
+          fill: var(--folder-dark-6, #232327) !important;
+          stroke: none !important;
+        }
 
         /* Folder 8 */
-        .tactile-rolodex [data-card-index="7"] path.sil { fill: var(--folder-body-7, #fff) !important; stroke: var(--folder-dark-7, #232327) !important; }
-        .tactile-rolodex [data-card-index="7"] path.lo:not(.nf) { fill: var(--folder-body-7, #fff) !important; stroke: var(--folder-light-7, #e0e0e4) !important; }
-        .tactile-rolodex [data-card-index="7"] path.nf:not(.lo) { fill: none !important; stroke: var(--folder-dark-7, #232327) !important; }
-        .tactile-rolodex [data-card-index="7"] path.nf.lo { fill: none !important; stroke: var(--folder-light-7, #e0e0e4) !important; }
-        .tactile-rolodex [data-card-index="7"] circle.dot { fill: var(--folder-dark-7, #232327) !important; stroke: none !important; }
-        .tactile-rolodex [data-card-index="7"] circle.dot.off { fill: var(--folder-light-7, #e0e0e4) !important; stroke: none !important; }
-        .tactile-rolodex [data-card-index="7"] circle.dot.m { fill: var(--folder-dark-7, #232327) !important; stroke: none !important; }
+        .tactile-rolodex [data-card-index="7"] path.sil {
+          fill: var(--folder-body-7, #fff) !important;
+          stroke: var(--folder-dark-7, #232327) !important;
+        }
+        .tactile-rolodex [data-card-index="7"] path.lo:not(.nf) {
+          fill: var(--folder-body-7, #fff) !important;
+          stroke: var(--folder-light-7, #e0e0e4) !important;
+        }
+        .tactile-rolodex [data-card-index="7"] path.nf:not(.lo) {
+          fill: none !important;
+          stroke: var(--folder-dark-7, #232327) !important;
+        }
+        .tactile-rolodex [data-card-index="7"] path.nf.lo {
+          fill: none !important;
+          stroke: var(--folder-light-7, #e0e0e4) !important;
+        }
+        .tactile-rolodex [data-card-index="7"] circle.dot {
+          fill: var(--folder-dark-7, #232327) !important;
+          stroke: none !important;
+        }
+        .tactile-rolodex [data-card-index="7"] circle.dot.off {
+          fill: var(--folder-light-7, #e0e0e4) !important;
+          stroke: none !important;
+        }
+        .tactile-rolodex [data-card-index="7"] circle.dot.m {
+          fill: var(--folder-dark-7, #232327) !important;
+          stroke: none !important;
+        }
       `}</style>
 
       {/* 3D Isometric Folder Tray Container */}
@@ -267,8 +435,12 @@ export function TactileRolodex<T = unknown>({
         ref={containerRef}
         onClick={handleContainerClick}
         onMouseLeave={handleContainerLeave}
-        className={`w-full h-full ${hoverIndex !== null ? "cursor-pointer" : "cursor-default"}`}
-        title={hoverIndex !== null ? `Click to open ${displayedFolder?.name}` : "Hover and click any folder"}
+        className={`h-full w-full ${hoverIndex !== null ? "cursor-pointer" : "cursor-default"}`}
+        title={
+          hoverIndex !== null
+            ? `Click to open ${displayedFolder?.name}`
+            : "Hover and click any folder"
+        }
       >
         <Riffle
           intensity={intensity}

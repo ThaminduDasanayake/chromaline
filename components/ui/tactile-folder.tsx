@@ -103,12 +103,7 @@ export function TactileSingleFolder({
   const activeDotIndex = 7 - (folderIndex % 8);
 
   return (
-    <svg
-      viewBox="-2 -1 88 65"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-    >
+    <svg viewBox="-2 -1 88 65" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
       {/* 1. Main Folder Silhouette Face */}
       <path
         d={silhouettePath}

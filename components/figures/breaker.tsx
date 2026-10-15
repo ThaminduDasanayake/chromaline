@@ -57,15 +57,15 @@ export function Breaker({ isTouring = false }: BreakerProps) {
       onMouseLeave={() => {
         if (!isTouring) setPointerOffset({ x: 0, y: 0 });
       }}
-      className="relative w-full aspect-[5/4] max-h-[460px] flex items-center justify-center select-none cursor-crosshair overflow-hidden bg-white"
+      className="relative flex aspect-[5/4] max-h-[460px] w-full cursor-crosshair items-center justify-center overflow-hidden bg-white select-none"
     >
-      <div className="absolute top-4 right-5 text-[11px] font-mono tracking-wider text-slate-400 select-none">
+      <div className="absolute top-4 right-5 font-mono text-[11px] tracking-wider text-slate-400 select-none">
         {allClosed ? "CIRCUITS CLOSED" : "TRIP FAULT"}
       </div>
 
       <svg
         viewBox="0 0 540 400"
-        className="w-full h-full stroke-slate-900 fill-none"
+        className="h-full w-full fill-none stroke-slate-900"
         strokeWidth="1.25"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -112,7 +112,9 @@ export function Breaker({ isTouring = false }: BreakerProps) {
                 }px)`,
               }}
             >
-              <path d={`M ${sw.x - 25} ${sw.y + 12} L ${sw.x} ${sw.y} L ${sw.x + 25} ${sw.y + 12}`} />
+              <path
+                d={`M ${sw.x - 25} ${sw.y + 12} L ${sw.x} ${sw.y} L ${sw.x + 25} ${sw.y + 12}`}
+              />
 
               <line
                 x1={sw.x}
@@ -134,7 +136,7 @@ export function Breaker({ isTouring = false }: BreakerProps) {
         })}
       </svg>
 
-      <div className="absolute bottom-3 left-5 right-5 flex justify-between items-center text-[11px] font-mono text-slate-400 select-none">
+      <div className="absolute right-5 bottom-3 left-5 flex items-center justify-between font-mono text-[11px] text-slate-400 select-none">
         <span>CLICK SWITCHES TO TOGGLE</span>
         <span>05 · Circuit Breaker</span>
       </div>

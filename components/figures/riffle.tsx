@@ -63,16 +63,16 @@ export function Riffle({ intensity = 100, isTouring = false }: RiffleProps) {
       onMouseMove={handleMouseMove}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={handleMouseLeave}
-      className="relative w-full aspect-[5/4] max-h-[460px] flex items-center justify-center select-none cursor-crosshair overflow-hidden bg-white"
+      className="relative flex aspect-[5/4] max-h-[460px] w-full cursor-crosshair items-center justify-center overflow-hidden bg-white select-none"
     >
       {/* HUD Status in Top Right */}
-      <div className="absolute top-4 right-5 text-[11px] font-mono tracking-wider text-slate-400 select-none">
+      <div className="absolute top-4 right-5 font-mono text-[11px] tracking-wider text-slate-400 select-none">
         {isHovered || isTouring ? "HIT BANDS" : "IDLE"}
       </div>
 
       <svg
         viewBox="0 0 540 440"
-        className="w-full h-full stroke-slate-900 fill-none"
+        className="h-full w-full fill-none stroke-slate-900"
         strokeWidth="1.25"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -109,7 +109,10 @@ export function Riffle({ intensity = 100, isTouring = false }: RiffleProps) {
               key={i}
               className="transition-transform duration-75"
               style={{
-                filter: i === Math.round(currentX * (numCards - 1)) ? "drop-shadow(0 4px 10px rgba(0,0,0,0.06))" : "none",
+                filter:
+                  i === Math.round(currentX * (numCards - 1))
+                    ? "drop-shadow(0 4px 10px rgba(0,0,0,0.06))"
+                    : "none",
               }}
             >
               {/* Card Face */}
@@ -177,18 +180,9 @@ export function Riffle({ intensity = 100, isTouring = false }: RiffleProps) {
 
         {/* Front Tray Walls & Bevels */}
         <g>
-          <path
-            d="M 125 240 L 268 322 L 268 368 L 125 286 Z"
-            className="fill-white"
-          />
-          <path
-            d="M 268 322 L 415 237 L 415 283 L 268 368 Z"
-            className="fill-white"
-          />
-          <path
-            d="M 125 240 Q 130 237 135 240 L 268 317 L 405 238"
-            opacity="0.6"
-          />
+          <path d="M 125 240 L 268 322 L 268 368 L 125 286 Z" className="fill-white" />
+          <path d="M 268 322 L 415 237 L 415 283 L 268 368 Z" className="fill-white" />
+          <path d="M 125 240 Q 130 237 135 240 L 268 317 L 405 238" opacity="0.6" />
 
           {/* Front Pull Handle Pill Notch */}
           <g transform="translate(196, 310) rotate(30)">
@@ -203,15 +197,11 @@ export function Riffle({ intensity = 100, isTouring = false }: RiffleProps) {
             />
           </g>
 
-          <path
-            d="M 125 286 L 268 368 L 415 283"
-            opacity="0.4"
-            strokeDasharray="2 2"
-          />
+          <path d="M 125 286 L 268 368 L 415 283" opacity="0.4" strokeDasharray="2 2" />
         </g>
       </svg>
 
-      <div className="absolute bottom-3 left-5 right-5 flex justify-between items-center text-[11px] font-mono text-slate-400 select-none">
+      <div className="absolute right-5 bottom-3 left-5 flex items-center justify-between font-mono text-[11px] text-slate-400 select-none">
         <span>HOVER · ← →</span>
         <span>01 · Deck Fanner</span>
       </div>

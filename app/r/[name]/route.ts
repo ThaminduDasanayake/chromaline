@@ -2,10 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: Promise<{ name: string }> }
-) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ name: string }> }) {
   const { name } = await params;
   const cleanName = name.replace(/\.json$/, "");
 

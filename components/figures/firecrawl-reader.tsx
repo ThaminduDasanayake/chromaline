@@ -46,15 +46,15 @@ export function DocumentScanner({ intensity = 100, isTouring = false }: Document
     <div
       ref={containerRef}
       onMouseMove={handleMouseMove}
-      className="relative w-full aspect-[5/4] max-h-[460px] flex items-center justify-center select-none cursor-ns-resize overflow-hidden bg-white"
+      className="relative flex aspect-[5/4] max-h-[460px] w-full cursor-ns-resize items-center justify-center overflow-hidden bg-white select-none"
     >
-      <div className="absolute top-4 right-5 text-[11px] font-mono tracking-wider text-slate-400 select-none">
+      <div className="absolute top-4 right-5 font-mono text-[11px] tracking-wider text-slate-400 select-none">
         {`SCAN PROGRESS: ${Math.round(scanY * 100)}%`}
       </div>
 
       <svg
         viewBox="0 0 540 420"
-        className="w-full h-full stroke-slate-900 fill-none"
+        className="h-full w-full fill-none stroke-slate-900"
         strokeWidth="1.25"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -76,10 +76,7 @@ export function DocumentScanner({ intensity = 100, isTouring = false }: Document
             className="fill-white"
             strokeWidth="1.4"
           />
-          <path
-            d="M 225 112 L 292 151 L 292 318 L 225 279 Z"
-            className="fill-white"
-          />
+          <path d="M 225 112 L 292 151 L 292 318 L 225 279 Z" className="fill-white" />
 
           {/* Screen Top Status Dots */}
           <circle cx="233" cy="120" r="1.5" className="fill-slate-500" />
@@ -92,7 +89,9 @@ export function DocumentScanner({ intensity = 100, isTouring = false }: Document
           <g
             className="transition-transform duration-300"
             style={{
-              transform: stageHeaderPeeled ? `translate(${24 * factor}px, ${-12 * factor}px)` : "none",
+              transform: stageHeaderPeeled
+                ? `translate(${24 * factor}px, ${-12 * factor}px)`
+                : "none",
               opacity: stageHeaderPeeled ? 0.35 : 1,
             }}
           >
@@ -104,7 +103,9 @@ export function DocumentScanner({ intensity = 100, isTouring = false }: Document
           <g
             className="transition-transform duration-300"
             style={{
-              transform: stageImagePeeled ? `translate(${32 * factor}px, ${-16 * factor}px)` : "none",
+              transform: stageImagePeeled
+                ? `translate(${32 * factor}px, ${-16 * factor}px)`
+                : "none",
               opacity: stageImagePeeled ? 0.35 : 1,
             }}
           >
@@ -121,7 +122,9 @@ export function DocumentScanner({ intensity = 100, isTouring = false }: Document
           <g
             className="transition-transform duration-300"
             style={{
-              transform: stageTextPeeled ? `translate(${40 * factor}px, ${-20 * factor}px)` : "none",
+              transform: stageTextPeeled
+                ? `translate(${40 * factor}px, ${-20 * factor}px)`
+                : "none",
               opacity: stageTextPeeled ? 0.35 : 1,
             }}
           >
@@ -147,7 +150,14 @@ export function DocumentScanner({ intensity = 100, isTouring = false }: Document
           />
           <circle cx="0" cy="0" r="2.5" className="fill-purple-600 stroke-none" />
           {/* Laser targeting guide lines */}
-          <line x1="-30" y1="0" x2="-14" y2="0" strokeDasharray="2 2" className="stroke-purple-600" />
+          <line
+            x1="-30"
+            y1="0"
+            x2="-14"
+            y2="0"
+            strokeDasharray="2 2"
+            className="stroke-purple-600"
+          />
           <line x1="14" y1="0" x2="30" y2="0" strokeDasharray="2 2" className="stroke-purple-600" />
         </g>
 
@@ -164,14 +174,12 @@ export function DocumentScanner({ intensity = 100, isTouring = false }: Document
           <text
             x="355"
             y="185"
-            className="text-[9px] font-mono fill-slate-400 stroke-none select-none font-semibold"
+            className="fill-slate-400 stroke-none font-mono text-[9px] font-semibold select-none"
           >
             # PARSED DATA
           </text>
           {stageHeaderPeeled && <line x1="352" y1="200" x2="405" y2="231" opacity="0.8" />}
-          {stageImagePeeled && (
-            <path d="M 352 230 L 385 249 L 385 270 L 352 251 Z" opacity="0.8" />
-          )}
+          {stageImagePeeled && <path d="M 352 230 L 385 249 L 385 270 L 352 251 Z" opacity="0.8" />}
           {stageTextPeeled && (
             <>
               <line x1="352" y1="285" x2="400" y2="313" opacity="0.8" />
@@ -181,7 +189,7 @@ export function DocumentScanner({ intensity = 100, isTouring = false }: Document
         </g>
       </svg>
 
-      <div className="absolute bottom-3 left-5 right-5 flex justify-between items-center text-[11px] font-mono text-slate-400 select-none">
+      <div className="absolute right-5 bottom-3 left-5 flex items-center justify-between font-mono text-[11px] text-slate-400 select-none">
         <span>POINT DOWN · ↓</span>
         <span>02 · Scanner</span>
       </div>

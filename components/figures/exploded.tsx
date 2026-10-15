@@ -48,15 +48,15 @@ export function Exploded({ intensity = 100, isTouring = false }: ExplodedProps) 
       ref={containerRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className="relative w-full aspect-[5/4] max-h-[460px] flex items-center justify-center select-none cursor-crosshair overflow-hidden bg-white"
+      className="relative flex aspect-[5/4] max-h-[460px] w-full cursor-crosshair items-center justify-center overflow-hidden bg-white select-none"
     >
-      <div className="absolute top-4 right-5 text-[11px] font-mono tracking-wider text-slate-400 select-none">
+      <div className="absolute top-4 right-5 font-mono text-[11px] tracking-wider text-slate-400 select-none">
         {`SEPARATION: ${Math.round(lift * 100)}%`}
       </div>
 
       <svg
         viewBox="0 0 540 400"
-        className="w-full h-full stroke-slate-900 fill-none"
+        className="h-full w-full fill-none stroke-slate-900"
         strokeWidth="1.25"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -67,26 +67,14 @@ export function Exploded({ intensity = 100, isTouring = false }: ExplodedProps) 
             const rx = 140 + r * 28 * 0.866;
             const ry = 180 + r * 28 * 0.5;
             return (
-              <line
-                key={`r-${r}`}
-                x1={rx}
-                y1={ry}
-                x2={rx + 160 * 0.866}
-                y2={ry - 160 * 0.5}
-              />
+              <line key={`r-${r}`} x1={rx} y1={ry} x2={rx + 160 * 0.866} y2={ry - 160 * 0.5} />
             );
           })}
           {Array.from({ length: 9 }).map((_, c) => {
             const cx = 280 - c * 20 * 0.866;
             const cy = 90 + c * 20 * 0.5;
             return (
-              <line
-                key={`c-${c}`}
-                x1={cx}
-                y1={cy}
-                x2={cx + 180 * 0.866}
-                y2={cy + 180 * 0.5}
-              />
+              <line key={`c-${c}`} x1={cx} y1={cy} x2={cx + 180 * 0.866} y2={cy + 180 * 0.5} />
             );
           })}
         </g>
@@ -107,7 +95,11 @@ export function Exploded({ intensity = 100, isTouring = false }: ExplodedProps) 
             opacity="0.9"
           />
           <path d="M 205 255 L 205 265 L 335 340 L 465 265 L 465 255" opacity="0.35" />
-          <path d="M 240 255 L 335 200 L 430 255 L 335 310 Z" strokeDasharray="3 3" opacity="0.25" />
+          <path
+            d="M 240 255 L 335 200 L 430 255 L 335 310 Z"
+            strokeDasharray="3 3"
+            opacity="0.25"
+          />
         </g>
 
         {/* Layer 2 (Middle Framework / Data Plane) */}
@@ -154,7 +146,7 @@ export function Exploded({ intensity = 100, isTouring = false }: ExplodedProps) 
         </g>
       </svg>
 
-      <div className="absolute bottom-3 left-5 right-5 flex justify-between items-center text-[11px] font-mono text-slate-400 select-none">
+      <div className="absolute right-5 bottom-3 left-5 flex items-center justify-between font-mono text-[11px] text-slate-400 select-none">
         <span>POINTER PROXIMITY · LIFT</span>
         <span>04 · Layer Stack</span>
       </div>

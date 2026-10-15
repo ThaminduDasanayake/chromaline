@@ -14,7 +14,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="light bg-white" style={{ colorScheme: "light" }}>
-      <body className="min-h-full flex flex-col bg-white text-slate-900 font-sans antialiased selection:bg-slate-200">
+      <body className="flex min-h-full flex-col bg-white font-sans text-slate-900 antialiased selection:bg-slate-200">
         {children}
       </body>
     </html>

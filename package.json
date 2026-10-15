@@ -7,7 +7,10 @@
     "build:registry": "node scripts/build-registry.js",
     "build": "node scripts/build-registry.js && next build --webpack",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "lint:fix": "eslint --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "dependencies": {
     "@lucasmarkes/hairline": "^0.5.0",
@@ -22,7 +25,10 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.4.0",
+    "eslint-config-prettier": "^10.1.8",
     "postcss": "^8.5.30",
+    "prettier": "^3.9.10",
+    "prettier-plugin-tailwindcss": "^0.8.1",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

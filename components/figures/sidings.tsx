@@ -36,15 +36,15 @@ export function Sidings({ intensity = 100, isTouring = false }: SidingsProps) {
     <div
       ref={containerRef}
       onMouseMove={handleMouseMove}
-      className="relative w-full aspect-[5/4] max-h-[460px] flex items-center justify-center select-none cursor-crosshair overflow-hidden bg-white"
+      className="relative flex aspect-[5/4] max-h-[460px] w-full cursor-crosshair items-center justify-center overflow-hidden bg-white select-none"
     >
-      <div className="absolute top-4 right-5 text-[11px] font-mono tracking-wider text-slate-400 select-none">
+      <div className="absolute top-4 right-5 font-mono text-[11px] tracking-wider text-slate-400 select-none">
         {`TRACK ${activeLane + 1} CHECKED OUT`}
       </div>
 
       <svg
         viewBox="0 0 540 400"
-        className="w-full h-full stroke-slate-900 fill-none"
+        className="h-full w-full fill-none stroke-slate-900"
         strokeWidth="1.25"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -65,15 +65,7 @@ export function Sidings({ intensity = 100, isTouring = false }: SidingsProps) {
           {Array.from({ length: 14 }).map((_, step) => {
             const rx = 160 + step * 20 * 0.866;
             const ry = 160 + step * 20 * 0.5;
-            return (
-              <line
-                key={step}
-                x1={rx}
-                y1={ry}
-                x2={rx + 110 * 0.866}
-                y2={ry - 110 * 0.5}
-              />
-            );
+            return <line key={step} x1={rx} y1={ry} x2={rx + 110 * 0.866} y2={ry - 110 * 0.5} />;
           })}
         </g>
 
@@ -113,10 +105,7 @@ export function Sidings({ intensity = 100, isTouring = false }: SidingsProps) {
                 const wH = isLeadingWagon ? 36 : 24;
 
                 return (
-                  <g
-                    key={wagonIdx}
-                    className="transition-transform duration-300 ease-out"
-                  >
+                  <g key={wagonIdx} className="transition-transform duration-300 ease-out">
                     {/* Shadow on track when lifted */}
                     {isSelected && (
                       <ellipse
@@ -182,7 +171,7 @@ export function Sidings({ intensity = 100, isTouring = false }: SidingsProps) {
         })}
       </svg>
 
-      <div className="absolute bottom-3 left-5 right-5 flex justify-between items-center text-[11px] font-mono text-slate-400 select-none">
+      <div className="absolute right-5 bottom-3 left-5 flex items-center justify-between font-mono text-[11px] text-slate-400 select-none">
         <span>POINT TRACKS · ↑ ↓</span>
         <span>03 · Rail Branch</span>
       </div>
