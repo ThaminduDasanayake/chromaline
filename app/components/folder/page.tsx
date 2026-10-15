@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { TactileSingleFolder } from "@/components/ui/tactile-folder";
 
 type PackageManager = "pnpm" | "npm" | "yarn" | "bun";
@@ -94,6 +95,13 @@ export default function FolderPage() {
             rel="noopener noreferrer"
             className="text-xs font-mono px-3 py-1 rounded-md bg-slate-900 text-white hover:bg-slate-800 transition-colors flex items-center gap-1.5"
           >
+            <Image
+              src="/github.svg"
+              alt="GitHub"
+              width={14}
+              height={14}
+              className="w-3.5 h-3.5"
+            />
             <span>GitHub</span>
             <span className="text-[10px]">&nearr;</span>
           </a>
