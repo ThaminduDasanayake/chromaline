@@ -7,6 +7,10 @@ export { Folder, type FolderProps } from "./folder";
 export interface FolderItem<T = unknown> {
   id: string;
   name: string;
+  /** Optional URL destination. If provided, clicking can navigate to this link. */
+  href?: string;
+  /** Target window/frame for navigation (e.g. "_blank", "_self") */
+  target?: "_blank" | "_self" | string;
   /** Fill / background color for the body of the folder (e.g. "#FFFFFF", "#FFF7ED") */
   bodyColor?: string;
   /** Dark outline color for silhouette, tab headline, and active punch dot (e.g. "#232327", "#E54F10") */
@@ -23,6 +27,8 @@ export interface FolderItem<T = unknown> {
 
   category?: string;
   description?: string;
+  /** Custom rich content, article, or notes to render when viewing this folder */
+  content?: React.ReactNode;
   badge?: string;
   data?: T;
 }
@@ -42,6 +48,8 @@ export interface FolderTrayProps<T = unknown> {
   onOpen?: (folder: FolderItem<T>) => void;
   /** Callback triggered when active folder selection changes */
   onSelect?: (folder: FolderItem<T>) => void;
+  /** Callback triggered when a folder is hovered or scrubbed over */
+  onHover?: (folder: FolderItem<T> | null) => void;
   /** Initial selected folder index */
   defaultSelected?: number;
   /** Spring intensity from 0 to 1 (default: 0.65) */
@@ -57,6 +65,7 @@ export function FolderTray<T = unknown>({
   defaultLightOutline = "#FED7AA",
   onOpen,
   onSelect,
+  onHover,
   defaultSelected = 0,
   intensity = 0.65,
   className = "",
@@ -87,6 +96,24 @@ export function FolderTray<T = unknown>({
   const activeFolder = getFolderItem(selectedIndex) || getFolderItem(0);
   const displayedFolder =
     hoverIndex !== null ? getFolderItem(hoverIndex) || activeFolder : activeFolder;
+
+  const triggerCardAction = useCallback(
+    (f: FolderItem<T>, e?: MouseEvent | React.MouseEvent) => {
+      onSelect?.(f);
+      if (onOpen) {
+        onOpen(f);
+      } else if (f.href) {
+        if (e && (e.metaKey || e.ctrlKey || e.shiftKey)) {
+          window.open(f.href, "_blank");
+        } else if (f.target === "_blank") {
+          window.open(f.href, "_blank");
+        } else {
+          window.location.href = f.href;
+        }
+      }
+    },
+    [onOpen, onSelect]
+  );
 
   // Set card indexes and attach click listeners to the SVG card groups
   useEffect(() => {
@@ -122,8 +149,7 @@ export function FolderTray<T = unknown>({
           setSelectedIndex(idx);
           const f = getFolderItem(idx);
           if (f) {
-            onSelect?.(f);
-            onOpen?.(f);
+            triggerCardAction(f, e);
           }
         };
       });
@@ -160,23 +186,28 @@ export function FolderTray<T = unknown>({
       cancelled = true;
       observer?.disconnect();
     };
-  }, [folders, getFolderItem, onOpen, onSelect, selectedIndex]);
+  }, [folders, getFolderItem, selectedIndex, triggerCardAction]);
 
   // Smooth throttled onRead: only update hover index when crossing between distinct folders
-  const handleRead = useCallback((label: string) => {
-    let cardIdx: number | null = null;
-    if (label && label !== "rest") {
-      const punchNum = parseInt(label, 10);
-      if (!isNaN(punchNum) && punchNum >= 1 && punchNum <= 8) {
-        cardIdx = 8 - punchNum;
+  const handleRead = useCallback(
+    (label: string) => {
+      let cardIdx: number | null = null;
+      if (label && label !== "rest") {
+        const punchNum = parseInt(label, 10);
+        if (!isNaN(punchNum) && punchNum >= 1 && punchNum <= 8) {
+          cardIdx = 8 - punchNum;
+        }
       }
-    }
 
-    if (lastReportedCard.current !== cardIdx) {
-      lastReportedCard.current = cardIdx;
-      setHoverIndex(cardIdx);
-    }
-  }, []);
+      if (lastReportedCard.current !== cardIdx) {
+        lastReportedCard.current = cardIdx;
+        setHoverIndex(cardIdx);
+        const hovered = cardIdx !== null ? getFolderItem(cardIdx) || null : null;
+        onHover?.(hovered);
+      }
+    },
+    [getFolderItem, onHover]
+  );
 
   const handleContainerClick = (e: React.MouseEvent) => {
     // Only open if clicking on an actual folder card
@@ -200,8 +231,7 @@ export function FolderTray<T = unknown>({
       const f = getFolderItem(targetIdx);
       if (f) {
         setSelectedIndex(targetIdx);
-        onSelect?.(f);
-        onOpen?.(f);
+        triggerCardAction(f, e);
       }
     }
   };
@@ -209,6 +239,7 @@ export function FolderTray<T = unknown>({
   const handleContainerLeave = () => {
     lastReportedCard.current = null;
     setHoverIndex(null);
+    onHover?.(null);
   };
 
   // Build 3 distinct CSS color variables for each folder (body, dark outline, light outline)
@@ -479,7 +510,13 @@ export function FolderTray<T = unknown>({
         onClick={handleContainerClick}
         onMouseLeave={handleContainerLeave}
         className={`h-full w-full ${hoverIndex !== null ? "cursor-pointer" : "cursor-default"}`}
-        title={hoverIndex !== null ? `Click to open ${displayedFolder?.name}` : undefined}
+        title={
+          hoverIndex !== null && displayedFolder
+            ? displayedFolder.href
+              ? `Open link: ${displayedFolder.name} ↗`
+              : `View: ${displayedFolder.name}`
+            : undefined
+        }
       >
         <Riffle
           intensity={intensity}
