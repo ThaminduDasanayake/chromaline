@@ -2,10 +2,9 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { Folder } from "@/components/ui/folder";
-import { Button } from "@/components/ui/button";
 import { SelectBar } from "@/components/ui/select-bar";
+import { SiteHeader, SiteFooter } from "@/components/layout";
 import {
   TextAlignLeftIcon,
   TextAlignCenterIcon,
@@ -155,25 +154,7 @@ export default function FolderPage() {
   return (
     <div className="flex min-h-screen flex-col bg-[#FAFAFA] font-sans text-slate-900 selection:bg-slate-200">
       {/* Top Header Navbar */}
-      <header className="sticky top-0 z-40 flex h-14 items-center justify-between border-b border-slate-200/80 bg-white/90 px-6 backdrop-blur-md md:px-12">
-        <div className="flex items-center gap-3">
-          <Link
-            href="/"
-            className="font-mono text-sm font-bold tracking-tight text-slate-950 transition-opacity hover:opacity-80"
-          >
-            Chromaline
-          </Link>
-          <span className="text-slate-300 select-none">/</span>
-          <span className="font-mono text-xs text-slate-600">Folder</span>
-        </div>
-
-        <div className="flex items-center gap-3">
-          <Button href="https://github.com/lucasmarkes/hairline" target="_blank" size="sm">
-            <Image src="/github.svg" alt="GitHub" width={14} height={14} className="h-3.5 w-3.5" />
-            <span>GitHub</span>
-          </Button>
-        </div>
-      </header>
+      <SiteHeader breadcrumb="Folder" />
 
       {/* Main Container */}
       <main className="mx-auto w-full max-w-4xl flex-1 px-4 py-8 sm:px-6 md:px-8 md:py-12">
@@ -494,9 +475,7 @@ export default function FolderPage() {
       </main>
 
       {/* Footer */}
-      <footer className="mt-auto border-t border-slate-200/80 bg-white px-6 py-8 text-center font-mono text-xs text-slate-400">
-        <p>Chromaline · Vibrant line-art components for modern React.</p>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }

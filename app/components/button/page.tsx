@@ -2,19 +2,11 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { SelectBar } from "@/components/ui/select-bar";
 import { ArrowRight, Copy, Check } from "@phosphor-icons/react";
-
-type PackageManager = "pnpm" | "npm" | "yarn" | "bun";
-
-const INSTALL_COMMANDS: Record<PackageManager, string> = {
-  pnpm: "pnpm dlx shadcn@latest add http://localhost:3000/r/button.json",
-  npm: "npx shadcn@latest add http://localhost:3000/r/button.json",
-  yarn: "npx shadcn@latest add http://localhost:3000/r/button.json",
-  bun: "bunx --bun shadcn@latest add http://localhost:3000/r/button.json",
-};
+import { SiteHeader, SiteFooter } from "@/components/layout";
+import { InstallCommandTabs } from "@/components/docs";
 
 const CODE_EXAMPLE_LINES = [
   {
@@ -179,7 +171,6 @@ export default function ButtonPage() {
   const [disabled, setDisabled] = useState(false);
   const [clickCount, setClickCount] = useState(0);
 
-  const [packageManager, setPackageManager] = useState<PackageManager>("pnpm");
   const [installTab, setInstallTab] = useState<"command" | "manual">("command");
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
 
@@ -196,25 +187,7 @@ export default function ButtonPage() {
   return (
     <div className="flex min-h-screen flex-col bg-[#FAFAFA] font-sans text-slate-900 selection:bg-slate-200">
       {/* Top Header Navbar */}
-      <header className="sticky top-0 z-40 flex h-14 items-center justify-between border-b border-slate-200/80 bg-white/90 px-6 backdrop-blur-md md:px-12">
-        <div className="flex items-center gap-3">
-          <Link
-            href="/"
-            className="font-mono text-sm font-bold tracking-tight text-slate-950 transition-opacity hover:opacity-80"
-          >
-            Chromaline
-          </Link>
-          <span className="text-slate-300 select-none">/</span>
-          <span className="font-mono text-xs text-slate-600">Button</span>
-        </div>
-
-        <div className="flex items-center gap-3">
-          <Button href="https://github.com/lucasmarkes/hairline" target="_blank" size="sm">
-            <Image src="/github.svg" alt="GitHub" width={14} height={14} className="h-3.5 w-3.5" />
-            <span>GitHub</span>
-          </Button>
-        </div>
-      </header>
+      <SiteHeader breadcrumb="Button" />
 
       {/* Main Container */}
       <main className="mx-auto w-full max-w-4xl flex-1 px-4 py-8 sm:px-6 md:px-8 md:py-12">
@@ -346,50 +319,7 @@ export default function ButtonPage() {
           </div>
 
           {installTab === "command" ? (
-            <div className="rounded-xl border border-slate-200/90 bg-white p-3.5 font-mono text-xs shadow-2xs">
-              <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-                <div className="flex items-center gap-2">
-                  <span className="rounded bg-slate-100 px-1.5 py-0.5 text-[11px] font-bold text-slate-400 select-none">
-                    &gt;_
-                  </span>
-                  <div className="flex items-center gap-1">
-                    {(["pnpm", "npm", "yarn", "bun"] as PackageManager[]).map((pm) => (
-                      <button
-                        key={pm}
-                        type="button"
-                        onClick={() => setPackageManager(pm)}
-                        className={`cursor-pointer rounded px-2 py-0.5 text-[11px] transition-all ${
-                          packageManager === pm
-                            ? "bg-slate-900 font-semibold text-white"
-                            : "bg-slate-50 text-slate-500 hover:text-slate-800"
-                        }`}
-                      >
-                        {pm}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() => copyToClipboard(INSTALL_COMMANDS[packageManager], "cli-copy")}
-                  className="cursor-pointer rounded p-1 text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900"
-                  title="Copy command"
-                >
-                  {copiedKey === "cli-copy" ? (
-                    <span className="flex items-center gap-1 text-[10px] font-medium text-emerald-600">
-                      <Check size={13} weight="bold" /> Copied!
-                    </span>
-                  ) : (
-                    <Copy size={14} />
-                  )}
-                </button>
-              </div>
-
-              <div className="overflow-x-auto pt-3 text-[12px] whitespace-nowrap text-slate-800 select-all">
-                {INSTALL_COMMANDS[packageManager]}
-              </div>
-            </div>
+            <InstallCommandTabs componentName="button" />
           ) : (
             <div className="space-y-3 rounded-xl border border-slate-200/90 bg-white p-4 font-mono text-xs shadow-2xs">
               <div className="flex items-center justify-between border-b border-slate-100 pb-2">
@@ -490,9 +420,7 @@ export default function ButtonPage() {
       </main>
 
       {/* Clean Minimal Footer */}
-      <footer className="mt-auto border-t border-slate-200/80 bg-white px-6 py-8 text-center font-mono text-xs text-slate-400">
-        <p>Chromaline · Vibrant line-art components for modern React.</p>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }
