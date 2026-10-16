@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { FolderTray, FolderItem, Folder } from "@/components/ui/folder-tray";
 import { Button } from "@/components/ui/button";
 import { SelectBar } from "@/components/ui/select-bar";
-import { ArrowRight, X, Palette, CircleHalf } from "@phosphor-icons/react";
+import { ArrowRightIcon, XIcon, PaletteIcon, CircleHalfIcon } from "@phosphor-icons/react";
 
 export interface WorkspaceData {
   branch: string;
@@ -211,12 +211,12 @@ export function ProjectLibrary({ showControls = true }: { showControls?: boolean
               {
                 key: "color",
                 label: "Color",
-                icon: <Palette size={13} weight="bold" />,
+                icon: <PaletteIcon size={13} weight="bold" />,
               },
               {
                 key: "original",
                 label: "No color",
-                icon: <CircleHalf size={13} weight="bold" />,
+                icon: <CircleHalfIcon size={13} weight="bold" />,
               },
             ]}
             value={variant}
@@ -247,7 +247,7 @@ export function ProjectLibrary({ showControls = true }: { showControls?: boolean
           onClick={() => setModalFolder(null)}
         >
           <div
-            className="animate-in zoom-in-95 relative aspect-[88/65] w-full max-w-[700px] drop-shadow-[0_30px_50px_rgba(0,0,0,0.45)] filter duration-200 select-none"
+            className="animate-in zoom-in-95 relative aspect-88/65 w-full max-w-175 drop-shadow-[0_30px_50px_rgba(0,0,0,0.45)] filter duration-200 select-none"
             onClick={(e) => e.stopPropagation()}
           >
             <Folder
@@ -271,7 +271,7 @@ export function ProjectLibrary({ showControls = true }: { showControls?: boolean
                 title="Close (Esc)"
                 aria-label="Close dialog"
               >
-                <X size={15} weight="bold" />
+                <XIcon size={15} weight="bold" />
               </button>
 
               {/* Folder Interior Content */}
@@ -312,7 +312,7 @@ export function ProjectLibrary({ showControls = true }: { showControls?: boolean
                       onClick={() => setModalFolder(null)}
                     >
                       <span>Continue</span>
-                      <ArrowRight size={14} weight="bold" />
+                      <ArrowRightIcon size={14} weight="bold" />
                     </Button>
                   </div>
                 </div>

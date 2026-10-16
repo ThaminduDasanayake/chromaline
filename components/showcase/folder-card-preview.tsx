@@ -10,6 +10,7 @@ import {
 } from "@phosphor-icons/react";
 
 export const FOLDER_COLOR_PRESETS = [
+  { name: "Original", body: "#FFFFFF", dark: "#232327", light: "#E0E0E4" },
   { name: "Orange", body: "#E54F10", dark: "#7C2D12", light: "#FED7AA" },
   { name: "Electric Blue", body: "#0A90D2", dark: "#075985", light: "#BAE6FD" },
   { name: "Mint Green", body: "#53F399", dark: "#047857", light: "#D1FAE5" },

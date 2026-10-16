@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { SelectBar } from "@/components/ui/select-bar";
-import { ArrowRight, Copy, Check } from "@phosphor-icons/react";
+import { ArrowRightIcon, CopyIcon, CheckIcon } from "@phosphor-icons/react";
 import { SiteHeader, SiteFooter } from "@/components/layout";
 import { InstallCommandTabs } from "@/components/docs";
 
@@ -25,7 +25,7 @@ const CODE_EXAMPLE_LINES = [
     parts: [
       { text: "import", cls: "text-[#f43f5e]" },
       { text: " { " },
-      { text: "ArrowRight", cls: "text-slate-900 font-semibold" },
+      { text: "ArrowRightIcon", cls: "text-slate-900 font-semibold" },
       { text: " } " },
       { text: "from", cls: "text-[#f43f5e]" },
       { text: ' "@phosphor-icons/react"', cls: "text-[#0284c7]" },
@@ -63,7 +63,7 @@ const CODE_EXAMPLE_LINES = [
     num: 8,
     parts: [
       { text: "      <", cls: "text-slate-500" },
-      { text: "ArrowRight", cls: "text-[#16a34a] font-semibold" },
+      { text: "ArrowRightIcon", cls: "text-[#16a34a] font-semibold" },
       { text: " " },
       { text: "size", cls: "text-purple-600" },
       { text: "={14} " },
@@ -85,13 +85,13 @@ const CODE_EXAMPLE_LINES = [
 ];
 
 const CODE_EXAMPLE_TEXT = `import { Button } from "@/components/ui/button";
-import { ArrowRight } from "@phosphor-icons/react";
+import { ArrowRightIcon } from "@phosphor-icons/react";
 
 export default function Demo() {
   return (
     <Button variant="default" size="default">
       <span>Continue</span>
-      <ArrowRight size={14} weight="bold" />
+      <ArrowRightIcon size={14} weight="bold" />
     </Button>
   );
 };`;
@@ -225,7 +225,7 @@ export default function ButtonPage() {
                 onClick={() => setClickCount((c) => c + 1)}
               >
                 <span>Continue</span>
-                <ArrowRight size={14} weight="bold" />
+                <ArrowRightIcon size={14} weight="bold" />
               </Button>
 
               {clickCount > 0 && (
@@ -334,10 +334,10 @@ export default function ButtonPage() {
                 >
                   {copiedKey === "manual-copy" ? (
                     <span className="flex items-center gap-1 text-[10px] font-medium text-emerald-600">
-                      <Check size={13} weight="bold" /> Copied!
+                      <CheckIcon size={13} weight="bold" /> Copied!
                     </span>
                   ) : (
-                    <Copy size={14} />
+                    <CopyIcon size={14} />
                   )}
                 </button>
               </div>
@@ -360,11 +360,11 @@ export default function ButtonPage() {
             >
               {copiedKey === "usage-copy" ? (
                 <span className="flex items-center gap-1 font-medium text-emerald-600">
-                  <Check size={13} weight="bold" /> Copied!
+                  <CheckIcon size={13} weight="bold" /> Copied!
                 </span>
               ) : (
                 <>
-                  <Copy size={13} />
+                  <CopyIcon size={13} />
                   <span>Copy code</span>
                 </>
               )}

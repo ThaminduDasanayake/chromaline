@@ -5,24 +5,17 @@ import Link from "next/link";
 import { Folder } from "@/components/ui/folder";
 import { SelectBar } from "@/components/ui/select-bar";
 import { SiteHeader, SiteFooter } from "@/components/layout";
+import { InstallCommandTabs } from "@/components/docs";
 import {
   TextAlignLeftIcon,
   TextAlignCenterIcon,
   TextAlignRightIcon,
-  Copy,
-  Check,
+  CopyIcon,
+  CheckIcon,
 } from "@phosphor-icons/react";
 
-type PackageManager = "pnpm" | "npm" | "yarn" | "bun";
-
-const INSTALL_COMMANDS: Record<PackageManager, string> = {
-  pnpm: "pnpm dlx shadcn@latest add http://localhost:3000/r/folder.json",
-  npm: "npx shadcn@latest add http://localhost:3000/r/folder.json",
-  yarn: "npx shadcn@latest add http://localhost:3000/r/folder.json",
-  bun: "bunx --bun shadcn@latest add http://localhost:3000/r/folder.json",
-};
-
 const COLOR_PRESETS = [
+  { name: "Original", body: "#FFFFFF", dark: "#232327", light: "#E0E0E4" },
   { name: "Orange", body: "#E54F10", dark: "#7C2D12", light: "#FED7AA" },
   { name: "Electric Blue", body: "#0A90D2", dark: "#075985", light: "#BAE6FD" },
   { name: "Mint Green", body: "#53F399", dark: "#047857", light: "#D1FAE5" },
@@ -139,7 +132,6 @@ export default function FolderDemo() {
 export default function FolderPage() {
   const [selectedColorIdx, setSelectedColorIdx] = useState(0);
   const [selectedTabPos, setSelectedTabPos] = useState<"left" | "center" | "right">("center");
-  const [packageManager, setPackageManager] = useState<PackageManager>("pnpm");
   const [installTab, setInstallTab] = useState<"command" | "manual">("command");
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
 
@@ -178,7 +170,7 @@ export default function FolderPage() {
 
         {/* Live Interactive Stage with Color & Tab Controls */}
         <div className="mb-12 overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-2xs">
-          <div className="flex min-h-[380px] flex-col items-center justify-center space-y-8 bg-[#F9FAFB] p-8 sm:p-14">
+          <div className="flex min-h-95 flex-col items-center justify-center space-y-8 bg-[#F9FAFB] p-8 sm:p-14">
             {/* Folder Graphic */}
             <Folder
               bodyColor={activeColor.body}
@@ -253,50 +245,7 @@ export default function FolderPage() {
           </div>
 
           {installTab === "command" ? (
-            <div className="rounded-xl border border-slate-200/90 bg-white p-3.5 font-mono text-xs shadow-2xs">
-              <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-                <div className="flex items-center gap-2">
-                  <span className="rounded bg-slate-100 px-1.5 py-0.5 text-[11px] font-bold text-slate-400 select-none">
-                    &gt;_
-                  </span>
-                  <div className="flex items-center gap-1">
-                    {(["pnpm", "npm", "yarn", "bun"] as PackageManager[]).map((pm) => (
-                      <button
-                        key={pm}
-                        type="button"
-                        onClick={() => setPackageManager(pm)}
-                        className={`cursor-pointer rounded px-2 py-0.5 text-[11px] transition-all ${
-                          packageManager === pm
-                            ? "bg-slate-900 font-semibold text-white"
-                            : "bg-slate-50 text-slate-500 hover:text-slate-800"
-                        }`}
-                      >
-                        {pm}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() => copyToClipboard(INSTALL_COMMANDS[packageManager], "cli-copy")}
-                  className="cursor-pointer rounded p-1 text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900"
-                  title="Copy command"
-                >
-                  {copiedKey === "cli-copy" ? (
-                    <span className="flex items-center gap-1 text-[10px] font-medium text-emerald-600">
-                      <Check size={13} weight="bold" /> Copied!
-                    </span>
-                  ) : (
-                    <Copy size={14} />
-                  )}
-                </button>
-              </div>
-
-              <div className="overflow-x-auto pt-3 text-[12px] whitespace-nowrap text-slate-800 select-all">
-                {INSTALL_COMMANDS[packageManager]}
-              </div>
-            </div>
+            <InstallCommandTabs componentName="folder" />
           ) : (
             <div className="space-y-3 rounded-xl border border-slate-200/90 bg-white p-4 font-mono text-xs shadow-2xs">
               <div className="flex items-center justify-between border-b border-slate-100 pb-2">
@@ -337,11 +286,11 @@ export default function FolderPage() {
             >
               {copiedKey === "usage-code" ? (
                 <span className="flex items-center gap-1 font-medium text-emerald-600">
-                  <Check size={13} weight="bold" /> Copied!
+                  <CheckIcon size={13} weight="bold" /> Copied!
                 </span>
               ) : (
                 <>
-                  <Copy size={13} />
+                  <CopyIcon size={13} />
                   <span>Copy code</span>
                 </>
               )}

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Check, Copy } from "@phosphor-icons/react";
+import { CheckIcon, CopyIcon } from "@phosphor-icons/react";
 
 export type PackageManager = "pnpm" | "npm" | "yarn" | "bun";
 
@@ -61,12 +61,12 @@ export function InstallCommandTabs({
         >
           {copied ? (
             <>
-              <Check size={13} weight="bold" className="text-emerald-600" />
+              <CheckIcon size={13} weight="bold" className="text-emerald-600" />
               <span className="text-emerald-600 font-semibold">Copied!</span>
             </>
           ) : (
             <>
-              <Copy size={13} />
+              <CopyIcon size={13} />
               <span>Copy</span>
             </>
           )}

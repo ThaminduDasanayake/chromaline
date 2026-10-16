@@ -1,13 +1,6 @@
 "use client";
 
 import React, { useEffect, useLayoutEffect, useRef, useState, useCallback } from "react";
-import {
-  HouseIcon,
-  MagnifyingGlassIcon,
-  FolderIcon,
-  BookmarkIcon,
-  UserIcon,
-} from "@phosphor-icons/react/ssr";
 
 const useIsomorphicLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
@@ -19,8 +12,6 @@ const overshoot = (bounce: number, tuned: number) =>
 
 const curve = (bounce: number, tuned: number, x1 = 0.28, x2 = 0.36) =>
   `cubic-bezier(${x1}, ${overshoot(bounce, tuned)}, ${x2}, 1)`;
-
-const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v));
 
 const settle = (bounce: number) => ({
   move: curve(bounce, 1.28, 0.28, 0.36),
@@ -313,6 +304,11 @@ export function SelectBar<T extends string = string>({
           opacity: 1;
         }
 
+        .gnav[data-variant="swatches"] .gnav-item,
+        .gnav-item[data-swatch="true"] {
+          opacity: 1;
+        }
+
         .gnav-item:focus-visible {
           outline: 1.5px solid var(--ink, #0f172a);
           outline-offset: 2px;
@@ -323,6 +319,7 @@ export function SelectBar<T extends string = string>({
         ref={trackRef as React.RefObject<HTMLElement>}
         className={`gnav ${className}`}
         data-orientation={vertical ? "vertical" : "horizontal"}
+        data-variant={variant}
         style={vars}
         aria-label={ariaLabel}
       >
@@ -365,6 +362,7 @@ export function SelectBar<T extends string = string>({
               type="button"
               className="gnav-item"
               data-active={isSelected}
+              data-swatch={isSwatch}
               aria-label={item.label || item.key}
               title={item.label || item.key}
               aria-current={isSelected ? "page" : undefined}
@@ -379,7 +377,7 @@ export function SelectBar<T extends string = string>({
               {item.color ? (
                 <span
                   className={`block rounded-full border transition-transform duration-150 ${
-                    isSelected ? "scale-110" : "opacity-80 hover:opacity-100"
+                    isSelected ? "scale-110" : "hover:scale-105"
                   }`}
                   style={{
                     backgroundColor: item.color,
@@ -414,40 +412,5 @@ export function SelectBar<T extends string = string>({
         })}
       </nav>
     </>
-  );
-}
-
-/* ── Default GlassIconBar ────────────────────────────────── */
-const NAV_CORNER = 26;
-
-export function GlassIconBar(props: {
-  glyph?: number;
-  axis?: "row" | "column";
-  dilate?: number;
-  bounce?: number;
-  speed?: number;
-  hug?: number;
-  corner?: number;
-}) {
-  const g = props.glyph ?? 17;
-  const icons: SelectBarItem[] = [
-    { key: "home", label: "Home", icon: <HouseIcon size={g} strokeWidth={2} /> },
-    { key: "search", label: "Search", icon: <MagnifyingGlassIcon size={g} strokeWidth={2} /> },
-    { key: "files", label: "Files", icon: <FolderIcon size={g} strokeWidth={2} /> },
-    { key: "saved", label: "Saved", icon: <BookmarkIcon size={g} strokeWidth={2} /> },
-    { key: "you", label: "You", icon: <UserIcon size={g} strokeWidth={2} /> },
-  ];
-
-  return (
-    <div
-      className="relative flex items-center justify-center p-4"
-      style={
-        {
-          "--gnav-r": `${clamp(props.corner ?? NAV_CORNER, 0, NAV_CORNER)}px`,
-        } as React.CSSProperties
-      }
-    >
-      <SelectBar items={icons} {...props} />
-    </div>
   );
 }
