@@ -103,10 +103,9 @@ export function FolderTray<T = unknown>({
       if (onOpen) {
         onOpen(f);
       } else if (f.href) {
-        if (e && (e.metaKey || e.ctrlKey || e.shiftKey)) {
-          window.open(f.href, "_blank");
-        } else if (f.target === "_blank") {
-          window.open(f.href, "_blank");
+        const target = f.target || "_blank";
+        if (target === "_blank" || e?.metaKey || e?.ctrlKey) {
+          window.open(f.href, "_blank", "noopener,noreferrer");
         } else {
           window.location.href = f.href;
         }

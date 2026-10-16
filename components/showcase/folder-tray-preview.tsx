@@ -51,6 +51,7 @@ export const WORKSPACE_FOLDERS: FolderItem<WorkspaceData>[] = [
     id: "f-2",
     name: "Button Component",
     href: "/components/button",
+    target: "_blank",
     bodyColor: "#0A90D2", // Vivid Electric Blue
     darkOutline: "#075985",
     lightOutline: "#BAE6FD",
@@ -94,6 +95,7 @@ export const WORKSPACE_FOLDERS: FolderItem<WorkspaceData>[] = [
     id: "f-4",
     name: "Folder Primitive",
     href: "/components/folder",
+    target: "_blank",
     bodyColor: "#8B5CF6", // Vivid Bright Violet
     darkOutline: "#4C1D95",
     lightOutline: "#DDD6FE",
@@ -254,11 +256,7 @@ export function FolderTrayPreview({ showControls = true }: { showControls?: bool
 
   const handleOpenFolder = (folder: FolderItem<WorkspaceData>) => {
     if (folder.href) {
-      if (folder.target === "_blank") {
-        window.open(folder.href, "_blank");
-      } else {
-        window.location.href = folder.href;
-      }
+      window.open(folder.href, folder.target || "_blank", "noopener,noreferrer");
     } else {
       setModalFolder(folder);
     }
