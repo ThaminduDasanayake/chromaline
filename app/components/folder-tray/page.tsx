@@ -2,9 +2,10 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { FolderTrayPreview } from "@/components/showcase";
+import { FolderTrayPreview, LinkFolderTrayPreview } from "@/components/showcase";
 import { SiteHeader, SiteFooter } from "@/components/layout";
 import { InstallCommandTabs } from "@/components/docs";
+import { CheckIcon, CopyIcon } from "@phosphor-icons/react";
 
 const CODE_EXAMPLE_LINES = [
   {
@@ -150,6 +151,123 @@ export default function Workspace() {
   );
 };`;
 
+const LINK_EXAMPLE_LINES = [
+  {
+    num: 1,
+    parts: [
+      { text: "import", cls: "text-[#f43f5e]" },
+      { text: " { " },
+      { text: "FolderTray", cls: "text-slate-900 font-semibold" },
+      { text: " } " },
+      { text: "from", cls: "text-[#f43f5e]" },
+      { text: ' "@/components/ui/folder-tray"', cls: "text-[#0284c7]" },
+    ],
+  },
+  { num: 2, parts: [{ text: "" }] },
+  {
+    num: 3,
+    parts: [
+      { text: "const", cls: "text-[#f43f5e]" },
+      { text: " NAV_LINKS = [" },
+    ],
+  },
+  {
+    num: 4,
+    parts: [
+      { text: "  { " },
+      { text: "id", cls: "text-purple-600" },
+      { text: ': "home", ' },
+      { text: "name", cls: "text-purple-600" },
+      { text: ': "Overview", ' },
+      { text: "href", cls: "text-purple-600" },
+      { text: ': "/", ' },
+      { text: "bodyColor", cls: "text-purple-600" },
+      { text: ': "#E54F10"' },
+      { text: " }," },
+    ],
+  },
+  {
+    num: 5,
+    parts: [
+      { text: "  { " },
+      { text: "id", cls: "text-purple-600" },
+      { text: ': "button", ' },
+      { text: "name", cls: "text-purple-600" },
+      { text: ': "Button", ' },
+      { text: "href", cls: "text-purple-600" },
+      { text: ': "/components/button", ' },
+      { text: "bodyColor", cls: "text-purple-600" },
+      { text: ': "#0A90D2"' },
+      { text: " }," },
+    ],
+  },
+  {
+    num: 6,
+    parts: [
+      { text: "  { " },
+      { text: "id", cls: "text-purple-600" },
+      { text: ': "folder", ' },
+      { text: "name", cls: "text-purple-600" },
+      { text: ': "Folder", ' },
+      { text: "href", cls: "text-purple-600" },
+      { text: ': "/components/folder", ' },
+      { text: "bodyColor", cls: "text-purple-600" },
+      { text: ': "#53F399"' },
+      { text: " }," },
+    ],
+  },
+  {
+    num: 7,
+    parts: [
+      { text: "  { " },
+      { text: "id", cls: "text-purple-600" },
+      { text: ': "github", ' },
+      { text: "name", cls: "text-purple-600" },
+      { text: ': "GitHub", ' },
+      { text: "href", cls: "text-purple-600" },
+      { text: ': "https://github.com", ' },
+      { text: "target", cls: "text-purple-600" },
+      { text: ': "_blank", ' },
+      { text: "bodyColor", cls: "text-purple-600" },
+      { text: ': "#F59E0B"' },
+      { text: " }," },
+    ],
+  },
+  { num: 8, parts: [{ text: "];" }] },
+  { num: 9, parts: [{ text: "" }] },
+  {
+    num: 10,
+    parts: [
+      { text: "export default function", cls: "text-[#f43f5e]" },
+      { text: " NavDeck() {" },
+    ],
+  },
+  {
+    num: 11,
+    parts: [
+      { text: "  return <", cls: "text-slate-500" },
+      { text: "FolderTray", cls: "text-[#16a34a] font-semibold" },
+      { text: " " },
+      { text: "folders", cls: "text-purple-600" },
+      { text: "={NAV_LINKS} />;" },
+    ],
+  },
+  { num: 12, parts: [{ text: "}" }] },
+];
+
+const LINK_EXAMPLE_TEXT = `import { FolderTray } from "@/components/ui/folder-tray";
+
+const NAV_LINKS = [
+  { id: "home", name: "Overview", href: "/", bodyColor: "#E54F10", darkOutline: "#7C2D12", lightOutline: "#FED7AA" },
+  { id: "button", name: "Button", href: "/components/button", bodyColor: "#0A90D2", darkOutline: "#075985", lightOutline: "#BAE6FD" },
+  { id: "folder", name: "Folder", href: "/components/folder", bodyColor: "#53F399", darkOutline: "#047857", lightOutline: "#D1FAE5" },
+  { id: "github", name: "GitHub", href: "https://github.com", target: "_blank", bodyColor: "#F59E0B", darkOutline: "#92400E", lightOutline: "#FEF08A" },
+];
+
+export default function NavDeck() {
+  return <FolderTray folders={NAV_LINKS} />;
+}`;
+
 export default function FolderTrayPage() {
   const [installTab, setInstallTab] = useState<"command" | "manual">("command");
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
@@ -281,6 +399,73 @@ export default function FolderTrayPage() {
           </div>
         </section>
 
+        {/* Examples Section */}
+        <section className="mb-12">
+          <div className="mb-4">
+            <h2 className="text-xl font-bold tracking-tight text-slate-950">Examples</h2>
+            <p className="text-sm text-slate-500">
+              Interactive patterns demonstrating link navigation and custom workflows.
+            </p>
+          </div>
+
+          {/* Example 1: Link Navigation Bookmark Deck */}
+          <div className="space-y-4">
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <h3 className="text-base font-semibold text-slate-900">Link Navigation (Bookmark Deck)</h3>
+                <p className="text-xs text-slate-500">
+                  Each folder accepts an optional <code className="rounded bg-slate-100 px-1 py-0.5 font-mono text-slate-700">href</code>. Clicking opens internal routes or external URLs directly, and <code className="rounded bg-slate-100 px-1 py-0.5 font-mono text-slate-700">onHover</code> broadcasts live card coordinates for destination docks.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => copyToClipboard(LINK_EXAMPLE_TEXT, "link-example-code")}
+                className="flex shrink-0 cursor-pointer items-center gap-1.5 font-mono text-xs text-slate-500 transition-colors hover:text-slate-900"
+              >
+                {copiedKey === "link-example-code" ? (
+                  <span className="flex items-center gap-1 font-medium text-emerald-600">
+                    <CheckIcon size={13} weight="bold" /> Copied!
+                  </span>
+                ) : (
+                  <>
+                    <CopyIcon size={13} />
+                    <span>Copy code</span>
+                  </>
+                )}
+              </button>
+            </div>
+
+            {/* Live Interactive Stage */}
+            <div className="overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-2xs">
+              <div className="relative flex min-h-[380px] flex-col items-center justify-center bg-[#F9FAFB] p-8 sm:p-12">
+                <LinkFolderTrayPreview />
+              </div>
+            </div>
+
+            {/* Code Snippet */}
+            <div className="overflow-x-auto rounded-2xl border border-slate-200/90 bg-white p-6 font-mono text-xs shadow-2xs">
+              <pre className="leading-relaxed">
+                <code>
+                  {LINK_EXAMPLE_LINES.map((line) => (
+                    <div key={line.num} className="table-row">
+                      <span className="table-cell pr-6 text-right text-slate-300 select-none">
+                        {line.num}
+                      </span>
+                      <span className="table-cell">
+                        {line.parts.map((part, idx) => (
+                          <span key={idx} className={part.cls || "text-slate-800"}>
+                            {part.text}
+                          </span>
+                        ))}
+                      </span>
+                    </div>
+                  ))}
+                </code>
+              </pre>
+            </div>
+          </div>
+        </section>
+
         {/* Props Documentation Section */}
         <section className="mb-12">
           <h2 className="mb-4 text-xl font-bold tracking-tight text-slate-950">Props Reference</h2>
@@ -301,7 +486,7 @@ export default function FolderTrayPage() {
                   <td className="p-3 text-slate-400">required</td>
                   <td className="p-3 font-sans text-slate-600">
                     Array of 1 to 8 folder items. Accepts <code>bodyColor</code>,{" "}
-                    <code>darkOutline</code>, and <code>lightOutline</code>.
+                    <code>darkOutline</code>, <code>lightOutline</code>, <code>href</code>, <code>target</code>, and <code>content</code>.
                   </td>
                 </tr>
                 <tr>
@@ -309,7 +494,15 @@ export default function FolderTrayPage() {
                   <td className="p-3 text-purple-700">(folder) =&gt; void</td>
                   <td className="p-3 text-slate-400">undefined</td>
                   <td className="p-3 font-sans text-slate-600">
-                    Callback triggered when any folder is clicked.
+                    Callback triggered when any folder is clicked. If omitted and the folder has an <code>href</code>, automatically navigates to that destination.
+                  </td>
+                </tr>
+                <tr>
+                  <td className="p-3 font-semibold text-slate-900">onHover</td>
+                  <td className="p-3 text-purple-700">(folder | null) =&gt; void</td>
+                  <td className="p-3 text-slate-400">undefined</td>
+                  <td className="p-3 font-sans text-slate-600">
+                    Callback fired whenever a folder is hovered or scrubbed over in the 3D tray.
                   </td>
                 </tr>
                 <tr>
@@ -318,6 +511,14 @@ export default function FolderTrayPage() {
                   <td className="p-3 text-slate-400">undefined</td>
                   <td className="p-3 font-sans text-slate-600">
                     Callback fired whenever folder selection changes on hover or click.
+                  </td>
+                </tr>
+                <tr>
+                  <td className="p-3 font-semibold text-slate-900">variant</td>
+                  <td className="p-3 text-purple-700">&quot;color&quot; | &quot;original&quot;</td>
+                  <td className="p-3 text-slate-700">&quot;color&quot;</td>
+                  <td className="p-3 font-sans text-slate-600">
+                    Visual theme: vibrant colored folders or monochrome white line-art.
                   </td>
                 </tr>
                 <tr>
