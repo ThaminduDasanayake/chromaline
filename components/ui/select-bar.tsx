@@ -96,10 +96,15 @@ export function SelectBar<T extends string = string>({
     [vertical]
   );
 
+  const activeRef = useRef<T>(initialKey);
+  const prevValueRef = useRef<T | undefined>(value);
+
   // Exact 2-phase elastic stretch and settle glide
   const select = useCallback(
     (k: T) => {
-      if (k === active && phase === "idle") return;
+      if (k === activeRef.current) return;
+      activeRef.current = k;
+      prevValueRef.current = k;
       const to = measure(k);
       const from = indRef.current;
       setActive(k);
@@ -138,25 +143,20 @@ export function SelectBar<T extends string = string>({
         150 * rate(speed)
       );
     },
-    [active, dilate, measure, phase, speed]
+    [dilate, measure, speed]
   );
 
   // Controlled sync from props.value
-  const prevValueRef = useRef<T | undefined>(value);
   useEffect(() => {
-    if (value !== undefined && value !== prevValueRef.current) {
-      prevValueRef.current = value;
-      const frame = requestAnimationFrame(() => {
-        select(value);
-      });
-      return () => cancelAnimationFrame(frame);
+    if (value !== undefined && value !== activeRef.current) {
+      select(value);
     }
   }, [value, select]);
 
   // Initial mount measurement & ResizeObserver (only settles on mount/resize, never cancels active glide)
   useIsomorphicLayoutEffect(() => {
     const settleInd = () => {
-      const next = measure(active);
+      const next = measure(activeRef.current);
       if (!next) return;
       indRef.current = next;
       setPhase("idle");
@@ -166,10 +166,7 @@ export function SelectBar<T extends string = string>({
 
     const ro = new ResizeObserver(settleInd);
     if (trackRef.current) ro.observe(trackRef.current);
-    return () => {
-      ro.disconnect();
-      window.clearTimeout(timer.current);
-    };
+    return () => ro.disconnect();
   }, [vertical]);
 
   const curveStyles = settle(bounce);
@@ -333,24 +330,29 @@ export function SelectBar<T extends string = string>({
 
         {items.map((item) => {
           const isSelected = active === item.key;
-          const isIconOnly = Boolean(item.icon && !item.showLabel);
           const isSwatch = Boolean(item.color || variant === "swatches");
+          const isIconOnly = Boolean(item.icon && (!item.label || item.showLabel === false));
 
           let slotStyle: React.CSSProperties = {};
           if (isSwatch || isIconOnly) {
-            const dim = size === "xs" ? 24 : size === "default" ? 36 : 28;
+            const dim = size === "xs" ? 26 : size === "default" ? 36 : 30;
             slotStyle = {
               width: `${dim}px`,
               height: `${dim}px`,
+              minWidth: `${dim}px`,
               padding: 0,
+              flexShrink: 0,
             };
           } else {
-            const h = size === "xs" ? 24 : size === "default" ? 36 : 28;
-            const padH = size === "xs" ? 8 : size === "default" ? 14 : 10;
+            const h = size === "xs" ? 26 : size === "default" ? 36 : 30;
+            const padH = size === "xs" ? 11 : size === "default" ? 16 : 13;
             slotStyle = {
+              width: "auto",
               minWidth: `${h}px`,
               height: `${h}px`,
               padding: `0 ${padH}px`,
+              whiteSpace: "nowrap",
+              flexShrink: 0,
             };
           }
 
@@ -390,12 +392,21 @@ export function SelectBar<T extends string = string>({
                 <span className="flex items-center justify-center text-current">{item.icon}</span>
               ) : (
                 <span
-                  className={`flex items-center justify-center gap-1.5 font-mono ${
-                    size === "xs" ? "text-[11px]" : size === "default" ? "text-xs" : "text-xs"
+                  className={`inline-flex items-center justify-center gap-1.5 font-sans ${
+                    size === "xs"
+                      ? "text-[11.5px] font-medium"
+                      : size === "default"
+                        ? "text-[13px] font-medium"
+                        : "text-xs font-medium"
                   }`}
+                  style={{ whiteSpace: "nowrap" }}
                 >
-                  {item.icon}
-                  {item.label && <span>{item.label}</span>}
+                  {item.icon && (
+                    <span className="inline-flex shrink-0 items-center justify-center">
+                      {item.icon}
+                    </span>
+                  )}
+                  {item.label && <span className="shrink-0">{item.label}</span>}
                 </span>
               )}
             </button>

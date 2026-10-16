@@ -30,6 +30,8 @@ export interface FolderItem<T = unknown> {
 export interface FolderTrayProps<T = unknown> {
   /** Array of folder cards (1 to 8). Each folder defines bodyColor, darkOutline, and lightOutline. */
   folders: FolderItem<T>[];
+  /** Visual theme variant: "color" for vibrant colored folders, "original" for clean monochrome white line-art (default: "color") */
+  variant?: "color" | "original";
   /** Default body color (default: "#E54F10") */
   defaultBodyColor?: string;
   /** Default dark outline (default: "#7C2D12") */
@@ -49,6 +51,7 @@ export interface FolderTrayProps<T = unknown> {
 
 export function FolderTray<T = unknown>({
   folders,
+  variant = "color",
   defaultBodyColor = "#E54F10",
   defaultDarkOutline = "#7C2D12",
   defaultLightOutline = "#FED7AA",
@@ -64,8 +67,26 @@ export function FolderTray<T = unknown>({
   const containerRef = useRef<HTMLDivElement>(null);
   const lastReportedCard = useRef<number | null>(null);
 
-  const activeFolder = folders[selectedIndex] || folders[0];
-  const displayedFolder = hoverIndex !== null ? folders[hoverIndex] || activeFolder : activeFolder;
+  const isOriginal = variant === "original";
+
+  const getFolderItem = useCallback(
+    (idx: number): FolderItem<T> | undefined => {
+      const folder = folders[idx];
+      if (!folder) return undefined;
+      if (!isOriginal) return folder;
+      return {
+        ...folder,
+        bodyColor: "#FFFFFF",
+        darkOutline: "#232327",
+        lightOutline: "#E0E0E4",
+      };
+    },
+    [folders, isOriginal]
+  );
+
+  const activeFolder = getFolderItem(selectedIndex) || getFolderItem(0);
+  const displayedFolder =
+    hoverIndex !== null ? getFolderItem(hoverIndex) || activeFolder : activeFolder;
 
   // Set card indexes and attach click listeners to the SVG card groups
   useEffect(() => {
@@ -99,9 +120,10 @@ export function FolderTray<T = unknown>({
         (grp as HTMLElement).onclick = (e) => {
           e.stopPropagation();
           setSelectedIndex(idx);
-          if (folders[idx]) {
-            onSelect?.(folders[idx]);
-            onOpen?.(folders[idx]);
+          const f = getFolderItem(idx);
+          if (f) {
+            onSelect?.(f);
+            onOpen?.(f);
           }
         };
       });
@@ -138,7 +160,7 @@ export function FolderTray<T = unknown>({
       cancelled = true;
       observer?.disconnect();
     };
-  }, [folders, onOpen, onSelect, selectedIndex]);
+  }, [folders, getFolderItem, onOpen, onSelect, selectedIndex]);
 
   // Smooth throttled onRead: only update hover index when crossing between distinct folders
   const handleRead = useCallback((label: string) => {
@@ -174,10 +196,13 @@ export function FolderTray<T = unknown>({
         ? parseInt(cardIndexAttr, 10)
         : lastReportedCard.current;
 
-    if (targetIdx !== null && folders[targetIdx]) {
-      setSelectedIndex(targetIdx);
-      onSelect?.(folders[targetIdx]);
-      onOpen?.(folders[targetIdx]);
+    if (targetIdx !== null) {
+      const f = getFolderItem(targetIdx);
+      if (f) {
+        setSelectedIndex(targetIdx);
+        onSelect?.(f);
+        onOpen?.(f);
+      }
     }
   };
 
@@ -189,9 +214,9 @@ export function FolderTray<T = unknown>({
   // Build 3 distinct CSS color variables for each folder (body, dark outline, light outline)
   const cssColorVariables: Record<string, string> = {};
   folders.slice(0, 8).forEach((item, idx) => {
-    const body = item.bodyColor || item.fill || item.color || defaultBodyColor;
-    const dark = item.darkOutline || item.outline || defaultDarkOutline;
-    const light = item.lightOutline || defaultLightOutline;
+    const body = isOriginal ? "#FFFFFF" : (item.bodyColor || item.fill || item.color || defaultBodyColor);
+    const dark = isOriginal ? "#232327" : (item.darkOutline || item.outline || defaultDarkOutline);
+    const light = isOriginal ? "#E0E0E4" : (item.lightOutline || defaultLightOutline);
 
     cssColorVariables[`--folder-body-${idx}`] = body;
     cssColorVariables[`--folder-dark-${idx}`] = dark;

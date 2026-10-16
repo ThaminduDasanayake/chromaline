@@ -3,7 +3,8 @@
 import React, { useState, useEffect } from "react";
 import { FolderTray, FolderItem, Folder } from "@/components/ui/folder-tray";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, X } from "@phosphor-icons/react";
+import { SelectBar } from "@/components/ui/select-bar";
+import { ArrowRight, X, Palette, CircleHalf } from "@phosphor-icons/react";
 
 export interface WorkspaceData {
   branch: string;
@@ -179,7 +180,8 @@ function isDarkColor(hex?: string): boolean {
   return yiq < 160;
 }
 
-export function ProjectLibrary() {
+export function ProjectLibrary({ showControls = true }: { showControls?: boolean }) {
+  const [variant, setVariant] = useState<"color" | "original">("color");
   const [modalFolder, setModalFolder] = useState<FolderItem<WorkspaceData> | null>(null);
 
   // Close on Escape key
@@ -199,11 +201,36 @@ export function ProjectLibrary() {
   const isDark = modalFolder ? isDarkColor(modalFolder.bodyColor) : true;
 
   return (
-    <div className="flex w-full flex-col items-center">
+    <div className="relative flex w-full flex-col items-center">
+      {/* Visual Theme Selector: Color vs No color (Original theme) */}
+      {showControls && (
+        <div className="absolute top-2 right-2 z-10 sm:top-3 sm:right-3">
+          <SelectBar<"color" | "original">
+            size="xs"
+            items={[
+              {
+                key: "color",
+                label: "Color",
+                icon: <Palette size={13} weight="bold" />,
+              },
+              {
+                key: "original",
+                label: "No color",
+                icon: <CircleHalf size={13} weight="bold" />,
+              },
+            ]}
+            value={variant}
+            onChange={setVariant}
+            ariaLabel="Select folder tray theme"
+          />
+        </div>
+      )}
+
       {/* 3D Folder Tray Preview Container */}
       <div className="flex w-full justify-center py-4">
         <FolderTray<WorkspaceData>
           folders={WORKSPACE_FOLDERS}
+          variant={variant}
           intensity={0.65}
           defaultSelected={0}
           onOpen={(folder) => setModalFolder(folder)}
