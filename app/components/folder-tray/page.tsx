@@ -2,17 +2,9 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
-import { ProjectLibrary } from "@/components/tactile/project-library";
-
-type PackageManager = "pnpm" | "npm" | "yarn" | "bun";
-
-const INSTALL_COMMANDS: Record<PackageManager, string> = {
-  pnpm: "pnpm dlx shadcn@latest add http://localhost:3000/r/folder-tray.json",
-  npm: "npx shadcn@latest add http://localhost:3000/r/folder-tray.json",
-  yarn: "npx shadcn@latest add http://localhost:3000/r/folder-tray.json",
-  bun: "bunx --bun shadcn@latest add http://localhost:3000/r/folder-tray.json",
-};
+import { FolderTrayPreview } from "@/components/showcase";
+import { SiteHeader, SiteFooter } from "@/components/layout";
+import { InstallCommandTabs } from "@/components/docs";
 
 const CODE_EXAMPLE_LINES = [
   {
@@ -159,7 +151,6 @@ export default function Workspace() {
 };`;
 
 export default function FolderTrayPage() {
-  const [packageManager, setPackageManager] = useState<PackageManager>("pnpm");
   const [installTab, setInstallTab] = useState<"command" | "manual">("command");
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
 
@@ -170,43 +161,12 @@ export default function FolderTrayPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAFAFA] font-sans text-slate-900 selection:bg-slate-200">
+    <div className="flex min-h-screen flex-col bg-[#FAFAFA] font-sans text-slate-900 selection:bg-slate-200">
       {/* Top Header Navbar */}
-      <header className="sticky top-0 z-40 flex h-14 items-center justify-between border-b border-slate-200/80 bg-white/90 px-6 backdrop-blur-md md:px-12">
-        <div className="flex items-center gap-3">
-          <Link
-            href="/"
-            className="font-mono text-sm font-bold tracking-tight text-slate-950 transition-opacity hover:opacity-80"
-          >
-            Chromaline
-          </Link>
-          <span className="text-slate-300 select-none">/</span>
-          <span className="font-mono text-xs text-slate-600">Folder Tray</span>
-        </div>
-
-        <div className="flex items-center gap-3">
-          <a
-            href="/r/folder-tray.json"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="rounded-md px-2.5 py-1 font-mono text-xs text-slate-600 transition-colors hover:text-slate-900"
-          >
-            Registry JSON
-          </a>
-          <a
-            href="https://github.com/lucasmarkes/hairline"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-1.5 rounded-md bg-slate-900 px-3 py-1 font-mono text-xs text-white transition-colors hover:bg-slate-800"
-          >
-            <Image src="/github.svg" alt="GitHub" width={14} height={14} className="h-3.5 w-3.5" />
-            <span>GitHub</span>
-          </a>
-        </div>
-      </header>
+      <SiteHeader breadcrumb="Folder Tray" />
 
       {/* Main Container */}
-      <main className="mx-auto max-w-4xl px-4 py-8 sm:px-6 md:px-8 md:py-12">
+      <main className="mx-auto w-full max-w-4xl flex-1 px-4 py-8 sm:px-6 md:px-8 md:py-12">
         {/* Back Link */}
         <Link
           href="/"
@@ -227,8 +187,8 @@ export default function FolderTrayPage() {
 
         {/* Live Interactive Stage */}
         <div className="mb-12 overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-2xs">
-          <div className="flex min-h-[380px] flex-col items-center justify-center bg-[#F9FAFB] p-8 sm:p-12">
-            <ProjectLibrary />
+          <div className="relative flex min-h-[380px] flex-col items-center justify-center bg-[#F9FAFB] p-8 sm:p-12">
+            <FolderTrayPreview />
           </div>
         </div>
 
@@ -262,45 +222,7 @@ export default function FolderTrayPage() {
           </div>
 
           {installTab === "command" ? (
-            <div>
-              {/* Package Manager Selector Tabs */}
-              <div className="flex items-center justify-between rounded-t-xl border border-b-0 border-slate-200/90 bg-slate-100 px-4 py-2 font-mono text-xs">
-                <div className="flex items-center gap-1">
-                  {(["pnpm", "npm", "yarn", "bun"] as const).map((pm) => (
-                    <button
-                      key={pm}
-                      type="button"
-                      onClick={() => setPackageManager(pm)}
-                      className={`cursor-pointer rounded px-2.5 py-1 font-mono transition-all ${
-                        packageManager === pm
-                          ? "bg-white font-semibold text-slate-950 shadow-2xs"
-                          : "text-slate-500 hover:text-slate-900"
-                      }`}
-                    >
-                      {pm}
-                    </button>
-                  ))}
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() =>
-                    copyToClipboard(INSTALL_COMMANDS[packageManager], `install-${packageManager}`)
-                  }
-                  className="cursor-pointer text-slate-500 transition-colors hover:text-slate-900"
-                  title="Copy command"
-                >
-                  {copiedKey === `install-${packageManager}` ? "Copied!" : "Copy"}
-                </button>
-              </div>
-
-              {/* Command Code Snippet Block */}
-              <div className="rounded-b-xl border border-slate-200/90 bg-[#1E1E2E] p-4 font-mono text-xs text-slate-100">
-                <div className="flex items-center justify-between overflow-x-auto">
-                  <code>{INSTALL_COMMANDS[packageManager]}</code>
-                </div>
-              </div>
-            </div>
+            <InstallCommandTabs componentName="folder-tray" />
           ) : (
             <div className="space-y-4 font-mono text-xs">
               <div className="rounded-xl border border-slate-200/90 bg-white p-4">
@@ -429,9 +351,7 @@ export default function FolderTrayPage() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-slate-200/80 bg-white px-6 py-8 text-center font-mono text-xs text-slate-400">
-        <p>Chromaline · Vibrant line-art components for modern React.</p>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }

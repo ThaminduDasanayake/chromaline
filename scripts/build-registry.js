@@ -5,6 +5,8 @@ const path = require("path");
 function buildRegistry() {
   const trayPath = path.join(__dirname, "../components/ui/folder-tray.tsx");
   const folderPath = path.join(__dirname, "../components/ui/folder.tsx");
+  const buttonPath = path.join(__dirname, "../components/ui/button.tsx");
+  const selectBarPath = path.join(__dirname, "../components/ui/select-bar.tsx");
 
   if (!fs.existsSync(trayPath)) {
     console.error("Component not found:", trayPath);
@@ -13,6 +15,10 @@ function buildRegistry() {
 
   const trayContent = fs.readFileSync(trayPath, "utf8");
   const folderContent = fs.existsSync(folderPath) ? fs.readFileSync(folderPath, "utf8") : "";
+  const buttonContent = fs.existsSync(buttonPath) ? fs.readFileSync(buttonPath, "utf8") : "";
+  const selectBarContent = fs.existsSync(selectBarPath)
+    ? fs.readFileSync(selectBarPath, "utf8")
+    : "";
 
   // 1. Full Folder Tray with Folder Support
   const trayRegistryItem = {
@@ -65,6 +71,48 @@ function buildRegistry() {
     ],
   };
 
+  // 3. Tactile 3D Button Component
+  const buttonRegistryItem = {
+    $schema: "https://ui.shadcn.com/schema/registry-item.json",
+    name: "button",
+    type: "registry:ui",
+    title: "Button",
+    description:
+      "Tactile 3D push button engineered with physical extrusion depth, inset bevel highlights, and click kinematics.",
+    dependencies: [],
+    devDependencies: [],
+    registryDependencies: [],
+    files: [
+      {
+        path: "components/ui/button.tsx",
+        content: buttonContent,
+        type: "registry:ui",
+        target: "components/ui/button.tsx",
+      },
+    ],
+  };
+
+  // 4. Elastic Kinetic Select Bar Component
+  const selectBarRegistryItem = {
+    $schema: "https://ui.shadcn.com/schema/registry-item.json",
+    name: "select-bar",
+    type: "registry:ui",
+    title: "Select Bar",
+    description:
+      "Elastic kinetic segmented pill and color swatch selector with two-phase mercury dilation and overshoot landing.",
+    dependencies: [],
+    devDependencies: [],
+    registryDependencies: [],
+    files: [
+      {
+        path: "components/ui/select-bar.tsx",
+        content: selectBarContent,
+        type: "registry:ui",
+        target: "components/ui/select-bar.tsx",
+      },
+    ],
+  };
+
   const outDir = path.join(__dirname, "../public/r");
   fs.mkdirSync(outDir, { recursive: true });
 
@@ -77,26 +125,17 @@ function buildRegistry() {
     path.join(outDir, "folder.json"),
     JSON.stringify(singleFolderRegistryItem, null, 2)
   );
-
-  // Compatibility aliases
+  fs.writeFileSync(path.join(outDir, "button.json"), JSON.stringify(buttonRegistryItem, null, 2));
   fs.writeFileSync(
-    path.join(outDir, "rolodex.json"),
-    JSON.stringify({ ...trayRegistryItem, name: "rolodex" }, null, 2)
-  );
-  fs.writeFileSync(
-    path.join(outDir, "tactile-rolodex.json"),
-    JSON.stringify({ ...trayRegistryItem, name: "tactile-rolodex" }, null, 2)
-  );
-  fs.writeFileSync(
-    path.join(outDir, "tactile-folder.json"),
-    JSON.stringify({ ...singleFolderRegistryItem, name: "tactile-folder" }, null, 2)
+    path.join(outDir, "select-bar.json"),
+    JSON.stringify(selectBarRegistryItem, null, 2)
   );
 
   const indexRegistry = {
     $schema: "https://ui.shadcn.com/schema/registry.json",
     name: "chromaline",
     homepage: "https://github.com/lucasmarkes/hairline",
-    items: [trayRegistryItem, singleFolderRegistryItem],
+    items: [trayRegistryItem, singleFolderRegistryItem, buttonRegistryItem, selectBarRegistryItem],
   };
   fs.writeFileSync(path.join(outDir, "index.json"), JSON.stringify(indexRegistry, null, 2));
 
@@ -139,12 +178,40 @@ function buildRegistry() {
           },
         ],
       },
+      {
+        name: "button",
+        type: "registry:ui",
+        title: "Button",
+        description:
+          "Tactile 3D push button engineered with physical extrusion depth and click kinematics.",
+        files: [
+          {
+            path: "components/ui/button.tsx",
+            type: "registry:ui",
+            target: "components/ui/button.tsx",
+          },
+        ],
+      },
+      {
+        name: "select-bar",
+        type: "registry:ui",
+        title: "Select Bar",
+        description:
+          "Elastic kinetic segmented pill and color swatch selector with two-phase mercury dilation and overshoot landing.",
+        files: [
+          {
+            path: "components/ui/select-bar.tsx",
+            type: "registry:ui",
+            target: "components/ui/select-bar.tsx",
+          },
+        ],
+      },
     ],
   };
   fs.writeFileSync(path.join(__dirname, "../registry.json"), JSON.stringify(rootRegistry, null, 2));
 
   console.log(
-    "✓ Chromaline registry generated at public/r/folder-tray.json and public/r/folder.json"
+    "✓ Chromaline registry generated at public/r/folder-tray.json, public/r/folder.json, public/r/button.json, and public/r/select-bar.json"
   );
 }
 

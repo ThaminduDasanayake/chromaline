@@ -13,7 +13,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="light bg-white" style={{ colorScheme: "light" }}>
+    <html lang="en" className="light h-full bg-white" style={{ colorScheme: "light" }}>
       <body className="flex min-h-full flex-col bg-white font-sans text-slate-900 antialiased selection:bg-slate-200">
         {children}
       </body>
