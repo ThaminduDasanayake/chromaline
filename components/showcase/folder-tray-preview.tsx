@@ -14,157 +14,174 @@ export interface WorkspaceData {
   envVars: { key: string; value: string }[];
 }
 
-// 8 Folders using Project 1 through Project 8 with bright saturated body colors
+// 8 Folders showcasing the full spectrum: live links, short notes, and long-form articles
 export const WORKSPACE_FOLDERS: FolderItem<WorkspaceData>[] = [
   {
-    id: "project-1",
-    name: "Project 1",
-    bodyColor: "#E54F10", // rgb(229, 79, 16) - Vivid Terracotta Orange
-    darkOutline: "#7C2D12", // Dark Rust Outline
-    lightOutline: "#FED7AA", // Cream Light Ruled Lines & Dots
-    category: "Design",
-    description: "Brand identity, design system primitives, and UI component assets.",
+    id: "f-1",
+    name: "The Tactile Web",
+    bodyColor: "#E54F10", // Vivid Terracotta Orange
+    darkOutline: "#7C2D12",
+    lightOutline: "#FED7AA",
+    category: "Essay",
+    description:
+      "An inquiry into why physical metaphors, paper grain, and spring physics make digital software feel durable and human.",
+    content: (
+      <div className="space-y-3">
+        <p>
+          For over a decade, digital interface design leaned heavily toward sterile flat rectangles—erasing texture, depth, and spatial continuity in pursuit of minimalist abstraction.
+        </p>
+        <p>
+          The tactile web is a quiet renaissance: re-anchoring digital artifacts in physical intuition. When an element bends with mass, reflects ambient lighting, or riffles like index cards in a drawer, the interface stops feeling like temporary pixels and starts feeling like an heirloom tool.
+        </p>
+        <p>
+          Chromaline explores this intersection—combining lightweight hairline vector graphics with natural spring physics to bring weight, delight, and permanence back to the browser.
+        </p>
+      </div>
+    ),
     data: {
       branch: "main",
       status: "deployed",
       updated: "12m ago",
-      filesCount: 42,
-      files: ["src/index.ts", "src/auth/session.ts", "src/crypto/jwt.ts", "env.production"],
-      envVars: [
-        { key: "JWT_SECRET", value: "sk_live_984392482390423" },
-        { key: "AUTH_DOMAIN", value: "auth.internal.corp" },
-      ],
+      filesCount: 3,
+      files: ["essay.md", "references.bib", "figures.svg"],
+      envVars: [],
     },
   },
   {
-    id: "project-2",
-    name: "Project 2",
-    bodyColor: "#0A90D2", // rgb(10, 144, 210) - Vivid Electric Blue
-    darkOutline: "#075985", // Deep Navy Outline
-    lightOutline: "#BAE6FD", // Soft Sky Light Ruled Lines & Dots
-    category: "Development",
-    description: "Core web application built with Next.js, React, and Tailwind CSS.",
+    id: "f-2",
+    name: "Button Component",
+    href: "/components/button",
+    bodyColor: "#0A90D2", // Vivid Electric Blue
+    darkOutline: "#075985",
+    lightOutline: "#BAE6FD",
+    category: "Primitive",
+    description: "Tactile micro-interaction button with spring press dynamics and dual-tone border bevels.",
     data: {
-      branch: "feat/v2-release",
-      status: "review",
+      branch: "main",
+      status: "deployed",
       updated: "1h ago",
-      filesCount: 68,
-      files: ["src/webhooks/stripe.ts", "src/ledger/invoices.ts", "src/db/schema.prisma"],
-      envVars: [
-        { key: "STRIPE_SECRET_KEY", value: "sk_live_stripe_988219" },
-        { key: "WEBHOOK_TOLERANCE", value: "300" },
-      ],
+      filesCount: 14,
+      files: ["button.tsx", "button.test.tsx"],
+      envVars: [],
     },
   },
   {
-    id: "project-3",
-    name: "Project 3",
-    bodyColor: "#53F399", // rgb(83, 243, 153) - Vivid Mint Spring Green
-    darkOutline: "#047857", // Deep Emerald Outline
-    lightOutline: "#D1FAE5", // Soft Mint Light Ruled Lines & Dots
-    category: "Mobile App",
-    description: "Cross-platform mobile client for iOS and Android.",
+    id: "f-3",
+    name: "Design Notes",
+    bodyColor: "#53F399", // Vivid Mint Spring Green
+    darkOutline: "#047857",
+    lightOutline: "#D1FAE5",
+    category: "Guidelines",
+    description: "Core design rules and specifications for tactile UI components.",
+    content: (
+      <div className="space-y-2.5">
+        <p className="font-mono text-xs uppercase tracking-wider opacity-75">Core Principles</p>
+        <p>• Keep vector geometry featherweight: render silhouettes purely with SVG paths and hairlines.</p>
+        <p>• Prioritize 60fps responsiveness: cascade color themes through 0ms CSS custom variables.</p>
+        <p>• Respect physical intuition: every transition should have mass, settle curves, and tactile feedback.</p>
+      </div>
+    ),
     data: {
       branch: "main",
       status: "deployed",
       updated: "3h ago",
-      filesCount: 184,
-      files: ["src/server.ts", "src/schema/resolvers.ts", "src/cache/redis.ts"],
-      envVars: [
-        { key: "DATABASE_URL", value: "postgresql://neondb_owner:***" },
-        { key: "REDIS_HOST", value: "edge-cache.us-east.aws" },
-      ],
+      filesCount: 22,
+      files: ["principles.md", "tokens.json"],
+      envVars: [],
     },
   },
   {
-    id: "project-4",
-    name: "Project 4",
+    id: "f-4",
+    name: "Folder Primitive",
+    href: "/components/folder",
     bodyColor: "#8B5CF6", // Vivid Bright Violet
-    darkOutline: "#4C1D95", // Deep Violet Outline
-    lightOutline: "#DDD6FE", // Lavender Light Ruled Lines & Dots
-    category: "Analytics",
-    description: "Telemetry, user analytics tracking, and performance reporting.",
+    darkOutline: "#4C1D95",
+    lightOutline: "#DDD6FE",
+    category: "Primitive",
+    description: "Individual SVG manila folder card with 5 ruled lines, dual-layer borders, and dynamic fill.",
     data: {
       branch: "main",
       status: "synced",
       updated: "4h ago",
-      filesCount: 312,
-      files: ["app/page.tsx", "app/layout.tsx", "components/ui/folder-tray.tsx"],
-      envVars: [
-        { key: "NEXT_PUBLIC_API_URL", value: "https://api.internal.corp" },
-        { key: "ANALYTICS_ID", value: "agt_prod_77192" },
-      ],
+      filesCount: 8,
+      files: ["folder.tsx", "registry.json"],
+      envVars: [],
     },
   },
   {
-    id: "project-5",
-    name: "Project 5",
-    bodyColor: "#F59E0B", // Vivid Bright Amber / Gold
-    darkOutline: "#92400E", // Deep Bronze Outline
-    lightOutline: "#FEF08A", // Soft Yellow Light Ruled Lines & Dots
-    category: "Marketing",
-    description: "Campaign landing pages, email templates, and conversion funnels.",
+    id: "f-5",
+    name: "Release Notes",
+    bodyColor: "#F59E0B", // Vivid Bright Amber
+    darkOutline: "#92400E",
+    lightOutline: "#FEF08A",
+    category: "Changelog",
+    description: "Version 0.1.0 release notes and feature changelog.",
+    content: (
+      <div className="space-y-2.5">
+        <p className="font-mono text-xs uppercase tracking-wider opacity-75">v0.1.0 Release Changelog</p>
+        <p>• Hairline Riffle 3D isometric tray with interactive spring card riffle physics.</p>
+        <p>• Floating 9-color inspector with true-opacity swatches and dynamic text contrast inversion.</p>
+        <p>• First-class hybrid routing: seamless support for direct URL navigation alongside rich document/note reading.</p>
+      </div>
+    ),
     data: {
-      branch: "feat/launch",
-      status: "building",
+      branch: "v0.1.0",
+      status: "deployed",
       updated: "5h ago",
       filesCount: 54,
-      files: ["pipeline/consumer.go", "pipeline/clickhouse.go", "docker-compose.yml"],
-      envVars: [
-        { key: "KAFKA_BROKERS", value: "broker1:9092,broker2:9092" },
-        { key: "CLICKHOUSE_DSN", value: "tcp://ch-cluster:9000" },
-      ],
+      files: ["CHANGELOG.md"],
+      envVars: [],
     },
   },
   {
-    id: "project-6",
-    name: "Project 6",
+    id: "f-6",
+    name: "Brand Palette",
     bodyColor: "#F43F5E", // Vivid Bright Rose
-    darkOutline: "#881337", // Deep Wine Outline
-    lightOutline: "#FECDD3", // Soft Rose Light Ruled Lines & Dots
-    category: "Documentation",
-    description: "API references, onboarding guides, and architecture documentation.",
+    darkOutline: "#881337",
+    lightOutline: "#FECDD3",
+    category: "Tokens",
+    description: "9 high-saturation ink tones formulated for deep contrast on both dark and light surfaces.",
     data: {
       branch: "main",
       status: "deployed",
       updated: "1d ago",
-      filesCount: 96,
-      files: ["content/docs/api.mdx", "content/docs/getting-started.mdx"],
-      envVars: [{ key: "BASE_PATH", value: "/docs" }],
+      filesCount: 16,
+      files: ["palette.json", "swatches.ase"],
+      envVars: [],
     },
   },
   {
-    id: "project-7",
-    name: "Project 7",
+    id: "f-7",
+    name: "Architecture",
     bodyColor: "#06B6D4", // Vivid Bright Cyan
-    darkOutline: "#155E75", // Deep Teal Outline
-    lightOutline: "#CFFAFE", // Soft Cyan Light Ruled Lines & Dots
-    category: "Backend API",
-    description: "REST and GraphQL endpoints for user authentication and data storage.",
+    darkOutline: "#155E75",
+    lightOutline: "#CFFAFE",
+    category: "Engineering",
+    description: "Hairline canvas pipeline driving SVG geometry through CSS variables for instantaneous 0ms repaint performance.",
     data: {
       branch: "v2-release",
       status: "synced",
       updated: "2d ago",
-      filesCount: 140,
-      files: ["tokens/colors.json", "tokens/spacing.json", "src/primitives.tsx"],
-      envVars: [{ key: "STORYBOOK_PORT", value: "6006" }],
+      filesCount: 40,
+      files: ["architecture.md", "pipeline.ts"],
+      envVars: [],
     },
   },
   {
-    id: "project-8",
-    name: "Project 8",
+    id: "f-8",
+    name: "Manifesto",
     bodyColor: "#6366F1", // Vivid Bright Indigo
-    darkOutline: "#312E81", // Deep Indigo Outline
-    lightOutline: "#E0E7FF", // Soft Indigo Light Ruled Lines & Dots
-    category: "Operations",
-    description: "Deployment configurations, monitoring alerts, and CI/CD automation.",
+    darkOutline: "#312E81",
+    lightOutline: "#E0E7FF",
+    category: "Philosophy",
+    description: "Software should feel like fine stationery: carefully folded, pleasing to touch, and crafted to last.",
     data: {
       branch: "main",
       status: "deployed",
       updated: "3d ago",
-      filesCount: 29,
-      files: ["workers/cache.ts", "wrangler.toml"],
-      envVars: [{ key: "KV_NAMESPACE", value: "CACHE_PROD_V2" }],
+      filesCount: 12,
+      files: ["manifesto.md"],
+      envVars: [],
     },
   },
 ];
@@ -235,6 +252,18 @@ export function FolderTrayPreview({ showControls = true }: { showControls?: bool
     }
   };
 
+  const handleOpenFolder = (folder: FolderItem<WorkspaceData>) => {
+    if (folder.href) {
+      if (folder.target === "_blank") {
+        window.open(folder.href, "_blank");
+      } else {
+        window.location.href = folder.href;
+      }
+    } else {
+      setModalFolder(folder);
+    }
+  };
+
   return (
     <>
       {/* 3D Folder Tray Preview Container */}
@@ -244,7 +273,7 @@ export function FolderTrayPreview({ showControls = true }: { showControls?: bool
           variant={variant}
           intensity={0.65}
           defaultSelected={0}
-          onOpen={(folder) => setModalFolder(folder)}
+          onOpen={handleOpenFolder}
         />
       </div>
 
@@ -310,7 +339,7 @@ export function FolderTrayPreview({ showControls = true }: { showControls?: bool
               </button>
 
               {/* Folder Interior Content */}
-              <div className="absolute inset-0 flex flex-col justify-center px-[8%] pt-[14%] pb-[8%]">
+              <div className="absolute inset-0 flex flex-col justify-between px-[8%] pt-[14%] pb-[8%]">
                 <div className="max-w-xl pr-10 sm:pr-12">
                   <h3
                     className={`font-mono text-2xl font-bold tracking-tight sm:text-3xl md:text-4xl ${
@@ -319,15 +348,38 @@ export function FolderTrayPreview({ showControls = true }: { showControls?: bool
                   >
                     {modalFolder.name}
                   </h3>
-
-                  <p
-                    className={`mt-3 font-sans text-sm leading-relaxed sm:mt-4 sm:text-base md:text-lg ${
-                      isDark ? "text-white/85" : "text-slate-700"
-                    }`}
-                  >
-                    {modalFolder.description}
-                  </p>
                 </div>
+
+                {/* Article / Notes Scrollable Area */}
+                <div
+                  className="my-auto max-h-[66%] overflow-y-auto pr-2 select-text"
+                  style={{
+                    scrollbarWidth: "thin",
+                    scrollbarColor: isDark
+                      ? "rgba(255,255,255,0.2) transparent"
+                      : "rgba(0,0,0,0.2) transparent",
+                  }}
+                >
+                  {modalFolder.content ? (
+                    <div
+                      className={`font-sans text-sm leading-relaxed sm:text-base md:text-lg ${
+                        isDark ? "text-white/85" : "text-slate-700"
+                      }`}
+                    >
+                      {modalFolder.content}
+                    </div>
+                  ) : (
+                    <p
+                      className={`font-sans text-sm leading-relaxed sm:text-base md:text-lg ${
+                        isDark ? "text-white/85" : "text-slate-700"
+                      }`}
+                    >
+                      {modalFolder.description}
+                    </p>
+                  )}
+                </div>
+
+                <div className="h-0.5" />
               </div>
             </Folder>
           </div>
