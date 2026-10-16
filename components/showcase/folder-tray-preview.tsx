@@ -2,9 +2,8 @@
 
 import React, { useEffect, useState } from "react";
 import { Folder, FolderItem, FolderTray } from "@/components/ui/folder-tray";
-import { Button } from "@/components/ui/button";
 import { SelectBar } from "@/components/ui/select-bar";
-import { ArrowRightIcon, CircleHalfIcon, PaletteIcon, XIcon } from "@phosphor-icons/react";
+import { CircleHalfIcon, PaletteIcon, XIcon } from "@phosphor-icons/react";
 
 export interface WorkspaceData {
   branch: string;
@@ -170,6 +169,18 @@ export const WORKSPACE_FOLDERS: FolderItem<WorkspaceData>[] = [
   },
 ];
 
+export const FOLDER_COLOR_OPTIONS = [
+  { name: "Original", body: "#FFFFFF", dark: "#232327", light: "#E0E0E4" },
+  { name: "Orange", body: "#E54F10", dark: "#7C2D12", light: "#FED7AA" },
+  { name: "Electric Blue", body: "#0A90D2", dark: "#075985", light: "#BAE6FD" },
+  { name: "Mint Green", body: "#53F399", dark: "#047857", light: "#D1FAE5" },
+  { name: "Violet", body: "#8B5CF6", dark: "#4C1D95", light: "#DDD6FE" },
+  { name: "Amber", body: "#F59E0B", dark: "#92400E", light: "#FEF08A" },
+  { name: "Rose", body: "#F43F5E", dark: "#881337", light: "#FECDD3" },
+  { name: "Cyan", body: "#06B6D4", dark: "#155E75", light: "#CFFAFE" },
+  { name: "Indigo", body: "#6366F1", dark: "#312E81", light: "#E0E7FF" },
+];
+
 function isDarkColor(hex?: string): boolean {
   if (!hex) return true;
   const clean = hex.replace("#", "");
@@ -181,6 +192,7 @@ function isDarkColor(hex?: string): boolean {
 }
 
 export function FolderTrayPreview({ showControls = true }: { showControls?: boolean }) {
+  const [folders, setFolders] = useState<FolderItem<WorkspaceData>[]>(WORKSPACE_FOLDERS);
   const [variant, setVariant] = useState<"color" | "original">("color");
   const [modalFolder, setModalFolder] = useState<FolderItem<WorkspaceData> | null>(null);
 
@@ -197,15 +209,38 @@ export function FolderTrayPreview({ showControls = true }: { showControls?: bool
     }
   }, [modalFolder]);
 
-  const activeIndex = modalFolder ? WORKSPACE_FOLDERS.findIndex((f) => f.id === modalFolder.id) : 0;
+  const activeIndex = modalFolder ? folders.findIndex((f) => f.id === modalFolder.id) : 0;
   const isDark = modalFolder ? isDarkColor(modalFolder.bodyColor) : true;
+
+  const handleFolderColorChange = (colorKey: string) => {
+    const selectedPreset = FOLDER_COLOR_OPTIONS.find(
+      (opt) => opt.body.toLowerCase() === colorKey.toLowerCase()
+    );
+    if (!selectedPreset || !modalFolder) return;
+
+    const updatedFolder: FolderItem<WorkspaceData> = {
+      ...modalFolder,
+      bodyColor: selectedPreset.body,
+      darkOutline: selectedPreset.dark,
+      lightOutline: selectedPreset.light,
+    };
+
+    setModalFolder(updatedFolder);
+    setFolders((prevFolders) =>
+      prevFolders.map((f) => (f.id === updatedFolder.id ? updatedFolder : f))
+    );
+
+    if (variant === "original" && selectedPreset.name !== "Original") {
+      setVariant("color");
+    }
+  };
 
   return (
     <>
       {/* 3D Folder Tray Preview Container */}
       <div className="flex w-full justify-center">
         <FolderTray<WorkspaceData>
-          folders={WORKSPACE_FOLDERS}
+          folders={folders}
           variant={variant}
           intensity={0.65}
           defaultSelected={0}
@@ -243,7 +278,7 @@ export function FolderTrayPreview({ showControls = true }: { showControls?: bool
           role="dialog"
           aria-modal="true"
           aria-label={`${modalFolder.name} Details`}
-          className="animate-in fade-in fixed inset-0 z-50 flex items-center justify-center bg-slate-950/45 p-4 backdrop-blur-xs duration-200"
+          className="animate-in fade-in fixed inset-0 z-50 flex flex-col items-center justify-center gap-4 bg-slate-950/45 p-4 backdrop-blur-xs duration-200 sm:gap-5"
           onClick={() => setModalFolder(null)}
         >
           <div
@@ -275,18 +310,8 @@ export function FolderTrayPreview({ showControls = true }: { showControls?: bool
               </button>
 
               {/* Folder Interior Content */}
-              <div className="absolute inset-0 flex flex-col justify-between px-[8%] pt-[17%] pb-[7%]">
-                {/* Header: Category + Title */}
-                <div className="pr-12">
-                  {modalFolder.category && (
-                    <div
-                      className={`mb-1 font-mono text-[11px] font-semibold tracking-widest uppercase sm:text-xs ${
-                        isDark ? "text-white/60" : "text-slate-700"
-                      }`}
-                    >
-                      {modalFolder.category}
-                    </div>
-                  )}
+              <div className="absolute inset-0 flex flex-col justify-center px-[8%] pt-[14%] pb-[8%]">
+                <div className="max-w-xl pr-10 sm:pr-12">
                   <h3
                     className={`font-mono text-2xl font-bold tracking-tight sm:text-3xl md:text-4xl ${
                       isDark ? "text-white" : "text-slate-950"
@@ -294,46 +319,37 @@ export function FolderTrayPreview({ showControls = true }: { showControls?: bool
                   >
                     {modalFolder.name}
                   </h3>
-                </div>
 
-                {/* Body: Description */}
-                <div className="my-auto py-2">
                   <p
-                    className={`max-w-xl font-sans text-sm leading-relaxed sm:text-base md:text-lg ${
-                      isDark ? "text-white/85" : "text-slate-800"
+                    className={`mt-3 font-sans text-sm leading-relaxed sm:mt-4 sm:text-base md:text-lg ${
+                      isDark ? "text-white/85" : "text-slate-700"
                     }`}
                   >
                     {modalFolder.description}
                   </p>
-
-                  <div className="mt-3 sm:mt-4">
-                    <Button
-                      variant={isDark ? "dark" : "default"}
-                      onClick={() => setModalFolder(null)}
-                    >
-                      <span>Continue</span>
-                      <ArrowRightIcon size={14} weight="bold" />
-                    </Button>
-                  </div>
-                </div>
-
-                {/* Footer: Subtle details & Esc hint */}
-                <div
-                  className={`flex items-center justify-between border-t pt-3 font-mono text-[11px] sm:text-xs ${
-                    isDark ? "border-white/15 text-white/60" : "border-black/10 text-slate-700"
-                  }`}
-                >
-                  <div className="flex items-center gap-2">
-                    <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500" />
-                    <span>{modalFolder.data?.branch || "main"}</span>
-                    <span>•</span>
-                    <span>{modalFolder.data?.filesCount || 0} files</span>
-                  </div>
-
-                  <span className="hidden opacity-75 sm:inline">Press Esc to close</span>
                 </div>
               </div>
             </Folder>
+          </div>
+
+          {/* Floating Color Swatch Palette Toolbar outside the folder */}
+          <div
+            className="animate-in fade-in slide-in-from-bottom-2 z-10 flex items-center justify-center duration-300"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <SelectBar
+              variant="swatches"
+              size="xs"
+              items={FOLDER_COLOR_OPTIONS.map((opt) => ({
+                key: opt.body,
+                color: opt.body,
+                darkOutline: opt.dark,
+                label: opt.name,
+              }))}
+              value={modalFolder.bodyColor}
+              onChange={handleFolderColorChange}
+              ariaLabel="Change folder color"
+            />
           </div>
         </div>
       )}
