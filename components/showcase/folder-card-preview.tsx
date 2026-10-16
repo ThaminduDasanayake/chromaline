@@ -3,11 +3,7 @@
 import React, { useState } from "react";
 import { Folder } from "@/components/ui/folder";
 import { SelectBar } from "@/components/ui/select-bar";
-import {
-  TextAlignCenterIcon,
-  TextAlignLeftIcon,
-  TextAlignRightIcon,
-} from "@phosphor-icons/react";
+import { TextAlignCenterIcon, TextAlignLeftIcon, TextAlignRightIcon } from "@phosphor-icons/react";
 
 export const FOLDER_COLOR_PRESETS = [
   { name: "Original", body: "#FFFFFF", dark: "#232327", light: "#E0E0E4" },

@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { ProjectLibrary } from "@/components/tactile/project-library";
+import { FolderTrayPreview } from "@/components/showcase";
 import { SiteHeader, SiteFooter } from "@/components/layout";
 import { InstallCommandTabs } from "@/components/docs";
 
@@ -187,8 +187,8 @@ export default function FolderTrayPage() {
 
         {/* Live Interactive Stage */}
         <div className="mb-12 overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-2xs">
-          <div className="flex min-h-[380px] flex-col items-center justify-center bg-[#F9FAFB] p-8 sm:p-12">
-            <ProjectLibrary />
+          <div className="relative flex min-h-[380px] flex-col items-center justify-center bg-[#F9FAFB] p-8 sm:p-12">
+            <FolderTrayPreview />
           </div>
         </div>
 

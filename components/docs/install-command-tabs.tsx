@@ -62,7 +62,7 @@ export function InstallCommandTabs({
           {copied ? (
             <>
               <CheckIcon size={13} weight="bold" className="text-emerald-600" />
-              <span className="text-emerald-600 font-semibold">Copied!</span>
+              <span className="font-semibold text-emerald-600">Copied!</span>
             </>
           ) : (
             <>

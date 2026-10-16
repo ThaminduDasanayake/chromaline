@@ -214,9 +214,11 @@ export function FolderTray<T = unknown>({
   // Build 3 distinct CSS color variables for each folder (body, dark outline, light outline)
   const cssColorVariables: Record<string, string> = {};
   folders.slice(0, 8).forEach((item, idx) => {
-    const body = isOriginal ? "#FFFFFF" : (item.bodyColor || item.fill || item.color || defaultBodyColor);
-    const dark = isOriginal ? "#232327" : (item.darkOutline || item.outline || defaultDarkOutline);
-    const light = isOriginal ? "#E0E0E4" : (item.lightOutline || defaultLightOutline);
+    const body = isOriginal
+      ? "#FFFFFF"
+      : item.bodyColor || item.fill || item.color || defaultBodyColor;
+    const dark = isOriginal ? "#232327" : item.darkOutline || item.outline || defaultDarkOutline;
+    const light = isOriginal ? "#E0E0E4" : item.lightOutline || defaultLightOutline;
 
     cssColorVariables[`--folder-body-${idx}`] = body;
     cssColorVariables[`--folder-dark-${idx}`] = dark;
