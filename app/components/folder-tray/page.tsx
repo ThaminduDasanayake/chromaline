@@ -1,10 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
-import Link from "next/link";
 import { FolderTrayPreview, LinkFolderTrayPreview } from "@/components/showcase";
 import { SiteHeader, SiteFooter } from "@/components/layout";
-import { InstallCommandTabs } from "@/components/docs";
+import { InstallCommandTabs, BackLink } from "@/components/docs";
 import { CheckIcon, CopyIcon } from "@phosphor-icons/react";
 
 const CODE_EXAMPLE_LINES = [
@@ -285,14 +284,7 @@ export default function FolderTrayPage() {
 
       {/* Main Container */}
       <main className="mx-auto w-full max-w-4xl flex-1 px-4 py-8 sm:px-6 md:px-8 md:py-12">
-        {/* Back Link */}
-        <Link
-          href="/"
-          className="group mb-6 inline-flex items-center gap-1.5 font-mono text-xs text-slate-500 transition-colors hover:text-slate-900"
-        >
-          <span className="transition-transform group-hover:-translate-x-0.5">&larr;</span>
-          <span>Back to Components</span>
-        </Link>
+        <BackLink />
 
         {/* Page Title & Description */}
         <div className="mb-6">

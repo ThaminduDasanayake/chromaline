@@ -1,12 +1,11 @@
 "use client";
 
 import React, { useState } from "react";
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { SelectBar } from "@/components/ui/select-bar";
-import {ArrowRightIcon, CopyIcon, CheckIcon, ArrowLeftIcon} from "@phosphor-icons/react";
+import { ArrowRightIcon, CopyIcon, CheckIcon } from "@phosphor-icons/react";
 import { SiteHeader, SiteFooter } from "@/components/layout";
-import { InstallCommandTabs } from "@/components/docs";
+import { InstallCommandTabs, BackLink } from "@/components/docs";
 
 const CODE_EXAMPLE_LINES = [
   {
@@ -190,13 +189,7 @@ export default function ButtonPage() {
 
       {/* Main Container */}
       <main className="mx-auto w-full max-w-4xl flex-1 px-4 py-8 sm:px-6 md:px-8 md:py-12">
-        {/* Back Link */}
-        <Link
-          href="/"
-          className="mb-8 inline-flex items-center gap-1.5 font-mono text-xs text-slate-500 transition-colors hover:text-slate-950"
-        >
-          <span><ArrowLeftIcon/></span> Back to Components
-        </Link>
+        <BackLink />
 
         {/* Page Title & Intro */}
         <div className="mb-10">
