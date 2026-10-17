@@ -1,9 +1,9 @@
 "use client";
 
 /**
- * SelectBar
+ * SelectBar (Glass Bar)
  *
- * Elastic kinetic segmented pill and color swatch selector engineered with
+ * A refined physical frosted glass selector and navigation dock with
  * two-phase mercury stretch dilation and overshoot landing kinematics.
  */
 
@@ -30,10 +30,11 @@ type Ind = { p: number; s: number };
 export interface SelectBarItem<T extends string = string> {
   key: T;
   label?: string;
-  color?: string; // Color swatch hex
-  darkOutline?: string; // Color swatch border
   icon?: React.ReactNode;
-  showLabel?: boolean; // Set to true to show label next to icon (defaults to false)
+  color?: string;
+  darkOutline?: string;
+  title?: string;
+  showLabel?: boolean;
 }
 
 export interface SelectBarProps<T extends string = string> {
@@ -41,17 +42,17 @@ export interface SelectBarProps<T extends string = string> {
   value?: T;
   defaultValue?: T;
   onChange?: (value: T) => void;
-  /** Layout orientation: "row" (default) or "column" (for icon toolbars and color swatches) */
-  axis?: "row" | "column";
   size?: "xs" | "sm" | "default";
-  dilate?: number; // 0..100: how far the indicator stretches across slots
-  bounce?: number; // 0..100: overshoot elasticity on landing
-  speed?: number; // 0..100: animation speed multiplier
-  hug?: number; // inset padding in px
-  corner?: number; // border radius in px (default: 999 for pill)
-  variant?: "glass" | "swatches" | "pill";
+  dilate?: number;
+  bounce?: number;
+  speed?: number;
+  hug?: number;
   className?: string;
   ariaLabel?: string;
+  // Backward compatibility props
+  variant?: "glass" | "swatches" | "pill";
+  axis?: "row" | "column";
+  corner?: number;
 }
 
 export function SelectBar<T extends string = string>({
@@ -59,18 +60,14 @@ export function SelectBar<T extends string = string>({
   value,
   defaultValue,
   onChange,
-  axis = "row",
   size = "sm",
   dilate = 100,
   bounce = 50,
   speed = 50,
   hug,
-  corner,
-  variant = "glass",
   className = "",
-  ariaLabel = "Main",
+  ariaLabel = "Navigation",
 }: SelectBarProps<T>) {
-  const vertical = axis === "column";
   const initialKey = value ?? defaultValue ?? items[0]?.key;
   const [active, setActive] = useState<T>(initialKey);
 
@@ -81,19 +78,15 @@ export function SelectBar<T extends string = string>({
   const indRef = useRef<Ind | null>(null);
   const timer = useRef<number | undefined>(undefined);
 
-  const defaultHug = variant === "swatches" ? 3 : size === "xs" ? 3 : size === "sm" ? 4 : 6;
+  const hasSwatches = items.some((item) => Boolean(item.color));
+  const defaultHug = hasSwatches ? 3 : size === "xs" ? 3 : size === "sm" ? 4 : 6;
   const actualHug = hug !== undefined ? hug : defaultHug;
 
-  const measure = useCallback(
-    (k: string): Ind | null => {
-      const el = refs.current[k];
-      if (!el) return null;
-      return vertical
-        ? { p: el.offsetTop, s: el.offsetHeight }
-        : { p: el.offsetLeft, s: el.offsetWidth };
-    },
-    [vertical]
-  );
+  const measure = useCallback((k: string): Ind | null => {
+    const el = refs.current[k];
+    if (!el) return null;
+    return { p: el.offsetLeft, s: el.offsetWidth };
+  }, []);
 
   const activeRef = useRef<T>(initialKey);
   const prevValueRef = useRef<T | undefined>(value);
@@ -118,10 +111,7 @@ export function SelectBar<T extends string = string>({
         return;
       }
 
-      /* The full union of both slots is as far as it can go —
-         past that it is a pill reaching for somewhere neither
-         end is. Dilate scales back from there toward simply
-         moving, so 0 is a slide and 100 is the stretch. */
+      /* Leading edge dilates across the union of slots */
       const start = Math.min(from.p, to.p);
       const end = Math.max(from.p + from.s, to.p + to.s);
       const grow = dilate / 100;
@@ -132,7 +122,7 @@ export function SelectBar<T extends string = string>({
         s: to.s + (end - start - to.s) * grow,
       });
 
-      /* The handoff rides the same clock as the phases */
+      /* Trailing edge catches up and overshoots on landing */
       timer.current = window.setTimeout(
         () => {
           indRef.current = to;
@@ -152,7 +142,7 @@ export function SelectBar<T extends string = string>({
     }
   }, [value, select]);
 
-  // Initial mount measurement & ResizeObserver (only settles on mount/resize, never cancels active glide)
+  // Initial mount measurement & ResizeObserver
   useIsomorphicLayoutEffect(() => {
     const settleInd = () => {
       const next = measure(activeRef.current);
@@ -166,14 +156,12 @@ export function SelectBar<T extends string = string>({
     const ro = new ResizeObserver(settleInd);
     if (trackRef.current) ro.observe(trackRef.current);
     return () => ro.disconnect();
-  }, [vertical]);
+  }, [measure]);
 
   const curveStyles = settle(bounce);
-  const actualRadius = corner !== undefined ? `${corner}px` : "999px";
 
   const vars = {
     "--nav-pad": `${actualHug}px`,
-    "--gnav-r": actualRadius,
     "--ind-stretch": `${Math.round(190 * rate(speed))}ms`,
     "--ind-settle": `${Math.round(420 * rate(speed))}ms`,
     "--ind-move": curveStyles.move,
@@ -181,40 +169,32 @@ export function SelectBar<T extends string = string>({
   } as React.CSSProperties;
 
   const style: React.CSSProperties = ind
-    ? vertical
-      ? { transform: `translate3d(0, ${ind.p}px, 0)`, height: ind.s }
-      : { transform: `translate3d(${ind.p}px, 0, 0)`, width: ind.s }
+    ? { transform: `translate3d(${ind.p}px, 0, 0)`, width: ind.s }
     : { opacity: 0 };
 
   return (
     <>
       <style>{`
-        /* ── glass navigation ──────────────────────────────────────
-           Exact recipe: 60% white, soft frost, lit inner edge,
-           top specular catch, floating depth shadow. */
+        /* ── signature frosted glass dock ──────────────────────── */
         .gnav {
           position: relative;
-          background: var(--pane, rgba(255, 255, 255, 0.6));
-          -webkit-backdrop-filter: blur(var(--g-blur, 8px)) saturate(var(--g-sat, 150%)) brightness(var(--g-bright, 100%));
-          backdrop-filter: blur(var(--g-blur, 8px)) saturate(var(--g-sat, 150%)) brightness(var(--g-bright, 100%));
+          background: rgba(255, 255, 255, 0.6);
+          -webkit-backdrop-filter: blur(8px) saturate(150%) brightness(100%);
+          backdrop-filter: blur(8px) saturate(150%) brightness(100%);
           isolation: isolate;
-          color: var(--ink, #0f172a);
+          color: #0f172a;
           display: inline-flex;
-          gap: var(--bar-gap, 2px);
+          align-items: center;
+          gap: 2px;
           padding: var(--nav-pad);
-          border-radius: var(--gnav-r, 999px);
+          border-radius: 999px;
           user-select: none;
           box-shadow:
-            inset 0 1px 0 rgba(255, 255, 255, var(--g-spec, 0.9)),
-            0 10px 40px rgba(var(--shadow-rgb, 15, 23, 42), var(--g-lift, 0.08));
+            inset 0 1px 0 rgba(255, 255, 255, 0.9),
+            0 10px 40px rgba(15, 23, 42, 0.08);
         }
 
-        .gnav[data-orientation="vertical"] {
-          flex-direction: column;
-          border-radius: var(--gnav-r, 30px);
-        }
-
-        /* Prismatic graded lit rim */
+        /* Prismatic specular lit rim */
         .gnav::before {
           content: "";
           position: absolute;
@@ -226,10 +206,10 @@ export function SelectBar<T extends string = string>({
           background:
             linear-gradient(
               142deg,
-              rgba(255, 255, 255, var(--g-edge-hi, 0.7)) 0%,
-              rgba(255, 255, 255, var(--g-edge-lo, 0.15)) 26%,
-              rgba(255, 255, 255, var(--g-edge-lo, 0.05)) 62%,
-              rgba(255, 255, 255, var(--g-edge-far, 0.4)) 100%
+              rgba(255, 255, 255, 0.7) 0%,
+              rgba(255, 255, 255, 0.15) 26%,
+              rgba(255, 255, 255, 0.05) 62%,
+              rgba(255, 255, 255, 0.4) 100%
             ) border-box;
           -webkit-mask:
             linear-gradient(#000 0 0) padding-box,
@@ -241,52 +221,19 @@ export function SelectBar<T extends string = string>({
           mask-composite: exclude;
         }
 
-        /* ── the two phase indicator ─────────────────────────────
-           Just a wash — no border, no inset highlight, no penumbra,
-           and no frost of its own. Pure slot tint. */
+        /* ── two-phase indicator wash ──────────────────────────── */
         .gnav-ind {
           position: absolute;
           top: var(--nav-pad);
           left: 0;
           height: calc(100% - var(--nav-pad) * 2);
-          border-radius: var(--gnav-r, 999px);
-          background: var(--pane-thumb, rgba(0, 0, 0, 0.06));
+          border-radius: 999px;
+          background: rgba(0, 0, 0, 0.06);
           border: 0;
           box-shadow: none;
           pointer-events: none;
-          will-change: transform, width, height;
+          will-change: transform, width;
           z-index: 1;
-        }
-
-        .gnav[data-orientation="vertical"] .gnav-ind {
-          top: 0;
-          left: var(--nav-pad);
-          width: calc(100% - var(--nav-pad) * 2);
-          height: auto;
-        }
-
-        /* ── pill variant: solid tactile segmented control ─────── */
-        .gnav[data-variant="pill"] {
-          background: var(--pill-bg, #f1f5f9);
-          -webkit-backdrop-filter: none;
-          backdrop-filter: none;
-          box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.05);
-        }
-
-        .gnav[data-variant="pill"]::before {
-          display: none;
-        }
-
-        .gnav[data-variant="pill"] .gnav-ind {
-          background: var(--pill-thumb, #ffffff);
-          box-shadow:
-            0 1px 2px rgba(0, 0, 0, 0.06),
-            0 1px 3px rgba(0, 0, 0, 0.08);
-        }
-
-        .gnav[data-variant="pill"] .gnav-item[data-active="true"] {
-          color: var(--ink, #0f172a);
-          font-weight: 600;
         }
 
         /* Phase one: leading edge jumps, pill dilates */
@@ -294,8 +241,7 @@ export function SelectBar<T extends string = string>({
           --d: var(--ind-stretch, 190ms);
           transition:
             transform var(--d) cubic-bezier(0.32, 0.72, 0.24, 1),
-            width var(--d) cubic-bezier(0.32, 0.72, 0.24, 1),
-            height var(--d) cubic-bezier(0.32, 0.72, 0.24, 1);
+            width var(--d) cubic-bezier(0.32, 0.72, 0.24, 1);
         }
 
         /* Phase two: trailing edge catches up, overshoots */
@@ -303,23 +249,22 @@ export function SelectBar<T extends string = string>({
           --d: var(--ind-settle, 420ms);
           transition:
             transform var(--d) var(--ind-move, cubic-bezier(0.28, 1.28, 0.36, 1)),
-            width var(--d) var(--ind-size, cubic-bezier(0.24, 1.34, 0.38, 1)),
-            height var(--d) var(--ind-size, cubic-bezier(0.24, 1.34, 0.38, 1));
+            width var(--d) var(--ind-size, cubic-bezier(0.24, 1.34, 0.38, 1));
         }
 
         .gnav-ind[data-phase="idle"] {
           transition: none;
         }
 
-        /* ── flat slots ────────────────────────────────────────── */
+        /* ── slots ─────────────────────────────────────────────── */
         .gnav-item {
           position: relative;
           z-index: 2;
           border: 0;
-          border-radius: var(--gnav-r, 999px);
+          border-radius: 999px;
           background: none;
-          color: var(--ink, #0f172a);
-          opacity: 0.48;
+          color: #0f172a;
+          opacity: 0.5;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -332,17 +277,13 @@ export function SelectBar<T extends string = string>({
           opacity: 0.85;
         }
 
-        .gnav-item[data-active="true"] {
-          opacity: 1;
-        }
-
-        .gnav[data-variant="swatches"] .gnav-item,
+        .gnav-item[data-active="true"],
         .gnav-item[data-swatch="true"] {
           opacity: 1;
         }
 
         .gnav-item:focus-visible {
-          outline: 1.5px solid var(--ink, #0f172a);
+          outline: 1.5px solid #0f172a;
           outline-offset: 2px;
         }
       `}</style>
@@ -350,8 +291,6 @@ export function SelectBar<T extends string = string>({
       <nav
         ref={trackRef as React.RefObject<HTMLElement>}
         className={`gnav ${className}`}
-        data-orientation={vertical ? "vertical" : "horizontal"}
-        data-variant={variant}
         style={vars}
         aria-label={ariaLabel}
       >
@@ -359,31 +298,30 @@ export function SelectBar<T extends string = string>({
 
         {items.map((item) => {
           const isSelected = active === item.key;
-          const isSwatch = Boolean(item.color || variant === "swatches");
+          const isSwatch = Boolean(item.color);
           const isIconOnly = Boolean(item.icon && (!item.label || item.showLabel === false));
+          const slotTitle = item.title || item.label || item.key;
 
-          let slotStyle: React.CSSProperties = {};
-          if (isSwatch || isIconOnly) {
-            const dim = size === "xs" ? 26 : size === "default" ? 36 : 30;
-            slotStyle = {
-              width: `${dim}px`,
-              height: `${dim}px`,
-              minWidth: `${dim}px`,
-              padding: 0,
-              flexShrink: 0,
-            };
-          } else {
-            const h = size === "xs" ? 26 : size === "default" ? 36 : 30;
-            const padH = size === "xs" ? 11 : size === "default" ? 16 : 13;
-            slotStyle = {
-              width: "auto",
-              minWidth: `${h}px`,
-              height: `${h}px`,
-              padding: `0 ${padH}px`,
-              whiteSpace: "nowrap",
-              flexShrink: 0,
-            };
-          }
+          const dim = size === "xs" ? 26 : size === "default" ? 36 : 30;
+          const padH = size === "xs" ? 11 : size === "default" ? 16 : 13;
+
+          const slotStyle: React.CSSProperties =
+            isSwatch || isIconOnly
+              ? {
+                  width: `${dim}px`,
+                  height: `${dim}px`,
+                  minWidth: `${dim}px`,
+                  padding: 0,
+                  flexShrink: 0,
+                }
+              : {
+                  width: "auto",
+                  minWidth: `${dim}px`,
+                  height: `${dim}px`,
+                  padding: `0 ${padH}px`,
+                  whiteSpace: "nowrap",
+                  flexShrink: 0,
+                };
 
           return (
             <button
@@ -395,8 +333,8 @@ export function SelectBar<T extends string = string>({
               className="gnav-item"
               data-active={isSelected}
               data-swatch={isSwatch}
-              aria-label={item.label || item.key}
-              title={item.label || item.key}
+              aria-label={slotTitle}
+              title={slotTitle}
               aria-current={isSelected ? "page" : undefined}
               onClick={(e) => {
                 e.preventDefault();
@@ -446,3 +384,5 @@ export function SelectBar<T extends string = string>({
     </>
   );
 }
+
+export { SelectBar as GlassBar, type SelectBarItem as GlassBarItem, type SelectBarProps as GlassBarProps };

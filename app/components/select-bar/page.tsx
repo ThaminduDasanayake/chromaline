@@ -34,7 +34,10 @@ const CODE_EXAMPLE_LINES = [
   { num: 2, parts: [{ text: "" }] },
   {
     num: 3,
-    parts: [{ text: "const", cls: "text-[#f43f5e]" }, { text: " TABS = [" }],
+    parts: [
+      { text: "const", cls: "text-[#f43f5e]" },
+      { text: " TABS = [" },
+    ],
   },
   {
     num: 4,
@@ -56,7 +59,10 @@ const CODE_EXAMPLE_LINES = [
   { num: 9, parts: [{ text: "" }] },
   {
     num: 10,
-    parts: [{ text: "export default function", cls: "text-[#f43f5e]" }, { text: " Demo() {" }],
+    parts: [
+      { text: "export default function", cls: "text-[#f43f5e]" },
+      { text: " Demo() {" },
+    ],
   },
   {
     num: 11,
@@ -92,14 +98,10 @@ const CODE_EXAMPLE_LINES = [
   },
   {
     num: 18,
-    parts: [{ text: '      variant="glass"' }],
-  },
-  {
-    num: 19,
     parts: [{ text: "    />", cls: "text-slate-500" }],
   },
-  { num: 20, parts: [{ text: "  );" }] },
-  { num: 21, parts: [{ text: "}" }] },
+  { num: 19, parts: [{ text: "  );" }] },
+  { num: 20, parts: [{ text: "}" }] },
 ];
 
 const CODE_EXAMPLE_TEXT = `import { useState } from "react";
@@ -121,7 +123,6 @@ export default function Demo() {
       value={active}
       onChange={setActive}
       size="sm"
-      variant="glass"
     />
   );
 }`;
@@ -181,7 +182,7 @@ const ICON_EXAMPLE_LINES = [
     num: 6,
     parts: [
       {
-        text: '  { key: "cursor", icon: <CursorIcon size={14} weight="bold" />, label: "Select", showLabel: false },',
+        text: '  { key: "cursor", icon: <CursorIcon size={14} weight="bold" />, title: "Select" },',
       },
     ],
   },
@@ -189,7 +190,7 @@ const ICON_EXAMPLE_LINES = [
     num: 7,
     parts: [
       {
-        text: '  { key: "draw", icon: <PencilSimpleIcon size={14} weight="bold" />, label: "Draw", showLabel: false },',
+        text: '  { key: "draw", icon: <PencilSimpleIcon size={14} weight="bold" />, title: "Draw" },',
       },
     ],
   },
@@ -197,7 +198,7 @@ const ICON_EXAMPLE_LINES = [
     num: 8,
     parts: [
       {
-        text: '  { key: "text", icon: <TextTIcon size={14} weight="bold" />, label: "Text", showLabel: false },',
+        text: '  { key: "text", icon: <TextTIcon size={14} weight="bold" />, title: "Text" },',
       },
     ],
   },
@@ -205,7 +206,7 @@ const ICON_EXAMPLE_LINES = [
     num: 9,
     parts: [
       {
-        text: '  { key: "shapes", icon: <SquareIcon size={14} weight="bold" />, label: "Shapes", showLabel: false },',
+        text: '  { key: "shapes", icon: <SquareIcon size={14} weight="bold" />, title: "Shapes" },',
       },
     ],
   },
@@ -213,7 +214,7 @@ const ICON_EXAMPLE_LINES = [
     num: 10,
     parts: [
       {
-        text: '  { key: "pan", icon: <HandPalmIcon size={14} weight="bold" />, label: "Pan", showLabel: false },',
+        text: '  { key: "pan", icon: <HandPalmIcon size={14} weight="bold" />, title: "Pan" },',
       },
     ],
   },
@@ -221,7 +222,10 @@ const ICON_EXAMPLE_LINES = [
   { num: 12, parts: [{ text: "" }] },
   {
     num: 13,
-    parts: [{ text: "export default function", cls: "text-[#f43f5e]" }, { text: " Toolbar() {" }],
+    parts: [
+      { text: "export default function", cls: "text-[#f43f5e]" },
+      { text: " Toolbar() {" },
+    ],
   },
   {
     num: 14,
@@ -237,7 +241,7 @@ const ICON_EXAMPLE_LINES = [
     parts: [
       { text: "    <", cls: "text-slate-500" },
       { text: "SelectBar", cls: "text-[#16a34a] font-semibold" },
-      { text: ' items={TOOLS} value={active} onChange={setActive} size="sm" variant="glass" />' },
+      { text: ' items={TOOLS} value={active} onChange={setActive} size="sm" />' },
     ],
   },
   { num: 17, parts: [{ text: "  );" }] },
@@ -256,12 +260,12 @@ import {
 } from "@phosphor-icons/react";
 
 const TOOLS: SelectBarItem[] = [
-  { key: "cursor", icon: <CursorIcon size={14} weight="bold" />, label: "Select", showLabel: false },
-  { key: "draw", icon: <PencilSimpleIcon size={14} weight="bold" />, label: "Draw", showLabel: false },
-  { key: "text", icon: <TextTIcon size={14} weight="bold" />, label: "Text", showLabel: false },
-  { key: "shapes", icon: <SquareIcon size={14} weight="bold" />, label: "Shapes", showLabel: false },
-  { key: "pan", icon: <HandPalmIcon size={14} weight="bold" />, label: "Pan", showLabel: false },
-  { key: "comment", icon: <ChatCircleDotsIcon size={14} weight="bold" />, label: "Comment", showLabel: false },
+  { key: "cursor", icon: <CursorIcon size={14} weight="bold" />, title: "Select" },
+  { key: "draw", icon: <PencilSimpleIcon size={14} weight="bold" />, title: "Draw" },
+  { key: "text", icon: <TextTIcon size={14} weight="bold" />, title: "Text" },
+  { key: "shapes", icon: <SquareIcon size={14} weight="bold" />, title: "Shapes" },
+  { key: "pan", icon: <HandPalmIcon size={14} weight="bold" />, title: "Pan" },
+  { key: "comment", icon: <ChatCircleDotsIcon size={14} weight="bold" />, title: "Comment" },
 ];
 
 export default function ToolbarDemo() {
@@ -273,8 +277,33 @@ export default function ToolbarDemo() {
       value={active}
       onChange={setActive}
       size="sm"
-      variant="glass"
       ariaLabel="Canvas editor toolbar"
+    />
+  );
+}`;
+
+const SWATCH_EXAMPLE_TEXT = `import { useState } from "react";
+import { SelectBar, SelectBarItem } from "@/components/ui/select-bar";
+
+const SWATCHES: SelectBarItem[] = [
+  { key: "white", color: "#FFFFFF", darkOutline: "#232327", title: "White" },
+  { key: "orange", color: "#E54F10", darkOutline: "#7C2D12", title: "Orange" },
+  { key: "blue", color: "#0A90D2", darkOutline: "#075985", title: "Blue" },
+  { key: "emerald", color: "#059669", darkOutline: "#047857", title: "Emerald" },
+  { key: "violet", color: "#8B5CF6", darkOutline: "#4C1D95", title: "Violet" },
+  { key: "amber", color: "#F59E0B", darkOutline: "#92400E", title: "Amber" },
+];
+
+export default function SwatchDemo() {
+  const [color, setColor] = useState("orange");
+
+  return (
+    <SelectBar
+      items={SWATCHES}
+      value={color}
+      onChange={setColor}
+      size="xs"
+      ariaLabel="Color palette switcher"
     />
   );
 }`;
@@ -284,13 +313,13 @@ const PROPS_DATA = [
     prop: "items",
     type: "SelectBarItem<T>[]",
     default: "[]",
-    desc: "Array of items with key, label, optional color swatch, and optional icon.",
+    desc: "Array of items with key, optional label (text pill), icon, color (swatch), and title.",
   },
   {
     prop: "value",
     type: "T",
     default: "undefined",
-    desc: "Controlled active selected key. Automatically glides indicator when updated.",
+    desc: "Controlled active selected key. Automatically glides the mercury indicator when updated.",
   },
   {
     prop: "defaultValue",
@@ -305,52 +334,10 @@ const PROPS_DATA = [
     desc: "Callback fired when a slot is clicked with the newly selected key.",
   },
   {
-    prop: "variant",
-    type: '"glass" | "swatches" | "pill"',
-    default: '"glass"',
-    desc: "Visual theme: frosted glass with specular edge rim, color swatches, or minimal pill.",
-  },
-  {
     prop: "size",
     type: '"xs" | "sm" | "default"',
     default: '"sm"',
-    desc: "Height and horizontal padding dimensions of the track and slots.",
-  },
-  {
-    prop: "axis",
-    type: '"row" | "column"',
-    default: '"row"',
-    desc: "Layout orientation: horizontal row (default) or vertical column (for icon docks and color swatches).",
-  },
-  {
-    prop: "dilate",
-    type: "number (0..100)",
-    default: "100",
-    desc: "Kinetic stretch dilation: 0 = pure slide, 100 = full mercury elongation between slots.",
-  },
-  {
-    prop: "bounce",
-    type: "number (0..100)",
-    default: "50",
-    desc: "Elastic landing overshoot amount applied via cubic-bezier curve calculation.",
-  },
-  {
-    prop: "speed",
-    type: "number (0..100)",
-    default: "50",
-    desc: "Animation speed multiplier tuning both the stretch phase and settle phase clock.",
-  },
-  {
-    prop: "hug",
-    type: "number",
-    default: "3 | 4 | 6 (by size/variant)",
-    desc: "Inset padding in pixels around the slot track.",
-  },
-  {
-    prop: "corner",
-    type: "number",
-    default: "999 (full pill)",
-    desc: "Custom corner border radius in pixels.",
+    desc: "Height and horizontal padding dimensions of the track and slots (26px, 30px, or 36px).",
   },
   {
     prop: "className",
@@ -361,7 +348,7 @@ const PROPS_DATA = [
   {
     prop: "ariaLabel",
     type: "string",
-    default: '"Main"',
+    default: '"Navigation"',
     desc: "Accessible label assigned to the navigation element.",
   },
 ];
@@ -374,51 +361,21 @@ const TAB_OPTIONS: SelectBarItem<string>[] = [
 ];
 
 const ICON_OPTIONS: SelectBarItem<string>[] = [
-  {
-    key: "cursor",
-    icon: <CursorIcon size={14} weight="bold" />,
-    label: "Select",
-    showLabel: false,
-  },
-  {
-    key: "draw",
-    icon: <PencilSimpleIcon size={14} weight="bold" />,
-    label: "Draw",
-    showLabel: false,
-  },
-  {
-    key: "text",
-    icon: <TextTIcon size={14} weight="bold" />,
-    label: "Text",
-    showLabel: false,
-  },
-  {
-    key: "shapes",
-    icon: <SquareIcon size={14} weight="bold" />,
-    label: "Shapes",
-    showLabel: false,
-  },
-  {
-    key: "pan",
-    icon: <HandPalmIcon size={14} weight="bold" />,
-    label: "Pan",
-    showLabel: false,
-  },
-  {
-    key: "comment",
-    icon: <ChatCircleDotsIcon size={14} weight="bold" />,
-    label: "Comments",
-    showLabel: false,
-  },
+  { key: "cursor", icon: <CursorIcon size={14} weight="bold" />, title: "Select" },
+  { key: "draw", icon: <PencilSimpleIcon size={14} weight="bold" />, title: "Draw" },
+  { key: "text", icon: <TextTIcon size={14} weight="bold" />, title: "Text" },
+  { key: "shapes", icon: <SquareIcon size={14} weight="bold" />, title: "Shapes" },
+  { key: "pan", icon: <HandPalmIcon size={14} weight="bold" />, title: "Pan" },
+  { key: "comment", icon: <ChatCircleDotsIcon size={14} weight="bold" />, title: "Comments" },
 ];
 
 const SWATCH_OPTIONS: SelectBarItem<string>[] = [
-  { key: "original", label: "White", color: "#FFFFFF", darkOutline: "#232327" },
-  { key: "orange", label: "Orange", color: "#E54F10", darkOutline: "#7C2D12" },
-  { key: "blue", label: "Blue", color: "#0A90D2", darkOutline: "#075985" },
-  { key: "emerald", label: "Emerald", color: "#059669", darkOutline: "#047857" },
-  { key: "violet", label: "Violet", color: "#8B5CF6", darkOutline: "#4C1D95" },
-  { key: "amber", label: "Amber", color: "#F59E0B", darkOutline: "#92400E" },
+  { key: "original", label: "White", color: "#FFFFFF", darkOutline: "#232327", title: "White" },
+  { key: "orange", label: "Orange", color: "#E54F10", darkOutline: "#7C2D12", title: "Orange" },
+  { key: "blue", label: "Blue", color: "#0A90D2", darkOutline: "#075985", title: "Blue" },
+  { key: "emerald", label: "Emerald", color: "#059669", darkOutline: "#047857", title: "Emerald" },
+  { key: "violet", label: "Violet", color: "#8B5CF6", darkOutline: "#4C1D95", title: "Violet" },
+  { key: "amber", label: "Amber", color: "#F59E0B", darkOutline: "#92400E", title: "Amber" },
 ];
 
 export default function SelectBarPage() {
@@ -427,17 +384,12 @@ export default function SelectBarPage() {
   const [activeSwatch, setActiveSwatch] = useState("orange");
 
   const [mode, setMode] = useState<"tabs" | "icons" | "swatches">("tabs");
-  const [variant, setVariant] = useState<"glass" | "swatches" | "pill">("glass");
   const [size, setSize] = useState<"xs" | "sm" | "default">("sm");
-  const [axis, setAxis] = useState<"row" | "column">("row");
-  const [dilate, setDilate] = useState(100);
-  const [bounce, setBounce] = useState(50);
-  const [speed, setSpeed] = useState(50);
 
-  // Dedicated Examples Section State
+  // Examples Section State
   const [exampleIconTool, setExampleIconTool] = useState("cursor");
-  const [exampleIconAxis, setExampleIconAxis] = useState<"row" | "column">("row");
   const [exampleIconSize, setExampleIconSize] = useState<"xs" | "sm" | "default">("sm");
+  const [exampleSwatch, setExampleSwatch] = useState("orange");
 
   const [installTab, setInstallTab] = useState<"command" | "manual">("command");
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
@@ -454,7 +406,8 @@ export default function SelectBarPage() {
 
   const currentItems =
     mode === "tabs" ? TAB_OPTIONS : mode === "icons" ? ICON_OPTIONS : SWATCH_OPTIONS;
-  const currentValue = mode === "tabs" ? activeTab : mode === "icons" ? activeIcon : activeSwatch;
+  const currentValue =
+    mode === "tabs" ? activeTab : mode === "icons" ? activeIcon : activeSwatch;
   const handleValueChange = (k: string) => {
     if (mode === "tabs") setActiveTab(k);
     else if (mode === "icons") setActiveIcon(k);
@@ -481,7 +434,7 @@ export default function SelectBarPage() {
             </span>
           </div>
           <p className="mt-2 text-sm leading-relaxed text-slate-600 sm:text-base">
-            An elastic kinetic segmented pill and color swatch selector engineered with two-phase
+            A refined physical frosted glass selector and navigation dock engineered with two-phase
             mercury stretch dilation and overshoot landing kinematics.
           </p>
         </div>
@@ -489,142 +442,49 @@ export default function SelectBarPage() {
         {/* Interactive Preview Canvas */}
         <div className="mb-12 overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-2xs">
           {/* Canvas Area */}
-          <div className="relative flex min-h-[300px] flex-col items-center justify-center bg-[#F9FAFB] p-8 sm:p-12">
+          <div className="relative flex min-h-65 flex-col items-center justify-center bg-[#F9FAFB] p-8 sm:p-12">
             <SelectBar
-              key={`${mode}-${axis}-${size}-${variant}`}
+              key={`${mode}-${size}`}
               items={currentItems}
               value={currentValue}
               onChange={handleValueChange}
-              variant={mode === "swatches" ? "swatches" : variant}
               size={size}
-              axis={mode === "tabs" ? "row" : axis}
-              dilate={dilate}
-              bounce={bounce}
-              speed={speed}
               ariaLabel="Interactive playground selector"
             />
           </div>
 
           {/* Interactive Controls Bar */}
-          <div className="space-y-3.5 border-t border-slate-100 bg-white px-5 py-4 font-mono text-xs">
-            {/* Top Controls Row */}
-            <div className="flex flex-wrap items-center justify-between gap-4">
-              <div className="flex flex-wrap items-center gap-4">
-                {/* Content Type Picker */}
-                <div className="flex items-center gap-2 border-r border-slate-200 pr-4">
-                  <span className="text-[11px] text-slate-400">Content:</span>
-                  <SelectBar<"tabs" | "icons" | "swatches">
-                    size="xs"
-                    items={[
-                      { key: "tabs", label: "Pills" },
-                      { key: "icons", label: "Icons" },
-                      { key: "swatches", label: "Swatches" },
-                    ]}
-                    value={mode}
-                    onChange={(m) => {
-                      setMode(m);
-                      if (m === "tabs") setAxis("row");
-                      if (m === "swatches") setVariant("swatches");
-                      else if (variant === "swatches") setVariant("glass");
-                    }}
-                    ariaLabel="Select content type"
-                  />
-                </div>
-
-                {/* Variant Picker (when in tabs or icons mode) */}
-                {mode !== "swatches" && (
-                  <div className="flex items-center gap-2 border-r border-slate-200 pr-4">
-                    <span className="text-[11px] text-slate-400">Variant:</span>
-                    <SelectBar<"glass" | "pill">
-                      size="xs"
-                      items={[
-                        { key: "glass", label: "Glass" },
-                        { key: "pill", label: "Pill" },
-                      ]}
-                      value={variant === "swatches" ? "glass" : variant}
-                      onChange={setVariant}
-                      ariaLabel="Select visual variant"
-                    />
-                  </div>
-                )}
-
-                {/* Size Picker */}
-                <div
-                  className={`flex items-center gap-2 ${
-                    mode !== "tabs" ? "border-r border-slate-200 pr-4" : ""
-                  }`}
-                >
-                  <span className="text-[11px] text-slate-400">Size:</span>
-                  <SelectBar<"xs" | "sm" | "default">
-                    size="xs"
-                    items={[
-                      { key: "xs", label: "XS" },
-                      { key: "sm", label: "SM" },
-                      { key: "default", label: "MD" },
-                    ]}
-                    value={size}
-                    onChange={setSize}
-                    ariaLabel="Select size"
-                  />
-                </div>
-
-                {/* Axis Picker (only for icons and swatches) */}
-                {mode !== "tabs" && (
-                  <div className="flex items-center gap-2">
-                    <span className="text-[11px] text-slate-400">Axis:</span>
-                    <SelectBar<"row" | "column">
-                      size="xs"
-                      items={[
-                        { key: "row", label: "Row" },
-                        { key: "column", label: "Col" },
-                      ]}
-                      value={axis}
-                      onChange={setAxis}
-                      ariaLabel="Select orientation axis"
-                    />
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Kinetic Tuning Sliders */}
-            <div className="grid grid-cols-1 gap-3 border-t border-slate-100 pt-3 sm:grid-cols-3">
-              {/* Dilate Slider */}
-              <div className="flex items-center justify-between gap-2 rounded-lg bg-slate-50 px-3 py-2">
-                <span className="text-[11px] text-slate-500">Dilate ({dilate}%)</span>
-                <input
-                  type="range"
-                  min="0"
-                  max="100"
-                  value={dilate}
-                  onChange={(e) => setDilate(Number(e.target.value))}
-                  className="h-1.5 w-24 cursor-pointer accent-slate-900"
+          <div className="flex flex-wrap items-center justify-between gap-4 border-t border-slate-100 bg-white px-5 py-3.5 font-mono text-xs">
+            <div className="flex flex-wrap items-center gap-4">
+              {/* Content Type Picker */}
+              <div className="flex items-center gap-2 border-r border-slate-200 pr-4">
+                <span className="text-[11px] text-slate-400">Content:</span>
+                <SelectBar<"tabs" | "icons" | "swatches">
+                  size="xs"
+                  items={[
+                    { key: "tabs", label: "Pills" },
+                    { key: "icons", label: "Icons" },
+                    { key: "swatches", label: "Swatches" },
+                  ]}
+                  value={mode}
+                  onChange={setMode}
+                  ariaLabel="Select content type"
                 />
               </div>
 
-              {/* Bounce Slider */}
-              <div className="flex items-center justify-between gap-2 rounded-lg bg-slate-50 px-3 py-2">
-                <span className="text-[11px] text-slate-500">Bounce ({bounce}%)</span>
-                <input
-                  type="range"
-                  min="0"
-                  max="100"
-                  value={bounce}
-                  onChange={(e) => setBounce(Number(e.target.value))}
-                  className="h-1.5 w-24 cursor-pointer accent-slate-900"
-                />
-              </div>
-
-              {/* Speed Slider */}
-              <div className="flex items-center justify-between gap-2 rounded-lg bg-slate-50 px-3 py-2">
-                <span className="text-[11px] text-slate-500">Speed ({speed}%)</span>
-                <input
-                  type="range"
-                  min="0"
-                  max="100"
-                  value={speed}
-                  onChange={(e) => setSpeed(Number(e.target.value))}
-                  className="h-1.5 w-24 cursor-pointer accent-slate-900"
+              {/* Size Picker */}
+              <div className="flex items-center gap-2">
+                <span className="text-[11px] text-slate-400">Size:</span>
+                <SelectBar<"xs" | "sm" | "default">
+                  size="xs"
+                  items={[
+                    { key: "xs", label: "XS" },
+                    { key: "sm", label: "SM" },
+                    { key: "default", label: "MD" },
+                  ]}
+                  value={size}
+                  onChange={setSize}
+                  ariaLabel="Select size"
                 />
               </div>
             </div>
@@ -666,8 +526,7 @@ export default function SelectBarPage() {
             <div className="space-y-3 rounded-xl border border-slate-200/90 bg-white p-4 font-mono text-xs shadow-2xs">
               <div className="flex items-center justify-between border-b border-slate-100 pb-2">
                 <span className="font-sans text-[12px] font-medium text-slate-600">
-                  Copy code into{" "}
-                  <code className="text-slate-900">components/ui/select-bar.tsx</code>
+                  Copy code into <code className="text-slate-900">components/ui/select-bar.tsx</code>
                 </span>
                 <button
                   type="button"
@@ -736,31 +595,20 @@ export default function SelectBarPage() {
 
         {/* Examples Section */}
         <section className="mb-12">
-          <div className="mb-4">
+          <div className="mb-6">
             <h2 className="text-xl font-bold tracking-tight text-slate-950">Examples</h2>
             <p className="text-sm text-slate-500">
-              Interactive patterns demonstrating icon-only floating toolbars and docked selectors.
+              Versatile physical glass selector patterns for toolbars and palettes.
             </p>
           </div>
 
           {/* Example 1: Icons Only Toolbar Dock */}
-          <div className="space-y-4">
+          <div className="mb-8 space-y-4">
             <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
               <div>
-                <h3 className="text-base font-semibold text-slate-900">
-                  Icons Only (Toolbar Dock)
-                </h3>
+                <h3 className="text-base font-semibold text-slate-900">Icons Only (Toolbar Dock)</h3>
                 <p className="text-xs text-slate-500">
-                  By omitting{" "}
-                  <code className="rounded bg-slate-100 px-1 py-0.5 font-mono text-slate-700">
-                    label
-                  </code>{" "}
-                  or setting{" "}
-                  <code className="rounded bg-slate-100 px-1 py-0.5 font-mono text-slate-700">
-                    showLabel: false
-                  </code>
-                  , slots automatically render as compact square buttons with centered icons and
-                  accessible native tooltips.
+                  When items have an <code className="rounded bg-slate-100 px-1 py-0.5 font-mono text-slate-700">icon</code> and no label, slots automatically render as compact square buttons with centered icons.
                 </p>
               </div>
               <button
@@ -783,47 +631,29 @@ export default function SelectBarPage() {
 
             {/* Live Interactive Stage */}
             <div className="relative overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-2xs">
-              <div className="relative flex min-h-[260px] flex-col items-center justify-center bg-[#F9FAFB] p-8 sm:p-12">
+              <div className="relative flex min-h-50 flex-col items-center justify-center bg-[#F9FAFB] p-8 sm:p-12">
                 <SelectBar
                   items={ICON_OPTIONS}
                   value={exampleIconTool}
                   onChange={setExampleIconTool}
                   size={exampleIconSize}
-                  variant="glass"
-                  axis={exampleIconAxis}
                   ariaLabel="Canvas drawing tools"
                 />
 
-                {/* Quick Interactive Stage Controls */}
-                <div className="mt-6 flex flex-wrap items-center justify-center gap-3 sm:absolute sm:right-4 sm:bottom-4 sm:mt-0">
-                  <div className="flex items-center gap-2 rounded-full border border-slate-200/80 bg-white/90 px-2 py-1 shadow-2xs">
-                    <span className="font-mono text-[10px] text-slate-400">Axis:</span>
-                    <SelectBar<"row" | "column">
-                      size="xs"
-                      items={[
-                        { key: "row", label: "Row" },
-                        { key: "column", label: "Col" },
-                      ]}
-                      value={exampleIconAxis}
-                      onChange={setExampleIconAxis}
-                      ariaLabel="Select toolbar orientation"
-                    />
-                  </div>
-
-                  <div className="flex items-center gap-2 rounded-full border border-slate-200/80 bg-white/90 px-2 py-1 shadow-2xs">
-                    <span className="font-mono text-[10px] text-slate-400">Size:</span>
-                    <SelectBar<"xs" | "sm" | "default">
-                      size="xs"
-                      items={[
-                        { key: "xs", label: "XS" },
-                        { key: "sm", label: "SM" },
-                        { key: "default", label: "MD" },
-                      ]}
-                      value={exampleIconSize}
-                      onChange={setExampleIconSize}
-                      ariaLabel="Select toolbar size"
-                    />
-                  </div>
+                {/* Size toggle */}
+                <div className="mt-6 flex items-center gap-2 rounded-full border border-slate-200/80 bg-white/90 px-2 py-1 shadow-2xs sm:absolute sm:right-4 sm:bottom-4 sm:mt-0">
+                  <span className="font-mono text-[10px] text-slate-400">Size:</span>
+                  <SelectBar<"xs" | "sm" | "default">
+                    size="xs"
+                    items={[
+                      { key: "xs", label: "XS" },
+                      { key: "sm", label: "SM" },
+                      { key: "default", label: "MD" },
+                    ]}
+                    value={exampleIconSize}
+                    onChange={setExampleIconSize}
+                    ariaLabel="Select toolbar size"
+                  />
                 </div>
               </div>
             </div>
@@ -845,6 +675,47 @@ export default function SelectBarPage() {
                     </span>
                   </div>
                 ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Example 2: Color Swatches */}
+          <div className="space-y-4">
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <h3 className="text-base font-semibold text-slate-900">Color Swatches</h3>
+                <p className="text-xs text-slate-500">
+                  Items with a <code className="rounded bg-slate-100 px-1 py-0.5 font-mono text-slate-700">color</code> hex are automatically detected and rendered as tactile swatches with active pop-scale micro-interactions.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => copyToClipboard(SWATCH_EXAMPLE_TEXT, "swatch-example-code")}
+                className="flex shrink-0 cursor-pointer items-center gap-1.5 font-mono text-xs text-slate-500 transition-colors hover:text-slate-900"
+              >
+                {copiedKey === "swatch-example-code" ? (
+                  <span className="flex items-center gap-1 font-medium text-emerald-600">
+                    <CheckIcon size={13} weight="bold" /> Copied!
+                  </span>
+                ) : (
+                  <>
+                    <CopyIcon size={13} />
+                    <span>Copy code</span>
+                  </>
+                )}
+              </button>
+            </div>
+
+            {/* Live Interactive Stage */}
+            <div className="relative overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-2xs">
+              <div className="relative flex min-h-45 flex-col items-center justify-center bg-[#F9FAFB] p-8 sm:p-12">
+                <SelectBar
+                  items={SWATCH_OPTIONS}
+                  value={exampleSwatch}
+                  onChange={setExampleSwatch}
+                  size="xs"
+                  ariaLabel="Color palette switcher"
+                />
               </div>
             </div>
           </div>
