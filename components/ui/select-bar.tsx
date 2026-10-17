@@ -41,6 +41,7 @@ export interface SelectBarProps<T extends string = string> {
   value?: T;
   defaultValue?: T;
   onChange?: (value: T) => void;
+  /** Layout orientation: "row" (default) or "column" (for icon toolbars and color swatches) */
   axis?: "row" | "column";
   size?: "xs" | "sm" | "default";
   dilate?: number; // 0..100: how far the indicator stretches across slots

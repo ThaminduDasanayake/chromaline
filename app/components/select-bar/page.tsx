@@ -320,7 +320,7 @@ const PROPS_DATA = [
     prop: "axis",
     type: '"row" | "column"',
     default: '"row"',
-    desc: "Layout orientation: horizontal row or vertical column.",
+    desc: "Layout orientation: horizontal row (default) or vertical column (for icon docks and color swatches).",
   },
   {
     prop: "dilate",
@@ -497,7 +497,7 @@ export default function SelectBarPage() {
               onChange={handleValueChange}
               variant={mode === "swatches" ? "swatches" : variant}
               size={size}
-              axis={axis}
+              axis={mode === "tabs" ? "row" : axis}
               dilate={dilate}
               bounce={bounce}
               speed={speed}
@@ -523,6 +523,7 @@ export default function SelectBarPage() {
                     value={mode}
                     onChange={(m) => {
                       setMode(m);
+                      if (m === "tabs") setAxis("row");
                       if (m === "swatches") setVariant("swatches");
                       else if (variant === "swatches") setVariant("glass");
                     }}
@@ -548,7 +549,11 @@ export default function SelectBarPage() {
                 )}
 
                 {/* Size Picker */}
-                <div className="flex items-center gap-2 border-r border-slate-200 pr-4">
+                <div
+                  className={`flex items-center gap-2 ${
+                    mode !== "tabs" ? "border-r border-slate-200 pr-4" : ""
+                  }`}
+                >
                   <span className="text-[11px] text-slate-400">Size:</span>
                   <SelectBar<"xs" | "sm" | "default">
                     size="xs"
@@ -563,20 +568,22 @@ export default function SelectBarPage() {
                   />
                 </div>
 
-                {/* Axis Picker */}
-                <div className="flex items-center gap-2">
-                  <span className="text-[11px] text-slate-400">Axis:</span>
-                  <SelectBar<"row" | "column">
-                    size="xs"
-                    items={[
-                      { key: "row", label: "Row" },
-                      { key: "column", label: "Column" },
-                    ]}
-                    value={axis}
-                    onChange={setAxis}
-                    ariaLabel="Select orientation axis"
-                  />
-                </div>
+                {/* Axis Picker (only for icons and swatches) */}
+                {mode !== "tabs" && (
+                  <div className="flex items-center gap-2">
+                    <span className="text-[11px] text-slate-400">Axis:</span>
+                    <SelectBar<"row" | "column">
+                      size="xs"
+                      items={[
+                        { key: "row", label: "Row" },
+                        { key: "column", label: "Col" },
+                      ]}
+                      value={axis}
+                      onChange={setAxis}
+                      ariaLabel="Select orientation axis"
+                    />
+                  </div>
+                )}
               </div>
             </div>
 
