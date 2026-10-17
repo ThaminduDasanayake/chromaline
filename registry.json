@@ -7,7 +7,7 @@
       "name": "folder-tray",
       "type": "registry:ui",
       "title": "Folder Tray",
-      "description": "Interactive 3D isometric tray of folders with custom solid colors and click-to-open actions.",
+      "description": "Interactive 3D isometric tray of folders with custom solid colors and click-to-open actions. Inspired by and built on @lucasmarkes/hairline.",
       "dependencies": [
         "@lucasmarkes/hairline@^0.5.0"
       ],
@@ -28,7 +28,7 @@
       "name": "folder",
       "type": "registry:ui",
       "title": "Folder",
-      "description": "Standalone forward-facing folder card.",
+      "description": "Standalone forward-facing folder card with 84x61 vector geometry adapted from @lucasmarkes/hairline.",
       "files": [
         {
           "path": "components/ui/folder.tsx",

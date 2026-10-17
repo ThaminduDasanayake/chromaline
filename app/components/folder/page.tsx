@@ -12,6 +12,7 @@ import {
   TextAlignRightIcon,
   CopyIcon,
   CheckIcon,
+  ArrowUpRightIcon,
 } from "@phosphor-icons/react";
 
 const COLOR_PRESETS = [
@@ -161,10 +162,19 @@ export default function FolderPage() {
 
         {/* Page Title & Description */}
         <div className="mb-6">
-          <h1 className="mb-2 text-3xl font-bold tracking-tight text-slate-950">Folder</h1>
-          <p className="max-w-2xl text-sm leading-relaxed text-slate-500">
+            <h1 className="text-3xl font-bold tracking-tight text-slate-950">Folder</h1>
+          <p className="mt-2 max-w-2xl text-sm leading-relaxed text-slate-500">
             A standalone forward-facing folder card with exact 84×61 vector proportions, filleted
-            tabs, 4 ruled lines, and 8 punch dots.
+            tabs, 4 ruled lines, and 8 punch dots. Silhouette geometry and fillet algorithms adapted from{" "}
+            <a
+              href="https://hairline.lucasmarkes.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-medium text-slate-800 underline decoration-slate-300 underline-offset-4 transition-colors hover:text-slate-950 hover:decoration-slate-900"
+            >
+              @lucasmarkes/hairline
+            </a>
+            .
           </p>
         </div>
 

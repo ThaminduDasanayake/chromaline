@@ -26,7 +26,8 @@ function buildRegistry() {
     name: "folder-tray",
     type: "registry:ui",
     title: "Folder Tray",
-    description: "Isometric tray of folders with custom solid colors and click-to-open actions.",
+    description:
+      "Isometric tray of folders with custom solid colors and click-to-open actions. Built with kinematic physics inspired by and powered by @lucasmarkes/hairline.",
     dependencies: ["@lucasmarkes/hairline@^0.5.0"],
     devDependencies: [],
     registryDependencies: [],
@@ -57,7 +58,7 @@ function buildRegistry() {
     type: "registry:ui",
     title: "Folder",
     description:
-      "Standalone forward-facing folder card with exact 84x61 hairline geometry, tab fillets, ruled lines, and punch dots.",
+      "Standalone forward-facing folder card with exact 84x61 geometry, tab fillets, ruled lines, and punch dots adapted from @lucasmarkes/hairline.",
     dependencies: [],
     devDependencies: [],
     registryDependencies: [],
@@ -150,7 +151,7 @@ function buildRegistry() {
         type: "registry:ui",
         title: "Folder Tray",
         description:
-          "Interactive 3D isometric tray of folders with custom solid colors and click-to-open actions.",
+          "Interactive 3D isometric tray of folders with custom solid colors and click-to-open actions. Inspired by and built on @lucasmarkes/hairline.",
         dependencies: ["@lucasmarkes/hairline@^0.5.0"],
         files: [
           {
@@ -169,7 +170,8 @@ function buildRegistry() {
         name: "folder",
         type: "registry:ui",
         title: "Folder",
-        description: "Standalone forward-facing folder card.",
+        description:
+          "Standalone forward-facing folder card with 84x61 vector geometry adapted from @lucasmarkes/hairline.",
         files: [
           {
             path: "components/ui/folder.tsx",

@@ -5,7 +5,7 @@ import Link from "next/link";
 import { FolderTrayPreview, LinkFolderTrayPreview } from "@/components/showcase";
 import { SiteHeader, SiteFooter } from "@/components/layout";
 import { InstallCommandTabs } from "@/components/docs";
-import { CheckIcon, CopyIcon } from "@phosphor-icons/react";
+import { ArrowUpRightIcon, CheckIcon, CopyIcon } from "@phosphor-icons/react";
 
 const CODE_EXAMPLE_LINES = [
   {
@@ -296,10 +296,21 @@ export default function FolderTrayPage() {
 
         {/* Page Title & Description */}
         <div className="mb-6">
-          <h1 className="mb-2 text-3xl font-bold tracking-tight text-slate-950">Folder Tray</h1>
-          <p className="max-w-2xl text-sm leading-relaxed text-slate-500">
+
+            <h1 className="text-3xl font-bold tracking-tight text-slate-950">Folder Tray</h1>
+
+          <p className="mt-2 max-w-2xl text-sm leading-relaxed text-slate-500">
             An interactive 3D isometric tray of folders with kinematic lean physics, solid folder
-            colorways, and click-to-open dialog callbacks.
+            colorways, and click-to-open dialog callbacks. Powered by{" "}
+            <a
+              href="https://hairline.lucasmarkes.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-medium text-slate-800 underline decoration-slate-300 underline-offset-4 transition-colors hover:text-slate-950 hover:decoration-slate-900"
+            >
+              @lucasmarkes/hairline
+            </a>
+            .
           </p>
         </div>
 

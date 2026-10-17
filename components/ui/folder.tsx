@@ -1,5 +1,13 @@
 "use client";
 
+/**
+ * Folder
+ *
+ * Standalone forward-facing 2D vector folder with exact 84x61 proportions, filleted tabs,
+ * and punch dots. Silhouette geometry and fillet algorithms adapted from Lucas Markes' hairline:
+ * https://github.com/lucasmarkes/hairline
+ */
+
 import React from "react";
 
 export interface FolderProps {

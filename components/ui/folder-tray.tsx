@@ -1,5 +1,13 @@
 "use client";
 
+/**
+ * FolderTray
+ *
+ * An interactive 3D isometric tray of folders with kinematic spring lean physics.
+ * Built on top of and inspired by Lucas Markes' hairline riffle engine:
+ * https://github.com/lucasmarkes/hairline
+ */
+
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Riffle } from "@lucasmarkes/hairline/react";
 export { Folder, type FolderProps } from "./folder";
