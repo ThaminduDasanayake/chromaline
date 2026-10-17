@@ -1,5 +1,12 @@
 "use client";
 
+/**
+ * SelectBar
+ *
+ * Elastic kinetic segmented pill and color swatch selector engineered with
+ * two-phase mercury stretch dilation and overshoot landing kinematics.
+ */
+
 import React, { useEffect, useLayoutEffect, useRef, useState, useCallback } from "react";
 
 const useIsomorphicLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect;

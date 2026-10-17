@@ -5,7 +5,7 @@ import Link from "next/link";
 import { FolderTrayPreview, LinkFolderTrayPreview } from "@/components/showcase";
 import { SiteHeader, SiteFooter } from "@/components/layout";
 import { InstallCommandTabs } from "@/components/docs";
-import { ArrowUpRightIcon, CheckIcon, CopyIcon } from "@phosphor-icons/react";
+import { CheckIcon, CopyIcon } from "@phosphor-icons/react";
 
 const CODE_EXAMPLE_LINES = [
   {

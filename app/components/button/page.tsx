@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { SelectBar } from "@/components/ui/select-bar";
-import { ArrowRightIcon, CopyIcon, CheckIcon } from "@phosphor-icons/react";
+import {ArrowRightIcon, CopyIcon, CheckIcon, ArrowLeftIcon} from "@phosphor-icons/react";
 import { SiteHeader, SiteFooter } from "@/components/layout";
 import { InstallCommandTabs } from "@/components/docs";
 
@@ -169,7 +169,6 @@ export default function ButtonPage() {
   const [variant, setVariant] = useState<"default" | "dark" | "orange" | "emerald">("default");
   const [size, setSize] = useState<"sm" | "default" | "lg">("default");
   const [disabled, setDisabled] = useState(false);
-  const [clickCount, setClickCount] = useState(0);
 
   const [installTab, setInstallTab] = useState<"command" | "manual">("command");
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
@@ -196,7 +195,7 @@ export default function ButtonPage() {
           href="/"
           className="mb-8 inline-flex items-center gap-1.5 font-mono text-xs text-slate-500 transition-colors hover:text-slate-950"
         >
-          <span>&larr;</span> Back to Components
+          <span><ArrowLeftIcon/></span> Back to Components
         </Link>
 
         {/* Page Title & Intro */}
@@ -216,23 +215,18 @@ export default function ButtonPage() {
         {/* Interactive Preview Canvas */}
         <div className="mb-12 overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-2xs">
           {/* Canvas Area */}
-          <div className="relative flex min-h-[280px] flex-col items-center justify-center bg-[#F9FAFB] p-8 sm:p-12">
+          <div className="relative flex min-h-70 flex-col items-center justify-center bg-[#F9FAFB] p-8 sm:p-12">
             <div className="flex flex-col items-center gap-4">
               <Button
                 variant={variant}
                 size={size}
                 disabled={disabled}
-                onClick={() => setClickCount((c) => c + 1)}
               >
                 <span>Continue</span>
                 <ArrowRightIcon size={14} weight="bold" />
               </Button>
 
-              {clickCount > 0 && (
-                <span className="font-mono text-[11px] text-slate-500">
-                  Clicked {clickCount} {clickCount === 1 ? "time" : "times"}
-                </span>
-              )}
+
             </div>
           </div>
 

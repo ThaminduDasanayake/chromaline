@@ -12,7 +12,6 @@ import {
   TextAlignRightIcon,
   CopyIcon,
   CheckIcon,
-  ArrowUpRightIcon,
 } from "@phosphor-icons/react";
 
 const COLOR_PRESETS = [

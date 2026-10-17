@@ -78,14 +78,14 @@ export const NAV_FOLDERS: FolderItem[] = [
     description: "Direct shadcn registry schema endpoint for CLI installation.",
   },
   {
-    id: "nav-primitives",
-    name: "Primitives",
-    href: "/components/folder",
+    id: "nav-select",
+    name: "Select Bar",
+    href: "/components/select-bar",
     bodyColor: "#6366F1", // Indigo
     darkOutline: "#312E81",
     lightOutline: "#E0E7FF",
-    category: "Docs",
-    description: "Core physical UI primitives and guidelines.",
+    category: "Component",
+    description: "Elastic kinetic segmented pill and color swatch selector.",
   },
 ];
 
