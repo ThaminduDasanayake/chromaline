@@ -4,3 +4,4 @@ export { FolderCardPreview } from "./folder-card-preview";
 export { ButtonCardPreview } from "./button-card-preview";
 export { LinkFolderTrayPreview } from "./link-folder-tray-preview";
 export { SelectBarCardPreview } from "./select-bar-card-preview";
+export { SeekCardPreview } from "./seek-card-preview";

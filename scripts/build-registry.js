@@ -7,6 +7,7 @@ function buildRegistry() {
   const folderPath = path.join(__dirname, "../components/ui/folder.tsx");
   const buttonPath = path.join(__dirname, "../components/ui/button.tsx");
   const selectBarPath = path.join(__dirname, "../components/ui/select-bar.tsx");
+  const seekPath = path.join(__dirname, "../components/ui/seek.tsx");
 
   if (!fs.existsSync(trayPath)) {
     console.error("Component not found:", trayPath);
@@ -19,6 +20,7 @@ function buildRegistry() {
   const selectBarContent = fs.existsSync(selectBarPath)
     ? fs.readFileSync(selectBarPath, "utf8")
     : "";
+  const seekContent = fs.existsSync(seekPath) ? fs.readFileSync(seekPath, "utf8") : "";
 
   // 1. Full Folder Tray with Folder Support
   const trayRegistryItem = {
@@ -114,6 +116,27 @@ function buildRegistry() {
     ],
   };
 
+  // 5. Kinetic Seek Search Component
+  const seekRegistryItem = {
+    $schema: "https://ui.shadcn.com/schema/registry-item.json",
+    name: "seek",
+    type: "registry:ui",
+    title: "Seek",
+    description:
+      "Kinetic search icon that springs into a focused input with continuous physics, cursor magnetic pull, and tactile yield.",
+    dependencies: [],
+    devDependencies: [],
+    registryDependencies: [],
+    files: [
+      {
+        path: "components/ui/seek.tsx",
+        content: seekContent,
+        type: "registry:ui",
+        target: "components/ui/seek.tsx",
+      },
+    ],
+  };
+
   const outDir = path.join(__dirname, "../public/r");
   fs.mkdirSync(outDir, { recursive: true });
 
@@ -131,12 +154,22 @@ function buildRegistry() {
     path.join(outDir, "select-bar.json"),
     JSON.stringify(selectBarRegistryItem, null, 2)
   );
+  fs.writeFileSync(
+    path.join(outDir, "seek.json"),
+    JSON.stringify(seekRegistryItem, null, 2)
+  );
 
   const indexRegistry = {
     $schema: "https://ui.shadcn.com/schema/registry.json",
     name: "chromaline",
     homepage: "https://github.com/lucasmarkes/hairline",
-    items: [trayRegistryItem, singleFolderRegistryItem, buttonRegistryItem, selectBarRegistryItem],
+    items: [
+      trayRegistryItem,
+      singleFolderRegistryItem,
+      buttonRegistryItem,
+      selectBarRegistryItem,
+      seekRegistryItem,
+    ],
   };
   fs.writeFileSync(path.join(outDir, "index.json"), JSON.stringify(indexRegistry, null, 2));
 
@@ -208,12 +241,26 @@ function buildRegistry() {
           },
         ],
       },
+      {
+        name: "seek",
+        type: "registry:ui",
+        title: "Seek",
+        description:
+          "Kinetic search icon that springs into a focused input with continuous physics, cursor magnetic pull, and tactile yield.",
+        files: [
+          {
+            path: "components/ui/seek.tsx",
+            type: "registry:ui",
+            target: "components/ui/seek.tsx",
+          },
+        ],
+      },
     ],
   };
   fs.writeFileSync(path.join(__dirname, "../registry.json"), JSON.stringify(rootRegistry, null, 2));
 
   console.log(
-    "✓ Chromaline registry generated at public/r/folder-tray.json, public/r/folder.json, public/r/button.json, and public/r/select-bar.json"
+    "✓ Chromaline registry generated at public/r/folder-tray.json, public/r/folder.json, public/r/button.json, public/r/select-bar.json, and public/r/seek.json"
   );
 }
 
