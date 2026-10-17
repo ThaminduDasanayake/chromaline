@@ -165,10 +165,7 @@ const LINK_EXAMPLE_LINES = [
   { num: 2, parts: [{ text: "" }] },
   {
     num: 3,
-    parts: [
-      { text: "const", cls: "text-[#f43f5e]" },
-      { text: " NAV_LINKS = [" },
-    ],
+    parts: [{ text: "const", cls: "text-[#f43f5e]" }, { text: " NAV_LINKS = [" }],
   },
   {
     num: 4,
@@ -236,10 +233,7 @@ const LINK_EXAMPLE_LINES = [
   { num: 9, parts: [{ text: "" }] },
   {
     num: 10,
-    parts: [
-      { text: "export default function", cls: "text-[#f43f5e]" },
-      { text: " NavDeck() {" },
-    ],
+    parts: [{ text: "export default function", cls: "text-[#f43f5e]" }, { text: " NavDeck() {" }],
   },
   {
     num: 11,
@@ -288,8 +282,7 @@ export default function FolderTrayPage() {
 
         {/* Page Title & Description */}
         <div className="mb-6">
-
-            <h1 className="text-3xl font-bold tracking-tight text-slate-950">Folder Tray</h1>
+          <h1 className="text-3xl font-bold tracking-tight text-slate-950">Folder Tray</h1>
 
           <p className="mt-2 max-w-2xl text-sm leading-relaxed text-slate-500">
             An interactive 3D isometric tray of folders with kinematic lean physics, solid folder
@@ -415,9 +408,19 @@ export default function FolderTrayPage() {
           <div className="space-y-4">
             <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
               <div>
-                <h3 className="text-base font-semibold text-slate-900">Link Navigation (Bookmark Deck)</h3>
+                <h3 className="text-base font-semibold text-slate-900">
+                  Link Navigation (Bookmark Deck)
+                </h3>
                 <p className="text-xs text-slate-500">
-                  Each folder accepts an optional <code className="rounded bg-slate-100 px-1 py-0.5 font-mono text-slate-700">href</code>. Clicking opens internal routes or external URLs directly, and <code className="rounded bg-slate-100 px-1 py-0.5 font-mono text-slate-700">onHover</code> broadcasts live card coordinates for destination docks.
+                  Each folder accepts an optional{" "}
+                  <code className="rounded bg-slate-100 px-1 py-0.5 font-mono text-slate-700">
+                    href
+                  </code>
+                  . Clicking opens internal routes or external URLs directly, and{" "}
+                  <code className="rounded bg-slate-100 px-1 py-0.5 font-mono text-slate-700">
+                    onHover
+                  </code>{" "}
+                  broadcasts live card coordinates for destination docks.
                 </p>
               </div>
               <button
@@ -489,7 +492,8 @@ export default function FolderTrayPage() {
                   <td className="p-3 text-slate-400">required</td>
                   <td className="p-3 font-sans text-slate-600">
                     Array of 1 to 8 folder items. Accepts <code>bodyColor</code>,{" "}
-                    <code>darkOutline</code>, <code>lightOutline</code>, <code>href</code>, <code>target</code>, and <code>content</code>.
+                    <code>darkOutline</code>, <code>lightOutline</code>, <code>href</code>,{" "}
+                    <code>target</code>, and <code>content</code>.
                   </td>
                 </tr>
                 <tr>
@@ -497,7 +501,8 @@ export default function FolderTrayPage() {
                   <td className="p-3 text-purple-700">(folder) =&gt; void</td>
                   <td className="p-3 text-slate-400">undefined</td>
                   <td className="p-3 font-sans text-slate-600">
-                    Callback triggered when any folder is clicked. If omitted and the folder has an <code>href</code>, automatically navigates to that destination.
+                    Callback triggered when any folder is clicked. If omitted and the folder has an{" "}
+                    <code>href</code>, automatically navigates to that destination.
                   </td>
                 </tr>
                 <tr>

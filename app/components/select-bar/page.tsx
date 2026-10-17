@@ -34,43 +34,29 @@ const CODE_EXAMPLE_LINES = [
   { num: 2, parts: [{ text: "" }] },
   {
     num: 3,
-    parts: [
-      { text: "const", cls: "text-[#f43f5e]" },
-      { text: " TABS = [" },
-    ],
+    parts: [{ text: "const", cls: "text-[#f43f5e]" }, { text: " TABS = [" }],
   },
   {
     num: 4,
-    parts: [
-      { text: '  { key: "design", label: "Design" },' },
-    ],
+    parts: [{ text: '  { key: "design", label: "Design" },' }],
   },
   {
     num: 5,
-    parts: [
-      { text: '  { key: "code", label: "Code" },' },
-    ],
+    parts: [{ text: '  { key: "code", label: "Code" },' }],
   },
   {
     num: 6,
-    parts: [
-      { text: '  { key: "preview", label: "Preview" },' },
-    ],
+    parts: [{ text: '  { key: "preview", label: "Preview" },' }],
   },
   {
     num: 7,
-    parts: [
-      { text: '  { key: "export", label: "Export" },' },
-    ],
+    parts: [{ text: '  { key: "export", label: "Export" },' }],
   },
   { num: 8, parts: [{ text: "];" }] },
   { num: 9, parts: [{ text: "" }] },
   {
     num: 10,
-    parts: [
-      { text: "export default function", cls: "text-[#f43f5e]" },
-      { text: " Demo() {" },
-    ],
+    parts: [{ text: "export default function", cls: "text-[#f43f5e]" }, { text: " Demo() {" }],
   },
   {
     num: 11,
@@ -90,39 +76,27 @@ const CODE_EXAMPLE_LINES = [
   },
   {
     num: 14,
-    parts: [
-      { text: "      items={TABS}" },
-    ],
+    parts: [{ text: "      items={TABS}" }],
   },
   {
     num: 15,
-    parts: [
-      { text: "      value={active}" },
-    ],
+    parts: [{ text: "      value={active}" }],
   },
   {
     num: 16,
-    parts: [
-      { text: "      onChange={setActive}" },
-    ],
+    parts: [{ text: "      onChange={setActive}" }],
   },
   {
     num: 17,
-    parts: [
-      { text: '      size="sm"' },
-    ],
+    parts: [{ text: '      size="sm"' }],
   },
   {
     num: 18,
-    parts: [
-      { text: '      variant="glass"' },
-    ],
+    parts: [{ text: '      variant="glass"' }],
   },
   {
     num: 19,
-    parts: [
-      { text: "    />", cls: "text-slate-500" },
-    ],
+    parts: [{ text: "    />", cls: "text-slate-500" }],
   },
   { num: 20, parts: [{ text: "  );" }] },
   { num: 21, parts: [{ text: "}" }] },
@@ -247,10 +221,7 @@ const ICON_EXAMPLE_LINES = [
   { num: 12, parts: [{ text: "" }] },
   {
     num: 13,
-    parts: [
-      { text: "export default function", cls: "text-[#f43f5e]" },
-      { text: " Toolbar() {" },
-    ],
+    parts: [{ text: "export default function", cls: "text-[#f43f5e]" }, { text: " Toolbar() {" }],
   },
   {
     num: 14,
@@ -483,8 +454,7 @@ export default function SelectBarPage() {
 
   const currentItems =
     mode === "tabs" ? TAB_OPTIONS : mode === "icons" ? ICON_OPTIONS : SWATCH_OPTIONS;
-  const currentValue =
-    mode === "tabs" ? activeTab : mode === "icons" ? activeIcon : activeSwatch;
+  const currentValue = mode === "tabs" ? activeTab : mode === "icons" ? activeIcon : activeSwatch;
   const handleValueChange = (k: string) => {
     if (mode === "tabs") setActiveTab(k);
     else if (mode === "icons") setActiveIcon(k);
@@ -689,7 +659,8 @@ export default function SelectBarPage() {
             <div className="space-y-3 rounded-xl border border-slate-200/90 bg-white p-4 font-mono text-xs shadow-2xs">
               <div className="flex items-center justify-between border-b border-slate-100 pb-2">
                 <span className="font-sans text-[12px] font-medium text-slate-600">
-                  Copy code into <code className="text-slate-900">components/ui/select-bar.tsx</code>
+                  Copy code into{" "}
+                  <code className="text-slate-900">components/ui/select-bar.tsx</code>
                 </span>
                 <button
                   type="button"
@@ -769,11 +740,20 @@ export default function SelectBarPage() {
           <div className="space-y-4">
             <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
               <div>
-                <h3 className="text-base font-semibold text-slate-900">Icons Only (Toolbar Dock)</h3>
+                <h3 className="text-base font-semibold text-slate-900">
+                  Icons Only (Toolbar Dock)
+                </h3>
                 <p className="text-xs text-slate-500">
-                  By omitting <code className="rounded bg-slate-100 px-1 py-0.5 font-mono text-slate-700">label</code> or setting{" "}
-                  <code className="rounded bg-slate-100 px-1 py-0.5 font-mono text-slate-700">showLabel: false</code>, slots
-                  automatically render as compact square buttons with centered icons and accessible native tooltips.
+                  By omitting{" "}
+                  <code className="rounded bg-slate-100 px-1 py-0.5 font-mono text-slate-700">
+                    label
+                  </code>{" "}
+                  or setting{" "}
+                  <code className="rounded bg-slate-100 px-1 py-0.5 font-mono text-slate-700">
+                    showLabel: false
+                  </code>
+                  , slots automatically render as compact square buttons with centered icons and
+                  accessible native tooltips.
                 </p>
               </div>
               <button

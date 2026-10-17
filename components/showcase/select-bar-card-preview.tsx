@@ -2,12 +2,7 @@
 
 import React, { useState } from "react";
 import { SelectBar, SelectBarItem } from "@/components/ui/select-bar";
-import {
-  CodeIcon,
-  EyeIcon,
-  PaintBrushIcon,
-  SparkleIcon,
-} from "@phosphor-icons/react";
+import { CodeIcon, EyeIcon, PaintBrushIcon, SparkleIcon } from "@phosphor-icons/react";
 
 const NAV_ITEMS: SelectBarItem<"design" | "code" | "preview" | "motion">[] = [
   { key: "design", label: "Design", icon: <PaintBrushIcon size={13} weight="bold" /> },

@@ -112,12 +112,8 @@ export function LinkFolderTrayPreview() {
         <span className="font-mono text-[11px] text-slate-500">
           {active.target === "_blank" ? "External:" : "Link:"}
         </span>
-        <span className="font-mono text-xs font-semibold text-slate-900">
-          {active.name}
-        </span>
-        <span className="font-mono text-[11px] text-slate-400">
-          {active.href}
-        </span>
+        <span className="font-mono text-xs font-semibold text-slate-900">{active.name}</span>
+        <span className="font-mono text-[11px] text-slate-400">{active.href}</span>
         <ArrowUpRightIcon size={12} weight="bold" className="text-slate-500" />
       </div>
     </div>

@@ -210,16 +210,10 @@ export default function ButtonPage() {
           {/* Canvas Area */}
           <div className="relative flex min-h-70 flex-col items-center justify-center bg-[#F9FAFB] p-8 sm:p-12">
             <div className="flex flex-col items-center gap-4">
-              <Button
-                variant={variant}
-                size={size}
-                disabled={disabled}
-              >
+              <Button variant={variant} size={size} disabled={disabled}>
                 <span>Continue</span>
                 <ArrowRightIcon size={14} weight="bold" />
               </Button>
-
-
             </div>
           </div>
 
