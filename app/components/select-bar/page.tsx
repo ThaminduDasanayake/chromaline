@@ -520,26 +520,19 @@ export default function SelectBarPage() {
         <div className="mb-12 overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-2xs">
           {/* Canvas Area */}
           <div className="relative flex min-h-[300px] flex-col items-center justify-center bg-[#F9FAFB] p-8 sm:p-12">
-            <div className="flex flex-col items-center gap-6">
-              <SelectBar
-                key={`${mode}-${axis}-${size}-${variant}`}
-                items={currentItems}
-                value={currentValue}
-                onChange={handleValueChange}
-                variant={mode === "swatches" ? "swatches" : variant}
-                size={size}
-                axis={axis}
-                dilate={dilate}
-                bounce={bounce}
-                speed={speed}
-                ariaLabel="Interactive playground selector"
-              />
-
-              <div className="flex items-center gap-2 rounded-full border border-slate-200/80 bg-white/90 px-3 py-1 font-mono text-[11px] text-slate-500 shadow-2xs">
-                <span>Selected:</span>
-                <span className="font-semibold text-slate-950 capitalize">{currentValue}</span>
-              </div>
-            </div>
+            <SelectBar
+              key={`${mode}-${axis}-${size}-${variant}`}
+              items={currentItems}
+              value={currentValue}
+              onChange={handleValueChange}
+              variant={mode === "swatches" ? "swatches" : variant}
+              size={size}
+              axis={axis}
+              dilate={dilate}
+              bounce={bounce}
+              speed={speed}
+              ariaLabel="Interactive playground selector"
+            />
           </div>
 
           {/* Interactive Controls Bar */}
@@ -804,22 +797,15 @@ export default function SelectBarPage() {
             {/* Live Interactive Stage */}
             <div className="relative overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-2xs">
               <div className="relative flex min-h-[260px] flex-col items-center justify-center bg-[#F9FAFB] p-8 sm:p-12">
-                <div className="flex flex-col items-center gap-6">
-                  <SelectBar
-                    items={ICON_OPTIONS}
-                    value={exampleIconTool}
-                    onChange={setExampleIconTool}
-                    size={exampleIconSize}
-                    variant="glass"
-                    axis={exampleIconAxis}
-                    ariaLabel="Canvas drawing tools"
-                  />
-
-                  <div className="flex items-center gap-2 rounded-full border border-slate-200/80 bg-white/95 px-3 py-1 font-mono text-[11px] text-slate-500 shadow-2xs">
-                    <span>Active Tool:</span>
-                    <span className="font-semibold text-slate-950 capitalize">{exampleIconTool}</span>
-                  </div>
-                </div>
+                <SelectBar
+                  items={ICON_OPTIONS}
+                  value={exampleIconTool}
+                  onChange={setExampleIconTool}
+                  size={exampleIconSize}
+                  variant="glass"
+                  axis={exampleIconAxis}
+                  ariaLabel="Canvas drawing tools"
+                />
 
                 {/* Quick Interactive Stage Controls */}
                 <div className="mt-6 flex flex-wrap items-center justify-center gap-3 sm:absolute sm:right-4 sm:bottom-4 sm:mt-0">
