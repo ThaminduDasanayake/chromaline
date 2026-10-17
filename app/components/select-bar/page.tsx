@@ -9,6 +9,12 @@ import {
   EyeIcon,
   PaintBrushIcon,
   SparkleIcon,
+  CursorIcon,
+  PencilSimpleIcon,
+  TextTIcon,
+  SquareIcon,
+  HandPalmIcon,
+  ChatCircleDotsIcon,
   CopyIcon,
   CheckIcon,
 } from "@phosphor-icons/react";
@@ -146,6 +152,162 @@ export default function Demo() {
   );
 }`;
 
+const ICON_EXAMPLE_LINES = [
+  {
+    num: 1,
+    parts: [
+      { text: "import", cls: "text-[#f43f5e]" },
+      { text: " { " },
+      { text: "useState", cls: "text-slate-900 font-semibold" },
+      { text: " } " },
+      { text: "from", cls: "text-[#f43f5e]" },
+      { text: ' "react"', cls: "text-[#0284c7]" },
+    ],
+  },
+  {
+    num: 2,
+    parts: [
+      { text: "import", cls: "text-[#f43f5e]" },
+      { text: " { " },
+      { text: "SelectBar", cls: "text-slate-900 font-semibold" },
+      { text: ", " },
+      { text: "type", cls: "text-[#f43f5e]" },
+      { text: " " },
+      { text: "SelectBarItem", cls: "text-slate-900 font-semibold" },
+      { text: " } " },
+      { text: "from", cls: "text-[#f43f5e]" },
+      { text: ' "@/components/ui/select-bar"', cls: "text-[#0284c7]" },
+    ],
+  },
+  {
+    num: 3,
+    parts: [
+      { text: "import", cls: "text-[#f43f5e]" },
+      { text: " { " },
+      {
+        text: "CursorIcon, PencilSimpleIcon, TextTIcon, SquareIcon, HandPalmIcon",
+        cls: "text-slate-900 font-semibold",
+      },
+      { text: " } " },
+      { text: "from", cls: "text-[#f43f5e]" },
+      { text: ' "@phosphor-icons/react"', cls: "text-[#0284c7]" },
+    ],
+  },
+  { num: 4, parts: [{ text: "" }] },
+  {
+    num: 5,
+    parts: [
+      { text: "const", cls: "text-[#f43f5e]" },
+      { text: " TOOLS: " },
+      { text: "SelectBarItem", cls: "text-purple-700 font-semibold" },
+      { text: "[] = [" },
+    ],
+  },
+  {
+    num: 6,
+    parts: [
+      {
+        text: '  { key: "cursor", icon: <CursorIcon size={14} weight="bold" />, label: "Select", showLabel: false },',
+      },
+    ],
+  },
+  {
+    num: 7,
+    parts: [
+      {
+        text: '  { key: "draw", icon: <PencilSimpleIcon size={14} weight="bold" />, label: "Draw", showLabel: false },',
+      },
+    ],
+  },
+  {
+    num: 8,
+    parts: [
+      {
+        text: '  { key: "text", icon: <TextTIcon size={14} weight="bold" />, label: "Text", showLabel: false },',
+      },
+    ],
+  },
+  {
+    num: 9,
+    parts: [
+      {
+        text: '  { key: "shapes", icon: <SquareIcon size={14} weight="bold" />, label: "Shapes", showLabel: false },',
+      },
+    ],
+  },
+  {
+    num: 10,
+    parts: [
+      {
+        text: '  { key: "pan", icon: <HandPalmIcon size={14} weight="bold" />, label: "Pan", showLabel: false },',
+      },
+    ],
+  },
+  { num: 11, parts: [{ text: "];" }] },
+  { num: 12, parts: [{ text: "" }] },
+  {
+    num: 13,
+    parts: [
+      { text: "export default function", cls: "text-[#f43f5e]" },
+      { text: " Toolbar() {" },
+    ],
+  },
+  {
+    num: 14,
+    parts: [
+      { text: "  const [active, setActive] = useState(" },
+      { text: '"cursor"', cls: "text-[#0284c7]" },
+      { text: ");" },
+    ],
+  },
+  { num: 15, parts: [{ text: "  return (" }] },
+  {
+    num: 16,
+    parts: [
+      { text: "    <", cls: "text-slate-500" },
+      { text: "SelectBar", cls: "text-[#16a34a] font-semibold" },
+      { text: ' items={TOOLS} value={active} onChange={setActive} size="sm" variant="glass" />' },
+    ],
+  },
+  { num: 17, parts: [{ text: "  );" }] },
+  { num: 18, parts: [{ text: "}" }] },
+];
+
+const ICON_EXAMPLE_TEXT = `import { useState } from "react";
+import { SelectBar, SelectBarItem } from "@/components/ui/select-bar";
+import {
+  CursorIcon,
+  PencilSimpleIcon,
+  TextTIcon,
+  SquareIcon,
+  HandPalmIcon,
+  ChatCircleDotsIcon,
+} from "@phosphor-icons/react";
+
+const TOOLS: SelectBarItem[] = [
+  { key: "cursor", icon: <CursorIcon size={14} weight="bold" />, label: "Select", showLabel: false },
+  { key: "draw", icon: <PencilSimpleIcon size={14} weight="bold" />, label: "Draw", showLabel: false },
+  { key: "text", icon: <TextTIcon size={14} weight="bold" />, label: "Text", showLabel: false },
+  { key: "shapes", icon: <SquareIcon size={14} weight="bold" />, label: "Shapes", showLabel: false },
+  { key: "pan", icon: <HandPalmIcon size={14} weight="bold" />, label: "Pan", showLabel: false },
+  { key: "comment", icon: <ChatCircleDotsIcon size={14} weight="bold" />, label: "Comment", showLabel: false },
+];
+
+export default function ToolbarDemo() {
+  const [active, setActive] = useState("cursor");
+
+  return (
+    <SelectBar
+      items={TOOLS}
+      value={active}
+      onChange={setActive}
+      size="sm"
+      variant="glass"
+      ariaLabel="Canvas editor toolbar"
+    />
+  );
+}`;
+
 const PROPS_DATA = [
   {
     prop: "items",
@@ -240,6 +402,45 @@ const TAB_OPTIONS: SelectBarItem<string>[] = [
   { key: "motion", label: "Motion", icon: <SparkleIcon size={14} weight="bold" /> },
 ];
 
+const ICON_OPTIONS: SelectBarItem<string>[] = [
+  {
+    key: "cursor",
+    icon: <CursorIcon size={14} weight="bold" />,
+    label: "Select",
+    showLabel: false,
+  },
+  {
+    key: "draw",
+    icon: <PencilSimpleIcon size={14} weight="bold" />,
+    label: "Draw",
+    showLabel: false,
+  },
+  {
+    key: "text",
+    icon: <TextTIcon size={14} weight="bold" />,
+    label: "Text",
+    showLabel: false,
+  },
+  {
+    key: "shapes",
+    icon: <SquareIcon size={14} weight="bold" />,
+    label: "Shapes",
+    showLabel: false,
+  },
+  {
+    key: "pan",
+    icon: <HandPalmIcon size={14} weight="bold" />,
+    label: "Pan",
+    showLabel: false,
+  },
+  {
+    key: "comment",
+    icon: <ChatCircleDotsIcon size={14} weight="bold" />,
+    label: "Comments",
+    showLabel: false,
+  },
+];
+
 const SWATCH_OPTIONS: SelectBarItem<string>[] = [
   { key: "original", label: "White", color: "#FFFFFF", darkOutline: "#232327" },
   { key: "orange", label: "Orange", color: "#E54F10", darkOutline: "#7C2D12" },
@@ -251,15 +452,21 @@ const SWATCH_OPTIONS: SelectBarItem<string>[] = [
 
 export default function SelectBarPage() {
   const [activeTab, setActiveTab] = useState("design");
+  const [activeIcon, setActiveIcon] = useState("cursor");
   const [activeSwatch, setActiveSwatch] = useState("orange");
 
-  const [mode, setMode] = useState<"tabs" | "swatches">("tabs");
+  const [mode, setMode] = useState<"tabs" | "icons" | "swatches">("tabs");
   const [variant, setVariant] = useState<"glass" | "swatches" | "pill">("glass");
   const [size, setSize] = useState<"xs" | "sm" | "default">("sm");
   const [axis, setAxis] = useState<"row" | "column">("row");
   const [dilate, setDilate] = useState(100);
   const [bounce, setBounce] = useState(50);
   const [speed, setSpeed] = useState(50);
+
+  // Dedicated Examples Section State
+  const [exampleIconTool, setExampleIconTool] = useState("cursor");
+  const [exampleIconAxis, setExampleIconAxis] = useState<"row" | "column">("row");
+  const [exampleIconSize, setExampleIconSize] = useState<"xs" | "sm" | "default">("sm");
 
   const [installTab, setInstallTab] = useState<"command" | "manual">("command");
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
@@ -274,10 +481,13 @@ export default function SelectBarPage() {
     }
   };
 
-  const currentItems = mode === "tabs" ? TAB_OPTIONS : SWATCH_OPTIONS;
-  const currentValue = mode === "tabs" ? activeTab : activeSwatch;
+  const currentItems =
+    mode === "tabs" ? TAB_OPTIONS : mode === "icons" ? ICON_OPTIONS : SWATCH_OPTIONS;
+  const currentValue =
+    mode === "tabs" ? activeTab : mode === "icons" ? activeIcon : activeSwatch;
   const handleValueChange = (k: string) => {
     if (mode === "tabs") setActiveTab(k);
+    else if (mode === "icons") setActiveIcon(k);
     else setActiveSwatch(k);
   };
 
@@ -327,7 +537,7 @@ export default function SelectBarPage() {
 
               <div className="flex items-center gap-2 rounded-full border border-slate-200/80 bg-white/90 px-3 py-1 font-mono text-[11px] text-slate-500 shadow-2xs">
                 <span>Selected:</span>
-                <span className="font-semibold text-slate-950">{currentValue}</span>
+                <span className="font-semibold text-slate-950 capitalize">{currentValue}</span>
               </div>
             </div>
           </div>
@@ -340,10 +550,11 @@ export default function SelectBarPage() {
                 {/* Content Type Picker */}
                 <div className="flex items-center gap-2 border-r border-slate-200 pr-4">
                   <span className="text-[11px] text-slate-400">Content:</span>
-                  <SelectBar<"tabs" | "swatches">
+                  <SelectBar<"tabs" | "icons" | "swatches">
                     size="xs"
                     items={[
                       { key: "tabs", label: "Pills" },
+                      { key: "icons", label: "Icons" },
                       { key: "swatches", label: "Swatches" },
                     ]}
                     value={mode}
@@ -356,8 +567,8 @@ export default function SelectBarPage() {
                   />
                 </div>
 
-                {/* Variant Picker (when in tabs mode) */}
-                {mode === "tabs" && (
+                {/* Variant Picker (when in tabs or icons mode) */}
+                {mode !== "swatches" && (
                   <div className="flex items-center gap-2 border-r border-slate-200 pr-4">
                     <span className="text-[11px] text-slate-400">Variant:</span>
                     <SelectBar<"glass" | "pill">
@@ -548,6 +759,120 @@ export default function SelectBarPage() {
                   </span>
                 </div>
               ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Examples Section */}
+        <section className="mb-12">
+          <div className="mb-4">
+            <h2 className="text-xl font-bold tracking-tight text-slate-950">Examples</h2>
+            <p className="text-sm text-slate-500">
+              Interactive patterns demonstrating icon-only floating toolbars and docked selectors.
+            </p>
+          </div>
+
+          {/* Example 1: Icons Only Toolbar Dock */}
+          <div className="space-y-4">
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <h3 className="text-base font-semibold text-slate-900">Icons Only (Toolbar Dock)</h3>
+                <p className="text-xs text-slate-500">
+                  By omitting <code className="rounded bg-slate-100 px-1 py-0.5 font-mono text-slate-700">label</code> or setting{" "}
+                  <code className="rounded bg-slate-100 px-1 py-0.5 font-mono text-slate-700">showLabel: false</code>, slots
+                  automatically render as compact square buttons with centered icons and accessible native tooltips.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => copyToClipboard(ICON_EXAMPLE_TEXT, "icon-example-code")}
+                className="flex shrink-0 cursor-pointer items-center gap-1.5 font-mono text-xs text-slate-500 transition-colors hover:text-slate-900"
+              >
+                {copiedKey === "icon-example-code" ? (
+                  <span className="flex items-center gap-1 font-medium text-emerald-600">
+                    <CheckIcon size={13} weight="bold" /> Copied!
+                  </span>
+                ) : (
+                  <>
+                    <CopyIcon size={13} />
+                    <span>Copy code</span>
+                  </>
+                )}
+              </button>
+            </div>
+
+            {/* Live Interactive Stage */}
+            <div className="relative overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-2xs">
+              <div className="relative flex min-h-[260px] flex-col items-center justify-center bg-[#F9FAFB] p-8 sm:p-12">
+                <div className="flex flex-col items-center gap-6">
+                  <SelectBar
+                    items={ICON_OPTIONS}
+                    value={exampleIconTool}
+                    onChange={setExampleIconTool}
+                    size={exampleIconSize}
+                    variant="glass"
+                    axis={exampleIconAxis}
+                    ariaLabel="Canvas drawing tools"
+                  />
+
+                  <div className="flex items-center gap-2 rounded-full border border-slate-200/80 bg-white/95 px-3 py-1 font-mono text-[11px] text-slate-500 shadow-2xs">
+                    <span>Active Tool:</span>
+                    <span className="font-semibold text-slate-950 capitalize">{exampleIconTool}</span>
+                  </div>
+                </div>
+
+                {/* Quick Interactive Stage Controls */}
+                <div className="mt-6 flex flex-wrap items-center justify-center gap-3 sm:absolute sm:right-4 sm:bottom-4 sm:mt-0">
+                  <div className="flex items-center gap-2 rounded-full border border-slate-200/80 bg-white/90 px-2 py-1 shadow-2xs">
+                    <span className="font-mono text-[10px] text-slate-400">Axis:</span>
+                    <SelectBar<"row" | "column">
+                      size="xs"
+                      items={[
+                        { key: "row", label: "Row" },
+                        { key: "column", label: "Col" },
+                      ]}
+                      value={exampleIconAxis}
+                      onChange={setExampleIconAxis}
+                      ariaLabel="Select toolbar orientation"
+                    />
+                  </div>
+
+                  <div className="flex items-center gap-2 rounded-full border border-slate-200/80 bg-white/90 px-2 py-1 shadow-2xs">
+                    <span className="font-mono text-[10px] text-slate-400">Size:</span>
+                    <SelectBar<"xs" | "sm" | "default">
+                      size="xs"
+                      items={[
+                        { key: "xs", label: "XS" },
+                        { key: "sm", label: "SM" },
+                        { key: "default", label: "MD" },
+                      ]}
+                      value={exampleIconSize}
+                      onChange={setExampleIconSize}
+                      ariaLabel="Select toolbar size"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Code Snippet */}
+            <div className="overflow-x-auto rounded-xl border border-slate-200/90 bg-white p-4 font-mono text-xs shadow-2xs">
+              <div className="space-y-1">
+                {ICON_EXAMPLE_LINES.map((line) => (
+                  <div key={line.num} className="flex">
+                    <span className="w-8 shrink-0 pr-4 text-right text-slate-300 select-none">
+                      {line.num}
+                    </span>
+                    <span>
+                      {line.parts.map((p, idx) => (
+                        <span key={idx} className={p.cls || "text-slate-700"}>
+                          {p.text}
+                        </span>
+                      ))}
+                    </span>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </section>

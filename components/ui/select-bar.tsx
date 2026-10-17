@@ -264,6 +264,30 @@ export function SelectBar<T extends string = string>({
           height: auto;
         }
 
+        /* ── pill variant: solid tactile segmented control ─────── */
+        .gnav[data-variant="pill"] {
+          background: var(--pill-bg, #f1f5f9);
+          -webkit-backdrop-filter: none;
+          backdrop-filter: none;
+          box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.05);
+        }
+
+        .gnav[data-variant="pill"]::before {
+          display: none;
+        }
+
+        .gnav[data-variant="pill"] .gnav-ind {
+          background: var(--pill-thumb, #ffffff);
+          box-shadow:
+            0 1px 2px rgba(0, 0, 0, 0.06),
+            0 1px 3px rgba(0, 0, 0, 0.08);
+        }
+
+        .gnav[data-variant="pill"] .gnav-item[data-active="true"] {
+          color: var(--ink, #0f172a);
+          font-weight: 600;
+        }
+
         /* Phase one: leading edge jumps, pill dilates */
         .gnav-ind[data-phase="stretch"] {
           --d: var(--ind-stretch, 190ms);
