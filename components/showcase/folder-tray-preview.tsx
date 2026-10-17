@@ -28,13 +28,19 @@ export const WORKSPACE_FOLDERS: FolderItem<WorkspaceData>[] = [
     content: (
       <div className="space-y-3">
         <p>
-          For over a decade, digital interface design leaned heavily toward sterile flat rectangles—erasing texture, depth, and spatial continuity in pursuit of minimalist abstraction.
+          For over a decade, digital interface design leaned heavily toward sterile flat
+          rectangles—erasing texture, depth, and spatial continuity in pursuit of minimalist
+          abstraction.
         </p>
         <p>
-          The tactile web is a quiet renaissance: re-anchoring digital artifacts in physical intuition. When an element bends with mass, reflects ambient lighting, or riffles like index cards in a drawer, the interface stops feeling like temporary pixels and starts feeling like an heirloom tool.
+          The tactile web is a quiet renaissance: re-anchoring digital artifacts in physical
+          intuition. When an element bends with mass, reflects ambient lighting, or riffles like
+          index cards in a drawer, the interface stops feeling like temporary pixels and starts
+          feeling like an heirloom tool.
         </p>
         <p>
-          Chromaline explores this intersection—combining lightweight hairline vector graphics with natural spring physics to bring weight, delight, and permanence back to the browser.
+          Chromaline explores this intersection—combining lightweight hairline vector graphics with
+          natural spring physics to bring weight, delight, and permanence back to the browser.
         </p>
       </div>
     ),
@@ -51,11 +57,13 @@ export const WORKSPACE_FOLDERS: FolderItem<WorkspaceData>[] = [
     id: "f-2",
     name: "Button Component",
     href: "/components/button",
+    target: "_blank",
     bodyColor: "#0A90D2", // Vivid Electric Blue
     darkOutline: "#075985",
     lightOutline: "#BAE6FD",
     category: "Primitive",
-    description: "Tactile micro-interaction button with spring press dynamics and dual-tone border bevels.",
+    description:
+      "Tactile micro-interaction button with spring press dynamics and dual-tone border bevels.",
     data: {
       branch: "main",
       status: "deployed",
@@ -75,10 +83,18 @@ export const WORKSPACE_FOLDERS: FolderItem<WorkspaceData>[] = [
     description: "Core design rules and specifications for tactile UI components.",
     content: (
       <div className="space-y-2.5">
-        <p className="font-mono text-xs uppercase tracking-wider opacity-75">Core Principles</p>
-        <p>• Keep vector geometry featherweight: render silhouettes purely with SVG paths and hairlines.</p>
-        <p>• Prioritize 60fps responsiveness: cascade color themes through 0ms CSS custom variables.</p>
-        <p>• Respect physical intuition: every transition should have mass, settle curves, and tactile feedback.</p>
+        <p className="font-mono text-xs tracking-wider uppercase opacity-75">Core Principles</p>
+        <p>
+          • Keep vector geometry featherweight: render silhouettes purely with SVG paths and
+          hairlines.
+        </p>
+        <p>
+          • Prioritize 60fps responsiveness: cascade color themes through 0ms CSS custom variables.
+        </p>
+        <p>
+          • Respect physical intuition: every transition should have mass, settle curves, and
+          tactile feedback.
+        </p>
       </div>
     ),
     data: {
@@ -94,11 +110,13 @@ export const WORKSPACE_FOLDERS: FolderItem<WorkspaceData>[] = [
     id: "f-4",
     name: "Folder Primitive",
     href: "/components/folder",
+    target: "_blank",
     bodyColor: "#8B5CF6", // Vivid Bright Violet
     darkOutline: "#4C1D95",
     lightOutline: "#DDD6FE",
     category: "Primitive",
-    description: "Individual SVG manila folder card with 5 ruled lines, dual-layer borders, and dynamic fill.",
+    description:
+      "Individual SVG manila folder card with 5 ruled lines, dual-layer borders, and dynamic fill.",
     data: {
       branch: "main",
       status: "synced",
@@ -118,10 +136,18 @@ export const WORKSPACE_FOLDERS: FolderItem<WorkspaceData>[] = [
     description: "Version 0.1.0 release notes and feature changelog.",
     content: (
       <div className="space-y-2.5">
-        <p className="font-mono text-xs uppercase tracking-wider opacity-75">v0.1.0 Release Changelog</p>
+        <p className="font-mono text-xs tracking-wider uppercase opacity-75">
+          v0.1.0 Release Changelog
+        </p>
         <p>• Hairline Riffle 3D isometric tray with interactive spring card riffle physics.</p>
-        <p>• Floating 9-color inspector with true-opacity swatches and dynamic text contrast inversion.</p>
-        <p>• First-class hybrid routing: seamless support for direct URL navigation alongside rich document/note reading.</p>
+        <p>
+          • Floating 9-color inspector with true-opacity swatches and dynamic text contrast
+          inversion.
+        </p>
+        <p>
+          • First-class hybrid routing: seamless support for direct URL navigation alongside rich
+          document/note reading.
+        </p>
       </div>
     ),
     data: {
@@ -140,7 +166,8 @@ export const WORKSPACE_FOLDERS: FolderItem<WorkspaceData>[] = [
     darkOutline: "#881337",
     lightOutline: "#FECDD3",
     category: "Tokens",
-    description: "9 high-saturation ink tones formulated for deep contrast on both dark and light surfaces.",
+    description:
+      "9 high-saturation ink tones formulated for deep contrast on both dark and light surfaces.",
     data: {
       branch: "main",
       status: "deployed",
@@ -157,7 +184,8 @@ export const WORKSPACE_FOLDERS: FolderItem<WorkspaceData>[] = [
     darkOutline: "#155E75",
     lightOutline: "#CFFAFE",
     category: "Engineering",
-    description: "Hairline canvas pipeline driving SVG geometry through CSS variables for instantaneous 0ms repaint performance.",
+    description:
+      "Hairline canvas pipeline driving SVG geometry through CSS variables for instantaneous 0ms repaint performance.",
     data: {
       branch: "v2-release",
       status: "synced",
@@ -174,7 +202,8 @@ export const WORKSPACE_FOLDERS: FolderItem<WorkspaceData>[] = [
     darkOutline: "#312E81",
     lightOutline: "#E0E7FF",
     category: "Philosophy",
-    description: "Software should feel like fine stationery: carefully folded, pleasing to touch, and crafted to last.",
+    description:
+      "Software should feel like fine stationery: carefully folded, pleasing to touch, and crafted to last.",
     data: {
       branch: "main",
       status: "deployed",
@@ -254,11 +283,7 @@ export function FolderTrayPreview({ showControls = true }: { showControls?: bool
 
   const handleOpenFolder = (folder: FolderItem<WorkspaceData>) => {
     if (folder.href) {
-      if (folder.target === "_blank") {
-        window.open(folder.href, "_blank");
-      } else {
-        window.location.href = folder.href;
-      }
+      window.open(folder.href, folder.target || "_blank", "noopener,noreferrer");
     } else {
       setModalFolder(folder);
     }

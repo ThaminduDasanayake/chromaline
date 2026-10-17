@@ -10,18 +10,26 @@ export interface InstallCommandTabsProps {
   baseUrl?: string;
 }
 
+const emptySubscribe = () => () => {};
+
 export function InstallCommandTabs({
   componentName,
-  baseUrl = "http://localhost:3000",
+  baseUrl = "https://chromaline.dev",
 }: InstallCommandTabsProps) {
   const [packageManager, setPackageManager] = useState<PackageManager>("pnpm");
   const [copied, setCopied] = useState(false);
 
+  const host = React.useSyncExternalStore(
+    emptySubscribe,
+    () => window.location.origin,
+    () => baseUrl
+  );
+
   const commands: Record<PackageManager, string> = {
-    pnpm: `pnpm dlx shadcn@latest add ${baseUrl}/r/${componentName}.json`,
-    npm: `npx shadcn@latest add ${baseUrl}/r/${componentName}.json`,
-    yarn: `npx shadcn@latest add ${baseUrl}/r/${componentName}.json`,
-    bun: `bunx --bun shadcn@latest add ${baseUrl}/r/${componentName}.json`,
+    pnpm: `pnpm dlx shadcn@latest add ${host}/r/${componentName}.json`,
+    npm: `npx shadcn@latest add ${host}/r/${componentName}.json`,
+    yarn: `npx shadcn@latest add ${host}/r/${componentName}.json`,
+    bun: `bunx --bun shadcn@latest add ${host}/r/${componentName}.json`,
   };
 
   const currentCommand = commands[packageManager];

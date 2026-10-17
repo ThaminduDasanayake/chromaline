@@ -5,6 +5,7 @@ import {
   FolderTrayPreview,
   FolderCardPreview,
   ButtonCardPreview,
+  SelectBarCardPreview,
 } from "@/components/showcase";
 
 export default function ChromalineHomePage() {
@@ -53,6 +54,15 @@ export default function ChromalineHomePage() {
             href="/components/button"
           >
             <ButtonCardPreview />
+          </ComponentCard>
+
+          {/* Card 4: Select Bar */}
+          <ComponentCard
+            title="Select Bar"
+            description="Elastic kinetic segmented pill and color swatch selector with two-phase mercury dilation and overshoot landing."
+            href="/components/select-bar"
+          >
+            <SelectBarCardPreview />
           </ComponentCard>
         </div>
       </main>

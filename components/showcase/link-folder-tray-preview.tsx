@@ -78,14 +78,14 @@ export const NAV_FOLDERS: FolderItem[] = [
     description: "Direct shadcn registry schema endpoint for CLI installation.",
   },
   {
-    id: "nav-primitives",
-    name: "Primitives",
-    href: "/components/folder",
+    id: "nav-select",
+    name: "Select Bar",
+    href: "/components/select-bar",
     bodyColor: "#6366F1", // Indigo
     darkOutline: "#312E81",
     lightOutline: "#E0E7FF",
-    category: "Docs",
-    description: "Core physical UI primitives and guidelines.",
+    category: "Component",
+    description: "Elastic kinetic segmented pill and color swatch selector.",
   },
 ];
 
@@ -112,12 +112,8 @@ export function LinkFolderTrayPreview() {
         <span className="font-mono text-[11px] text-slate-500">
           {active.target === "_blank" ? "External:" : "Link:"}
         </span>
-        <span className="font-mono text-xs font-semibold text-slate-900">
-          {active.name}
-        </span>
-        <span className="font-mono text-[11px] text-slate-400">
-          {active.href}
-        </span>
+        <span className="font-mono text-xs font-semibold text-slate-900">{active.name}</span>
+        <span className="font-mono text-[11px] text-slate-400">{active.href}</span>
         <ArrowUpRightIcon size={12} weight="bold" className="text-slate-500" />
       </div>
     </div>

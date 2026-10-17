@@ -1,5 +1,12 @@
 "use client";
 
+/**
+ * SelectBar
+ *
+ * Elastic kinetic segmented pill and color swatch selector engineered with
+ * two-phase mercury stretch dilation and overshoot landing kinematics.
+ */
+
 import React, { useEffect, useLayoutEffect, useRef, useState, useCallback } from "react";
 
 const useIsomorphicLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect;
@@ -34,6 +41,7 @@ export interface SelectBarProps<T extends string = string> {
   value?: T;
   defaultValue?: T;
   onChange?: (value: T) => void;
+  /** Layout orientation: "row" (default) or "column" (for icon toolbars and color swatches) */
   axis?: "row" | "column";
   size?: "xs" | "sm" | "default";
   dilate?: number; // 0..100: how far the indicator stretches across slots
@@ -255,6 +263,30 @@ export function SelectBar<T extends string = string>({
           left: var(--nav-pad);
           width: calc(100% - var(--nav-pad) * 2);
           height: auto;
+        }
+
+        /* ── pill variant: solid tactile segmented control ─────── */
+        .gnav[data-variant="pill"] {
+          background: var(--pill-bg, #f1f5f9);
+          -webkit-backdrop-filter: none;
+          backdrop-filter: none;
+          box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.05);
+        }
+
+        .gnav[data-variant="pill"]::before {
+          display: none;
+        }
+
+        .gnav[data-variant="pill"] .gnav-ind {
+          background: var(--pill-thumb, #ffffff);
+          box-shadow:
+            0 1px 2px rgba(0, 0, 0, 0.06),
+            0 1px 3px rgba(0, 0, 0, 0.08);
+        }
+
+        .gnav[data-variant="pill"] .gnav-item[data-active="true"] {
+          color: var(--ink, #0f172a);
+          font-weight: 600;
         }
 
         /* Phase one: leading edge jumps, pill dilates */
