@@ -6,6 +6,7 @@ import {
   FolderCardPreview,
   ButtonCardPreview,
   SelectBarCardPreview,
+  SeekCardPreview,
 } from "@/components/showcase";
 
 export default function ChromalineHomePage() {
@@ -63,6 +64,15 @@ export default function ChromalineHomePage() {
             href="/components/select-bar"
           >
             <SelectBarCardPreview />
+          </ComponentCard>
+
+          {/* Card 5: Seek */}
+          <ComponentCard
+            title="Seek"
+            description="Kinetic search icon that springs into a focused input with continuous physics, cursor magnetic pull, and tactile yield."
+            href="/components/seek"
+          >
+            <SeekCardPreview />
           </ComponentCard>
         </div>
       </main>

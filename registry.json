@@ -62,6 +62,19 @@
           "target": "components/ui/select-bar.tsx"
         }
       ]
+    },
+    {
+      "name": "seek",
+      "type": "registry:ui",
+      "title": "Seek",
+      "description": "Kinetic search icon that springs into a focused input with continuous physics, cursor magnetic pull, and tactile yield.",
+      "files": [
+        {
+          "path": "components/ui/seek.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/seek.tsx"
+        }
+      ]
     }
   ]
 }
