@@ -416,11 +416,7 @@ export function Seek({
       >
         <div className={`sek-skin-${instanceId}`}>
           {/* Custom continuous vector lens */}
-          <svg
-            className={`sek-lens-${instanceId}`}
-            viewBox="0 0 18 18"
-            aria-hidden="true"
-          >
+          <svg className={`sek-lens-${instanceId}`} viewBox="0 0 18 18" aria-hidden="true">
             <circle cx="7.6" cy="7.6" r="5.4" />
             <path d="M11.6 11.6 L15.4 15.4" />
           </svg>

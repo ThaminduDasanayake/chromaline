@@ -46,45 +46,31 @@ const CODE_EXAMPLE_LINES = [
   },
   {
     num: 8,
-    parts: [
-      { text: "      value={query}" },
-    ],
+    parts: [{ text: "      value={query}" }],
   },
   {
     num: 9,
-    parts: [
-      { text: "      onChange={setQuery}" },
-    ],
+    parts: [{ text: "      onChange={setQuery}" }],
   },
   {
     num: 10,
-    parts: [
-      { text: '      placeholder="Search components..."' },
-    ],
+    parts: [{ text: '      placeholder="Search components..."' }],
   },
   {
     num: 11,
-    parts: [
-      { text: '      size="default"' },
-    ],
+    parts: [{ text: '      size="default"' }],
   },
   {
     num: 12,
-    parts: [
-      { text: "      give={50}" },
-    ],
+    parts: [{ text: "      give={50}" }],
   },
   {
     num: 13,
-    parts: [
-      { text: "      spring={50}" },
-    ],
+    parts: [{ text: "      spring={50}" }],
   },
   {
     num: 14,
-    parts: [
-      { text: "    />", cls: "text-slate-500" },
-    ],
+    parts: [{ text: "    />", cls: "text-slate-500" }],
   },
   { num: 15, parts: [{ text: "  );" }] },
   { num: 16, parts: [{ text: "}" }] },
@@ -212,7 +198,7 @@ export default function SeekDocumentationPage() {
 
         {/* Header */}
         <div className="mb-8">
-          <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-slate-500">
+          <div className="flex items-center gap-2 text-xs font-semibold tracking-wider text-slate-500 uppercase">
             <MagnifyingGlassIcon size={14} weight="bold" />
             <span>Components</span>
           </div>
@@ -302,7 +288,7 @@ export default function SeekDocumentationPage() {
                 <code>
                   {CODE_EXAMPLE_LINES.map((line) => (
                     <div key={line.num} className="table-row">
-                      <span className="table-cell select-none pr-6 text-right text-slate-400">
+                      <span className="table-cell pr-6 text-right text-slate-400 select-none">
                         {line.num}
                       </span>
                       <span className="table-cell">
@@ -374,16 +360,18 @@ export default function SeekDocumentationPage() {
 
         {/* Examples Section */}
         <div className="mb-12">
-          <h2 className="text-xl font-bold tracking-tight text-slate-900 sm:text-2xl">
-            Examples
-          </h2>
+          <h2 className="text-xl font-bold tracking-tight text-slate-900 sm:text-2xl">Examples</h2>
 
           {/* Example 1: Header Toolbar Dock */}
           <div className="mt-6 overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-2xs">
             <div className="border-b border-slate-100 px-5 py-4">
               <h3 className="text-sm font-semibold text-slate-900">Header Toolbar (Compact)</h3>
               <p className="mt-1 text-xs text-slate-500">
-                Sized at <code className="rounded bg-slate-100 px-1 py-0.5 font-mono text-[11px]">size=&quot;sm&quot;</code> (44px), ideal for fixed topbars and docking next to navigation links.
+                Sized at{" "}
+                <code className="rounded bg-slate-100 px-1 py-0.5 font-mono text-[11px]">
+                  size=&quot;sm&quot;
+                </code>{" "}
+                (44px), ideal for fixed topbars and docking next to navigation links.
               </p>
             </div>
             <div className="flex min-h-[160px] items-center justify-center bg-[#F9FAFB] p-6">
@@ -401,7 +389,8 @@ export default function SeekDocumentationPage() {
         <div className="mb-16">
           <h2 className="text-xl font-bold tracking-tight text-slate-900 sm:text-2xl">Props</h2>
           <p className="mt-1 text-xs text-slate-500">
-            TypeScript properties available on the <code className="font-mono">Seek</code> component.
+            TypeScript properties available on the <code className="font-mono">Seek</code>{" "}
+            component.
           </p>
 
           <div className="mt-4 overflow-x-auto rounded-2xl border border-slate-200/90 bg-white shadow-2xs">

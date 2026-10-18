@@ -154,10 +154,7 @@ function buildRegistry() {
     path.join(outDir, "select-bar.json"),
     JSON.stringify(selectBarRegistryItem, null, 2)
   );
-  fs.writeFileSync(
-    path.join(outDir, "seek.json"),
-    JSON.stringify(seekRegistryItem, null, 2)
-  );
+  fs.writeFileSync(path.join(outDir, "seek.json"), JSON.stringify(seekRegistryItem, null, 2));
 
   const indexRegistry = {
     $schema: "https://ui.shadcn.com/schema/registry.json",

@@ -34,10 +34,7 @@ const CODE_EXAMPLE_LINES = [
   { num: 2, parts: [{ text: "" }] },
   {
     num: 3,
-    parts: [
-      { text: "const", cls: "text-[#f43f5e]" },
-      { text: " TABS = [" },
-    ],
+    parts: [{ text: "const", cls: "text-[#f43f5e]" }, { text: " TABS = [" }],
   },
   {
     num: 4,
@@ -59,10 +56,7 @@ const CODE_EXAMPLE_LINES = [
   { num: 9, parts: [{ text: "" }] },
   {
     num: 10,
-    parts: [
-      { text: "export default function", cls: "text-[#f43f5e]" },
-      { text: " Demo() {" },
-    ],
+    parts: [{ text: "export default function", cls: "text-[#f43f5e]" }, { text: " Demo() {" }],
   },
   {
     num: 11,
@@ -222,10 +216,7 @@ const ICON_EXAMPLE_LINES = [
   { num: 12, parts: [{ text: "" }] },
   {
     num: 13,
-    parts: [
-      { text: "export default function", cls: "text-[#f43f5e]" },
-      { text: " Toolbar() {" },
-    ],
+    parts: [{ text: "export default function", cls: "text-[#f43f5e]" }, { text: " Toolbar() {" }],
   },
   {
     num: 14,
@@ -406,8 +397,7 @@ export default function SelectBarPage() {
 
   const currentItems =
     mode === "tabs" ? TAB_OPTIONS : mode === "icons" ? ICON_OPTIONS : SWATCH_OPTIONS;
-  const currentValue =
-    mode === "tabs" ? activeTab : mode === "icons" ? activeIcon : activeSwatch;
+  const currentValue = mode === "tabs" ? activeTab : mode === "icons" ? activeIcon : activeSwatch;
   const handleValueChange = (k: string) => {
     if (mode === "tabs") setActiveTab(k);
     else if (mode === "icons") setActiveIcon(k);
@@ -526,7 +516,8 @@ export default function SelectBarPage() {
             <div className="space-y-3 rounded-xl border border-slate-200/90 bg-white p-4 font-mono text-xs shadow-2xs">
               <div className="flex items-center justify-between border-b border-slate-100 pb-2">
                 <span className="font-sans text-[12px] font-medium text-slate-600">
-                  Copy code into <code className="text-slate-900">components/ui/select-bar.tsx</code>
+                  Copy code into{" "}
+                  <code className="text-slate-900">components/ui/select-bar.tsx</code>
                 </span>
                 <button
                   type="button"
@@ -606,9 +597,16 @@ export default function SelectBarPage() {
           <div className="mb-8 space-y-4">
             <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
               <div>
-                <h3 className="text-base font-semibold text-slate-900">Icons Only (Toolbar Dock)</h3>
+                <h3 className="text-base font-semibold text-slate-900">
+                  Icons Only (Toolbar Dock)
+                </h3>
                 <p className="text-xs text-slate-500">
-                  When items have an <code className="rounded bg-slate-100 px-1 py-0.5 font-mono text-slate-700">icon</code> and no label, slots automatically render as compact square buttons with centered icons.
+                  When items have an{" "}
+                  <code className="rounded bg-slate-100 px-1 py-0.5 font-mono text-slate-700">
+                    icon
+                  </code>{" "}
+                  and no label, slots automatically render as compact square buttons with centered
+                  icons.
                 </p>
               </div>
               <button
@@ -685,7 +683,12 @@ export default function SelectBarPage() {
               <div>
                 <h3 className="text-base font-semibold text-slate-900">Color Swatches</h3>
                 <p className="text-xs text-slate-500">
-                  Items with a <code className="rounded bg-slate-100 px-1 py-0.5 font-mono text-slate-700">color</code> hex are automatically detected and rendered as tactile swatches with active pop-scale micro-interactions.
+                  Items with a{" "}
+                  <code className="rounded bg-slate-100 px-1 py-0.5 font-mono text-slate-700">
+                    color
+                  </code>{" "}
+                  hex are automatically detected and rendered as tactile swatches with active
+                  pop-scale micro-interactions.
                 </p>
               </div>
               <button

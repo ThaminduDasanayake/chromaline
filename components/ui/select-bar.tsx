@@ -385,4 +385,8 @@ export function SelectBar<T extends string = string>({
   );
 }
 
-export { SelectBar as GlassBar, type SelectBarItem as GlassBarItem, type SelectBarProps as GlassBarProps };
+export {
+  SelectBar as GlassBar,
+  type SelectBarItem as GlassBarItem,
+  type SelectBarProps as GlassBarProps,
+};
