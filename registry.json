@@ -75,6 +75,19 @@
           "target": "components/ui/seek.tsx"
         }
       ]
+    },
+    {
+      "name": "terrain",
+      "type": "registry:ui",
+      "title": "Terrain",
+      "description": "Interactive 3D isometric topographic pillar matrix with configurable grid density, click resolution, and shockwave physics.",
+      "files": [
+        {
+          "path": "components/ui/terrain.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/terrain.tsx"
+        }
+      ]
     }
   ]
 }

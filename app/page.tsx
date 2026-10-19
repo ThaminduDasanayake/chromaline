@@ -7,6 +7,7 @@ import {
   ButtonCardPreview,
   SelectBarCardPreview,
   SeekCardPreview,
+  TerrainCardPreview,
 } from "@/components/showcase";
 
 export default function ChromalineHomePage() {
@@ -73,6 +74,15 @@ export default function ChromalineHomePage() {
             href="/components/seek"
           >
             <SeekCardPreview />
+          </ComponentCard>
+
+          {/* Card 6: Terrain */}
+          <ComponentCard
+            title="Terrain"
+            description="Interactive 3D isometric topographic pillar matrix with configurable grid density, click resolution, and shockwave physics."
+            href="/components/terrain"
+          >
+            <TerrainCardPreview />
           </ComponentCard>
         </div>
       </main>
