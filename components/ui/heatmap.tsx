@@ -536,7 +536,7 @@ function prism(
 }
 
 const falloff = (u: number) =>
-  u <= 0 ? 1 : u <= 0.417 ? 1 - (u / 0.417) * 0.6875 : u <= 1 ? 0.3125 - ((u - 0.417) / 0.583) * 0.2185 : 0.094;
+  u <= 0 ? 1 : u <= 0.417 ? 1 - (u / 0.417) * 0.6875 : u <= 1 ? 0.3125 - ((u - 0.417) / 0.583) * 0.3125 : 0;
 
 interface SpringState {
   x: number;
@@ -811,6 +811,76 @@ export function Heatmap({
     overRef.current = null;
   }, [numCols, numRows, scheme, mode, range]);
 
+  const getHitColumn = useCallback(
+    (sx: number, sy: number): { col: number; row: number } | null => {
+      const [wx0, wy0] = unproj(C, sx, sy, 0);
+
+      // Ray direction derivative: dwx/dz and dwy/dz
+      const zf = Math.sqrt(1 - C.k * C.k);
+      const deltaX = (zf / C.k) * Math.sin(C.az);
+      const deltaY = (zf / C.k) * Math.cos(C.az);
+
+      // Ray spans z from 0 to HMAX
+      const minWx = Math.min(wx0, wx0 + HMAX * deltaX);
+      const maxWx = Math.max(wx0, wx0 + HMAX * deltaX);
+      const minWy = Math.min(wy0, wy0 + HMAX * deltaY);
+      const maxWy = Math.max(wy0, wy0 + HMAX * deltaY);
+
+      const iMin = Math.max(0, Math.floor(minWx / CELL));
+      const iMax = Math.min(numCols - 1, Math.floor(maxWx / CELL));
+      const jMin = Math.max(0, Math.floor(minWy / CELL));
+      const jMax = Math.min(numRows - 1, Math.floor(maxWy / CELL));
+
+      if (iMin > iMax || jMin > jMax) {
+        return null;
+      }
+
+      let bestHit: { col: number; row: number; zExit: number } | null = null;
+
+      // Check candidate pillars in isometric painter's order (front to back)
+      for (let s = iMax + jMax; s >= iMin + jMin; s--) {
+        for (let i = iMax; i >= iMin; i--) {
+          const j = s - i;
+          if (j < jMin || j > jMax) continue;
+
+          const key = `${i}-${j}`;
+          const sp = springsRef.current.get(key);
+          const colMeta = columns.find((cm) => cm.i === i && cm.j === j);
+          const h = sp ? sp.x : (colMeta?.h0 ?? 2.5);
+
+          const x0 = i * CELL;
+          const x1 = (i + 1) * CELL;
+          const y0 = j * CELL;
+          const y1 = (j + 1) * CELL;
+
+          // Ray parameter interval for x
+          const zx0 = (x0 - wx0) / deltaX;
+          const zx1 = (x1 - wx0) / deltaX;
+          const zxMin = Math.min(zx0, zx1);
+          const zxMax = Math.max(zx0, zx1);
+
+          // Ray parameter interval for y
+          const zy0 = (y0 - wy0) / deltaY;
+          const zy1 = (y1 - wy0) / deltaY;
+          const zyMin = Math.min(zy0, zy1);
+          const zyMax = Math.max(zy0, zy1);
+
+          const zEnter = Math.max(0, zxMin, zyMin);
+          const zExit = Math.min(h, zxMax, zyMax);
+
+          if (zEnter <= zExit) {
+            if (!bestHit || zExit > bestHit.zExit) {
+              bestHit = { col: i, row: j, zExit };
+            }
+          }
+        }
+      }
+
+      return bestHit ? { col: bestHit.col, row: bestHit.row } : null;
+    },
+    [C, CELL, HMAX, numCols, numRows, columns]
+  );
+
   const handlePointerMove = useCallback(
     (e: React.PointerEvent<SVGSVGElement>) => {
       const svg = svgRef.current;
@@ -818,12 +888,32 @@ export function Heatmap({
       const rect = svg.getBoundingClientRect();
       const sx = ((e.clientX - rect.left) / rect.width) * VIEW_W;
       const sy = ((e.clientY - rect.top) / rect.height) * VIEW_H;
-      const [wx, wy] = unproj(C, sx, sy, 0);
 
-      overRef.current = [wx, wy];
+      const hit = getHitColumn(sx, sy);
 
-      const colIdx = clamp(Math.floor(wx / CELL), 0, numCols - 1);
-      const rowIdx = clamp(Math.floor(wy / CELL), 0, numRows - 1);
+      if (!hit) {
+        if (hoverRef.current) {
+          const prev = hoverRef.current;
+          const prevKey = `${prev.col}-${prev.row}`;
+          const prevNode = domRefs.current.get(prevKey);
+          prevNode?.sil?.classList.remove("hovered");
+          prevNode?.cr?.classList.remove("hovered");
+          prevNode?.dot?.classList.remove("hovered");
+          hoverRef.current = null;
+        }
+        overRef.current = null;
+        if (markGroupRef.current) {
+          markGroupRef.current.style.opacity = "0";
+        }
+        onHover?.(null);
+        return;
+      }
+
+      const colIdx = hit.col;
+      const rowIdx = hit.row;
+
+      // Inside terrain: center elevation mound on hovered pillar
+      overRef.current = [(colIdx + 0.5) * CELL, (rowIdx + 0.5) * CELL];
 
       const prev = hoverRef.current;
       if (!prev || prev.col !== colIdx || prev.row !== rowIdx) {
@@ -856,11 +946,11 @@ export function Heatmap({
         );
       }
     },
-    [C, CELL, numCols, numRows, colorOnHover, columns, onHover, VIEW_W, VIEW_H]
+    [VIEW_W, VIEW_H, getHitColumn, CELL, colorOnHover, columns, onHover]
   );
 
   const handlePointerLeave = useCallback(() => {
-    if (colorOnHover && hoverRef.current) {
+    if (hoverRef.current) {
       const prev = hoverRef.current;
       const prevKey = `${prev.col}-${prev.row}`;
       const prevNode = domRefs.current.get(prevKey);
@@ -870,8 +960,11 @@ export function Heatmap({
     }
     overRef.current = null;
     hoverRef.current = null;
+    if (markGroupRef.current) {
+      markGroupRef.current.style.opacity = "0";
+    }
     onHover?.(null);
-  }, [colorOnHover, onHover]);
+  }, [onHover]);
 
   const handleClick = useCallback(
     (e: React.MouseEvent<SVGSVGElement>) => {
@@ -880,10 +973,12 @@ export function Heatmap({
       const rect = svg.getBoundingClientRect();
       const sx = ((e.clientX - rect.left) / rect.width) * VIEW_W;
       const sy = ((e.clientY - rect.top) / rect.height) * VIEW_H;
-      const [wx, wy] = unproj(C, sx, sy, 0);
 
-      const colIdx = clamp(Math.floor(wx / CELL), 0, numCols - 1);
-      const rowIdx = clamp(Math.floor(wy / CELL), 0, numRows - 1);
+      const hit = getHitColumn(sx, sy);
+      if (!hit) return;
+
+      const colIdx = hit.col;
+      const rowIdx = hit.row;
 
       shockwaveRef.current = { col: colIdx, row: rowIdx, time: performance.now() };
 
@@ -897,7 +992,7 @@ export function Heatmap({
         });
       }
     },
-    [C, CELL, numCols, numRows, columns, onClick, VIEW_W, VIEW_H]
+    [VIEW_W, VIEW_H, getHitColumn, columns, onClick]
   );
 
   return (
