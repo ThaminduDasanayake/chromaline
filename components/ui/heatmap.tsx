@@ -394,15 +394,6 @@ function proj(C: Camera) {
   };
 }
 
-function unproj(C: Camera, sx: number, sy: number, z: number): [number, number] {
-  const c = Math.cos(C.az);
-  const s = Math.sin(C.az);
-  const zf = Math.sqrt(1 - C.k * C.k);
-  const X = (sx - C.ox) / C.S;
-  const Y = ((sy - C.oy) / C.S + z * zf) / C.k;
-  return [X * c + Y * s, -X * s + Y * c];
-}
-
 function fit(C: Camera, pts: number[][], viewWidth: number, viewHeight: number, pad = 14) {
   const c = Math.cos(C.az);
   const s = Math.sin(C.az);
@@ -581,6 +572,8 @@ interface ColumnMeta {
   inner: Point2D[];
   color?: string;
   node: HeatmapNode;
+  capX: number;
+  capY: number;
 }
 
 export function Heatmap({
@@ -685,12 +678,13 @@ export function Heatmap({
         const x0 = i * CELL + (CELL - FOOT) / 2;
         const y0 = j * CELL + (CELL - FOOT) / 2;
         const [ring, inner] = rings(x0, y0, x0 + FOOT, y0 + FOOT, 2.6, 0.9);
+        const [capX, capY] = P((i + 0.5) * CELL, (j + 0.5) * CELL, h0);
 
-        colsList.push({ i, j, h0, ring, inner, color, node });
+        colsList.push({ i, j, h0, ring, inner, color, node, capX, capY });
       }
     }
     return colsList;
-  }, [numCols, numRows, resolvedMatrix, palette, CELL, FOOT]);
+  }, [numCols, numRows, resolvedMatrix, palette, CELL, FOOT, P]);
 
   // Node element references for direct SVG path mutation without re-renders
   const domRefs = useRef<
@@ -830,70 +824,52 @@ export function Heatmap({
 
   const getHitColumn = useCallback(
     (sx: number, sy: number): { col: number; row: number } | null => {
-      const [wx0, wy0] = unproj(C, sx, sy, 0);
-
-      // Ray direction derivative: dwx/dz and dwy/dz
-      const zf = Math.sqrt(1 - C.k * C.k);
-      const deltaX = (zf / C.k) * Math.sin(C.az);
-      const deltaY = (zf / C.k) * Math.cos(C.az);
-
-      // Ray spans z from 0 to HMAX (with a small 1-cell safety margin)
-      const minWx = Math.min(wx0, wx0 + HMAX * deltaX) - CELL;
-      const maxWx = Math.max(wx0, wx0 + HMAX * deltaX) + CELL;
-      const minWy = Math.min(wy0, wy0 + HMAX * deltaY) - CELL;
-      const maxWy = Math.max(wy0, wy0 + HMAX * deltaY) + CELL;
-
-      const iMin = Math.max(0, Math.floor(minWx / CELL));
-      const iMax = Math.min(numCols - 1, Math.floor(maxWx / CELL));
-      const jMin = Math.max(0, Math.floor(minWy / CELL));
-      const jMax = Math.min(numRows - 1, Math.floor(maxWy / CELL));
-
-      // 1. Top-Cap Priority Pass: Check if cursor is directly over any pillar's top cap
-      let bestCapHit: { col: number; row: number; d2: number } | null = null;
-      const rx = CELL * 0.5 * C.S * 1.15;
+      // Metric radii for isometric column projection
+      const rx = CELL * 0.5 * C.S * 1.5;
       const ry = rx * C.k;
 
-      if (iMin <= iMax && jMin <= jMax) {
-        for (let i = iMin; i <= iMax; i++) {
-          for (let j = jMin; j <= jMax; j++) {
-            const key = `${i}-${j}`;
-            const sp = springsRef.current.get(key);
-            const colMeta = columns.find((cm) => cm.i === i && cm.j === j);
-            const h = sp ? sp.x : (colMeta?.h0 ?? 2.5);
+      let bestCol: ColumnMeta | null = null;
+      let minD2 = Infinity;
 
-            const cx = (i + 0.5) * CELL;
-            const cy = (j + 0.5) * CELL;
-            const pt = P(cx, cy, h);
+      const currentHover = hoverRef.current;
 
-            const dx = (sx - pt[0]) / rx;
-            const dy = (sy - pt[1]) / ry;
-            const d2 = dx * dx + dy * dy;
+      for (let k = 0; k < columns.length; k++) {
+        const c = columns[k];
+        const isHovered = currentHover && currentHover.col === c.i && currentHover.row === c.j;
 
-            if (d2 <= 1.25) {
-              if (!bestCapHit || d2 < bestCapHit.d2) {
-                bestCapHit = { col: i, row: j, d2 };
-              }
-            }
+        // Base cap distance (stable target based on intrinsic commit height h0)
+        const dx = (sx - c.capX) / rx;
+        const dy = (sy - c.capY) / ry;
+        let d2 = dx * dx + dy * dy;
+
+        // If this column is currently hovered, also check against its elevated cap position
+        if (isHovered) {
+          const sp = springsRef.current.get(`${c.i}-${c.j}`);
+          if (sp && Math.abs(sp.x - c.h0) > 0.5) {
+            const elevPt = P((c.i + 0.5) * CELL, (c.j + 0.5) * CELL, sp.x);
+            const edx = (sx - elevPt[0]) / rx;
+            const edy = (sy - elevPt[1]) / ry;
+            const ed2 = edx * edx + edy * edy;
+            d2 = Math.min(d2, ed2);
           }
+          // Hysteresis deadband: give currently hovered column a 45% stability preference
+          d2 *= 0.55;
+        }
+
+        if (d2 < minD2) {
+          minD2 = d2;
+          bestCol = c;
         }
       }
 
-      if (bestCapHit) {
-        return { col: bestCapHit.col, row: bestCapHit.row };
+      // Check boundary: if closest column is too far (cursor in empty space or preview padding)
+      if (minD2 > 2.5) {
+        return null;
       }
 
-      // 2. Ground-Plane Grid Fallback: Check if cursor is within the plinth ground grid
-      if (wx0 >= 0 && wx0 < EXT_X && wy0 >= 0 && wy0 < EXT_Y) {
-        const gi = Math.floor(wx0 / CELL);
-        const gj = Math.floor(wy0 / CELL);
-        if (gi >= 0 && gi < numCols && gj >= 0 && gj < numRows) {
-          return { col: gi, row: gj };
-        }
-      }
-
-      return null;
+      return bestCol ? { col: bestCol.i, row: bestCol.j } : null;
     },
-    [C, CELL, HMAX, numCols, numRows, columns, P, EXT_X, EXT_Y]
+    [C, CELL, columns, P]
   );
 
   const handlePointerMove = useCallback(
@@ -1044,25 +1020,26 @@ export function Heatmap({
         .hl-heatmap-${instanceId} .col-sil {
           fill: var(--base-fill, ${mode === "dark" ? "#151b23" : "#ffffff"});
           stroke: ${mode === "dark" ? "#30363d" : "rgba(15, 23, 42, 0.22)"};
-          stroke-width: 0.9;
+          stroke-width: 0.8;
           stroke-linejoin: round;
           transition: stroke 120ms ease;
         }
 
         .hl-heatmap-${instanceId} .col-sil.hovered {
           stroke: ${mode === "dark" ? "#ffffff" : "#000000"};
-          stroke-width: 1.35;
+          stroke-width: 0.95;
         }
 
         .hl-heatmap-${instanceId} .col-cr {
           fill: none;
           stroke: ${mode === "dark" ? "rgba(255, 255, 255, 0.12)" : "rgba(15, 23, 42, 0.14)"};
-          stroke-width: 0.75;
+          stroke-width: 0.65;
           transition: stroke 120ms ease;
         }
 
         .hl-heatmap-${instanceId} .col-cr.hovered {
           stroke: ${mode === "dark" ? "rgba(255, 255, 255, 0.45)" : "rgba(0, 0, 0, 0.35)"};
+          stroke-width: 0.75;
         }
 
         .hl-heatmap-${instanceId} .punch-dot-center {
