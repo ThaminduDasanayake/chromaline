@@ -119,21 +119,15 @@ const CODE_EXAMPLE_LINES = [
   },
   {
     num: 12,
-    parts: [
-      { text: "      folders={folders}" },
-    ],
+    parts: [{ text: "      folders={folders}" }],
   },
   {
     num: 13,
-    parts: [
-      { text: '      variant="color"' },
-    ],
+    parts: [{ text: '      variant="color"' }],
   },
   {
     num: 14,
-    parts: [
-      { text: "      onOpen={(f) => console.log(f.name)}" },
-    ],
+    parts: [{ text: "      onOpen={(f) => console.log(f.name)}" }],
   },
   { num: 15, parts: [{ text: "    />", cls: "text-slate-500" }] },
   { num: 16, parts: [{ text: "  );" }] },
@@ -231,14 +225,13 @@ export default function FolderTrayDocumentationPage() {
 
       {/* Extra Example: Link Navigation Tray */}
       <section>
-        <h2 className="text-xl font-bold tracking-tight text-slate-900 sm:text-2xl">
-          Examples
-        </h2>
+        <h2 className="text-xl font-bold tracking-tight text-slate-900 sm:text-2xl">Examples</h2>
         <div className="mt-4 overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-2xs">
           <div className="border-b border-slate-100 px-5 py-4">
             <h3 className="text-sm font-semibold text-slate-900">Direct Link Navigation</h3>
             <p className="mt-1 text-xs text-slate-500">
-              Each folder item specifies an <code>href</code> destination. Hovering over a card stands it up, and clicking opens the link.
+              Each folder item specifies an <code>href</code> destination. Hovering over a card
+              stands it up, and clicking opens the link.
             </p>
           </div>
           <div className="bg-[#F9FAFB]">

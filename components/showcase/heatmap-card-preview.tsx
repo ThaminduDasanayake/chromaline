@@ -9,13 +9,7 @@ export function HeatmapCardPreview() {
   return (
     <div className="flex h-full w-full flex-col items-center justify-center p-6">
       <div className="w-full max-w-[340px]">
-        <Heatmap
-          scheme="default"
-          mode="dark"
-          range="14w"
-          colorOnHover
-          onHover={setHoveredNode}
-        />
+        <Heatmap scheme="default" mode="dark" range="14w" colorOnHover onHover={setHoveredNode} />
       </div>
 
       {/* Tactile Coordinate Badge */}

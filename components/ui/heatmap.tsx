@@ -146,7 +146,7 @@ export function calculateTier(count: number, maxCount: number): 0 | 1 | 2 | 3 | 
   if (count <= 0 || maxCount <= 0) return 0;
   const ratio = count / maxCount;
   if (ratio <= 0.25) return 1;
-  if (ratio <= 0.50) return 2;
+  if (ratio <= 0.5) return 2;
   if (ratio <= 0.75) return 3;
   return 4;
 }
@@ -167,15 +167,7 @@ export function getCommitHeight(count: number, maxCount: number = 25, level?: nu
   const safeMax = Math.max(1, maxCount);
   const ratio = Math.min(1, count / safeMax);
   const effectiveLevel =
-    level !== undefined
-      ? level
-      : ratio <= 0.25
-        ? 1
-        : ratio <= 0.5
-          ? 2
-          : ratio <= 0.75
-            ? 3
-            : 4;
+    level !== undefined ? level : ratio <= 0.25 ? 1 : ratio <= 0.5 ? 2 : ratio <= 0.75 ? 3 : 4;
 
   const baseByLevel = [2.5, 7.5, 18, 30, 44];
   const spanByLevel = [0, 8.5, 10, 11, 10];
@@ -207,7 +199,8 @@ export function generateHeatmapMatrix(
   const baseDate = new Date(2026, 9, 20); // Oct 20, 2026
 
   // Pass 1: compute daily counts and find max activity
-  const rawCells: { w: number; d: number; count: number; dateStr: string; dayOfWeek: number }[] = [];
+  const rawCells: { w: number; d: number; count: number; dateStr: string; dayOfWeek: number }[] =
+    [];
   let maxCount = 1;
 
   for (let w = 0; w < numWeeks; w++) {
@@ -229,7 +222,11 @@ export function generateHeatmapMatrix(
           count = rnd > 0.4 ? Math.floor(rnd * 4) : 0;
         } else {
           count = Math.floor(2 + rnd * 10);
-          if ((w % 5 === 0 && d === 2) || (w % 7 === 0 && d === 3) || (w === numWeeks - 2 && d === 1)) {
+          if (
+            (w % 5 === 0 && d === 2) ||
+            (w % 7 === 0 && d === 3) ||
+            (w === numWeeks - 2 && d === 1)
+          ) {
             count = 18 + Math.floor(rnd * 7);
           }
         }
@@ -334,9 +331,8 @@ export function generateThaminduMatrix(
       // Level 2: 7-12 commits (51 days)
       // Level 3: 13-18 commits (36 days)
       // Level 4: 19-25 commits (only 8 top peak days!)
-      const tier = (
-        item?.level !== undefined ? item.level : calculateTier(count, maxCount)
-      ) as 0 | 1 | 2 | 3 | 4;
+      const tier = (item?.level !== undefined ? item.level : calculateTier(count, maxCount)) as
+        0 | 1 | 2 | 3 | 4;
 
       const color = palette.colors[tier];
       const height = getCommitHeight(count, maxCount, tier);
@@ -469,8 +465,11 @@ const rings = (x0: number, y0: number, x1: number, y1: number, r: number, b: num
   rrect(x0 + b, y0 + b, x1 - b, y1 - b, Math.max(0.3, r - b)),
 ];
 
-const ringAt = (P: (x: number, y: number, z: number) => [number, number], ring: Point2D[], z: number) =>
-  ring.map((q) => P(q.u, q.v, z));
+const ringAt = (
+  P: (x: number, y: number, z: number) => [number, number],
+  ring: Point2D[],
+  z: number
+) => ring.map((q) => P(q.u, q.v, z));
 
 const facing = (C: Camera) => {
   const s = Math.sin(C.az);
@@ -536,7 +535,13 @@ function prism(
 }
 
 const falloff = (u: number) =>
-  u <= 0 ? 1 : u <= 0.417 ? 1 - (u / 0.417) * 0.6875 : u <= 1 ? 0.3125 - ((u - 0.417) / 0.583) * 0.3125 : 0;
+  u <= 0
+    ? 1
+    : u <= 0.417
+      ? 1 - (u / 0.417) * 0.6875
+      : u <= 1
+        ? 0.3125 - ((u - 0.417) / 0.583) * 0.3125
+        : 0;
 
 interface SpringState {
   x: number;
@@ -662,7 +667,7 @@ export function Heatmap({
   // Columns layout via useMemo (sorted in isometric painter's order)
   const columns = useMemo<ColumnMeta[]>(() => {
     const colsList: ColumnMeta[] = [];
-    for (let s = 0; s <= (numCols - 1) + (numRows - 1); s++) {
+    for (let s = 0; s <= numCols - 1 + (numRows - 1); s++) {
       for (let i = 0; i < numCols; i++) {
         const j = s - i;
         if (j < 0 || j >= numRows) continue;
@@ -845,7 +850,7 @@ export function Heatmap({
 
       // 1. Top-Cap Priority Pass: Check if cursor is directly over any pillar's top cap
       let bestCapHit: { col: number; row: number; d2: number } | null = null;
-      const rx = (CELL * 0.5) * C.S * 1.15;
+      const rx = CELL * 0.5 * C.S * 1.15;
       const ry = rx * C.k;
 
       if (iMin <= iMax && jMin <= jMax) {
@@ -1106,7 +1111,9 @@ export function Heatmap({
                       }
                       node.sil = el;
                     }}
-                    style={c.color ? ({ "--base-fill": c.color } as React.CSSProperties) : undefined}
+                    style={
+                      c.color ? ({ "--base-fill": c.color } as React.CSSProperties) : undefined
+                    }
                     className="col-sil"
                   />
                   <path

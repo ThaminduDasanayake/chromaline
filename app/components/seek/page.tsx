@@ -268,14 +268,13 @@ export default function SeekDocumentationPage() {
 
       {/* Examples */}
       <section>
-        <h2 className="text-xl font-bold tracking-tight text-slate-900 sm:text-2xl">
-          Examples
-        </h2>
+        <h2 className="text-xl font-bold tracking-tight text-slate-900 sm:text-2xl">Examples</h2>
         <div className="mt-4 overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-2xs">
           <div className="border-b border-slate-100 px-5 py-4">
             <h3 className="text-sm font-semibold text-slate-900">Header Toolbar (Compact)</h3>
             <p className="mt-1 text-xs text-slate-500">
-              Sized at <code>size=&quot;sm&quot;</code> (44px), ideal for fixed topbars and docking next to navigation links.
+              Sized at <code>size=&quot;sm&quot;</code> (44px), ideal for fixed topbars and docking
+              next to navigation links.
             </p>
           </div>
           <div className="flex min-h-[160px] items-center justify-center bg-[#F9FAFB] p-6">

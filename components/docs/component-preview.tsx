@@ -20,7 +20,9 @@ export function ComponentPreview({
   const hasCustomBg = canvasClassName.includes("bg-") || Boolean(canvasStyle?.backgroundColor);
 
   return (
-    <section className={`overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-2xs ${className}`}>
+    <section
+      className={`overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-2xs ${className}`}
+    >
       {/* Canvas */}
       <div
         className={`relative flex flex-col items-center justify-center overflow-hidden transition-colors duration-300 ${
@@ -32,11 +34,7 @@ export function ComponentPreview({
       </div>
 
       {/* Controls Footer */}
-      {controls && (
-        <div className="border-t border-slate-100 bg-white p-5 sm:p-6">
-          {controls}
-        </div>
-      )}
+      {controls && <div className="border-t border-slate-100 bg-white p-5 sm:p-6">{controls}</div>}
     </section>
   );
 }

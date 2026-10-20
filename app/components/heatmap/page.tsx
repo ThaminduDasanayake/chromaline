@@ -65,10 +65,7 @@ const CODE_EXAMPLE_LINES = [
   },
   {
     num: 8,
-    parts: [
-      { text: '      mode="dark"' },
-      { text: ' // "dark" | "light"', cls: "text-slate-400" },
-    ],
+    parts: [{ text: '      mode="dark"' }, { text: ' // "dark" | "light"', cls: "text-slate-400" }],
   },
   {
     num: 9,
@@ -182,9 +179,7 @@ export default function HeatmapDocumentationPage() {
                 <span className="flex h-5 w-5 items-center justify-center rounded-md bg-emerald-50 text-emerald-600">
                   <GitCommitIcon size={13} weight="bold" />
                 </span>
-                <span className="text-xs font-semibold text-slate-900">
-                  Contributions
-                </span>
+                <span className="text-xs font-semibold text-slate-900">Contributions</span>
               </div>
               <span className="font-mono text-xs text-slate-500">
                 <strong className="text-slate-900">{totalContributions.toLocaleString()}</strong>{" "}
@@ -293,9 +288,7 @@ export default function HeatmapDocumentationPage() {
               <span>
                 {hoveredNode.count === 0
                   ? "No contributions"
-                  : `${hoveredNode.count} contribution${
-                      hoveredNode.count === 1 ? "" : "s"
-                    }`}
+                  : `${hoveredNode.count} contribution${hoveredNode.count === 1 ? "" : "s"}`}
               </span>
             </>
           ) : (

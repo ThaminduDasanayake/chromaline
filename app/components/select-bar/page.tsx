@@ -201,18 +201,10 @@ export default function SelectBarDocumentationPage() {
   const [activeSwatch, setActiveSwatch] = useState("orange");
 
   const currentItems =
-    contentType === "pills"
-      ? PILL_ITEMS
-      : contentType === "icons"
-        ? ICON_ITEMS
-        : SWATCH_ITEMS;
+    contentType === "pills" ? PILL_ITEMS : contentType === "icons" ? ICON_ITEMS : SWATCH_ITEMS;
 
   const currentValue =
-    contentType === "pills"
-      ? activePill
-      : contentType === "icons"
-        ? activeIcon
-        : activeSwatch;
+    contentType === "pills" ? activePill : contentType === "icons" ? activeIcon : activeSwatch;
 
   const handleValueChange = (key: string) => {
     if (contentType === "pills") setActivePill(key);
@@ -284,9 +276,7 @@ export default function SelectBarDocumentationPage() {
 
       {/* Examples */}
       <section>
-        <h2 className="text-xl font-bold tracking-tight text-slate-900 sm:text-2xl">
-          Examples
-        </h2>
+        <h2 className="text-xl font-bold tracking-tight text-slate-900 sm:text-2xl">Examples</h2>
 
         <div className="mt-4 grid grid-cols-1 gap-6 sm:grid-cols-2">
           {/* Example 1: Icon Toolbar */}
@@ -298,12 +288,7 @@ export default function SelectBarDocumentationPage() {
               </p>
             </div>
             <div className="flex h-36 items-center justify-center bg-[#F9FAFB] p-6">
-              <SelectBar
-                size="sm"
-                items={ICON_ITEMS}
-                value={activeIcon}
-                onChange={setActiveIcon}
-              />
+              <SelectBar size="sm" items={ICON_ITEMS} value={activeIcon} onChange={setActiveIcon} />
             </div>
           </div>
 

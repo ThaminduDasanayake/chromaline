@@ -38,9 +38,7 @@ export function UsageSection({
     <section>
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-xl font-bold tracking-tight text-slate-900 sm:text-2xl">
-            {title}
-          </h2>
+          <h2 className="text-xl font-bold tracking-tight text-slate-900 sm:text-2xl">{title}</h2>
           {description && <p className="mt-1 text-xs text-slate-500">{description}</p>}
         </div>
 
@@ -71,7 +69,7 @@ export function UsageSection({
               <code>
                 {codeLines.map((line) => (
                   <div key={line.num} className="table-row">
-                    <span className="table-cell select-none pr-6 text-right text-slate-400">
+                    <span className="table-cell pr-6 text-right text-slate-400 select-none">
                       {line.num}
                     </span>
                     <span className="table-cell">
