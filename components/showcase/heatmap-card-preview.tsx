@@ -12,7 +12,6 @@ export function HeatmapCardPreview() {
         <Heatmap
           scheme="default"
           mode="dark"
-          profile="thamindu"
           range="14w"
           colorOnHover
           onHover={setHoveredNode}
@@ -21,7 +20,10 @@ export function HeatmapCardPreview() {
 
       {/* Tactile Coordinate Badge */}
       <div className="mt-2 flex items-center gap-2 font-mono text-[11px] text-slate-500">
-        <span className="inline-block h-1.5 w-1.5 rounded-full bg-[#56d364]" />
+        <span
+          className="inline-block h-1.5 w-1.5 rounded-full transition-colors duration-150"
+          style={{ backgroundColor: hoveredNode?.color || "#56d364" }}
+        />
         {hoveredNode ? (
           <span>
             {hoveredNode.label} · {hoveredNode.count} commit{hoveredNode.count === 1 ? "" : "s"}

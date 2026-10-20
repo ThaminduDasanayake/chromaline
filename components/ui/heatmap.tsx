@@ -126,8 +126,6 @@ export interface HeatmapProps {
   scheme?: HeatmapSchemeKey;
   /** Theme mode: 'dark' | 'light'. Default: 'dark' */
   mode?: HeatmapMode;
-  /** Activity profile preset when data is generated: 'thamindu' | 'maintainer' | 'weekend' | 'sprint' */
-  profile?: HeatmapProfile;
   /** Timeline range: 'year' (full 52-53 weeks) | '14w' (14 weeks). Default: 'year' */
   range?: HeatmapRange;
   /** Spring response radius/intensity (0.2 subtle to 1.5 wide). Default: 0.6 */
@@ -144,20 +142,49 @@ export interface HeatmapProps {
   style?: React.CSSProperties;
 }
 
-export function getCommitTier(count: number): 0 | 1 | 2 | 3 | 4 {
-  if (count <= 0) return 0;
-  if (count <= 2) return 1;
-  if (count <= 5) return 2;
-  if (count <= 8) return 3;
+export function calculateTier(count: number, maxCount: number): 0 | 1 | 2 | 3 | 4 {
+  if (count <= 0 || maxCount <= 0) return 0;
+  const ratio = count / maxCount;
+  if (ratio <= 0.25) return 1;
+  if (ratio <= 0.50) return 2;
+  if (ratio <= 0.75) return 3;
   return 4;
 }
 
-export function getCommitHeight(count: number): number {
+export function getCommitTier(count: number, maxCount?: number): 0 | 1 | 2 | 3 | 4 {
+  if (maxCount && maxCount > 0) {
+    return calculateTier(count, maxCount);
+  }
+  if (count <= 0) return 0;
+  if (count <= 6) return 1;
+  if (count <= 12) return 2;
+  if (count <= 18) return 3;
+  return 4;
+}
+
+export function getCommitHeight(count: number, maxCount: number = 25, level?: number): number {
   if (count <= 0) return 2.5;
-  if (count <= 2) return 11;
-  if (count <= 5) return 22;
-  if (count <= 8) return 34;
-  return Math.min(52, 38 + Math.sqrt(count) * 4);
+  const safeMax = Math.max(1, maxCount);
+  const ratio = Math.min(1, count / safeMax);
+  const effectiveLevel =
+    level !== undefined
+      ? level
+      : ratio <= 0.25
+        ? 1
+        : ratio <= 0.5
+          ? 2
+          : ratio <= 0.75
+            ? 3
+            : 4;
+
+  const baseByLevel = [2.5, 7.5, 18, 30, 44];
+  const spanByLevel = [0, 8.5, 10, 11, 10];
+  const levelMinRatio = [0, 0, 0.25, 0.5, 0.75][effectiveLevel] ?? 0;
+  const levelMaxRatio = [0, 0.25, 0.5, 0.75, 1.0][effectiveLevel] ?? 1.0;
+  const span = levelMaxRatio - levelMinRatio || 0.25;
+  const frac = Math.max(0, Math.min(1, (ratio - levelMinRatio) / span));
+
+  return Math.round((baseByLevel[effectiveLevel] + frac * spanByLevel[effectiveLevel]) * 10) / 10;
 }
 
 /**
@@ -178,10 +205,12 @@ export function generateHeatmapMatrix(
   let totalContributions = 0;
 
   const baseDate = new Date(2026, 9, 20); // Oct 20, 2026
-  const cols: HeatmapNode[][] = [];
+
+  // Pass 1: compute daily counts and find max activity
+  const rawCells: { w: number; d: number; count: number; dateStr: string; dayOfWeek: number }[] = [];
+  let maxCount = 1;
 
   for (let w = 0; w < numWeeks; w++) {
-    const col: HeatmapNode[] = [];
     for (let d = 0; d < numDays; d++) {
       const daysAgo = (numWeeks - 1 - w) * 7 + (numDays - 1 - d);
       const cellDate = new Date(baseDate);
@@ -199,21 +228,21 @@ export function generateHeatmapMatrix(
         if (isWeekend) {
           count = rnd > 0.4 ? Math.floor(rnd * 4) : 0;
         } else {
-          count = Math.floor(3 + rnd * 11);
+          count = Math.floor(2 + rnd * 10);
           if ((w % 5 === 0 && d === 2) || (w % 7 === 0 && d === 3) || (w === numWeeks - 2 && d === 1)) {
-            count = 16 + Math.floor(rnd * 6);
+            count = 18 + Math.floor(rnd * 7);
           }
         }
       } else if (profile === "weekend") {
         if (isWeekend) {
-          count = Math.floor(7 + rnd * 12);
+          count = Math.floor(8 + rnd * 16);
         } else {
-          count = rnd > 0.65 ? Math.floor(rnd * 3) : 0;
+          count = rnd > 0.65 ? Math.floor(rnd * 4) : 0;
         }
       } else {
         const inSprintPeak = w % 3 === 2;
         if (inSprintPeak && !isWeekend) {
-          count = Math.floor(8 + rnd * 12);
+          count = Math.floor(10 + rnd * 14);
         } else if (!isWeekend) {
           count = Math.floor(2 + rnd * 6);
         } else {
@@ -222,9 +251,7 @@ export function generateHeatmapMatrix(
       }
 
       totalContributions += count;
-      const tier = getCommitTier(count);
-      const color = palette.colors[tier];
-      const height = getCommitHeight(count);
+      if (count > maxCount) maxCount = count;
 
       const formattedDate = cellDate.toLocaleDateString("en-US", {
         weekday: "short",
@@ -232,14 +259,35 @@ export function generateHeatmapMatrix(
         day: "numeric",
       });
 
+      rawCells.push({
+        w,
+        d,
+        count,
+        dateStr: formattedDate,
+        dayOfWeek,
+      });
+    }
+  }
+
+  // Pass 2: map into matrix columns with dynamic quartile tiers
+  const cols: HeatmapNode[][] = [];
+  for (let w = 0; w < numWeeks; w++) {
+    const col: HeatmapNode[] = [];
+    for (let d = 0; d < numDays; d++) {
+      const cell = rawCells[w * numDays + d];
+      const count = cell.count;
+      const tier = calculateTier(count, maxCount);
+      const color = palette.colors[tier];
+      const height = getCommitHeight(count, maxCount, tier);
+
       col.push({
         col: w,
         row: d,
         count,
         color,
         height,
-        label: formattedDate,
-        date: cellDate.toISOString().slice(0, 10),
+        label: cell.dateStr,
+        date: cell.dateStr,
       });
     }
     cols.push(col);
@@ -250,6 +298,7 @@ export function generateHeatmapMatrix(
 
 /**
  * Generates matrix using Thamindu's real GitHub contributions (full year or 14 weeks)
+ * Uses official GitHub data-level (0-4) directly matching github.com
  */
 export function generateThaminduMatrix(
   scheme: HeatmapSchemeKey = "default",
@@ -264,6 +313,9 @@ export function generateThaminduMatrix(
   const targetWeeks = range === "14w" ? 14 : totalWeeks;
   const startWeek = range === "14w" ? totalWeeks - 14 : 0;
 
+  // Maximum commit count in Thamindu's history is 25
+  const maxCount = 25;
+
   const cols: HeatmapNode[][] = [];
   let totalContributions = 0;
 
@@ -276,9 +328,18 @@ export function generateThaminduMatrix(
       const count = item?.count ?? 0;
       totalContributions += count;
 
-      const tier = getCommitTier(count);
+      // Use GitHub's exact official level directly:
+      // Level 0: 0 commits (142 days)
+      // Level 1: 1-6 commits (134 days)
+      // Level 2: 7-12 commits (51 days)
+      // Level 3: 13-18 commits (36 days)
+      // Level 4: 19-25 commits (only 8 top peak days!)
+      const tier = (
+        item?.level !== undefined ? item.level : calculateTier(count, maxCount)
+      ) as 0 | 1 | 2 | 3 | 4;
+
       const color = palette.colors[tier];
-      const height = getCommitHeight(count);
+      const height = getCommitHeight(count, maxCount, tier);
 
       let formattedDate = "";
       if (item?.date) {
@@ -521,31 +582,25 @@ export function Heatmap({
   data: providedData,
   scheme = "default",
   mode = "dark",
-  profile = "thamindu",
   range = "year",
   intensity = 0.6,
   colorOnHover = true,
   onClick,
   onHover,
-  accentColor: customAccent,
   className = "",
   style = {},
 }: HeatmapProps) {
   const instanceId = useId();
 
   const palette = (GITHUB_SCHEMES[scheme] || GITHUB_SCHEMES.default)[mode];
-  const effectiveAccent = customAccent || palette.accent;
 
-  // Resolve grid data (either user provided or generated)
+  // Resolve grid data (either user provided or generated from real GitHub contributions)
   const resolvedMatrix = useMemo(() => {
     if (providedData && providedData.length > 0) {
       return providedData;
     }
-    if (profile === "thamindu") {
-      return generateThaminduMatrix(scheme, mode, range).matrix;
-    }
-    return generateHeatmapMatrix(profile, scheme, mode, range).matrix;
-  }, [providedData, profile, scheme, mode, range]);
+    return generateThaminduMatrix(scheme, mode, range).matrix;
+  }, [providedData, scheme, mode, range]);
 
   const numCols = resolvedMatrix.length;
   const numRows = resolvedMatrix[0]?.length || 7;
@@ -733,7 +788,7 @@ export function Heatmap({
   useEffect(() => {
     hoverRef.current = null;
     overRef.current = null;
-  }, [numCols, numRows, scheme, mode, profile, range]);
+  }, [numCols, numRows, scheme, mode, range]);
 
   const handlePointerMove = useCallback(
     (e: React.PointerEvent<SVGSVGElement>) => {
@@ -756,18 +811,28 @@ export function Heatmap({
             const prevKey = `${prev.col}-${prev.row}`;
             const prevNode = domRefs.current.get(prevKey);
             prevNode?.sil?.classList.remove("hovered");
+            prevNode?.cr?.classList.remove("hovered");
             prevNode?.dot?.classList.remove("hovered");
           }
           const newKey = `${colIdx}-${rowIdx}`;
           const newNode = domRefs.current.get(newKey);
           newNode?.sil?.classList.add("hovered");
+          newNode?.cr?.classList.add("hovered");
           newNode?.dot?.classList.add("hovered");
         }
 
         hoverRef.current = { col: colIdx, row: rowIdx };
         const sp = springsRef.current.get(`${colIdx}-${rowIdx}`);
         const colMeta = columns.find((cm) => cm.i === colIdx && cm.j === rowIdx);
-        onHover?.(colMeta ? { ...colMeta.node, height: sp ? sp.x : colMeta.h0 } : null);
+        onHover?.(
+          colMeta
+            ? {
+                ...colMeta.node,
+                color: colMeta.color,
+                height: sp ? sp.x : colMeta.h0,
+              }
+            : null
+        );
       }
     },
     [C, CELL, numCols, numRows, colorOnHover, columns, onHover, VIEW_W, VIEW_H]
@@ -779,6 +844,7 @@ export function Heatmap({
       const prevKey = `${prev.col}-${prev.row}`;
       const prevNode = domRefs.current.get(prevKey);
       prevNode?.sil?.classList.remove("hovered");
+      prevNode?.cr?.classList.remove("hovered");
       prevNode?.dot?.classList.remove("hovered");
     }
     overRef.current = null;
@@ -803,7 +869,11 @@ export function Heatmap({
       const sp = springsRef.current.get(`${colIdx}-${rowIdx}`);
       const colMeta = columns.find((cm) => cm.i === colIdx && cm.j === rowIdx);
       if (colMeta) {
-        onClick?.({ ...colMeta.node, height: sp ? sp.x : colMeta.h0 });
+        onClick?.({
+          ...colMeta.node,
+          color: colMeta.color,
+          height: sp ? sp.x : colMeta.h0,
+        });
       }
     },
     [C, CELL, numCols, numRows, columns, onClick, VIEW_W, VIEW_H]
@@ -846,30 +916,35 @@ export function Heatmap({
 
         .hl-heatmap-${instanceId} .col-sil {
           fill: var(--base-fill, ${mode === "dark" ? "#151b23" : "#ffffff"});
-          stroke: ${mode === "dark" ? "#30363d" : "#0f172a"};
+          stroke: ${mode === "dark" ? "#30363d" : "rgba(15, 23, 42, 0.22)"};
           stroke-width: 0.9;
           stroke-linejoin: round;
-          transition: fill 150ms ease;
+          transition: stroke 120ms ease;
         }
 
         .hl-heatmap-${instanceId} .col-sil.hovered {
-          fill: ${effectiveAccent} !important;
-          stroke: ${mode === "dark" ? "#e6edf3" : "#0f172a"};
-          stroke-width: 1.1;
+          stroke: ${mode === "dark" ? "#ffffff" : "#000000"};
+          stroke-width: 1.35;
         }
 
         .hl-heatmap-${instanceId} .col-cr {
           fill: none;
           stroke: ${mode === "dark" ? "rgba(255, 255, 255, 0.12)" : "rgba(15, 23, 42, 0.14)"};
           stroke-width: 0.75;
+          transition: stroke 120ms ease;
+        }
+
+        .hl-heatmap-${instanceId} .col-cr.hovered {
+          stroke: ${mode === "dark" ? "rgba(255, 255, 255, 0.45)" : "rgba(0, 0, 0, 0.35)"};
         }
 
         .hl-heatmap-${instanceId} .beacon-dot {
-          fill: ${effectiveAccent};
-          stroke: ${mode === "dark" ? "#0d1117" : "#ffffff"};
-          stroke-width: 0.8;
+          fill: ${palette.accent};
+          stroke: #ffffff;
+          stroke-width: 0.85;
           opacity: 0;
-          transition: opacity 150ms ease;
+          pointer-events: none;
+          transition: opacity 120ms ease;
         }
 
         .hl-heatmap-${instanceId} .beacon-dot.hovered {
@@ -935,8 +1010,8 @@ export function Heatmap({
                       }
                       node.dot = el;
                     }}
-                    rx="1.2"
-                    ry="0.6"
+                    rx="2.2"
+                    ry="1.1"
                     className="beacon-dot"
                   />
                 </g>
