@@ -820,65 +820,63 @@ export function Heatmap({
       const deltaX = (zf / C.k) * Math.sin(C.az);
       const deltaY = (zf / C.k) * Math.cos(C.az);
 
-      // Ray spans z from 0 to HMAX
-      const minWx = Math.min(wx0, wx0 + HMAX * deltaX);
-      const maxWx = Math.max(wx0, wx0 + HMAX * deltaX);
-      const minWy = Math.min(wy0, wy0 + HMAX * deltaY);
-      const maxWy = Math.max(wy0, wy0 + HMAX * deltaY);
+      // Ray spans z from 0 to HMAX (with a small 1-cell safety margin)
+      const minWx = Math.min(wx0, wx0 + HMAX * deltaX) - CELL;
+      const maxWx = Math.max(wx0, wx0 + HMAX * deltaX) + CELL;
+      const minWy = Math.min(wy0, wy0 + HMAX * deltaY) - CELL;
+      const maxWy = Math.max(wy0, wy0 + HMAX * deltaY) + CELL;
 
       const iMin = Math.max(0, Math.floor(minWx / CELL));
       const iMax = Math.min(numCols - 1, Math.floor(maxWx / CELL));
       const jMin = Math.max(0, Math.floor(minWy / CELL));
       const jMax = Math.min(numRows - 1, Math.floor(maxWy / CELL));
 
-      if (iMin > iMax || jMin > jMax) {
-        return null;
-      }
+      // 1. Top-Cap Priority Pass: Check if cursor is directly over any pillar's top cap
+      let bestCapHit: { col: number; row: number; d2: number } | null = null;
+      const rx = (CELL * 0.5) * C.S * 1.15;
+      const ry = rx * C.k;
 
-      let bestHit: { col: number; row: number; zExit: number } | null = null;
+      if (iMin <= iMax && jMin <= jMax) {
+        for (let i = iMin; i <= iMax; i++) {
+          for (let j = jMin; j <= jMax; j++) {
+            const key = `${i}-${j}`;
+            const sp = springsRef.current.get(key);
+            const colMeta = columns.find((cm) => cm.i === i && cm.j === j);
+            const h = sp ? sp.x : (colMeta?.h0 ?? 2.5);
 
-      // Check candidate pillars in isometric painter's order (front to back)
-      for (let s = iMax + jMax; s >= iMin + jMin; s--) {
-        for (let i = iMax; i >= iMin; i--) {
-          const j = s - i;
-          if (j < jMin || j > jMax) continue;
+            const cx = (i + 0.5) * CELL;
+            const cy = (j + 0.5) * CELL;
+            const pt = P(cx, cy, h);
 
-          const key = `${i}-${j}`;
-          const sp = springsRef.current.get(key);
-          const colMeta = columns.find((cm) => cm.i === i && cm.j === j);
-          const h = sp ? sp.x : (colMeta?.h0 ?? 2.5);
+            const dx = (sx - pt[0]) / rx;
+            const dy = (sy - pt[1]) / ry;
+            const d2 = dx * dx + dy * dy;
 
-          const x0 = i * CELL;
-          const x1 = (i + 1) * CELL;
-          const y0 = j * CELL;
-          const y1 = (j + 1) * CELL;
-
-          // Ray parameter interval for x
-          const zx0 = (x0 - wx0) / deltaX;
-          const zx1 = (x1 - wx0) / deltaX;
-          const zxMin = Math.min(zx0, zx1);
-          const zxMax = Math.max(zx0, zx1);
-
-          // Ray parameter interval for y
-          const zy0 = (y0 - wy0) / deltaY;
-          const zy1 = (y1 - wy0) / deltaY;
-          const zyMin = Math.min(zy0, zy1);
-          const zyMax = Math.max(zy0, zy1);
-
-          const zEnter = Math.max(0, zxMin, zyMin);
-          const zExit = Math.min(h, zxMax, zyMax);
-
-          if (zEnter <= zExit) {
-            if (!bestHit || zExit > bestHit.zExit) {
-              bestHit = { col: i, row: j, zExit };
+            if (d2 <= 1.25) {
+              if (!bestCapHit || d2 < bestCapHit.d2) {
+                bestCapHit = { col: i, row: j, d2 };
+              }
             }
           }
         }
       }
 
-      return bestHit ? { col: bestHit.col, row: bestHit.row } : null;
+      if (bestCapHit) {
+        return { col: bestCapHit.col, row: bestCapHit.row };
+      }
+
+      // 2. Ground-Plane Grid Fallback: Check if cursor is within the plinth ground grid
+      if (wx0 >= 0 && wx0 < EXT_X && wy0 >= 0 && wy0 < EXT_Y) {
+        const gi = Math.floor(wx0 / CELL);
+        const gj = Math.floor(wy0 / CELL);
+        if (gi >= 0 && gi < numCols && gj >= 0 && gj < numRows) {
+          return { col: gi, row: gj };
+        }
+      }
+
+      return null;
     },
-    [C, CELL, HMAX, numCols, numRows, columns]
+    [C, CELL, HMAX, numCols, numRows, columns, P, EXT_X, EXT_Y]
   );
 
   const handlePointerMove = useCallback(
