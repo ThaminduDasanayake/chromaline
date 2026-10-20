@@ -694,13 +694,14 @@ export function Heatmap({
       {
         sil: SVGPathElement | null;
         cr: SVGPathElement | null;
-        dot: SVGEllipseElement | null;
+        mark: SVGGElement | null;
       }
     >
   >(new Map());
 
   const springsRef = useRef<Map<string, SpringState>>(new Map());
   const markGroupRef = useRef<SVGGElement | null>(null);
+  const hiddenHostRef = useRef<SVGGElement | null>(null);
   const dotRefs = useRef<(SVGEllipseElement | null)[]>([]);
 
   // Main Animation & Physics Loop
@@ -780,14 +781,18 @@ export function Heatmap({
         const colMeta = columns.find(
           (cm) => cm.i === hoverRef.current?.col && cm.j === hoverRef.current?.row
         );
+        const targetSlot = domRefs.current.get(mcKey)?.mark;
         if (colMeta && markGroupRef.current) {
+          if (targetSlot && (markGroupRef.current.parentNode as Node | null) !== targetSlot) {
+            targetSlot.appendChild(markGroupRef.current);
+          }
           markGroupRef.current.style.opacity = "1";
           const cx = (colMeta.i + 0.5) * CELL;
           const cy = (colMeta.j + 0.5) * CELL;
           const h = Math.max(0.6, mcSp ? mcSp.x : colMeta.h0);
           dotRefs.current.forEach((el, k) => {
             if (!el) return;
-            const dx = cx + (k % 3 - 1) * 2.5;
+            const dx = cx + ((k % 3) - 1) * 2.5;
             const dy = cy + (Math.floor(k / 3) - 1) * 2.5;
             const pt = P(dx, dy, h + 0.25);
             el.setAttribute("cx", String(r2(pt[0])));
@@ -809,6 +814,13 @@ export function Heatmap({
   useEffect(() => {
     hoverRef.current = null;
     overRef.current = null;
+    if (
+      markGroupRef.current &&
+      hiddenHostRef.current &&
+      (markGroupRef.current.parentNode as Node | null) !== hiddenHostRef.current
+    ) {
+      hiddenHostRef.current.appendChild(markGroupRef.current);
+    }
   }, [numCols, numRows, scheme, mode, range]);
 
   const getHitColumn = useCallback(
@@ -896,7 +908,6 @@ export function Heatmap({
           const prevNode = domRefs.current.get(prevKey);
           prevNode?.sil?.classList.remove("hovered");
           prevNode?.cr?.classList.remove("hovered");
-          prevNode?.dot?.classList.remove("hovered");
           hoverRef.current = null;
         }
         overRef.current = null;
@@ -921,13 +932,11 @@ export function Heatmap({
             const prevNode = domRefs.current.get(prevKey);
             prevNode?.sil?.classList.remove("hovered");
             prevNode?.cr?.classList.remove("hovered");
-            prevNode?.dot?.classList.remove("hovered");
           }
           const newKey = `${colIdx}-${rowIdx}`;
           const newNode = domRefs.current.get(newKey);
           newNode?.sil?.classList.add("hovered");
           newNode?.cr?.classList.add("hovered");
-          newNode?.dot?.classList.add("hovered");
         }
 
         hoverRef.current = { col: colIdx, row: rowIdx };
@@ -954,7 +963,6 @@ export function Heatmap({
       const prevNode = domRefs.current.get(prevKey);
       prevNode?.sil?.classList.remove("hovered");
       prevNode?.cr?.classList.remove("hovered");
-      prevNode?.dot?.classList.remove("hovered");
     }
     overRef.current = null;
     hoverRef.current = null;
@@ -1093,7 +1101,7 @@ export function Heatmap({
                     ref={(el) => {
                       let node = domRefs.current.get(key);
                       if (!node) {
-                        node = { sil: null, cr: null, dot: null };
+                        node = { sil: null, cr: null, mark: null };
                         domRefs.current.set(key, node);
                       }
                       node.sil = el;
@@ -1105,38 +1113,51 @@ export function Heatmap({
                     ref={(el) => {
                       let node = domRefs.current.get(key);
                       if (!node) {
-                        node = { sil: null, cr: null, dot: null };
+                        node = { sil: null, cr: null, mark: null };
                         domRefs.current.set(key, node);
                       }
                       node.cr = el;
                     }}
                     className="col-cr"
                   />
+                  <g
+                    ref={(el) => {
+                      let node = domRefs.current.get(key);
+                      if (!node) {
+                        node = { sil: null, cr: null, mark: null };
+                        domRefs.current.set(key, node);
+                      }
+                      node.mark = el;
+                    }}
+                    className="col-mark-slot"
+                  />
                 </g>
               );
             })}
           </g>
 
-          {/* Top Indicator: Original 9-dot punch matrix from hairline Terrain */}
-          <g
-            ref={markGroupRef}
-            className="hl-punch-matrix"
-            style={{ opacity: 0, pointerEvents: "none", transition: "opacity 120ms ease" }}
-          >
-            {Array.from({ length: 9 }).map((_, k) => {
-              const isCenter = k === 4;
-              return (
-                <ellipse
-                  key={k}
-                  ref={(el) => {
-                    dotRefs.current[k] = el;
-                  }}
-                  rx={r2((isCenter ? 0.65 : 0.52) * C.S)}
-                  ry={r2((isCenter ? 0.65 : 0.52) * C.S * C.k)}
-                  className={isCenter ? "punch-dot-center" : "punch-dot-outer"}
-                />
-              );
-            })}
+          {/* Hidden Host for the 9-dot punch matrix when unattached */}
+          <g ref={hiddenHostRef} style={{ display: "none" }}>
+            <g
+              ref={markGroupRef}
+              className="hl-punch-matrix"
+              style={{ opacity: 0, pointerEvents: "none", transition: "opacity 120ms ease" }}
+            >
+              {Array.from({ length: 9 }).map((_, k) => {
+                const isCenter = k === 4;
+                return (
+                  <ellipse
+                    key={k}
+                    ref={(el) => {
+                      dotRefs.current[k] = el;
+                    }}
+                    rx={r2((isCenter ? 0.65 : 0.52) * C.S)}
+                    ry={r2((isCenter ? 0.65 : 0.52) * C.S * C.k)}
+                    className={isCenter ? "punch-dot-center" : "punch-dot-outer"}
+                  />
+                );
+              })}
+            </g>
           </g>
         </svg>
       </div>
