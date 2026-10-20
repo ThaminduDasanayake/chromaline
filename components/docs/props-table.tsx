@@ -17,9 +17,7 @@ export interface PropsTableProps {
 export function PropsTable({ componentName, props }: PropsTableProps) {
   return (
     <section>
-      <h2 className="text-xl font-bold tracking-tight text-slate-900 sm:text-2xl">
-        Props
-      </h2>
+      <h2 className="text-xl font-bold tracking-tight text-slate-900 sm:text-2xl">Props</h2>
       <p className="mt-1 text-xs text-slate-500">
         TypeScript properties available on the{" "}
         {componentName ? <code className="font-mono">{componentName}</code> : "component"}.

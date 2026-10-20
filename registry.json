@@ -77,15 +77,15 @@
       ]
     },
     {
-      "name": "terrain",
+      "name": "heatmap",
       "type": "registry:ui",
-      "title": "Terrain",
-      "description": "Interactive 3D isometric topographic pillar matrix with configurable grid density, click resolution, and shockwave physics.",
+      "title": "Heatmap",
+      "description": "Interactive 3D isometric GitHub contribution heatmap with 14-week timeline, official dark, halloween, and winter themes, and tactile impulse shockwaves.",
       "files": [
         {
-          "path": "components/ui/terrain.tsx",
+          "path": "components/ui/heatmap.tsx",
           "type": "registry:ui",
-          "target": "components/ui/terrain.tsx"
+          "target": "components/ui/heatmap.tsx"
         }
       ]
     }

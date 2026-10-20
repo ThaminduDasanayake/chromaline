@@ -28,7 +28,7 @@ export function DocsLayout({
 
         {/* Header */}
         <header className="mb-8">
-          <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-slate-500">
+          <div className="flex items-center gap-2 text-xs font-semibold tracking-wider text-slate-500 uppercase">
             {icon}
             <span>{category}</span>
           </div>

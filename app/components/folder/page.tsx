@@ -3,11 +3,7 @@
 import React, { useState } from "react";
 import { Folder } from "@/components/ui/folder";
 import { SelectBar } from "@/components/ui/select-bar";
-import {
-  TextAlignLeftIcon,
-  TextAlignCenterIcon,
-  TextAlignRightIcon,
-} from "@phosphor-icons/react";
+import { TextAlignLeftIcon, TextAlignCenterIcon, TextAlignRightIcon } from "@phosphor-icons/react";
 import {
   DocsLayout,
   ComponentPreview,
@@ -75,38 +71,23 @@ const CODE_EXAMPLE_LINES = [
   },
   {
     num: 6,
-    parts: [
-      { text: "      bodyColor", cls: "text-purple-600" },
-      { text: '="#E54F10"' },
-    ],
+    parts: [{ text: "      bodyColor", cls: "text-purple-600" }, { text: '="#E54F10"' }],
   },
   {
     num: 7,
-    parts: [
-      { text: "      darkOutline", cls: "text-purple-600" },
-      { text: '="#7C2D12"' },
-    ],
+    parts: [{ text: "      darkOutline", cls: "text-purple-600" }, { text: '="#7C2D12"' }],
   },
   {
     num: 8,
-    parts: [
-      { text: "      lightOutline", cls: "text-purple-600" },
-      { text: '="#FED7AA"' },
-    ],
+    parts: [{ text: "      lightOutline", cls: "text-purple-600" }, { text: '="#FED7AA"' }],
   },
   {
     num: 9,
-    parts: [
-      { text: "      tabPosition", cls: "text-purple-600" },
-      { text: '="center"' },
-    ],
+    parts: [{ text: "      tabPosition", cls: "text-purple-600" }, { text: '="center"' }],
   },
   {
     num: 10,
-    parts: [
-      { text: "      className", cls: "text-purple-600" },
-      { text: '="w-56 h-auto"' },
-    ],
+    parts: [{ text: "      className", cls: "text-purple-600" }, { text: '="w-56 h-auto"' }],
   },
   { num: 11, parts: [{ text: "    />", cls: "text-slate-500" }] },
   { num: 12, parts: [{ text: "  );" }] },

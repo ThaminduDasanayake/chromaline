@@ -8,7 +8,8 @@ function buildRegistry() {
   const buttonPath = path.join(__dirname, "../components/ui/button.tsx");
   const selectBarPath = path.join(__dirname, "../components/ui/select-bar.tsx");
   const seekPath = path.join(__dirname, "../components/ui/seek.tsx");
-  const terrainPath = path.join(__dirname, "../components/ui/terrain.tsx");
+  const heatmapPath = path.join(__dirname, "../components/ui/heatmap.tsx");
+  const thaminduDataPath = path.join(__dirname, "../components/ui/thamindu-data.ts");
 
   if (!fs.existsSync(trayPath)) {
     console.error("Component not found:", trayPath);
@@ -22,7 +23,10 @@ function buildRegistry() {
     ? fs.readFileSync(selectBarPath, "utf8")
     : "";
   const seekContent = fs.existsSync(seekPath) ? fs.readFileSync(seekPath, "utf8") : "";
-  const terrainContent = fs.existsSync(terrainPath) ? fs.readFileSync(terrainPath, "utf8") : "";
+  const heatmapContent = fs.existsSync(heatmapPath) ? fs.readFileSync(heatmapPath, "utf8") : "";
+  const thaminduDataContent = fs.existsSync(thaminduDataPath)
+    ? fs.readFileSync(thaminduDataPath, "utf8")
+    : "";
 
   // 1. Full Folder Tray with Folder Support
   const trayRegistryItem = {
@@ -139,24 +143,34 @@ function buildRegistry() {
     ],
   };
 
-  // 6. Interactive 3D Isometric Terrain Component
-  const terrainRegistryItem = {
+  // 6. Interactive 3D Isometric Heatmap Component
+  const heatmapRegistryItem = {
     $schema: "https://ui.shadcn.com/schema/registry-item.json",
-    name: "terrain",
+    name: "heatmap",
     type: "registry:ui",
-    title: "Terrain",
+    title: "Heatmap",
     description:
-      "Interactive 3D isometric topographic pillar matrix with configurable grid density, click resolution, and shockwave physics.",
+      "Interactive 3D isometric GitHub contribution heatmap with 14-week timeline, official dark, halloween, and winter themes, and tactile impulse shockwaves.",
     dependencies: [],
     devDependencies: [],
     registryDependencies: [],
     files: [
       {
-        path: "components/ui/terrain.tsx",
-        content: terrainContent,
+        path: "components/ui/heatmap.tsx",
+        content: heatmapContent,
         type: "registry:ui",
-        target: "components/ui/terrain.tsx",
+        target: "components/ui/heatmap.tsx",
       },
+      ...(thaminduDataContent
+        ? [
+            {
+              path: "components/ui/thamindu-data.ts",
+              content: thaminduDataContent,
+              type: "registry:ui",
+              target: "components/ui/thamindu-data.ts",
+            },
+          ]
+        : []),
     ],
   };
 
@@ -178,7 +192,7 @@ function buildRegistry() {
     JSON.stringify(selectBarRegistryItem, null, 2)
   );
   fs.writeFileSync(path.join(outDir, "seek.json"), JSON.stringify(seekRegistryItem, null, 2));
-  fs.writeFileSync(path.join(outDir, "terrain.json"), JSON.stringify(terrainRegistryItem, null, 2));
+  fs.writeFileSync(path.join(outDir, "heatmap.json"), JSON.stringify(heatmapRegistryItem, null, 2));
 
   const indexRegistry = {
     $schema: "https://ui.shadcn.com/schema/registry.json",
@@ -190,7 +204,7 @@ function buildRegistry() {
       buttonRegistryItem,
       selectBarRegistryItem,
       seekRegistryItem,
-      terrainRegistryItem,
+      heatmapRegistryItem,
     ],
   };
   fs.writeFileSync(path.join(outDir, "index.json"), JSON.stringify(indexRegistry, null, 2));
@@ -278,16 +292,16 @@ function buildRegistry() {
         ],
       },
       {
-        name: "terrain",
+        name: "heatmap",
         type: "registry:ui",
-        title: "Terrain",
+        title: "Heatmap",
         description:
-          "Interactive 3D isometric topographic pillar matrix with configurable grid density, click resolution, and shockwave physics.",
+          "Interactive 3D isometric GitHub contribution heatmap with 14-week timeline, official dark, halloween, and winter themes, and tactile impulse shockwaves.",
         files: [
           {
-            path: "components/ui/terrain.tsx",
+            path: "components/ui/heatmap.tsx",
             type: "registry:ui",
-            target: "components/ui/terrain.tsx",
+            target: "components/ui/heatmap.tsx",
           },
         ],
       },
@@ -296,7 +310,7 @@ function buildRegistry() {
   fs.writeFileSync(path.join(__dirname, "../registry.json"), JSON.stringify(rootRegistry, null, 2));
 
   console.log(
-    "✓ Chromaline registry generated at public/r/folder-tray.json, public/r/folder.json, public/r/button.json, public/r/select-bar.json, public/r/seek.json, and public/r/terrain.json"
+    "✓ Chromaline registry generated at public/r/folder-tray.json, public/r/folder.json, public/r/button.json, public/r/select-bar.json, public/r/seek.json, and public/r/heatmap.json"
   );
 }
 
