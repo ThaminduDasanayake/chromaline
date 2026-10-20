@@ -700,6 +700,8 @@ export function Heatmap({
   >(new Map());
 
   const springsRef = useRef<Map<string, SpringState>>(new Map());
+  const markGroupRef = useRef<SVGGElement | null>(null);
+  const dotRefs = useRef<(SVGEllipseElement | null)[]>([]);
 
   // Main Animation & Physics Loop
   useEffect(() => {
@@ -722,7 +724,7 @@ export function Heatmap({
       timeRef.current += dt;
 
       const over = overRef.current;
-      const R = intensity * CELL * (Math.max(numCols, numRows) / 9);
+      const R = intensity * CELL * (isWide ? 3.6 : 2.8);
 
       const shock = shockwaveRef.current;
       const shockAge = shock ? (currentTime - shock.time) / 1000 : 999;
@@ -739,7 +741,9 @@ export function Heatmap({
           const dx = (c.i + 0.5) * CELL - over[0];
           const dy = (c.j + 0.5) * CELL - over[1];
           const dist = Math.hypot(dx, dy);
-          sp.t = HMAX * falloff(dist / R);
+          const f = falloff(dist / R);
+          // Graceful cohesive elevation cone preserving base commit volumes
+          sp.t = Math.min(HMAX, c.h0 + 22 * f);
         } else {
           // Ambient subtle shimmer
           const t = timeRef.current * 1.5;
@@ -767,14 +771,31 @@ export function Heatmap({
           nodeEls.sil.setAttribute("d", p.sil);
           nodeEls.cr.setAttribute("d", p.crease);
         }
+      }
 
-        if (nodeEls?.dot) {
-          const cx = (c.i + 0.5) * CELL;
-          const cy = (c.j + 0.5) * CELL;
-          const pt = P(cx, cy, h + 1);
-          nodeEls.dot.setAttribute("cx", String(r2(pt[0])));
-          nodeEls.dot.setAttribute("cy", String(r2(pt[1])));
+      // Update 9-dot punch matrix indicator on top of the hovered pillar
+      if (over && hoverRef.current) {
+        const mcKey = `${hoverRef.current.col}-${hoverRef.current.row}`;
+        const mcSp = springsRef.current.get(mcKey);
+        const colMeta = columns.find(
+          (cm) => cm.i === hoverRef.current?.col && cm.j === hoverRef.current?.row
+        );
+        if (colMeta && markGroupRef.current) {
+          markGroupRef.current.style.opacity = "1";
+          const cx = (colMeta.i + 0.5) * CELL;
+          const cy = (colMeta.j + 0.5) * CELL;
+          const h = Math.max(0.6, mcSp ? mcSp.x : colMeta.h0);
+          dotRefs.current.forEach((el, k) => {
+            if (!el) return;
+            const dx = cx + (k % 3 - 1) * 2.5;
+            const dy = cy + (Math.floor(k / 3) - 1) * 2.5;
+            const pt = P(dx, dy, h + 0.25);
+            el.setAttribute("cx", String(r2(pt[0])));
+            el.setAttribute("cy", String(r2(pt[1])));
+          });
         }
+      } else if (markGroupRef.current) {
+        markGroupRef.current.style.opacity = "0";
       }
 
       raf = requestAnimationFrame(loop);
@@ -938,17 +959,14 @@ export function Heatmap({
           stroke: ${mode === "dark" ? "rgba(255, 255, 255, 0.45)" : "rgba(0, 0, 0, 0.35)"};
         }
 
-        .hl-heatmap-${instanceId} .beacon-dot {
-          fill: ${palette.accent};
-          stroke: #ffffff;
-          stroke-width: 0.85;
-          opacity: 0;
-          pointer-events: none;
-          transition: opacity 120ms ease;
+        .hl-heatmap-${instanceId} .punch-dot-center {
+          fill: ${mode === "dark" ? "#ffffff" : "#0f172a"};
+          stroke: none;
         }
 
-        .hl-heatmap-${instanceId} .beacon-dot.hovered {
-          opacity: 1;
+        .hl-heatmap-${instanceId} .punch-dot-outer {
+          fill: ${mode === "dark" ? "rgba(255, 255, 255, 0.45)" : "rgba(15, 23, 42, 0.3)"};
+          stroke: none;
         }
       `}</style>
 
@@ -1001,20 +1019,29 @@ export function Heatmap({
                     }}
                     className="col-cr"
                   />
-                  <ellipse
-                    ref={(el) => {
-                      let node = domRefs.current.get(key);
-                      if (!node) {
-                        node = { sil: null, cr: null, dot: null };
-                        domRefs.current.set(key, node);
-                      }
-                      node.dot = el;
-                    }}
-                    rx="2.2"
-                    ry="1.1"
-                    className="beacon-dot"
-                  />
                 </g>
+              );
+            })}
+          </g>
+
+          {/* Top Indicator: Original 9-dot punch matrix from hairline Terrain */}
+          <g
+            ref={markGroupRef}
+            className="hl-punch-matrix"
+            style={{ opacity: 0, pointerEvents: "none", transition: "opacity 120ms ease" }}
+          >
+            {Array.from({ length: 9 }).map((_, k) => {
+              const isCenter = k === 4;
+              return (
+                <ellipse
+                  key={k}
+                  ref={(el) => {
+                    dotRefs.current[k] = el;
+                  }}
+                  rx={r2((isCenter ? 0.65 : 0.52) * C.S)}
+                  ry={r2((isCenter ? 0.65 : 0.52) * C.S * C.k)}
+                  className={isCenter ? "punch-dot-center" : "punch-dot-outer"}
+                />
               );
             })}
           </g>
