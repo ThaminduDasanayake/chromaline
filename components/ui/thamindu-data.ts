@@ -4,6 +4,7 @@ export interface RawContributionDay {
   level: number;
   col: number;
   row: number;
+  isFuture?: boolean;
 }
 
 export const THAMINDU_YEAR_TOTAL = 1572;
@@ -2584,31 +2585,35 @@ export const THAMINDU_CONTRIBUTIONS: RawContributionDay[] = [
     row: 2,
   },
   {
-    date: "2026-10-20",
+    date: "2026-10-21",
     count: 0,
     level: 0,
     col: 52,
     row: 3,
+    isFuture: true,
   },
   {
-    date: "2026-10-20",
+    date: "2026-10-22",
     count: 0,
     level: 0,
     col: 52,
     row: 4,
+    isFuture: true,
   },
   {
-    date: "2026-10-20",
+    date: "2026-10-23",
     count: 0,
     level: 0,
     col: 52,
     row: 5,
+    isFuture: true,
   },
   {
-    date: "2026-10-20",
+    date: "2026-10-24",
     count: 0,
     level: 0,
     col: 52,
     row: 6,
+    isFuture: true,
   },
 ];

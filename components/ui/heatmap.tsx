@@ -29,6 +29,15 @@ export interface HeatmapPalette {
   };
   accent: string;
   canvasBg: string;
+  plinthFill: string;
+  plinthStroke: string;
+  plinthCrease: string;
+  colStroke: string;
+  colCrease: string;
+  hoverStroke: string;
+  hoverCrease: string;
+  dotCenter: string;
+  dotOuter: string;
 }
 
 export const GITHUB_SCHEMES: Record<HeatmapSchemeKey, Record<HeatmapMode, HeatmapPalette>> = {
@@ -43,6 +52,15 @@ export const GITHUB_SCHEMES: Record<HeatmapSchemeKey, Record<HeatmapMode, Heatma
       },
       accent: "#56d364",
       canvasBg: "bg-[#0d1117]",
+      plinthFill: "#161b22",
+      plinthStroke: "#30363d",
+      plinthCrease: "rgba(255, 255, 255, 0.08)",
+      colStroke: "rgba(255, 255, 255, 0.18)",
+      colCrease: "rgba(255, 255, 255, 0.10)",
+      hoverStroke: "#ffffff",
+      hoverCrease: "rgba(255, 255, 255, 0.6)",
+      dotCenter: "#ffffff",
+      dotOuter: "rgba(255, 255, 255, 0.5)",
     },
     light: {
       colors: {
@@ -54,6 +72,15 @@ export const GITHUB_SCHEMES: Record<HeatmapSchemeKey, Record<HeatmapMode, Heatma
       },
       accent: "#216e39",
       canvasBg: "bg-[#F9FAFB]",
+      plinthFill: "#f8fafc",
+      plinthStroke: "#cbd5e1",
+      plinthCrease: "rgba(15, 23, 42, 0.10)",
+      colStroke: "rgba(15, 23, 42, 0.26)",
+      colCrease: "rgba(15, 23, 42, 0.14)",
+      hoverStroke: "#0f172a",
+      hoverCrease: "rgba(15, 23, 42, 0.5)",
+      dotCenter: "#0f172a",
+      dotOuter: "rgba(15, 23, 42, 0.4)",
     },
   },
   winter: {
@@ -67,6 +94,15 @@ export const GITHUB_SCHEMES: Record<HeatmapSchemeKey, Record<HeatmapMode, Heatma
       },
       accent: "#58a6ff",
       canvasBg: "bg-[#0d1117]",
+      plinthFill: "#0b1522",
+      plinthStroke: "#223b59",
+      plinthCrease: "rgba(202, 232, 255, 0.10)",
+      colStroke: "rgba(202, 232, 255, 0.28)",
+      colCrease: "rgba(202, 232, 255, 0.16)",
+      hoverStroke: "#ffffff",
+      hoverCrease: "rgba(202, 232, 255, 0.65)",
+      dotCenter: "#ffffff",
+      dotOuter: "rgba(88, 166, 255, 0.6)",
     },
     light: {
       colors: {
@@ -78,6 +114,15 @@ export const GITHUB_SCHEMES: Record<HeatmapSchemeKey, Record<HeatmapMode, Heatma
       },
       accent: "#0c2d6b",
       canvasBg: "bg-[#F9FAFB]",
+      plinthFill: "#f0f6fc",
+      plinthStroke: "#cbd5e1",
+      plinthCrease: "rgba(12, 45, 107, 0.10)",
+      colStroke: "rgba(12, 45, 107, 0.30)",
+      colCrease: "rgba(12, 45, 107, 0.16)",
+      hoverStroke: "#0f172a",
+      hoverCrease: "rgba(12, 45, 107, 0.5)",
+      dotCenter: "#0f172a",
+      dotOuter: "rgba(17, 88, 199, 0.4)",
     },
   },
   halloween: {
@@ -91,6 +136,15 @@ export const GITHUB_SCHEMES: Record<HeatmapSchemeKey, Record<HeatmapMode, Heatma
       },
       accent: "#e3d04f",
       canvasBg: "bg-[#0d1117]",
+      plinthFill: "#171412",
+      plinthStroke: "#422f22",
+      plinthCrease: "rgba(254, 215, 170, 0.10)",
+      colStroke: "rgba(254, 215, 170, 0.28)",
+      colCrease: "rgba(254, 215, 170, 0.16)",
+      hoverStroke: "#ffffff",
+      hoverCrease: "rgba(254, 215, 170, 0.65)",
+      dotCenter: "#ffffff",
+      dotOuter: "rgba(254, 215, 170, 0.6)",
     },
     light: {
       colors: {
@@ -102,6 +156,15 @@ export const GITHUB_SCHEMES: Record<HeatmapSchemeKey, Record<HeatmapMode, Heatma
       },
       accent: "#c46212",
       canvasBg: "bg-[#F9FAFB]",
+      plinthFill: "#faf7f4",
+      plinthStroke: "#cbd5e1",
+      plinthCrease: "rgba(75, 30, 8, 0.10)",
+      colStroke: "rgba(75, 30, 8, 0.30)",
+      colCrease: "rgba(75, 30, 8, 0.16)",
+      hoverStroke: "#0f172a",
+      hoverCrease: "rgba(75, 30, 8, 0.5)",
+      dotCenter: "#0f172a",
+      dotOuter: "rgba(75, 30, 8, 0.4)",
     },
   },
 };
@@ -116,6 +179,7 @@ export interface HeatmapNode {
   color?: string;
   label?: string;
   date?: string;
+  isFuture?: boolean;
   [key: string]: unknown;
 }
 
@@ -149,6 +213,49 @@ export function calculateTier(count: number, maxCount: number): 0 | 1 | 2 | 3 | 
   if (ratio <= 0.5) return 2;
   if (ratio <= 0.75) return 3;
   return 4;
+}
+
+/**
+ * Calculates whether a color has dark perceived luminance (Rec. 709).
+ * Dark colors (luminance < 0.48) require light outlines for clear edge definition.
+ * Light colors (luminance >= 0.48) require dark outlines to avoid blending.
+ */
+export function isDarkColor(color?: string): boolean {
+  if (!color) return true;
+  const str = color.trim().toLowerCase();
+
+  // Hex format (#rgb, #rgba, #rrggbb, #rrggbbaa)
+  if (str.startsWith("#")) {
+    let hex = str.slice(1);
+    if (hex.length === 3 || hex.length === 4) {
+      hex = hex
+        .slice(0, 3)
+        .split("")
+        .map((ch) => ch + ch)
+        .join("");
+    }
+    if (hex.length >= 6) {
+      const r = parseInt(hex.slice(0, 2), 16);
+      const g = parseInt(hex.slice(2, 4), 16);
+      const b = parseInt(hex.slice(4, 6), 16);
+      if (!isNaN(r) && !isNaN(g) && !isNaN(b)) {
+        const luminance = (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
+        return luminance < 0.48;
+      }
+    }
+  }
+
+  // RGB / RGBA format
+  const rgbMatch = str.match(/rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/);
+  if (rgbMatch) {
+    const r = parseInt(rgbMatch[1], 10);
+    const g = parseInt(rgbMatch[2], 10);
+    const b = parseInt(rgbMatch[3], 10);
+    const luminance = (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
+    return luminance < 0.48;
+  }
+
+  return true;
 }
 
 export function getCommitTier(count: number, maxCount?: number): 0 | 1 | 2 | 3 | 4 {
@@ -355,6 +462,7 @@ export function generateThaminduMatrix(
         height,
         label: formattedDate,
         date: item?.date || "",
+        isFuture: item?.isFuture ?? false,
       });
     }
     cols.push(col);
@@ -571,8 +679,10 @@ interface ColumnMeta {
   ring: Point2D[];
   inner: Point2D[];
   color?: string;
+  isDark: boolean;
   node: HeatmapNode;
-  capX: number;
+  cx: number;
+  baseY: number;
   capY: number;
 }
 
@@ -665,22 +775,23 @@ export function Heatmap({
         const j = s - i;
         if (j < 0 || j >= numRows) continue;
 
-        const node = resolvedMatrix[i]?.[j] || {
-          col: i,
-          row: j,
-          height: 2.5,
-          color: palette.colors[0],
-        };
+        const node = resolvedMatrix[i]?.[j];
+        if (!node || node.isFuture) continue;
 
         const h0 = node.height ?? (node.count !== undefined ? getCommitHeight(node.count) : 2.5);
         const color = node.color || palette.colors[0];
+        const isDark = isDarkColor(color);
 
         const x0 = i * CELL + (CELL - FOOT) / 2;
         const y0 = j * CELL + (CELL - FOOT) / 2;
         const [ring, inner] = rings(x0, y0, x0 + FOOT, y0 + FOOT, 2.6, 0.9);
-        const [capX, capY] = P((i + 0.5) * CELL, (j + 0.5) * CELL, h0);
+        const basePt = P((i + 0.5) * CELL, (j + 0.5) * CELL, 0);
+        const capPt = P((i + 0.5) * CELL, (j + 0.5) * CELL, h0);
+        const cx = basePt[0];
+        const baseY = basePt[1];
+        const capY = capPt[1];
 
-        colsList.push({ i, j, h0, ring, inner, color, node, capX, capY });
+        colsList.push({ i, j, h0, ring, inner, color, isDark, node, cx, baseY, capY });
       }
     }
     return colsList;
@@ -785,6 +896,8 @@ export function Heatmap({
           if (targetSlot && (markGroupRef.current.parentNode as Node | null) !== targetSlot) {
             targetSlot.appendChild(markGroupRef.current);
           }
+          markGroupRef.current.classList.toggle("for-dark-bar", colMeta.isDark);
+          markGroupRef.current.classList.toggle("for-light-bar", !colMeta.isDark);
           markGroupRef.current.style.opacity = "1";
           const cx = (colMeta.i + 0.5) * CELL;
           const cy = (colMeta.j + 0.5) * CELL;
@@ -824,8 +937,8 @@ export function Heatmap({
 
   const getHitColumn = useCallback(
     (sx: number, sy: number): { col: number; row: number } | null => {
-      // Metric radii for isometric column projection
-      const rx = CELL * 0.5 * C.S * 1.5;
+      // Horizontal and vertical reach radii for isometric columns
+      const rx = CELL * 0.5 * C.S * 1.35;
       const ry = rx * C.k;
 
       let bestCol: ColumnMeta | null = null;
@@ -837,22 +950,27 @@ export function Heatmap({
         const c = columns[k];
         const isHovered = currentHover && currentHover.col === c.i && currentHover.row === c.j;
 
-        // Base cap distance (stable target based on intrinsic commit height h0)
-        const dx = (sx - c.capX) / rx;
-        const dy = (sy - c.capY) / ry;
-        let d2 = dx * dx + dy * dy;
-
-        // If this column is currently hovered, also check against its elevated cap position
+        // Effective top cap boundary (extends up to live spring height if currently elevated)
+        let topY = c.capY;
         if (isHovered) {
           const sp = springsRef.current.get(`${c.i}-${c.j}`);
-          if (sp && Math.abs(sp.x - c.h0) > 0.5) {
-            const elevPt = P((c.i + 0.5) * CELL, (c.j + 0.5) * CELL, sp.x);
-            const edx = (sx - elevPt[0]) / rx;
-            const edy = (sy - elevPt[1]) / ry;
-            const ed2 = edx * edx + edy * edy;
-            d2 = Math.min(d2, ed2);
+          if (sp && sp.x > c.h0) {
+            topY = Math.min(topY, P((c.i + 0.5) * CELL, (c.j + 0.5) * CELL, sp.x)[1]);
           }
-          // Hysteresis deadband: give currently hovered column a 45% stability preference
+        }
+
+        // Horizontal distance from column center line
+        const dx = (sx - c.cx) / rx;
+
+        // Vertical distance to the pillar segment [topY, c.baseY]
+        // dy is 0 anywhere along the pillar's body, base, or cap
+        const clampedY = Math.max(topY, Math.min(c.baseY, sy));
+        const dy = (sy - clampedY) / ry;
+
+        let d2 = dx * dx + dy * dy;
+
+        // Hysteresis deadband: give currently hovered column a stability preference
+        if (isHovered) {
           d2 *= 0.55;
         }
 
@@ -863,7 +981,7 @@ export function Heatmap({
       }
 
       // Check boundary: if closest column is too far (cursor in empty space or preview padding)
-      if (minD2 > 2.5) {
+      if (minD2 > 2.2) {
         return null;
       }
 
@@ -1005,51 +1123,100 @@ export function Heatmap({
         }
 
         .hl-heatmap-${instanceId} .plinth-sil {
-          fill: ${mode === "dark" ? "#161b22" : "#f8fafc"};
-          stroke: ${mode === "dark" ? "#30363d" : "#0f172a"};
+          fill: ${palette.plinthFill};
+          stroke: ${palette.plinthStroke};
           stroke-width: 0.95;
           stroke-linejoin: round;
         }
 
         .hl-heatmap-${instanceId} .plinth-cr {
           fill: none;
-          stroke: ${mode === "dark" ? "rgba(255, 255, 255, 0.08)" : "rgba(15, 23, 42, 0.12)"};
+          stroke: ${palette.plinthCrease};
           stroke-width: 0.85;
         }
 
         .hl-heatmap-${instanceId} .col-sil {
           fill: var(--base-fill, ${mode === "dark" ? "#151b23" : "#ffffff"});
-          stroke: ${mode === "dark" ? "#30363d" : "rgba(15, 23, 42, 0.22)"};
-          stroke-width: 0.8;
+          stroke: ${palette.colStroke};
+          stroke-width: 0.85;
           stroke-linejoin: round;
           transition: stroke 120ms ease;
         }
 
-        .hl-heatmap-${instanceId} .col-sil.hovered {
-          stroke: ${mode === "dark" ? "#ffffff" : "#000000"};
-          stroke-width: 0.95;
-        }
-
         .hl-heatmap-${instanceId} .col-cr {
           fill: none;
-          stroke: ${mode === "dark" ? "rgba(255, 255, 255, 0.12)" : "rgba(15, 23, 42, 0.14)"};
+          stroke: ${palette.colCrease};
           stroke-width: 0.65;
           transition: stroke 120ms ease;
         }
 
-        .hl-heatmap-${instanceId} .col-cr.hovered {
-          stroke: ${mode === "dark" ? "rgba(255, 255, 255, 0.45)" : "rgba(0, 0, 0, 0.35)"};
-          stroke-width: 0.75;
+        /* Per-bar luminance-adaptive outline contrast:
+           Dark colors get a light outline.
+           Light colors get a dark outline. */
+        .hl-heatmap-${instanceId} .is-dark-bar .col-sil {
+          stroke: ${mode === "dark" ? "rgba(255, 255, 255, 0.22)" : "rgba(255, 255, 255, 0.60)"};
+        }
+
+        .hl-heatmap-${instanceId} .is-dark-bar .col-cr {
+          stroke: ${mode === "dark" ? "rgba(255, 255, 255, 0.12)" : "rgba(255, 255, 255, 0.30)"};
+        }
+
+        .hl-heatmap-${instanceId} .is-dark-bar .col-sil.hovered {
+          stroke: #ffffff;
+          stroke-width: 1.15;
+        }
+
+        .hl-heatmap-${instanceId} .is-dark-bar .col-cr.hovered {
+          stroke: rgba(255, 255, 255, 0.70);
+          stroke-width: 0.85;
+        }
+
+        .hl-heatmap-${instanceId} .is-light-bar .col-sil {
+          stroke: ${mode === "dark" ? "rgba(0, 0, 0, 0.45)" : "rgba(15, 23, 42, 0.28)"};
+        }
+
+        .hl-heatmap-${instanceId} .is-light-bar .col-cr {
+          stroke: ${mode === "dark" ? "rgba(0, 0, 0, 0.25)" : "rgba(15, 23, 42, 0.14)"};
+        }
+
+        .hl-heatmap-${instanceId} .is-light-bar .col-sil.hovered {
+          stroke: ${mode === "dark" ? "#000000" : "#0f172a"};
+          stroke-width: 1.15;
+        }
+
+        .hl-heatmap-${instanceId} .is-light-bar .col-cr.hovered {
+          stroke: ${mode === "dark" ? "rgba(0, 0, 0, 0.65)" : "rgba(15, 23, 42, 0.60)"};
+          stroke-width: 0.85;
         }
 
         .hl-heatmap-${instanceId} .punch-dot-center {
-          fill: ${mode === "dark" ? "#ffffff" : "#0f172a"};
+          fill: ${palette.dotCenter};
           stroke: none;
         }
 
         .hl-heatmap-${instanceId} .punch-dot-outer {
-          fill: ${mode === "dark" ? "rgba(255, 255, 255, 0.45)" : "rgba(15, 23, 42, 0.3)"};
+          fill: ${palette.dotOuter};
           stroke: none;
+        }
+
+        .hl-heatmap-${instanceId} .is-dark-bar .punch-dot-center,
+        .hl-heatmap-${instanceId} .for-dark-bar .punch-dot-center {
+          fill: #ffffff;
+        }
+
+        .hl-heatmap-${instanceId} .is-dark-bar .punch-dot-outer,
+        .hl-heatmap-${instanceId} .for-dark-bar .punch-dot-outer {
+          fill: rgba(255, 255, 255, 0.65);
+        }
+
+        .hl-heatmap-${instanceId} .is-light-bar .punch-dot-center,
+        .hl-heatmap-${instanceId} .for-light-bar .punch-dot-center {
+          fill: ${mode === "dark" ? "#000000" : "#0f172a"};
+        }
+
+        .hl-heatmap-${instanceId} .is-light-bar .punch-dot-outer,
+        .hl-heatmap-${instanceId} .for-light-bar .punch-dot-outer {
+          fill: ${mode === "dark" ? "rgba(0, 0, 0, 0.45)" : "rgba(15, 23, 42, 0.45)"};
         }
       `}</style>
 
@@ -1078,7 +1245,7 @@ export function Heatmap({
             {columns.map((c) => {
               const key = `${c.i}-${c.j}`;
               return (
-                <g key={key}>
+                <g key={key} className={c.isDark ? "is-dark-bar" : "is-light-bar"}>
                   <path
                     ref={(el) => {
                       let node = domRefs.current.get(key);
