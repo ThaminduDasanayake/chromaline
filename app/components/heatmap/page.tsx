@@ -11,7 +11,7 @@ import {
   generateThaminduMatrix,
 } from "@/components/ui/heatmap";
 import { SelectBar } from "@/components/ui/select-bar";
-import { GitCommitIcon, CalendarBlankIcon } from "@phosphor-icons/react";
+import { GitCommitIcon } from "@phosphor-icons/react";
 import {
   DocsLayout,
   ComponentPreview,
@@ -183,17 +183,7 @@ export default function HeatmapDocumentationPage() {
                   <GitCommitIcon size={13} weight="bold" />
                 </span>
                 <span className="text-xs font-semibold text-slate-900">
-                  <a
-                    href="https://github.com/ThaminduDasanayake"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="text-emerald-600 underline underline-offset-2 hover:text-emerald-700"
-                  >
-                    github.com/ThaminduDasanayake
-                  </a>
-                  <span className="ml-1.5 font-normal text-slate-500">
-                    · {range === "year" ? "Full Year Skyline (53 Weeks)" : "14-Week Skyline"}
-                  </span>
+                  Contributions
                 </span>
               </div>
               <span className="font-mono text-xs text-slate-500">
@@ -255,14 +245,7 @@ export default function HeatmapDocumentationPage() {
             </div>
 
             {/* Bottom Scale Legend */}
-            <div className="flex flex-wrap items-center justify-between gap-4 border-t border-slate-100 pt-3 text-xs text-slate-500">
-              <div className="flex items-center gap-2">
-                <CalendarBlankIcon size={14} weight="bold" className="text-slate-400" />
-                <span>
-                  $X$: {range === "year" ? "53 Weeks (Full Year)" : "14 Weeks"} · $Y$: Sun–Sat (7 Days) · $Z$: Commit Volume
-                </span>
-              </div>
-
+            <div className="flex flex-wrap items-center justify-end gap-4 border-t border-slate-100 pt-3 text-xs text-slate-500">
               <div className="flex items-center gap-1.5">
                 <span className="text-[11px] text-slate-400">Less</span>
                 {([0, 1, 2, 3, 4] as const).map((tier) => (
