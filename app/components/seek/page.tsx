@@ -3,9 +3,15 @@
 import React, { useState } from "react";
 import { Seek } from "@/components/ui/seek";
 import { SelectBar } from "@/components/ui/select-bar";
-import { SiteHeader, SiteFooter } from "@/components/layout";
-import { InstallCommandTabs, BackLink } from "@/components/docs";
-import { CopyIcon, CheckIcon, MagnifyingGlassIcon } from "@phosphor-icons/react";
+import { MagnifyingGlassIcon } from "@phosphor-icons/react";
+import {
+  DocsLayout,
+  ComponentPreview,
+  InstallationSection,
+  UsageSection,
+  PropsTable,
+  PropItem,
+} from "@/components/docs";
 
 const CODE_EXAMPLE_LINES = [
   {
@@ -94,7 +100,7 @@ export default function SearchDemo() {
   );
 }`;
 
-const PROPS_DATA = [
+const PROPS_DATA: PropItem[] = [
   {
     name: "value",
     type: "string",
@@ -170,143 +176,23 @@ const PROPS_DATA = [
 ];
 
 export default function SeekDocumentationPage() {
-  const [activeTab, setActiveTab] = useState<"preview" | "code">("preview");
-  const [copiedCode, setCopiedCode] = useState(false);
-
-  // Playground state
   const [size, setSize] = useState<"sm" | "default" | "lg">("default");
   const [give, setGive] = useState(50);
   const [spring, setSpring] = useState(50);
   const [searchVal, setSearchVal] = useState("");
-
-  // Example 2 state
   const [compactVal, setCompactVal] = useState("");
 
-  const handleCopyCode = () => {
-    navigator.clipboard.writeText(CODE_EXAMPLE_TEXT);
-    setCopiedCode(true);
-    setTimeout(() => setCopiedCode(false), 2000);
-  };
-
   return (
-    <div className="flex min-h-screen flex-col bg-[#FAFAFA] font-sans text-slate-900 selection:bg-slate-200">
-      <SiteHeader />
-
-      <main className="mx-auto w-full max-w-4xl flex-1 px-4 py-8 sm:px-6 md:px-8">
-        {/* Back Link */}
-        <BackLink />
-
-        {/* Header */}
-        <div className="mb-8">
-          <div className="flex items-center gap-2 text-xs font-semibold tracking-wider text-slate-500 uppercase">
-            <MagnifyingGlassIcon size={14} weight="bold" />
-            <span>Components</span>
-          </div>
-          <h1 className="mt-2 text-3xl font-extrabold tracking-tight text-slate-950 sm:text-4xl">
-            Seek
-          </h1>
-          <p className="mt-2.5 max-w-2xl text-sm leading-relaxed text-slate-600 sm:text-base">
-            A search icon that becomes a search field as one single continuous object. Features
-            tactile yield on press, rAF spring expansion, cursor magnetic pull, and typing feedback.
-          </p>
-        </div>
-
-        {/* Installation Section */}
-        <div className="mb-10">
-          <InstallCommandTabs componentName="seek" />
-        </div>
-
-        {/* Interactive Playground Canvas */}
-        <div className="mb-12 overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-2xs">
-          {/* Canvas Tabs */}
-          <div className="flex items-center justify-between border-b border-slate-100 px-4 py-2.5">
-            <div className="flex items-center gap-1">
-              <button
-                type="button"
-                onClick={() => setActiveTab("preview")}
-                className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${
-                  activeTab === "preview"
-                    ? "bg-slate-100 text-slate-900"
-                    : "text-slate-500 hover:text-slate-900"
-                }`}
-              >
-                Preview
-              </button>
-              <button
-                type="button"
-                onClick={() => setActiveTab("code")}
-                className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${
-                  activeTab === "code"
-                    ? "bg-slate-100 text-slate-900"
-                    : "text-slate-500 hover:text-slate-900"
-                }`}
-              >
-                Code
-              </button>
-            </div>
-
-            {activeTab === "code" && (
-              <button
-                type="button"
-                onClick={handleCopyCode}
-                className="flex items-center gap-1.5 rounded-lg border border-slate-200/80 px-2.5 py-1 text-xs font-medium text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-900"
-              >
-                {copiedCode ? (
-                  <>
-                    <CheckIcon size={13} weight="bold" className="text-emerald-600" />
-                    <span>Copied</span>
-                  </>
-                ) : (
-                  <>
-                    <CopyIcon size={13} weight="bold" />
-                    <span>Copy</span>
-                  </>
-                )}
-              </button>
-            )}
-          </div>
-
-          {/* Interactive Preview Canvas */}
-          {activeTab === "preview" ? (
-            <div className="relative flex min-h-[340px] flex-col items-center justify-center overflow-hidden bg-[#F9FAFB] p-8">
-              <Seek
-                size={size}
-                give={give}
-                spring={spring}
-                value={searchVal}
-                onChange={setSearchVal}
-                placeholder="Search components..."
-              />
-
-              <p className="mt-6 text-xs text-slate-400">
-                Click circle to expand · Hover nearby to test magnetic lean
-              </p>
-            </div>
-          ) : (
-            <div className="overflow-x-auto bg-[#F9FAFB] p-6 font-mono text-xs leading-relaxed text-slate-800">
-              <pre className="m-0 p-0">
-                <code>
-                  {CODE_EXAMPLE_LINES.map((line) => (
-                    <div key={line.num} className="table-row">
-                      <span className="table-cell pr-6 text-right text-slate-400 select-none">
-                        {line.num}
-                      </span>
-                      <span className="table-cell">
-                        {line.parts.map((p, idx) => (
-                          <span key={idx} className={p.cls || "text-slate-800"}>
-                            {p.text}
-                          </span>
-                        ))}
-                      </span>
-                    </div>
-                  ))}
-                </code>
-              </pre>
-            </div>
-          )}
-
-          {/* Playground Controls Footer */}
-          <div className="grid grid-cols-1 gap-6 border-t border-slate-100 bg-white p-5 sm:grid-cols-3 sm:p-6">
+    <DocsLayout
+      title="Seek"
+      description="A search icon that becomes a search field as one single continuous object. Features tactile yield on press, rAF spring expansion, cursor magnetic pull, and typing feedback."
+      icon={<MagnifyingGlassIcon size={14} weight="bold" />}
+    >
+      {/* 1. Preview */}
+      <ComponentPreview
+        canvasClassName="min-h-[340px] p-8"
+        controls={
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
             {/* Size control */}
             <div>
               <label className="text-xs font-semibold text-slate-900">Size</label>
@@ -356,69 +242,52 @@ export default function SeekDocumentationPage() {
               />
             </div>
           </div>
-        </div>
+        }
+      >
+        <Seek
+          size={size}
+          give={give}
+          spring={spring}
+          value={searchVal}
+          onChange={setSearchVal}
+          placeholder="Search components..."
+        />
+        <p className="mt-6 text-xs text-slate-400">
+          Click circle to expand · Hover nearby to test magnetic lean
+        </p>
+      </ComponentPreview>
 
-        {/* Examples Section */}
-        <div className="mb-12">
-          <h2 className="text-xl font-bold tracking-tight text-slate-900 sm:text-2xl">Examples</h2>
+      {/* 2. Installation */}
+      <InstallationSection componentName="seek" />
 
-          {/* Example 1: Header Toolbar Dock */}
-          <div className="mt-6 overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-2xs">
-            <div className="border-b border-slate-100 px-5 py-4">
-              <h3 className="text-sm font-semibold text-slate-900">Header Toolbar (Compact)</h3>
-              <p className="mt-1 text-xs text-slate-500">
-                Sized at{" "}
-                <code className="rounded bg-slate-100 px-1 py-0.5 font-mono text-[11px]">
-                  size=&quot;sm&quot;
-                </code>{" "}
-                (44px), ideal for fixed topbars and docking next to navigation links.
-              </p>
-            </div>
-            <div className="flex min-h-[160px] items-center justify-center bg-[#F9FAFB] p-6">
-              <Seek
-                size="sm"
-                placeholder="Quick find..."
-                value={compactVal}
-                onChange={setCompactVal}
-              />
-            </div>
+      {/* 3. Usage */}
+      <UsageSection codeText={CODE_EXAMPLE_TEXT} codeLines={CODE_EXAMPLE_LINES} />
+
+      {/* 4. Props */}
+      <PropsTable componentName="Seek" props={PROPS_DATA} />
+
+      {/* Examples */}
+      <section>
+        <h2 className="text-xl font-bold tracking-tight text-slate-900 sm:text-2xl">
+          Examples
+        </h2>
+        <div className="mt-4 overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-2xs">
+          <div className="border-b border-slate-100 px-5 py-4">
+            <h3 className="text-sm font-semibold text-slate-900">Header Toolbar (Compact)</h3>
+            <p className="mt-1 text-xs text-slate-500">
+              Sized at <code>size=&quot;sm&quot;</code> (44px), ideal for fixed topbars and docking next to navigation links.
+            </p>
+          </div>
+          <div className="flex min-h-[160px] items-center justify-center bg-[#F9FAFB] p-6">
+            <Seek
+              size="sm"
+              placeholder="Quick find..."
+              value={compactVal}
+              onChange={setCompactVal}
+            />
           </div>
         </div>
-
-        {/* Props Reference Table */}
-        <div className="mb-16">
-          <h2 className="text-xl font-bold tracking-tight text-slate-900 sm:text-2xl">Props</h2>
-          <p className="mt-1 text-xs text-slate-500">
-            TypeScript properties available on the <code className="font-mono">Seek</code>{" "}
-            component.
-          </p>
-
-          <div className="mt-4 overflow-x-auto rounded-2xl border border-slate-200/90 bg-white shadow-2xs">
-            <table className="w-full text-left font-sans text-xs">
-              <thead>
-                <tr className="border-b border-slate-100 bg-slate-50/70">
-                  <th className="px-5 py-3 font-semibold text-slate-900">Prop</th>
-                  <th className="px-5 py-3 font-semibold text-slate-900">Type</th>
-                  <th className="px-5 py-3 font-semibold text-slate-900">Default</th>
-                  <th className="px-5 py-3 font-semibold text-slate-900">Description</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100">
-                {PROPS_DATA.map((p) => (
-                  <tr key={p.name} className="hover:bg-slate-50/40">
-                    <td className="px-5 py-3 font-mono font-medium text-slate-900">{p.name}</td>
-                    <td className="px-5 py-3 font-mono text-purple-700">{p.type}</td>
-                    <td className="px-5 py-3 font-mono text-slate-500">{p.default}</td>
-                    <td className="px-5 py-3 leading-relaxed text-slate-600">{p.desc}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </main>
-
-      <SiteFooter />
-    </div>
+      </section>
+    </DocsLayout>
   );
 }

@@ -5,4 +5,4 @@ export { ButtonCardPreview } from "./button-card-preview";
 export { LinkFolderTrayPreview } from "./link-folder-tray-preview";
 export { SelectBarCardPreview } from "./select-bar-card-preview";
 export { SeekCardPreview } from "./seek-card-preview";
-export { TerrainCardPreview } from "./terrain-card-preview";
+export { HeatmapCardPreview } from "./heatmap-card-preview";

@@ -1,8 +1,11 @@
 import React from "react";
 
+export type ButtonVariant = "default" | "dark" | "orange" | "emerald";
+export type ButtonSize = "sm" | "default" | "lg";
+
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: "default" | "dark" | "orange" | "emerald";
-  size?: "sm" | "default" | "lg";
+  variant?: ButtonVariant;
+  size?: ButtonSize;
   depth?: string;
   radius?: string;
   faceColor?: string;

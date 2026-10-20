@@ -1,0 +1,934 @@
+"use client";
+
+import React, { useCallback, useEffect, useId, useMemo, useRef } from "react";
+import { THAMINDU_CONTRIBUTIONS } from "./thamindu-data";
+
+/* ══ Heatmap ═══════════════════════════════════════════════
+   An interactive 3D isometric contribution heatmap on a plinth.
+   Features:
+   - 14-week calendar timeline (X: Weeks, Y: Mon–Sun, Z: Commit volume)
+   - Decoupled Color Scheme (Default, Winter, Halloween) and Mode (Dark, Light)
+   - Official GitHub palettes directly matching github.com CSS variables
+   - Cursor tracking with tactile spring elevation kinematics
+   - Shockwave ripple impulse on click
+   - Live hover highlighting and cell metadata resolution
+   ─────────────────────────────────────────────────────────── */
+
+export type HeatmapSchemeKey = "default" | "winter" | "halloween";
+export type HeatmapMode = "dark" | "light";
+export type HeatmapProfile = "thamindu" | "maintainer" | "weekend" | "sprint";
+
+export interface HeatmapPalette {
+  colors: {
+    0: string;
+    1: string;
+    2: string;
+    3: string;
+    4: string;
+  };
+  accent: string;
+  canvasBg: string;
+}
+
+export const GITHUB_SCHEMES: Record<HeatmapSchemeKey, Record<HeatmapMode, HeatmapPalette>> = {
+  default: {
+    dark: {
+      colors: {
+        0: "#151b23",
+        1: "#033a16",
+        2: "#196c2e",
+        3: "#2ea043",
+        4: "#56d364",
+      },
+      accent: "#56d364",
+      canvasBg: "bg-[#0d1117]",
+    },
+    light: {
+      colors: {
+        0: "#ebedf0",
+        1: "#9be9a8",
+        2: "#40c463",
+        3: "#30a14e",
+        4: "#216e39",
+      },
+      accent: "#216e39",
+      canvasBg: "bg-[#F9FAFB]",
+    },
+  },
+  winter: {
+    dark: {
+      colors: {
+        0: "#151b23",
+        1: "#0c2d6b",
+        2: "#1158c7",
+        3: "#58a6ff",
+        4: "#cae8ff",
+      },
+      accent: "#58a6ff",
+      canvasBg: "bg-[#0d1117]",
+    },
+    light: {
+      colors: {
+        0: "#ebedf0",
+        1: "#cae8ff",
+        2: "#58a6ff",
+        3: "#1158c7",
+        4: "#0c2d6b",
+      },
+      accent: "#0c2d6b",
+      canvasBg: "bg-[#F9FAFB]",
+    },
+  },
+  halloween: {
+    dark: {
+      colors: {
+        0: "#151b23",
+        1: "#fac68f",
+        2: "#c46212",
+        3: "#984b10",
+        4: "#e3d04f",
+      },
+      accent: "#e3d04f",
+      canvasBg: "bg-[#0d1117]",
+    },
+    light: {
+      colors: {
+        0: "#ebedf0",
+        1: "#ffeeaa",
+        2: "#fbb13c",
+        3: "#c46212",
+        4: "#6e2f05",
+      },
+      accent: "#c46212",
+      canvasBg: "bg-[#F9FAFB]",
+    },
+  },
+};
+
+export const DAY_NAMES = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+
+export interface HeatmapNode {
+  row: number;
+  col: number;
+  height: number;
+  count?: number;
+  color?: string;
+  label?: string;
+  date?: string;
+  [key: string]: unknown;
+}
+
+export interface HeatmapProps {
+  /** 2D grid matrix of nodes: data[col][row]. If not provided, generates realistic activity data */
+  data?: HeatmapNode[][];
+  /** Color scheme: 'default' (classic green) | 'winter' (blue) | 'halloween' (orange/gold). Default: 'default' */
+  scheme?: HeatmapSchemeKey;
+  /** Theme mode: 'dark' | 'light'. Default: 'dark' */
+  mode?: HeatmapMode;
+  /** Activity profile preset when data is generated: 'maintainer' | 'weekend' | 'sprint' */
+  profile?: HeatmapProfile;
+  /** Spring response radius/intensity (0.2 subtle to 1.5 wide). Default: 0.6 */
+  intensity?: number;
+  /** Whether hovered pillars highlight with the accent color. Default: true */
+  colorOnHover?: boolean;
+  /** Callback fired when a pillar is clicked */
+  onClick?: (node: HeatmapNode) => void;
+  /** Callback fired when a pillar is hovered */
+  onHover?: (node: HeatmapNode | null) => void;
+  /** Accent color for hovered node. Defaults to active scheme accent */
+  accentColor?: string;
+  className?: string;
+  style?: React.CSSProperties;
+}
+
+export function getCommitTier(count: number): 0 | 1 | 2 | 3 | 4 {
+  if (count <= 0) return 0;
+  if (count <= 2) return 1;
+  if (count <= 5) return 2;
+  if (count <= 8) return 3;
+  return 4;
+}
+
+export function getCommitHeight(count: number): number {
+  if (count <= 0) return 2.5;
+  if (count <= 2) return 11;
+  if (count <= 5) return 22;
+  if (count <= 8) return 34;
+  return Math.min(52, 38 + Math.sqrt(count) * 4);
+}
+
+/**
+ * Deterministically generates a 14-week (14 cols x 7 rows = 98 days) contribution matrix
+ */
+export function generateHeatmapMatrix(
+  profile: HeatmapProfile = "maintainer",
+  scheme: HeatmapSchemeKey = "default",
+  mode: HeatmapMode = "dark"
+): {
+  matrix: HeatmapNode[][];
+  totalContributions: number;
+} {
+  const numWeeks = 14;
+  const numDays = 7;
+  const palette = (GITHUB_SCHEMES[scheme] || GITHUB_SCHEMES.default)[mode];
+  let totalContributions = 0;
+
+  const baseDate = new Date(2026, 9, 20); // Oct 20, 2026
+  const cols: HeatmapNode[][] = [];
+
+  for (let w = 0; w < numWeeks; w++) {
+    const col: HeatmapNode[] = [];
+    for (let d = 0; d < numDays; d++) {
+      const daysAgo = (numWeeks - 1 - w) * 7 + (numDays - 1 - d);
+      const cellDate = new Date(baseDate);
+      cellDate.setDate(cellDate.getDate() - daysAgo);
+
+      const dayOfWeek = (cellDate.getDay() + 6) % 7; // 0 = Mon, 6 = Sun
+      const isWeekend = dayOfWeek >= 5;
+
+      const seed = Math.sin(w * 17.3 + d * 31.7) * 10000;
+      const rnd = seed - Math.floor(seed);
+
+      let count = 0;
+
+      if (profile === "maintainer") {
+        if (isWeekend) {
+          count = rnd > 0.4 ? Math.floor(rnd * 4) : 0;
+        } else {
+          count = Math.floor(3 + rnd * 11);
+          if ((w === 4 && d === 2) || (w === 9 && d === 3) || (w === 12 && d === 1)) {
+            count = 16 + Math.floor(rnd * 6);
+          }
+        }
+      } else if (profile === "weekend") {
+        if (isWeekend) {
+          count = Math.floor(7 + rnd * 12);
+        } else {
+          count = rnd > 0.65 ? Math.floor(rnd * 3) : 0;
+        }
+      } else {
+        const inSprintPeak = w % 3 === 2;
+        if (inSprintPeak && !isWeekend) {
+          count = Math.floor(8 + rnd * 12);
+        } else if (!isWeekend) {
+          count = Math.floor(2 + rnd * 6);
+        } else {
+          count = rnd > 0.5 ? Math.floor(rnd * 3) : 0;
+        }
+      }
+
+      totalContributions += count;
+      const tier = getCommitTier(count);
+      const color = palette.colors[tier];
+      const height = getCommitHeight(count);
+
+      const formattedDate = cellDate.toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+      });
+
+      col.push({
+        col: w,
+        row: d,
+        count,
+        color,
+        height,
+        label: `${DAY_NAMES[dayOfWeek]}, ${formattedDate}`,
+        date: formattedDate,
+      });
+    }
+    cols.push(col);
+  }
+
+  return { matrix: cols, totalContributions };
+}
+
+/**
+ * Generates matrix using Thamindu's real 14-week GitHub contributions
+ */
+export function generateThaminduMatrix(
+  scheme: HeatmapSchemeKey = "default",
+  mode: HeatmapMode = "dark"
+): {
+  matrix: HeatmapNode[][];
+  totalContributions: number;
+} {
+  const palette = (GITHUB_SCHEMES[scheme] || GITHUB_SCHEMES.default)[mode];
+  const cols: HeatmapNode[][] = [];
+  let totalContributions = 0;
+
+  for (let w = 0; w < 14; w++) {
+    const col: HeatmapNode[] = [];
+    for (let d = 0; d < 7; d++) {
+      const idx = w * 7 + d;
+      const item = THAMINDU_CONTRIBUTIONS[idx];
+      const count = item?.count ?? 0;
+      totalContributions += count;
+
+      const tier = getCommitTier(count);
+      const color = palette.colors[tier];
+      const height = getCommitHeight(count);
+
+      const dObj = item ? new Date(item.date + "T00:00:00") : new Date();
+      const formattedDate = dObj.toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+      });
+      const dayOfWeek = (dObj.getDay() + 6) % 7;
+
+      col.push({
+        col: w,
+        row: d,
+        count,
+        color,
+        height,
+        label: `${DAY_NAMES[dayOfWeek]}, ${formattedDate}`,
+        date: formattedDate,
+      });
+    }
+    cols.push(col);
+  }
+
+  return { matrix: cols, totalContributions };
+}
+
+const rad = (d: number) => (d * Math.PI) / 180;
+const r2 = (n: number) => Math.round(n * 100) / 100;
+const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
+
+interface Camera {
+  az: number;
+  k: number;
+  S: number;
+  ox: number;
+  oy: number;
+}
+
+const Cam = (azDeg: number, k: number, S: number): Camera => ({
+  az: rad(azDeg),
+  k,
+  S,
+  ox: 0,
+  oy: 0,
+});
+
+function proj(C: Camera) {
+  const c = Math.cos(C.az);
+  const s = Math.sin(C.az);
+  const zf = Math.sqrt(1 - C.k * C.k);
+  return (x: number, y: number, z: number): [number, number] => {
+    const X = x * c - y * s;
+    const Y = x * s + y * c;
+    return [C.ox + C.S * X, C.oy + C.S * (Y * C.k - z * zf)];
+  };
+}
+
+function unproj(C: Camera, sx: number, sy: number, z: number): [number, number] {
+  const c = Math.cos(C.az);
+  const s = Math.sin(C.az);
+  const zf = Math.sqrt(1 - C.k * C.k);
+  const X = (sx - C.ox) / C.S;
+  const Y = ((sy - C.oy) / C.S + z * zf) / C.k;
+  return [X * c + Y * s, -X * s + Y * c];
+}
+
+function fit(C: Camera, pts: number[][], viewWidth: number, viewHeight: number, pad = 14) {
+  const c = Math.cos(C.az);
+  const s = Math.sin(C.az);
+  const zf = Math.sqrt(1 - C.k * C.k);
+
+  let minX = 1e9,
+    maxX = -1e9,
+    minY = 1e9,
+    maxY = -1e9;
+
+  for (const [x, y, z] of pts) {
+    const X = x * c - y * s;
+    const Y = (x * s + y * c) * C.k - z * zf;
+    minX = Math.min(minX, X);
+    maxX = Math.max(maxX, X);
+    minY = Math.min(minY, Y);
+    maxY = Math.max(maxY, Y);
+  }
+
+  const spanX = Math.max(1, maxX - minX);
+  const spanY = Math.max(1, maxY - minY);
+
+  const availW = viewWidth - pad * 2;
+  const availH = viewHeight - pad * 2;
+
+  C.S = Math.min(availW / spanX, availH / spanY);
+  C.ox = viewWidth / 2 - (C.S * (minX + maxX)) / 2;
+  C.oy = viewHeight / 2 - (C.S * (minY + maxY)) / 2;
+}
+
+interface Point2D {
+  u: number;
+  v: number;
+  nu: number;
+  nv: number;
+}
+
+function rrect(u0: number, v0: number, u1: number, v1: number, r: number, n = 4): Point2D[] {
+  r = Math.max(0, Math.min(r, (u1 - u0) / 2, (v1 - v0) / 2));
+  const out: Point2D[] = [];
+  const corners = [
+    [u1 - r, v1 - r, 0],
+    [u0 + r, v1 - r, 90],
+    [u0 + r, v0 + r, 180],
+    [u1 - r, v0 + r, 270],
+  ];
+  for (const [cu, cv, a0] of corners) {
+    for (let k = 0; k <= n; k++) {
+      const a = rad(a0 + (90 * k) / n);
+      const ca = Math.cos(a);
+      const sa = Math.sin(a);
+      out.push({ u: cu + r * ca, v: cv + r * sa, nu: ca, nv: sa });
+    }
+  }
+  return out;
+}
+
+const rings = (x0: number, y0: number, x1: number, y1: number, r: number, b: number) => [
+  rrect(x0, y0, x1, y1, r),
+  rrect(x0 + b, y0 + b, x1 - b, y1 - b, Math.max(0.3, r - b)),
+];
+
+const ringAt = (P: (x: number, y: number, z: number) => [number, number], ring: Point2D[], z: number) =>
+  ring.map((q) => P(q.u, q.v, z));
+
+const facing = (C: Camera) => {
+  const s = Math.sin(C.az);
+  const c = Math.cos(C.az);
+  return (q: Point2D) => q.nu * s + q.nv * c >= -1e-6;
+};
+
+function run(ring: Point2D[], keep: (p: Point2D) => boolean) {
+  const n = ring.length;
+  let s = -1;
+  for (let i = 0; i < n; i++) {
+    if (keep(ring[i]) && !keep(ring[(i + n - 1) % n])) {
+      s = i;
+      break;
+    }
+  }
+  if (s < 0) return keep(ring[0]) ? ring.slice() : [];
+  const out: Point2D[] = [];
+  for (let k = 0; k < n && keep(ring[(s + k) % n]); k++) {
+    out.push(ring[(s + k) % n]);
+  }
+  return out;
+}
+
+function hull(input: [number, number][]) {
+  const pts = input.slice().sort((a, b) => a[0] - b[0] || a[1] - b[1]);
+  const cross = (o: [number, number], a: [number, number], b: [number, number]) =>
+    (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0]);
+  const lo: [number, number][] = [];
+  const up: [number, number][] = [];
+  for (const p of pts) {
+    while (lo.length > 1 && cross(lo[lo.length - 2], lo[lo.length - 1], p) <= 0) lo.pop();
+    lo.push(p);
+  }
+  for (let i = pts.length - 1; i >= 0; i--) {
+    const p = pts[i];
+    while (up.length > 1 && cross(up[up.length - 2], up[up.length - 1], p) <= 0) up.pop();
+    up.push(p);
+  }
+  lo.pop();
+  up.pop();
+  return lo.concat(up);
+}
+
+const poly = (pts: [number, number][]) =>
+  "M" + pts.map((p) => r2(p[0]) + " " + r2(p[1])).join("L") + "Z";
+
+const openPath = (pts: [number, number][]) =>
+  pts.length < 2 ? "" : "M" + pts.map((p) => r2(p[0]) + " " + r2(p[1])).join("L");
+
+function prism(
+  P: (x: number, y: number, z: number) => [number, number],
+  front: (q: Point2D) => boolean,
+  ring: Point2D[],
+  inner: Point2D[] | null,
+  z0: number,
+  z1: number
+) {
+  return {
+    sil: poly(hull(ringAt(P, ring, z1).concat(ringAt(P, ring, z0)))),
+    crease: inner ? openPath(ringAt(P, run(inner, front), z1)) : "",
+  };
+}
+
+const falloff = (u: number) =>
+  u <= 0 ? 1 : u <= 0.417 ? 1 - (u / 0.417) * 0.6875 : u <= 1 ? 0.3125 - ((u - 0.417) / 0.583) * 0.2185 : 0.094;
+
+interface SpringState {
+  x: number;
+  v: number;
+  t: number;
+  k: number;
+  c: number;
+  m: number;
+  eps: number;
+}
+
+function createSpring(x: number): SpringState {
+  return { x, v: 0, t: x, k: 100, c: 18, m: 1, eps: 0.04 };
+}
+
+function stepSpring(sp: SpringState, dt: number): boolean {
+  const n = Math.max(1, Math.ceil(dt * 240));
+  const h = dt / n;
+  for (let i = 0; i < n; i++) {
+    const a = (-sp.k * (sp.x - sp.t) - sp.c * sp.v) / sp.m;
+    sp.v += a * h;
+    sp.x += sp.v * h;
+  }
+  if (Math.abs(sp.x - sp.t) < sp.eps && Math.abs(sp.v) < sp.eps * 10) {
+    sp.x = sp.t;
+    sp.v = 0;
+    return false;
+  }
+  return true;
+}
+
+interface ColumnMeta {
+  i: number;
+  j: number;
+  h0: number;
+  ring: Point2D[];
+  inner: Point2D[];
+  color?: string;
+  node: HeatmapNode;
+}
+
+export function Heatmap({
+  data: providedData,
+  scheme = "default",
+  mode = "dark",
+  profile = "thamindu",
+  intensity = 0.6,
+  colorOnHover = true,
+  onClick,
+  onHover,
+  accentColor: customAccent,
+  className = "",
+  style = {},
+}: HeatmapProps) {
+  const instanceId = useId();
+
+  const palette = (GITHUB_SCHEMES[scheme] || GITHUB_SCHEMES.default)[mode];
+  const effectiveAccent = customAccent || palette.accent;
+
+  // Resolve grid data (either user provided or generated)
+  const resolvedMatrix = useMemo(() => {
+    if (providedData && providedData.length > 0) {
+      return providedData;
+    }
+    if (profile === "thamindu") {
+      return generateThaminduMatrix(scheme, mode).matrix;
+    }
+    return generateHeatmapMatrix(profile, scheme, mode).matrix;
+  }, [providedData, profile, scheme, mode]);
+
+  const numCols = resolvedMatrix.length;
+  const numRows = resolvedMatrix[0]?.length || 7;
+
+  const CELL = 14;
+  const FOOT = 11;
+  const HMAX = 56;
+  const EXT_X = numCols * CELL;
+  const EXT_Y = numRows * CELL;
+  const PB = 5;
+
+  const svgRef = useRef<SVGSVGElement | null>(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+
+  const hoverRef = useRef<{ col: number; row: number } | null>(null);
+  const overRef = useRef<[number, number] | null>(null);
+  const shockwaveRef = useRef<{ col: number; row: number; time: number } | null>(null);
+  const timeRef = useRef(0);
+
+  const VIEW_W = 320;
+  const VIEW_H = 200;
+
+  // Setup Camera via useMemo
+  const C = useMemo(() => {
+    const cam = Cam(45, 0.5, 1);
+    fit(
+      cam,
+      [
+        [-8, -8, -PB],
+        [EXT_X + 8, -8, -PB],
+        [EXT_X + 8, EXT_Y + 8, -PB],
+        [-8, EXT_Y + 8, -PB],
+        [-8, -8, 0],
+        [EXT_X + 8, -8, 0],
+        [EXT_X + 8, EXT_Y + 8, 0],
+        [-8, EXT_Y + 8, 0],
+        [0, 0, HMAX],
+        [EXT_X, 0, HMAX],
+        [EXT_X, EXT_Y, HMAX],
+        [0, EXT_Y, HMAX],
+      ],
+      VIEW_W,
+      VIEW_H,
+      16
+    );
+    return cam;
+  }, [EXT_X, EXT_Y, PB, HMAX]);
+
+  const P = useMemo(() => proj(C), [C]);
+  const front = useMemo(() => facing(C), [C]);
+
+  // Base Plinth Rings & Shape
+  const plinthPrism = useMemo(() => {
+    const [pr, pi] = rings(-6, -6, EXT_X + 6, EXT_Y + 6, 9, 2.2);
+    return prism(P, front, pr, pi, -PB, 0);
+  }, [EXT_X, EXT_Y, P, front, PB]);
+
+  // Columns layout via useMemo (sorted in isometric painter's order)
+  const columns = useMemo<ColumnMeta[]>(() => {
+    const colsList: ColumnMeta[] = [];
+    for (let s = 0; s <= (numCols - 1) + (numRows - 1); s++) {
+      for (let i = 0; i < numCols; i++) {
+        const j = s - i;
+        if (j < 0 || j >= numRows) continue;
+
+        const node = resolvedMatrix[i]?.[j] || {
+          col: i,
+          row: j,
+          height: 2.5,
+          color: palette.colors[0],
+        };
+
+        const h0 = node.height ?? (node.count !== undefined ? getCommitHeight(node.count) : 2.5);
+        const color = node.color || palette.colors[0];
+
+        const x0 = i * CELL + (CELL - FOOT) / 2;
+        const y0 = j * CELL + (CELL - FOOT) / 2;
+        const [ring, inner] = rings(x0, y0, x0 + FOOT, y0 + FOOT, 2.6, 0.9);
+
+        colsList.push({ i, j, h0, ring, inner, color, node });
+      }
+    }
+    return colsList;
+  }, [numCols, numRows, resolvedMatrix, palette, CELL, FOOT]);
+
+  // Node element references for direct SVG path mutation without re-renders
+  const domRefs = useRef<
+    Map<
+      string,
+      {
+        sil: SVGPathElement | null;
+        cr: SVGPathElement | null;
+        dot: SVGEllipseElement | null;
+      }
+    >
+  >(new Map());
+
+  const springsRef = useRef<Map<string, SpringState>>(new Map());
+
+  // Main Animation & Physics Loop
+  useEffect(() => {
+    let raf = 0;
+    let prevTime = performance.now();
+
+    for (const c of columns) {
+      const key = `${c.i}-${c.j}`;
+      if (!springsRef.current.has(key)) {
+        springsRef.current.set(key, createSpring(c.h0));
+      } else {
+        const sp = springsRef.current.get(key);
+        if (sp) sp.t = c.h0;
+      }
+    }
+
+    const loop = (currentTime: number) => {
+      const dt = clamp((currentTime - prevTime) / 1000, 0, 0.1);
+      prevTime = currentTime;
+      timeRef.current += dt;
+
+      const over = overRef.current;
+      const R = intensity * CELL * (Math.max(numCols, numRows) / 9);
+
+      const shock = shockwaveRef.current;
+      const shockAge = shock ? (currentTime - shock.time) / 1000 : 999;
+      if (shock && shockAge > 1.2) {
+        shockwaveRef.current = null;
+      }
+
+      for (const c of columns) {
+        const key = `${c.i}-${c.j}`;
+        const sp = springsRef.current.get(key);
+        if (!sp) continue;
+
+        if (over) {
+          const dx = (c.i + 0.5) * CELL - over[0];
+          const dy = (c.j + 0.5) * CELL - over[1];
+          const dist = Math.hypot(dx, dy);
+          sp.t = HMAX * falloff(dist / R);
+        } else {
+          // Ambient subtle shimmer
+          const t = timeRef.current * 1.5;
+          const shimmer = Math.sin(t + c.i * 0.35 + c.j * 0.4) * 0.8;
+          sp.t = Math.max(2, c.h0 + shimmer);
+        }
+
+        // Apply shockwave bump if active
+        if (shock && shockAge < 1.0) {
+          const sDist = Math.hypot(c.i - shock.col, c.j - shock.row);
+          const waveFront = shockAge * 8;
+          const waveDist = Math.abs(sDist - waveFront);
+          if (waveDist < 1.8) {
+            const shockLift = (1 - waveDist / 1.8) * (1 - shockAge) * 20;
+            sp.t += shockLift;
+          }
+        }
+
+        stepSpring(sp, dt);
+
+        const h = Math.max(0.6, sp.x);
+        const nodeEls = domRefs.current.get(key);
+        if (nodeEls?.sil && nodeEls?.cr) {
+          const p = prism(P, front, c.ring, c.inner, 0, h);
+          nodeEls.sil.setAttribute("d", p.sil);
+          nodeEls.cr.setAttribute("d", p.crease);
+        }
+
+        if (nodeEls?.dot) {
+          const cx = (c.i + 0.5) * CELL;
+          const cy = (c.j + 0.5) * CELL;
+          const pt = P(cx, cy, h + 1);
+          nodeEls.dot.setAttribute("cx", String(r2(pt[0])));
+          nodeEls.dot.setAttribute("cy", String(r2(pt[1])));
+        }
+      }
+
+      raf = requestAnimationFrame(loop);
+    };
+
+    raf = requestAnimationFrame(loop);
+    return () => cancelAnimationFrame(raf);
+  }, [numCols, numRows, CELL, HMAX, P, front, intensity, columns]);
+
+  // Reset hover on matrix change
+  useEffect(() => {
+    hoverRef.current = null;
+    overRef.current = null;
+  }, [numCols, numRows, scheme, mode, profile]);
+
+  const handlePointerMove = useCallback(
+    (e: React.PointerEvent<SVGSVGElement>) => {
+      const svg = svgRef.current;
+      if (!svg) return;
+      const rect = svg.getBoundingClientRect();
+      const sx = ((e.clientX - rect.left) / rect.width) * VIEW_W;
+      const sy = ((e.clientY - rect.top) / rect.height) * VIEW_H;
+      const [wx, wy] = unproj(C, sx, sy, 0);
+
+      overRef.current = [wx, wy];
+
+      const colIdx = clamp(Math.floor(wx / CELL), 0, numCols - 1);
+      const rowIdx = clamp(Math.floor(wy / CELL), 0, numRows - 1);
+
+      const prev = hoverRef.current;
+      if (!prev || prev.col !== colIdx || prev.row !== rowIdx) {
+        if (colorOnHover) {
+          if (prev) {
+            const prevKey = `${prev.col}-${prev.row}`;
+            const prevNode = domRefs.current.get(prevKey);
+            prevNode?.sil?.classList.remove("hovered");
+            prevNode?.dot?.classList.remove("hovered");
+          }
+          const newKey = `${colIdx}-${rowIdx}`;
+          const newNode = domRefs.current.get(newKey);
+          newNode?.sil?.classList.add("hovered");
+          newNode?.dot?.classList.add("hovered");
+        }
+
+        hoverRef.current = { col: colIdx, row: rowIdx };
+        const sp = springsRef.current.get(`${colIdx}-${rowIdx}`);
+        const colMeta = columns.find((cm) => cm.i === colIdx && cm.j === rowIdx);
+        onHover?.(colMeta ? { ...colMeta.node, height: sp ? sp.x : colMeta.h0 } : null);
+      }
+    },
+    [C, CELL, numCols, numRows, colorOnHover, columns, onHover]
+  );
+
+  const handlePointerLeave = useCallback(() => {
+    if (colorOnHover && hoverRef.current) {
+      const prev = hoverRef.current;
+      const prevKey = `${prev.col}-${prev.row}`;
+      const prevNode = domRefs.current.get(prevKey);
+      prevNode?.sil?.classList.remove("hovered");
+      prevNode?.dot?.classList.remove("hovered");
+    }
+    overRef.current = null;
+    hoverRef.current = null;
+    onHover?.(null);
+  }, [colorOnHover, onHover]);
+
+  const handleClick = useCallback(
+    (e: React.MouseEvent<SVGSVGElement>) => {
+      const svg = svgRef.current;
+      if (!svg) return;
+      const rect = svg.getBoundingClientRect();
+      const sx = ((e.clientX - rect.left) / rect.width) * VIEW_W;
+      const sy = ((e.clientY - rect.top) / rect.height) * VIEW_H;
+      const [wx, wy] = unproj(C, sx, sy, 0);
+
+      const colIdx = clamp(Math.floor(wx / CELL), 0, numCols - 1);
+      const rowIdx = clamp(Math.floor(wy / CELL), 0, numRows - 1);
+
+      shockwaveRef.current = { col: colIdx, row: rowIdx, time: performance.now() };
+
+      const sp = springsRef.current.get(`${colIdx}-${rowIdx}`);
+      const colMeta = columns.find((cm) => cm.i === colIdx && cm.j === rowIdx);
+      if (colMeta) {
+        onClick?.({ ...colMeta.node, height: sp ? sp.x : colMeta.h0 });
+      }
+    },
+    [C, CELL, numCols, numRows, columns, onClick]
+  );
+
+  return (
+    <>
+      <style>{`
+        .hl-heatmap-${instanceId} {
+          position: relative;
+          display: block;
+          aspect-ratio: 16 / 10;
+          width: 100%;
+          touch-action: none;
+          user-select: none;
+          cursor: crosshair;
+        }
+
+        .hl-heatmap-${instanceId} svg {
+          position: absolute;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+          display: block;
+          overflow: visible;
+        }
+
+        .hl-heatmap-${instanceId} .plinth-sil {
+          fill: ${mode === "dark" ? "#161b22" : "#f8fafc"};
+          stroke: ${mode === "dark" ? "#30363d" : "#0f172a"};
+          stroke-width: 0.95;
+          stroke-linejoin: round;
+        }
+
+        .hl-heatmap-${instanceId} .plinth-cr {
+          fill: none;
+          stroke: ${mode === "dark" ? "rgba(255, 255, 255, 0.08)" : "rgba(15, 23, 42, 0.12)"};
+          stroke-width: 0.85;
+        }
+
+        .hl-heatmap-${instanceId} .col-sil {
+          fill: var(--base-fill, ${mode === "dark" ? "#151b23" : "#ffffff"});
+          stroke: ${mode === "dark" ? "#30363d" : "#0f172a"};
+          stroke-width: 0.9;
+          stroke-linejoin: round;
+          transition: fill 150ms ease;
+        }
+
+        .hl-heatmap-${instanceId} .col-sil.hovered {
+          fill: ${effectiveAccent} !important;
+          stroke: ${mode === "dark" ? "#e6edf3" : "#0f172a"};
+          stroke-width: 1.1;
+        }
+
+        .hl-heatmap-${instanceId} .col-cr {
+          fill: none;
+          stroke: ${mode === "dark" ? "rgba(255, 255, 255, 0.12)" : "rgba(15, 23, 42, 0.14)"};
+          stroke-width: 0.75;
+        }
+
+        .hl-heatmap-${instanceId} .beacon-dot {
+          fill: ${effectiveAccent};
+          stroke: ${mode === "dark" ? "#0d1117" : "#ffffff"};
+          stroke-width: 0.8;
+          opacity: 0;
+          transition: opacity 150ms ease;
+        }
+
+        .hl-heatmap-${instanceId} .beacon-dot.hovered {
+          opacity: 1;
+        }
+      `}</style>
+
+      <div
+        ref={containerRef}
+        className={`hl-heatmap-${instanceId} ${className}`}
+        style={style}
+        role="region"
+        aria-label={`Interactive 3D GitHub Heatmap with ${numCols} weeks by ${numRows} days`}
+      >
+        <svg
+          ref={svgRef}
+          viewBox={`0 0 ${VIEW_W} ${VIEW_H}`}
+          onPointerMove={handlePointerMove}
+          onPointerLeave={handlePointerLeave}
+          onClick={handleClick}
+        >
+          {/* Ground Plinth */}
+          <g className="plinth">
+            <path className="plinth-sil" d={plinthPrism.sil} />
+            <path className="plinth-cr" d={plinthPrism.crease} />
+          </g>
+
+          {/* Isometric Pillars */}
+          <g className="pillars">
+            {columns.map((c) => {
+              const key = `${c.i}-${c.j}`;
+              return (
+                <g key={key}>
+                  <path
+                    ref={(el) => {
+                      let node = domRefs.current.get(key);
+                      if (!node) {
+                        node = { sil: null, cr: null, dot: null };
+                        domRefs.current.set(key, node);
+                      }
+                      node.sil = el;
+                    }}
+                    style={c.color ? ({ "--base-fill": c.color } as React.CSSProperties) : undefined}
+                    className="col-sil"
+                  />
+                  <path
+                    ref={(el) => {
+                      let node = domRefs.current.get(key);
+                      if (!node) {
+                        node = { sil: null, cr: null, dot: null };
+                        domRefs.current.set(key, node);
+                      }
+                      node.cr = el;
+                    }}
+                    className="col-cr"
+                  />
+                  <ellipse
+                    ref={(el) => {
+                      let node = domRefs.current.get(key);
+                      if (!node) {
+                        node = { sil: null, cr: null, dot: null };
+                        domRefs.current.set(key, node);
+                      }
+                      node.dot = el;
+                    }}
+                    rx="1.2"
+                    ry="0.6"
+                    className="beacon-dot"
+                  />
+                </g>
+              );
+            })}
+          </g>
+        </svg>
+      </div>
+    </>
+  );
+}
