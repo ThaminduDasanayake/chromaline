@@ -1,12 +1,12 @@
 "use client";
 
 import React, { useCallback, useEffect, useId, useMemo, useRef } from "react";
-import { THAMINDU_CONTRIBUTIONS } from "./thamindu-data";
+import { THAMINDU_CONTRIBUTIONS, THAMINDU_TOTAL_WEEKS } from "./thamindu-data";
 
 /* ══ Heatmap ═══════════════════════════════════════════════
    An interactive 3D isometric contribution heatmap on a plinth.
    Features:
-   - 14-week calendar timeline (X: Weeks, Y: Mon–Sun, Z: Commit volume)
+   - Full 52/53-week whole-year or 14-week timeline (X: Weeks, Y: Days, Z: Commit volume)
    - Decoupled Color Scheme (Default, Winter, Halloween) and Mode (Dark, Light)
    - Official GitHub palettes directly matching github.com CSS variables
    - Cursor tracking with tactile spring elevation kinematics
@@ -17,6 +17,7 @@ import { THAMINDU_CONTRIBUTIONS } from "./thamindu-data";
 export type HeatmapSchemeKey = "default" | "winter" | "halloween";
 export type HeatmapMode = "dark" | "light";
 export type HeatmapProfile = "thamindu" | "maintainer" | "weekend" | "sprint";
+export type HeatmapRange = "year" | "14w";
 
 export interface HeatmapPalette {
   colors: {
@@ -125,8 +126,10 @@ export interface HeatmapProps {
   scheme?: HeatmapSchemeKey;
   /** Theme mode: 'dark' | 'light'. Default: 'dark' */
   mode?: HeatmapMode;
-  /** Activity profile preset when data is generated: 'maintainer' | 'weekend' | 'sprint' */
+  /** Activity profile preset when data is generated: 'thamindu' | 'maintainer' | 'weekend' | 'sprint' */
   profile?: HeatmapProfile;
+  /** Timeline range: 'year' (full 52-53 weeks) | '14w' (14 weeks). Default: 'year' */
+  range?: HeatmapRange;
   /** Spring response radius/intensity (0.2 subtle to 1.5 wide). Default: 0.6 */
   intensity?: number;
   /** Whether hovered pillars highlight with the accent color. Default: true */
@@ -158,17 +161,18 @@ export function getCommitHeight(count: number): number {
 }
 
 /**
- * Deterministically generates a 14-week (14 cols x 7 rows = 98 days) contribution matrix
+ * Deterministically generates a timeline contribution matrix (full year 53 weeks or 14 weeks)
  */
 export function generateHeatmapMatrix(
   profile: HeatmapProfile = "maintainer",
   scheme: HeatmapSchemeKey = "default",
-  mode: HeatmapMode = "dark"
+  mode: HeatmapMode = "dark",
+  range: HeatmapRange = "year"
 ): {
   matrix: HeatmapNode[][];
   totalContributions: number;
 } {
-  const numWeeks = 14;
+  const numWeeks = range === "14w" ? 14 : 53;
   const numDays = 7;
   const palette = (GITHUB_SCHEMES[scheme] || GITHUB_SCHEMES.default)[mode];
   let totalContributions = 0;
@@ -196,7 +200,7 @@ export function generateHeatmapMatrix(
           count = rnd > 0.4 ? Math.floor(rnd * 4) : 0;
         } else {
           count = Math.floor(3 + rnd * 11);
-          if ((w === 4 && d === 2) || (w === 9 && d === 3) || (w === 12 && d === 1)) {
+          if ((w % 5 === 0 && d === 2) || (w % 7 === 0 && d === 3) || (w === numWeeks - 2 && d === 1)) {
             count = 16 + Math.floor(rnd * 6);
           }
         }
@@ -223,6 +227,7 @@ export function generateHeatmapMatrix(
       const height = getCommitHeight(count);
 
       const formattedDate = cellDate.toLocaleDateString("en-US", {
+        weekday: "short",
         month: "short",
         day: "numeric",
       });
@@ -233,8 +238,8 @@ export function generateHeatmapMatrix(
         count,
         color,
         height,
-        label: `${DAY_NAMES[dayOfWeek]}, ${formattedDate}`,
-        date: formattedDate,
+        label: formattedDate,
+        date: cellDate.toISOString().slice(0, 10),
       });
     }
     cols.push(col);
@@ -244,23 +249,29 @@ export function generateHeatmapMatrix(
 }
 
 /**
- * Generates matrix using Thamindu's real 14-week GitHub contributions
+ * Generates matrix using Thamindu's real GitHub contributions (full year or 14 weeks)
  */
 export function generateThaminduMatrix(
   scheme: HeatmapSchemeKey = "default",
-  mode: HeatmapMode = "dark"
+  mode: HeatmapMode = "dark",
+  range: HeatmapRange = "year"
 ): {
   matrix: HeatmapNode[][];
   totalContributions: number;
 } {
   const palette = (GITHUB_SCHEMES[scheme] || GITHUB_SCHEMES.default)[mode];
+  const totalWeeks = THAMINDU_TOTAL_WEEKS;
+  const targetWeeks = range === "14w" ? 14 : totalWeeks;
+  const startWeek = range === "14w" ? totalWeeks - 14 : 0;
+
   const cols: HeatmapNode[][] = [];
   let totalContributions = 0;
 
-  for (let w = 0; w < 14; w++) {
+  for (let w = 0; w < targetWeeks; w++) {
+    const actualWeekIdx = startWeek + w;
     const col: HeatmapNode[] = [];
     for (let d = 0; d < 7; d++) {
-      const idx = w * 7 + d;
+      const idx = actualWeekIdx * 7 + d;
       const item = THAMINDU_CONTRIBUTIONS[idx];
       const count = item?.count ?? 0;
       totalContributions += count;
@@ -269,12 +280,15 @@ export function generateThaminduMatrix(
       const color = palette.colors[tier];
       const height = getCommitHeight(count);
 
-      const dObj = item ? new Date(item.date + "T00:00:00") : new Date();
-      const formattedDate = dObj.toLocaleDateString("en-US", {
-        month: "short",
-        day: "numeric",
-      });
-      const dayOfWeek = (dObj.getDay() + 6) % 7;
+      let formattedDate = "";
+      if (item?.date) {
+        const dObj = new Date(item.date + "T00:00:00");
+        formattedDate = dObj.toLocaleDateString("en-US", {
+          weekday: "short",
+          month: "short",
+          day: "numeric",
+        });
+      }
 
       col.push({
         col: w,
@@ -282,8 +296,8 @@ export function generateThaminduMatrix(
         count,
         color,
         height,
-        label: `${DAY_NAMES[dayOfWeek]}, ${formattedDate}`,
-        date: formattedDate,
+        label: formattedDate,
+        date: item?.date || "",
       });
     }
     cols.push(col);
@@ -508,6 +522,7 @@ export function Heatmap({
   scheme = "default",
   mode = "dark",
   profile = "thamindu",
+  range = "year",
   intensity = 0.6,
   colorOnHover = true,
   onClick,
@@ -527,13 +542,17 @@ export function Heatmap({
       return providedData;
     }
     if (profile === "thamindu") {
-      return generateThaminduMatrix(scheme, mode).matrix;
+      return generateThaminduMatrix(scheme, mode, range).matrix;
     }
-    return generateHeatmapMatrix(profile, scheme, mode).matrix;
-  }, [providedData, profile, scheme, mode]);
+    return generateHeatmapMatrix(profile, scheme, mode, range).matrix;
+  }, [providedData, profile, scheme, mode, range]);
 
   const numCols = resolvedMatrix.length;
   const numRows = resolvedMatrix[0]?.length || 7;
+
+  const isWide = numCols > 20;
+  const VIEW_W = isWide ? 660 : 320;
+  const VIEW_H = isWide ? 390 : 200;
 
   const CELL = 14;
   const FOOT = 11;
@@ -549,9 +568,6 @@ export function Heatmap({
   const overRef = useRef<[number, number] | null>(null);
   const shockwaveRef = useRef<{ col: number; row: number; time: number } | null>(null);
   const timeRef = useRef(0);
-
-  const VIEW_W = 320;
-  const VIEW_H = 200;
 
   // Setup Camera via useMemo
   const C = useMemo(() => {
@@ -577,7 +593,7 @@ export function Heatmap({
       16
     );
     return cam;
-  }, [EXT_X, EXT_Y, PB, HMAX]);
+  }, [EXT_X, EXT_Y, PB, HMAX, VIEW_W, VIEW_H]);
 
   const P = useMemo(() => proj(C), [C]);
   const front = useMemo(() => facing(C), [C]);
@@ -679,7 +695,7 @@ export function Heatmap({
         // Apply shockwave bump if active
         if (shock && shockAge < 1.0) {
           const sDist = Math.hypot(c.i - shock.col, c.j - shock.row);
-          const waveFront = shockAge * 8;
+          const waveFront = shockAge * (isWide ? 26 : 8);
           const waveDist = Math.abs(sDist - waveFront);
           if (waveDist < 1.8) {
             const shockLift = (1 - waveDist / 1.8) * (1 - shockAge) * 20;
@@ -711,13 +727,13 @@ export function Heatmap({
 
     raf = requestAnimationFrame(loop);
     return () => cancelAnimationFrame(raf);
-  }, [numCols, numRows, CELL, HMAX, P, front, intensity, columns]);
+  }, [numCols, numRows, CELL, HMAX, P, front, intensity, columns, isWide]);
 
   // Reset hover on matrix change
   useEffect(() => {
     hoverRef.current = null;
     overRef.current = null;
-  }, [numCols, numRows, scheme, mode, profile]);
+  }, [numCols, numRows, scheme, mode, profile, range]);
 
   const handlePointerMove = useCallback(
     (e: React.PointerEvent<SVGSVGElement>) => {
@@ -754,7 +770,7 @@ export function Heatmap({
         onHover?.(colMeta ? { ...colMeta.node, height: sp ? sp.x : colMeta.h0 } : null);
       }
     },
-    [C, CELL, numCols, numRows, colorOnHover, columns, onHover]
+    [C, CELL, numCols, numRows, colorOnHover, columns, onHover, VIEW_W, VIEW_H]
   );
 
   const handlePointerLeave = useCallback(() => {
@@ -790,7 +806,7 @@ export function Heatmap({
         onClick?.({ ...colMeta.node, height: sp ? sp.x : colMeta.h0 });
       }
     },
-    [C, CELL, numCols, numRows, columns, onClick]
+    [C, CELL, numCols, numRows, columns, onClick, VIEW_W, VIEW_H]
   );
 
   return (
@@ -799,7 +815,7 @@ export function Heatmap({
         .hl-heatmap-${instanceId} {
           position: relative;
           display: block;
-          aspect-ratio: 16 / 10;
+          aspect-ratio: ${VIEW_W} / ${VIEW_H};
           width: 100%;
           touch-action: none;
           user-select: none;

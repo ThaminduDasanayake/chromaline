@@ -13,6 +13,7 @@ export function HeatmapCardPreview() {
           scheme="default"
           mode="dark"
           profile="thamindu"
+          range="14w"
           colorOnHover
           onHover={setHoveredNode}
         />

@@ -6,6 +6,7 @@ import {
   HeatmapSchemeKey,
   HeatmapMode,
   HeatmapProfile,
+  HeatmapRange,
   HeatmapNode,
   GITHUB_SCHEMES,
   generateHeatmapMatrix,
@@ -53,34 +54,41 @@ const CODE_EXAMPLE_LINES = [
   {
     num: 6,
     parts: [
+      { text: '      profile="thamindu"' },
+      { text: ' // "thamindu" | "maintainer" | "weekend" | "sprint"', cls: "text-slate-400" },
+    ],
+  },
+  {
+    num: 7,
+    parts: [
+      { text: '      range="year"' },
+      { text: ' // "year" (full 52w) | "14w"', cls: "text-slate-400" },
+    ],
+  },
+  {
+    num: 8,
+    parts: [
       { text: '      scheme="default"' },
       { text: ' // "default" | "winter" | "halloween"', cls: "text-slate-400" },
     ],
   },
   {
-    num: 7,
+    num: 9,
     parts: [
       { text: '      mode="dark"' },
       { text: ' // "dark" | "light"', cls: "text-slate-400" },
     ],
   },
   {
-    num: 8,
-    parts: [
-      { text: '      profile="thamindu"' },
-      { text: ' // "thamindu" | "maintainer" | "weekend" | "sprint"', cls: "text-slate-400" },
-    ],
-  },
-  {
-    num: 9,
+    num: 10,
     parts: [{ text: "      colorOnHover" }],
   },
   {
-    num: 10,
+    num: 11,
     parts: [{ text: "    />", cls: "text-slate-500" }],
   },
-  { num: 11, parts: [{ text: "  );" }] },
-  { num: 12, parts: [{ text: "}" }] },
+  { num: 12, parts: [{ text: "  );" }] },
+  { num: 13, parts: [{ text: "}" }] },
 ];
 
 const CODE_EXAMPLE_TEXT = `import { Heatmap } from "@/components/ui/heatmap";
@@ -88,15 +96,28 @@ const CODE_EXAMPLE_TEXT = `import { Heatmap } from "@/components/ui/heatmap";
 export default function ContributionDemo() {
   return (
     <Heatmap
+      profile="thamindu" // "thamindu" | "maintainer" | "weekend" | "sprint"
+      range="year" // "year" (full 52w) | "14w"
       scheme="default" // "default" | "winter" | "halloween"
       mode="dark" // "dark" | "light"
-      profile="thamindu" // "thamindu" | "maintainer" | "weekend" | "sprint"
       colorOnHover
     />
   );
 }`;
 
 const PROPS_DATA: PropItem[] = [
+  {
+    name: "profile",
+    type: '"thamindu" | "maintainer" | "weekend" | "sprint"',
+    default: '"thamindu"',
+    desc: "Activity profile preset. 'thamindu' loads real 1,572 GitHub commits; others synthesize patterns.",
+  },
+  {
+    name: "range",
+    type: '"year" | "14w"',
+    default: '"year"',
+    desc: "Timeline range: 'year' (full 52-53 weeks / 365+ days) or '14w' (14 weeks).",
+  },
   {
     name: "scheme",
     type: '"default" | "winter" | "halloween"',
@@ -110,16 +131,10 @@ const PROPS_DATA: PropItem[] = [
     desc: "Visual theme mode. In dark mode, peaks glow bright; in light mode, peaks saturate dark.",
   },
   {
-    name: "profile",
-    type: '"thamindu" | "maintainer" | "weekend" | "sprint"',
-    default: '"thamindu"',
-    desc: "Activity profile preset. 'thamindu' loads real 1,016 GitHub commits; others synthesize patterns.",
-  },
-  {
     name: "data",
     type: "HeatmapNode[][]",
     default: "undefined",
-    desc: "2D matrix of nodes: data[col][row]. If omitted, generates realistic 14-week timeline.",
+    desc: "2D matrix of nodes: data[col][row]. If omitted, generates timeline based on profile and range.",
   },
   {
     name: "colorOnHover",
@@ -154,9 +169,10 @@ const PROPS_DATA: PropItem[] = [
 ];
 
 export default function HeatmapDocumentationPage() {
+  const [range, setRange] = useState<HeatmapRange>("year");
+  const [profile, setProfile] = useState<HeatmapProfile>("thamindu");
   const [scheme, setScheme] = useState<HeatmapSchemeKey>("default");
   const [mode, setMode] = useState<HeatmapMode>("dark");
-  const [profile, setProfile] = useState<HeatmapProfile>("thamindu");
   const [hoveredNode, setHoveredNode] = useState<HeatmapNode | null>(null);
 
   const activePalette = (GITHUB_SCHEMES[scheme] || GITHUB_SCHEMES.default)[mode];
@@ -164,20 +180,20 @@ export default function HeatmapDocumentationPage() {
 
   const { matrix, totalContributions } = useMemo(() => {
     if (profile === "thamindu") {
-      return generateThaminduMatrix(scheme, mode);
+      return generateThaminduMatrix(scheme, mode, range);
     }
-    return generateHeatmapMatrix(profile, scheme, mode);
-  }, [profile, scheme, mode]);
+    return generateHeatmapMatrix(profile, scheme, mode, range);
+  }, [profile, scheme, mode, range]);
 
   return (
     <DocsLayout
       title="Heatmap"
-      description="An interactive 3D isometric contribution calendar on a plinth. Features decoupled Dark & Light modes, official GitHub color schemes (Classic Green, Winter, and Halloween), and tactile kinematics."
+      description="An interactive 3D isometric contribution calendar on a plinth. Features full 52-week whole-year timelines, decoupled Dark & Light modes, official GitHub color schemes (Classic Green, Winter, and Halloween), and tactile kinematics."
       icon={<GitCommitIcon size={14} weight="bold" />}
     >
       {/* 1. Preview */}
       <ComponentPreview
-        canvasClassName={`min-h-[400px] flex-col p-6 sm:p-8 transition-colors duration-300 ${activePalette.canvasBg}`}
+        canvasClassName={`min-h-[460px] flex-col p-6 sm:p-8 transition-colors duration-300 ${activePalette.canvasBg}`}
         controls={
           <div className="flex flex-col gap-6">
             {/* Header info */}
@@ -198,21 +214,58 @@ export default function HeatmapDocumentationPage() {
                         github.com/ThaminduDasanayake
                       </a>
                       <span className="ml-1.5 font-normal text-slate-500">
-                        · Real 14-Week Skyline
+                        · {range === "year" ? "Full Year Skyline (53 Weeks)" : "14-Week Skyline"}
                       </span>
                     </>
                   ) : (
-                    "14-Week Activity Timeline"
+                    range === "year"
+                      ? "Full Year Activity Timeline (53 Weeks)"
+                      : "14-Week Activity Timeline"
                   )}
                 </span>
               </div>
               <span className="font-mono text-xs text-slate-500">
-                <strong className="text-slate-900">{totalContributions.toLocaleString()}</strong> contributions
+                <strong className="text-slate-900">{totalContributions.toLocaleString()}</strong>{" "}
+                contributions {range === "year" ? "in past year" : "in 14 weeks"}
               </span>
             </div>
 
             {/* SelectBar Controls Grid */}
-            <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
+            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+              {/* Timeline Range SelectBar */}
+              <div>
+                <label className="text-xs font-semibold text-slate-900">Timeline</label>
+                <div className="mt-2">
+                  <SelectBar<HeatmapRange>
+                    size="xs"
+                    items={[
+                      { key: "year", label: "Full Year (52w)" },
+                      { key: "14w", label: "14 Weeks" },
+                    ]}
+                    value={range}
+                    onChange={setRange}
+                  />
+                </div>
+              </div>
+
+              {/* Activity Profile SelectBar */}
+              <div>
+                <label className="text-xs font-semibold text-slate-900">Pattern</label>
+                <div className="mt-2">
+                  <SelectBar<HeatmapProfile>
+                    size="xs"
+                    items={[
+                      { key: "thamindu", label: "@Thamindu" },
+                      { key: "maintainer", label: "Maintainer" },
+                      { key: "weekend", label: "Weekend" },
+                      { key: "sprint", label: "Sprint" },
+                    ]}
+                    value={profile}
+                    onChange={setProfile}
+                  />
+                </div>
+              </div>
+
               {/* Color Scheme SelectBar */}
               <div>
                 <label className="text-xs font-semibold text-slate-900">Color Scheme</label>
@@ -245,31 +298,15 @@ export default function HeatmapDocumentationPage() {
                   />
                 </div>
               </div>
-
-              {/* Activity Profile SelectBar */}
-              <div>
-                <label className="text-xs font-semibold text-slate-900">Pattern</label>
-                <div className="mt-2">
-                  <SelectBar<HeatmapProfile>
-                    size="xs"
-                    items={[
-                      { key: "thamindu", label: "@Thamindu" },
-                      { key: "maintainer", label: "Maintainer" },
-                      { key: "weekend", label: "Weekend" },
-                      { key: "sprint", label: "Sprint" },
-                    ]}
-                    value={profile}
-                    onChange={setProfile}
-                  />
-                </div>
-              </div>
             </div>
 
             {/* Bottom Scale Legend */}
             <div className="flex flex-wrap items-center justify-between gap-4 border-t border-slate-100 pt-3 text-xs text-slate-500">
               <div className="flex items-center gap-2">
                 <CalendarBlankIcon size={14} weight="bold" className="text-slate-400" />
-                <span>$X$: 14 Weeks · $Y$: Mon–Sun (7 Days) · $Z$: Commit Volume</span>
+                <span>
+                  $X$: {range === "year" ? "53 Weeks (Full Year)" : "14 Weeks"} · $Y$: Sun–Sat (7 Days) · $Z$: Commit Volume
+                </span>
               </div>
 
               <div className="flex items-center gap-1.5">
@@ -288,11 +325,12 @@ export default function HeatmapDocumentationPage() {
           </div>
         }
       >
-        <div className="w-full max-w-[580px]">
+        <div className="w-full max-w-[840px] px-1 sm:px-2">
           <Heatmap
             data={matrix}
             scheme={scheme}
             mode={mode}
+            range={range}
             colorOnHover
             onHover={setHoveredNode}
           />
