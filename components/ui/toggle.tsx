@@ -1,13 +1,6 @@
 "use client";
 
-import React, {
-  useCallback,
-  useEffect,
-  useId,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import React, { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
 import {
   animate,
   motion,
@@ -378,7 +371,7 @@ export function Toggle({
             setToggle(!on);
           }
         }}
-        className="relative block cursor-pointer p-0 border-0 rounded-full outline-none touch-none transition-colors duration-300 ease-out motion-reduce:duration-100 focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+        className="relative block cursor-pointer touch-none rounded-full border-0 p-0 transition-colors duration-300 ease-out outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 motion-reduce:duration-100"
         style={{
           width: `${cfg.trackWidth}px`,
           height: `${cfg.trackHeight}px`,
@@ -388,13 +381,13 @@ export function Toggle({
       >
         {/* Layer 1: Filtered Liquid Goo Layer (Underneath for trail & necking) */}
         <span
-          className="absolute inset-0 block overflow-visible pointer-events-none"
+          className="pointer-events-none absolute inset-0 block overflow-visible"
           aria-hidden="true"
           style={{ filter: `url(#${filterId})` }}
         >
           {/* Secondary trailing droplet chasing on spring */}
           <motion.span
-            className="absolute left-0 top-1/2 rounded-full pointer-events-none transition-colors duration-300 ease-out motion-reduce:duration-100"
+            className="pointer-events-none absolute top-1/2 left-0 rounded-full transition-colors duration-300 ease-out motion-reduce:duration-100"
             style={{
               width: `${cfg.dropSize}px`,
               height: `${cfg.dropSize}px`,
@@ -406,7 +399,7 @@ export function Toggle({
 
           {/* Liquid bridge anchor underneath thumb */}
           <motion.span
-            className="absolute left-0 top-1/2 rounded-full pointer-events-none transition-colors duration-300 ease-out motion-reduce:duration-100"
+            className="pointer-events-none absolute top-1/2 left-0 rounded-full transition-colors duration-300 ease-out motion-reduce:duration-100"
             style={{
               width: `${cfg.thumbSize - 2}px`,
               height: `${cfg.thumbSize - 2}px`,
@@ -421,7 +414,7 @@ export function Toggle({
 
         {/* Layer 2: Pristine Unfiltered Vector Thumb (On top in exact register - ZERO blur) */}
         <motion.span
-          className="absolute left-0 top-1/2 rounded-full pointer-events-none transition-colors duration-300 ease-out motion-reduce:duration-100 shadow-2xs"
+          className="pointer-events-none absolute top-1/2 left-0 rounded-full shadow-2xs transition-colors duration-300 ease-out motion-reduce:duration-100"
           style={{
             width: `${cfg.thumbSize}px`,
             height: `${cfg.thumbSize}px`,

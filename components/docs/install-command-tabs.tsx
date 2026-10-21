@@ -21,10 +21,7 @@ const PACKAGE_MANAGERS: SelectBarItem<PackageManager>[] = [
 
 const emptySubscribe = () => () => {};
 
-export function InstallCommandTabs({
-  componentName,
-  baseUrl = SITE_URL,
-}: InstallCommandTabsProps) {
+export function InstallCommandTabs({ componentName, baseUrl = SITE_URL }: InstallCommandTabsProps) {
   const [packageManager, setPackageManager] = useState<PackageManager>("pnpm");
   const [copied, setCopied] = useState(false);
 
@@ -87,7 +84,7 @@ export function InstallCommandTabs({
       </div>
 
       {/* Command Code snippet block in light theme */}
-      <div className="overflow-x-auto p-4 sm:p-5 font-mono text-xs leading-relaxed text-slate-800">
+      <div className="overflow-x-auto p-4 font-mono text-xs leading-relaxed text-slate-800 sm:p-5">
         <code>{currentCommand}</code>
       </div>
     </div>

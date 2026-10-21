@@ -230,7 +230,7 @@ export default function ToggleDocumentationPage() {
                 <button
                   type="button"
                   onClick={() => setIsCustomSize(!isCustomSize)}
-                  className="text-[10px] font-medium text-sky-600 hover:text-sky-700 underline"
+                  className="text-[10px] font-medium text-sky-600 underline hover:text-sky-700"
                 >
                   {isCustomSize ? "Presets" : "Custom"}
                 </button>
@@ -320,7 +320,7 @@ export default function ToggleDocumentationPage() {
                 onClick={handleReset}
                 title="Reset to defaults"
                 aria-label="Reset to defaults"
-                className="border border-slate-300/80 rounded-lg shadow-2xs"
+                className="rounded-lg border border-slate-300/80 shadow-2xs"
               >
                 <ArrowCounterClockwiseIcon size={14} weight="bold" />
               </Button>
@@ -347,10 +347,7 @@ export default function ToggleDocumentationPage() {
 
       {/* 4. Usage */}
       <div className="mt-12">
-        <UsageSection
-          codeLines={CODE_EXAMPLE_LINES}
-          codeText={CODE_EXAMPLE_TEXT}
-        />
+        <UsageSection codeLines={CODE_EXAMPLE_LINES} codeText={CODE_EXAMPLE_TEXT} />
       </div>
 
       {/* 5. Props Reference */}
