@@ -88,6 +88,22 @@
           "target": "components/ui/heatmap.tsx"
         }
       ]
+    },
+    {
+      "name": "toggle",
+      "type": "registry:ui",
+      "title": "Toggle",
+      "description": "Organic liquid goo switch with two-blob chasing kinematics, pointer drag tracking, and SVG metaball necking.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "files": [
+        {
+          "path": "components/ui/toggle.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/toggle.tsx"
+        }
+      ]
     }
   ]
 }

@@ -6,3 +6,4 @@ export { LinkFolderTrayPreview } from "./link-folder-tray-preview";
 export { SelectBarCardPreview } from "./select-bar-card-preview";
 export { SeekCardPreview } from "./seek-card-preview";
 export { HeatmapCardPreview } from "./heatmap-card-preview";
+export { ToggleCardPreview } from "./toggle-card-preview";

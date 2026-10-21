@@ -9,7 +9,7 @@ function buildRegistry() {
   const selectBarPath = path.join(__dirname, "../components/ui/select-bar.tsx");
   const seekPath = path.join(__dirname, "../components/ui/seek.tsx");
   const heatmapPath = path.join(__dirname, "../components/ui/heatmap.tsx");
-  const thaminduDataPath = path.join(__dirname, "../components/ui/thamindu-data.ts");
+  const togglePath = path.join(__dirname, "../components/ui/toggle.tsx");
 
   if (!fs.existsSync(trayPath)) {
     console.error("Component not found:", trayPath);
@@ -24,9 +24,7 @@ function buildRegistry() {
     : "";
   const seekContent = fs.existsSync(seekPath) ? fs.readFileSync(seekPath, "utf8") : "";
   const heatmapContent = fs.existsSync(heatmapPath) ? fs.readFileSync(heatmapPath, "utf8") : "";
-  const thaminduDataContent = fs.existsSync(thaminduDataPath)
-    ? fs.readFileSync(thaminduDataPath, "utf8")
-    : "";
+  const toggleContent = fs.existsSync(togglePath) ? fs.readFileSync(togglePath, "utf8") : "";
 
   // 1. Full Folder Tray with Folder Support
   const trayRegistryItem = {
@@ -161,16 +159,27 @@ function buildRegistry() {
         type: "registry:ui",
         target: "components/ui/heatmap.tsx",
       },
-      ...(thaminduDataContent
-        ? [
-            {
-              path: "components/ui/thamindu-data.ts",
-              content: thaminduDataContent,
-              type: "registry:ui",
-              target: "components/ui/thamindu-data.ts",
-            },
-          ]
-        : []),
+    ],
+  };
+
+  // 7. Liquid Goo Toggle Component
+  const toggleRegistryItem = {
+    $schema: "https://ui.shadcn.com/schema/registry-item.json",
+    name: "toggle",
+    type: "registry:ui",
+    title: "Toggle",
+    description:
+      "Organic liquid goo switch with two-blob chasing kinematics, pointer drag tracking, and SVG metaball necking.",
+    dependencies: ["framer-motion"],
+    devDependencies: [],
+    registryDependencies: [],
+    files: [
+      {
+        path: "components/ui/toggle.tsx",
+        content: toggleContent,
+        type: "registry:ui",
+        target: "components/ui/toggle.tsx",
+      },
     ],
   };
 
@@ -193,6 +202,7 @@ function buildRegistry() {
   );
   fs.writeFileSync(path.join(outDir, "seek.json"), JSON.stringify(seekRegistryItem, null, 2));
   fs.writeFileSync(path.join(outDir, "heatmap.json"), JSON.stringify(heatmapRegistryItem, null, 2));
+  fs.writeFileSync(path.join(outDir, "toggle.json"), JSON.stringify(toggleRegistryItem, null, 2));
 
   const indexRegistry = {
     $schema: "https://ui.shadcn.com/schema/registry.json",
@@ -205,6 +215,7 @@ function buildRegistry() {
       selectBarRegistryItem,
       seekRegistryItem,
       heatmapRegistryItem,
+      toggleRegistryItem,
     ],
   };
   fs.writeFileSync(path.join(outDir, "index.json"), JSON.stringify(indexRegistry, null, 2));
@@ -305,12 +316,27 @@ function buildRegistry() {
           },
         ],
       },
+      {
+        name: "toggle",
+        type: "registry:ui",
+        title: "Toggle",
+        description:
+          "Organic liquid goo switch with two-blob chasing kinematics, pointer drag tracking, and SVG metaball necking.",
+        dependencies: ["framer-motion"],
+        files: [
+          {
+            path: "components/ui/toggle.tsx",
+            type: "registry:ui",
+            target: "components/ui/toggle.tsx",
+          },
+        ],
+      },
     ],
   };
   fs.writeFileSync(path.join(__dirname, "../registry.json"), JSON.stringify(rootRegistry, null, 2));
 
   console.log(
-    "✓ Chromaline registry generated at public/r/folder-tray.json, public/r/folder.json, public/r/button.json, public/r/select-bar.json, public/r/seek.json, and public/r/heatmap.json"
+    "✓ Chromaline registry generated at public/r/folder-tray.json, public/r/folder.json, public/r/button.json, public/r/select-bar.json, public/r/seek.json, public/r/heatmap.json, and public/r/toggle.json"
   );
 }
 
