@@ -780,7 +780,21 @@ export function Heatmap({
 
         const h0 = node.height ?? (node.count !== undefined ? getCommitHeight(node.count) : 2.5);
         const color = node.color || palette.colors[0];
-        const isDark = isDarkColor(color);
+        let isDark = isDarkColor(color);
+
+        // For halloween theme:
+        // - Dark mode: all active contribution bars (tiers 1-4) use dark outline,
+        //   while tier 0 (zero contributions / less) keeps the light outline.
+        // - Light mode: everything uses the dark outline (no white outlines).
+        if (scheme === "halloween") {
+          if (mode === "dark") {
+            const isZero =
+              node.count !== undefined ? node.count === 0 : color === palette.colors[0];
+            isDark = isZero;
+          } else {
+            isDark = false;
+          }
+        }
 
         const x0 = i * CELL + (CELL - FOOT) / 2;
         const y0 = j * CELL + (CELL - FOOT) / 2;
@@ -795,7 +809,7 @@ export function Heatmap({
       }
     }
     return colsList;
-  }, [numCols, numRows, resolvedMatrix, palette, CELL, FOOT, P]);
+  }, [numCols, numRows, resolvedMatrix, palette, CELL, FOOT, P, scheme, mode]);
 
   // Node element references for direct SVG path mutation without re-renders
   const domRefs = useRef<
@@ -1172,11 +1186,11 @@ export function Heatmap({
         }
 
         .hl-heatmap-${instanceId} .is-light-bar .col-sil {
-          stroke: ${mode === "dark" ? "rgba(0, 0, 0, 0.45)" : "rgba(15, 23, 42, 0.28)"};
+          stroke: ${mode === "dark" ? "rgba(0, 0, 0, 0.50)" : "rgba(15, 23, 42, 0.30)"};
         }
 
         .hl-heatmap-${instanceId} .is-light-bar .col-cr {
-          stroke: ${mode === "dark" ? "rgba(0, 0, 0, 0.25)" : "rgba(15, 23, 42, 0.14)"};
+          stroke: ${mode === "dark" ? "rgba(0, 0, 0, 0.28)" : "rgba(15, 23, 42, 0.16)"};
         }
 
         .hl-heatmap-${instanceId} .is-light-bar .col-sil.hovered {

@@ -6,7 +6,6 @@ import {
   HeatmapSchemeKey,
   HeatmapMode,
   HeatmapRange,
-  HeatmapNode,
   GITHUB_SCHEMES,
   generateThaminduMatrix,
 } from "@/components/ui/heatmap";
@@ -147,12 +146,11 @@ export default function HeatmapDocumentationPage() {
   const [range, setRange] = useState<HeatmapRange>("year");
   const [scheme, setScheme] = useState<HeatmapSchemeKey>("default");
   const [mode, setMode] = useState<HeatmapMode>("dark");
-  const [hoveredNode, setHoveredNode] = useState<HeatmapNode | null>(null);
 
   const activePalette = (GITHUB_SCHEMES[scheme] || GITHUB_SCHEMES.default)[mode];
   const isDark = mode === "dark";
 
-  const { matrix, totalContributions } = useMemo(() => {
+  const { matrix } = useMemo(() => {
     return generateThaminduMatrix(scheme, mode, range);
   }, [scheme, mode, range]);
 
@@ -173,20 +171,6 @@ export default function HeatmapDocumentationPage() {
         }}
         controls={
           <div className="flex flex-col gap-6">
-            {/* Header info */}
-            <div className="flex flex-wrap items-center justify-between gap-4">
-              <div className="flex items-center gap-2">
-                <span className="flex h-5 w-5 items-center justify-center rounded-md bg-emerald-50 text-emerald-600">
-                  <GitCommitIcon size={13} weight="bold" />
-                </span>
-                <span className="text-xs font-semibold text-slate-900">Contributions</span>
-              </div>
-              <span className="font-mono text-xs text-slate-500">
-                <strong className="text-slate-900">{totalContributions.toLocaleString()}</strong>{" "}
-                contributions {range === "year" ? "in past year" : "in 14 weeks"}
-              </span>
-            </div>
-
             {/* SelectBar Controls Grid */}
             <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
               {/* Timeline Range SelectBar */}
@@ -264,38 +248,7 @@ export default function HeatmapDocumentationPage() {
             mode={mode}
             range={range}
             colorOnHover
-            onHover={setHoveredNode}
           />
-        </div>
-
-        {/* Live Hover Inspector Badge */}
-        <div
-          className={`mt-4 flex items-center gap-2.5 rounded-full px-4 py-1.5 font-mono text-xs shadow-2xs transition-all ${
-            isDark
-              ? "border border-white/10 bg-[#161b22]/90 text-slate-200 backdrop-blur-md"
-              : "border border-slate-200/90 bg-white/95 text-slate-700 backdrop-blur-md"
-          }`}
-        >
-          {hoveredNode ? (
-            <>
-              <span
-                className="inline-block h-2.5 w-2.5 rounded-full"
-                style={{ backgroundColor: hoveredNode.color || activePalette.accent }}
-              />
-              <span className={`font-semibold ${isDark ? "text-white" : "text-slate-900"}`}>
-                {hoveredNode.label}:
-              </span>
-              <span>
-                {hoveredNode.count === 0
-                  ? "No contributions"
-                  : `${hoveredNode.count} contribution${hoveredNode.count === 1 ? "" : "s"}`}
-              </span>
-            </>
-          ) : (
-            <span className="text-slate-400">
-              Hover over any pillar to inspect date and commit volume
-            </span>
-          )}
         </div>
       </ComponentPreview>
 
