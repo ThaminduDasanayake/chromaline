@@ -156,7 +156,6 @@ export const GITHUB_SCHEMES: Record<HeatmapSchemeKey, Record<HeatmapMode, Heatma
   },
 };
 
-
 export interface HeatmapNode {
   row: number;
   col: number;

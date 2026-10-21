@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { Toggle, ToggleSize, ToggleSizePreset, ToggleVariant } from "@/components/ui/toggle";
 import { SelectBar } from "@/components/ui/select-bar";
+import { Button } from "@/components/ui/button";
 import { ToggleRightIcon, ArrowCounterClockwiseIcon } from "@phosphor-icons/react";
 import {
   DocsLayout,
@@ -229,7 +230,7 @@ export default function ToggleDocumentationPage() {
                 <button
                   type="button"
                   onClick={() => setIsCustomSize(!isCustomSize)}
-                  className="text-[10px] font-medium text-sky-600 hover:text-sky-700 underline"
+                  className="text-[10px] font-medium text-sky-600 underline hover:text-sky-700"
                 >
                   {isCustomSize ? "Presets" : "Custom"}
                 </button>
@@ -307,15 +308,22 @@ export default function ToggleDocumentationPage() {
 
             {/* Reset button */}
             <div className="flex justify-end pb-0.5 sm:justify-start">
-              <button
-                type="button"
+              <Button
+                size="sm"
+                depth="3px"
+                radius="0.5rem"
+                faceColor="#f1f5f9"
+                faceHighlight="#ffffff"
+                contentColor="#0f172a"
+                baseColor="#cbd5e1"
+                baseShadow="#94a3b8"
                 onClick={handleReset}
                 title="Reset to defaults"
                 aria-label="Reset to defaults"
-                className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-400 hover:bg-slate-50 hover:text-slate-700 transition-colors shadow-2xs cursor-pointer"
+                className="rounded-lg border border-slate-300/80 shadow-2xs"
               >
                 <ArrowCounterClockwiseIcon size={14} weight="bold" />
-              </button>
+              </Button>
             </div>
           </div>
         }
@@ -339,10 +347,7 @@ export default function ToggleDocumentationPage() {
 
       {/* 4. Usage */}
       <div className="mt-12">
-        <UsageSection
-          codeLines={CODE_EXAMPLE_LINES}
-          codeText={CODE_EXAMPLE_TEXT}
-        />
+        <UsageSection codeLines={CODE_EXAMPLE_LINES} codeText={CODE_EXAMPLE_TEXT} />
       </div>
 
       {/* 5. Props Reference */}

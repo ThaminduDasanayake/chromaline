@@ -261,13 +261,7 @@ export default function HeatmapDocumentationPage() {
         }
       >
         <div className="w-full max-w-[840px] px-1 sm:px-2">
-          <Heatmap
-            data={matrix}
-            scheme={scheme}
-            mode={mode}
-            range={range}
-            colorOnHover
-          />
+          <Heatmap data={matrix} scheme={scheme} mode={mode} range={range} colorOnHover />
         </div>
       </ComponentPreview>
 
