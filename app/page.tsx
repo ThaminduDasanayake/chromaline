@@ -8,6 +8,7 @@ import {
   SelectBarCardPreview,
   SeekCardPreview,
   HeatmapCardPreview,
+  ToggleCardPreview,
 } from "@/components/showcase";
 
 export default function ChromalineHomePage() {
@@ -83,6 +84,15 @@ export default function ChromalineHomePage() {
             href="/components/heatmap"
           >
             <HeatmapCardPreview />
+          </ComponentCard>
+
+          {/* Card 7: Toggle */}
+          <ComponentCard
+            title="Toggle"
+            description="Liquid goo switch driven by two-blob spring kinematics, dragging pointer capture, and SVG alpha thresholding."
+            href="/components/toggle"
+          >
+            <ToggleCardPreview />
           </ComponentCard>
         </div>
       </main>
