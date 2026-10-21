@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useCallback, useEffect, useId, useMemo, useRef } from "react";
-import { THAMINDU_CONTRIBUTIONS, THAMINDU_TOTAL_WEEKS } from "./thamindu-data";
+import React, {useCallback, useEffect, useId, useMemo, useRef} from "react";
+import {THAMINDU_CONTRIBUTIONS, THAMINDU_TOTAL_WEEKS} from "./thamindu-data";
 
 /* ══ Heatmap ═══════════════════════════════════════════════
    An interactive 3D isometric contribution heatmap on a plinth.
@@ -16,7 +16,6 @@ import { THAMINDU_CONTRIBUTIONS, THAMINDU_TOTAL_WEEKS } from "./thamindu-data";
 
 export type HeatmapSchemeKey = "default" | "winter" | "halloween";
 export type HeatmapMode = "dark" | "light";
-export type HeatmapProfile = "thamindu" | "maintainer" | "weekend" | "sprint";
 export type HeatmapRange = "year" | "14w";
 
 export interface HeatmapPalette {
@@ -169,7 +168,6 @@ export const GITHUB_SCHEMES: Record<HeatmapSchemeKey, Record<HeatmapMode, Heatma
   },
 };
 
-export const DAY_NAMES = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
 export interface HeatmapNode {
   row: number;
@@ -289,116 +287,116 @@ export function getCommitHeight(count: number, maxCount: number = 25, level?: nu
 /**
  * Deterministically generates a timeline contribution matrix (full year 53 weeks or 14 weeks)
  */
-export function generateHeatmapMatrix(
-  profile: HeatmapProfile = "maintainer",
-  scheme: HeatmapSchemeKey = "default",
-  mode: HeatmapMode = "dark",
-  range: HeatmapRange = "year"
-): {
-  matrix: HeatmapNode[][];
-  totalContributions: number;
-} {
-  const numWeeks = range === "14w" ? 14 : 53;
-  const numDays = 7;
-  const palette = (GITHUB_SCHEMES[scheme] || GITHUB_SCHEMES.default)[mode];
-  let totalContributions = 0;
-
-  const baseDate = new Date(2026, 9, 20); // Oct 20, 2026
-
-  // Pass 1: compute daily counts and find max activity
-  const rawCells: { w: number; d: number; count: number; dateStr: string; dayOfWeek: number }[] =
-    [];
-  let maxCount = 1;
-
-  for (let w = 0; w < numWeeks; w++) {
-    for (let d = 0; d < numDays; d++) {
-      const daysAgo = (numWeeks - 1 - w) * 7 + (numDays - 1 - d);
-      const cellDate = new Date(baseDate);
-      cellDate.setDate(cellDate.getDate() - daysAgo);
-
-      const dayOfWeek = (cellDate.getDay() + 6) % 7; // 0 = Mon, 6 = Sun
-      const isWeekend = dayOfWeek >= 5;
-
-      const seed = Math.sin(w * 17.3 + d * 31.7) * 10000;
-      const rnd = seed - Math.floor(seed);
-
-      let count = 0;
-
-      if (profile === "maintainer") {
-        if (isWeekend) {
-          count = rnd > 0.4 ? Math.floor(rnd * 4) : 0;
-        } else {
-          count = Math.floor(2 + rnd * 10);
-          if (
-            (w % 5 === 0 && d === 2) ||
-            (w % 7 === 0 && d === 3) ||
-            (w === numWeeks - 2 && d === 1)
-          ) {
-            count = 18 + Math.floor(rnd * 7);
-          }
-        }
-      } else if (profile === "weekend") {
-        if (isWeekend) {
-          count = Math.floor(8 + rnd * 16);
-        } else {
-          count = rnd > 0.65 ? Math.floor(rnd * 4) : 0;
-        }
-      } else {
-        const inSprintPeak = w % 3 === 2;
-        if (inSprintPeak && !isWeekend) {
-          count = Math.floor(10 + rnd * 14);
-        } else if (!isWeekend) {
-          count = Math.floor(2 + rnd * 6);
-        } else {
-          count = rnd > 0.5 ? Math.floor(rnd * 3) : 0;
-        }
-      }
-
-      totalContributions += count;
-      if (count > maxCount) maxCount = count;
-
-      const formattedDate = cellDate.toLocaleDateString("en-US", {
-        weekday: "short",
-        month: "short",
-        day: "numeric",
-      });
-
-      rawCells.push({
-        w,
-        d,
-        count,
-        dateStr: formattedDate,
-        dayOfWeek,
-      });
-    }
-  }
-
-  // Pass 2: map into matrix columns with dynamic quartile tiers
-  const cols: HeatmapNode[][] = [];
-  for (let w = 0; w < numWeeks; w++) {
-    const col: HeatmapNode[] = [];
-    for (let d = 0; d < numDays; d++) {
-      const cell = rawCells[w * numDays + d];
-      const count = cell.count;
-      const tier = calculateTier(count, maxCount);
-      const color = palette.colors[tier];
-      const height = getCommitHeight(count, maxCount, tier);
-
-      col.push({
-        col: w,
-        row: d,
-        count,
-        color,
-        height,
-        label: cell.dateStr,
-        date: cell.dateStr,
-      });
-    }
-    cols.push(col);
-  }
-
-  return { matrix: cols, totalContributions };
-}
+// export function generateHeatmapMatrix(
+//   profile: HeatmapProfile = "maintainer",
+//   scheme: HeatmapSchemeKey = "default",
+//   mode: HeatmapMode = "dark",
+//   range: HeatmapRange = "year"
+// ): {
+//   matrix: HeatmapNode[][];
+//   totalContributions: number;
+// } {
+//   const numWeeks = range === "14w" ? 14 : 53;
+//   const numDays = 7;
+//   const palette = (GITHUB_SCHEMES[scheme] || GITHUB_SCHEMES.default)[mode];
+//   let totalContributions = 0;
+//
+//   const baseDate = new Date(2026, 9, 20); // Oct 20, 2026
+//
+//   // Pass 1: compute daily counts and find max activity
+//   const rawCells: { w: number; d: number; count: number; dateStr: string; dayOfWeek: number }[] =
+//     [];
+//   let maxCount = 1;
+//
+//   for (let w = 0; w < numWeeks; w++) {
+//     for (let d = 0; d < numDays; d++) {
+//       const daysAgo = (numWeeks - 1 - w) * 7 + (numDays - 1 - d);
+//       const cellDate = new Date(baseDate);
+//       cellDate.setDate(cellDate.getDate() - daysAgo);
+//
+//       const dayOfWeek = (cellDate.getDay() + 6) % 7; // 0 = Mon, 6 = Sun
+//       const isWeekend = dayOfWeek >= 5;
+//
+//       const seed = Math.sin(w * 17.3 + d * 31.7) * 10000;
+//       const rnd = seed - Math.floor(seed);
+//
+//       let count = 0;
+//
+//       if (profile === "maintainer") {
+//         if (isWeekend) {
+//           count = rnd > 0.4 ? Math.floor(rnd * 4) : 0;
+//         } else {
+//           count = Math.floor(2 + rnd * 10);
+//           if (
+//             (w % 5 === 0 && d === 2) ||
+//             (w % 7 === 0 && d === 3) ||
+//             (w === numWeeks - 2 && d === 1)
+//           ) {
+//             count = 18 + Math.floor(rnd * 7);
+//           }
+//         }
+//       } else if (profile === "weekend") {
+//         if (isWeekend) {
+//           count = Math.floor(8 + rnd * 16);
+//         } else {
+//           count = rnd > 0.65 ? Math.floor(rnd * 4) : 0;
+//         }
+//       } else {
+//         const inSprintPeak = w % 3 === 2;
+//         if (inSprintPeak && !isWeekend) {
+//           count = Math.floor(10 + rnd * 14);
+//         } else if (!isWeekend) {
+//           count = Math.floor(2 + rnd * 6);
+//         } else {
+//           count = rnd > 0.5 ? Math.floor(rnd * 3) : 0;
+//         }
+//       }
+//
+//       totalContributions += count;
+//       if (count > maxCount) maxCount = count;
+//
+//       const formattedDate = cellDate.toLocaleDateString("en-US", {
+//         weekday: "short",
+//         month: "short",
+//         day: "numeric",
+//       });
+//
+//       rawCells.push({
+//         w,
+//         d,
+//         count,
+//         dateStr: formattedDate,
+//         dayOfWeek,
+//       });
+//     }
+//   }
+//
+//   // Pass 2: map into matrix columns with dynamic quartile tiers
+//   const cols: HeatmapNode[][] = [];
+//   for (let w = 0; w < numWeeks; w++) {
+//     const col: HeatmapNode[] = [];
+//     for (let d = 0; d < numDays; d++) {
+//       const cell = rawCells[w * numDays + d];
+//       const count = cell.count;
+//       const tier = calculateTier(count, maxCount);
+//       const color = palette.colors[tier];
+//       const height = getCommitHeight(count, maxCount, tier);
+//
+//       col.push({
+//         col: w,
+//         row: d,
+//         count,
+//         color,
+//         height,
+//         label: cell.dateStr,
+//         date: cell.dateStr,
+//       });
+//     }
+//     cols.push(col);
+//   }
+//
+//   return { matrix: cols, totalContributions };
+// }
 
 /**
  * Generates matrix using Thamindu's real GitHub contributions (full year or 14 weeks)
@@ -782,15 +780,31 @@ export function Heatmap({
         const color = node.color || palette.colors[0];
         let isDark = isDarkColor(color);
 
-        // For halloween theme:
-        // - Dark mode: all active contribution bars (tiers 1-4) use dark outline,
-        //   while tier 0 (zero contributions / less) keeps the light outline.
-        // - Light mode: everything uses the dark outline (no white outlines).
-        if (scheme === "halloween") {
+        // Theme-specific outline contrast rules:
+        // 1. Default theme:
+        //    - Dark mode: tier 4 (lightest green) and the previous 2 colors (tiers 3 & 2)
+        //      use the dark outline; tiers 0 & 1 use the light outline.
+        //    - Light mode: outlines are all dark.
+        if (scheme === "default") {
           if (mode === "dark") {
-            const isZero =
-              node.count !== undefined ? node.count === 0 : color === palette.colors[0];
-            isDark = isZero;
+            const isDarkOutlined =
+              color === palette.colors[4] ||
+              color === palette.colors[3] ||
+              color === "#56d364" ||
+              color === "#2ea043";
+
+            isDark = !isDarkOutlined;
+          } else {
+            isDark = false;
+          }
+        }
+        // 2. Halloween theme:
+        //    - Dark mode: all active contribution bars (tiers 1-4) use dark outline,
+        //      while tier 0 (zero contributions / less) keeps the light outline.
+        //    - Light mode: everything uses the dark outline (no white outlines).
+        else if (scheme === "halloween") {
+          if (mode === "dark") {
+            isDark = node.count !== undefined ? node.count === 0 : color === palette.colors[0];
           } else {
             isDark = false;
           }
