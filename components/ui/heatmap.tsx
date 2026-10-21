@@ -1,18 +1,6 @@
 "use client";
 
-import React, {useCallback, useEffect, useId, useMemo, useRef} from "react";
-import {THAMINDU_CONTRIBUTIONS, THAMINDU_TOTAL_WEEKS} from "./thamindu-data";
-
-/* ══ Heatmap ═══════════════════════════════════════════════
-   An interactive 3D isometric contribution heatmap on a plinth.
-   Features:
-   - Full 52/53-week whole-year or 14-week timeline (X: Weeks, Y: Days, Z: Commit volume)
-   - Decoupled Color Scheme (Default, Winter, Halloween) and Mode (Dark, Light)
-   - Official GitHub palettes directly matching github.com CSS variables
-   - Cursor tracking with tactile spring elevation kinematics
-   - Shockwave ripple impulse on click
-   - Live hover highlighting and cell metadata resolution
-   ─────────────────────────────────────────────────────────── */
+import React, { useCallback, useEffect, useId, useMemo, useRef } from "react";
 
 export type HeatmapSchemeKey = "default" | "winter" | "halloween";
 export type HeatmapMode = "dark" | "light";
@@ -181,6 +169,12 @@ export interface HeatmapNode {
   [key: string]: unknown;
 }
 
+export interface RawContributionDay {
+  date: string;
+  count: number;
+  level: number;
+}
+
 export interface HeatmapProps {
   /** 2D grid matrix of nodes: data[col][row]. If not provided, generates realistic activity data */
   data?: HeatmapNode[][];
@@ -198,8 +192,6 @@ export interface HeatmapProps {
   onClick?: (node: HeatmapNode) => void;
   /** Callback fired when a pillar is hovered */
   onHover?: (node: HeatmapNode | null) => void;
-  /** Accent color for hovered node. Defaults to active scheme accent */
-  accentColor?: string;
   className?: string;
   style?: React.CSSProperties;
 }
@@ -256,17 +248,6 @@ export function isDarkColor(color?: string): boolean {
   return true;
 }
 
-export function getCommitTier(count: number, maxCount?: number): 0 | 1 | 2 | 3 | 4 {
-  if (maxCount && maxCount > 0) {
-    return calculateTier(count, maxCount);
-  }
-  if (count <= 0) return 0;
-  if (count <= 6) return 1;
-  if (count <= 12) return 2;
-  if (count <= 18) return 3;
-  return 4;
-}
-
 export function getCommitHeight(count: number, maxCount: number = 25, level?: number): number {
   if (count <= 0) return 2.5;
   const safeMax = Math.max(1, maxCount);
@@ -285,124 +266,10 @@ export function getCommitHeight(count: number, maxCount: number = 25, level?: nu
 }
 
 /**
- * Deterministically generates a timeline contribution matrix (full year 53 weeks or 14 weeks)
+ * Transforms an array of contribution days (e.g. from GitHub API) into a 2D HeatmapNode matrix
  */
-// export function generateHeatmapMatrix(
-//   profile: HeatmapProfile = "maintainer",
-//   scheme: HeatmapSchemeKey = "default",
-//   mode: HeatmapMode = "dark",
-//   range: HeatmapRange = "year"
-// ): {
-//   matrix: HeatmapNode[][];
-//   totalContributions: number;
-// } {
-//   const numWeeks = range === "14w" ? 14 : 53;
-//   const numDays = 7;
-//   const palette = (GITHUB_SCHEMES[scheme] || GITHUB_SCHEMES.default)[mode];
-//   let totalContributions = 0;
-//
-//   const baseDate = new Date(2026, 9, 20); // Oct 20, 2026
-//
-//   // Pass 1: compute daily counts and find max activity
-//   const rawCells: { w: number; d: number; count: number; dateStr: string; dayOfWeek: number }[] =
-//     [];
-//   let maxCount = 1;
-//
-//   for (let w = 0; w < numWeeks; w++) {
-//     for (let d = 0; d < numDays; d++) {
-//       const daysAgo = (numWeeks - 1 - w) * 7 + (numDays - 1 - d);
-//       const cellDate = new Date(baseDate);
-//       cellDate.setDate(cellDate.getDate() - daysAgo);
-//
-//       const dayOfWeek = (cellDate.getDay() + 6) % 7; // 0 = Mon, 6 = Sun
-//       const isWeekend = dayOfWeek >= 5;
-//
-//       const seed = Math.sin(w * 17.3 + d * 31.7) * 10000;
-//       const rnd = seed - Math.floor(seed);
-//
-//       let count = 0;
-//
-//       if (profile === "maintainer") {
-//         if (isWeekend) {
-//           count = rnd > 0.4 ? Math.floor(rnd * 4) : 0;
-//         } else {
-//           count = Math.floor(2 + rnd * 10);
-//           if (
-//             (w % 5 === 0 && d === 2) ||
-//             (w % 7 === 0 && d === 3) ||
-//             (w === numWeeks - 2 && d === 1)
-//           ) {
-//             count = 18 + Math.floor(rnd * 7);
-//           }
-//         }
-//       } else if (profile === "weekend") {
-//         if (isWeekend) {
-//           count = Math.floor(8 + rnd * 16);
-//         } else {
-//           count = rnd > 0.65 ? Math.floor(rnd * 4) : 0;
-//         }
-//       } else {
-//         const inSprintPeak = w % 3 === 2;
-//         if (inSprintPeak && !isWeekend) {
-//           count = Math.floor(10 + rnd * 14);
-//         } else if (!isWeekend) {
-//           count = Math.floor(2 + rnd * 6);
-//         } else {
-//           count = rnd > 0.5 ? Math.floor(rnd * 3) : 0;
-//         }
-//       }
-//
-//       totalContributions += count;
-//       if (count > maxCount) maxCount = count;
-//
-//       const formattedDate = cellDate.toLocaleDateString("en-US", {
-//         weekday: "short",
-//         month: "short",
-//         day: "numeric",
-//       });
-//
-//       rawCells.push({
-//         w,
-//         d,
-//         count,
-//         dateStr: formattedDate,
-//         dayOfWeek,
-//       });
-//     }
-//   }
-//
-//   // Pass 2: map into matrix columns with dynamic quartile tiers
-//   const cols: HeatmapNode[][] = [];
-//   for (let w = 0; w < numWeeks; w++) {
-//     const col: HeatmapNode[] = [];
-//     for (let d = 0; d < numDays; d++) {
-//       const cell = rawCells[w * numDays + d];
-//       const count = cell.count;
-//       const tier = calculateTier(count, maxCount);
-//       const color = palette.colors[tier];
-//       const height = getCommitHeight(count, maxCount, tier);
-//
-//       col.push({
-//         col: w,
-//         row: d,
-//         count,
-//         color,
-//         height,
-//         label: cell.dateStr,
-//         date: cell.dateStr,
-//       });
-//     }
-//     cols.push(col);
-//   }
-//
-//   return { matrix: cols, totalContributions };
-// }
-
-/**
- * Generates matrix using Thamindu's real GitHub contributions (full year or 14 weeks)
- * Uses official GitHub data-level (0-4) directly matching github.com
- */
-export function generateThaminduMatrix(
+export function transformContributionsToMatrix(
+  contributions: RawContributionDay[],
   scheme: HeatmapSchemeKey = "default",
   mode: HeatmapMode = "dark",
   range: HeatmapRange = "year"
@@ -411,12 +278,15 @@ export function generateThaminduMatrix(
   totalContributions: number;
 } {
   const palette = (GITHUB_SCHEMES[scheme] || GITHUB_SCHEMES.default)[mode];
-  const totalWeeks = THAMINDU_TOTAL_WEEKS;
+  const totalDays = contributions.length;
+  const totalWeeks = Math.ceil(totalDays / 7);
   const targetWeeks = range === "14w" ? 14 : totalWeeks;
-  const startWeek = range === "14w" ? totalWeeks - 14 : 0;
+  const startWeek = range === "14w" ? Math.max(0, totalWeeks - 14) : 0;
 
-  // Maximum commit count in Thamindu's history is 25
-  const maxCount = 25;
+  const today = new Date();
+  today.setHours(23, 59, 59, 999);
+
+  const maxCount = Math.max(1, ...contributions.map((c) => c.count || 0));
 
   const cols: HeatmapNode[][] = [];
   let totalContributions = 0;
@@ -426,16 +296,10 @@ export function generateThaminduMatrix(
     const col: HeatmapNode[] = [];
     for (let d = 0; d < 7; d++) {
       const idx = actualWeekIdx * 7 + d;
-      const item = THAMINDU_CONTRIBUTIONS[idx];
+      const item = contributions[idx];
       const count = item?.count ?? 0;
       totalContributions += count;
 
-      // Use GitHub's exact official level directly:
-      // Level 0: 0 commits (142 days)
-      // Level 1: 1-6 commits (134 days)
-      // Level 2: 7-12 commits (51 days)
-      // Level 3: 13-18 commits (36 days)
-      // Level 4: 19-25 commits (only 8 top peak days!)
       const tier = (item?.level !== undefined ? item.level : calculateTier(count, maxCount)) as
         0 | 1 | 2 | 3 | 4;
 
@@ -443,8 +307,10 @@ export function generateThaminduMatrix(
       const height = getCommitHeight(count, maxCount, tier);
 
       let formattedDate = "";
+      let isFuture = false;
       if (item?.date) {
         const dObj = new Date(item.date + "T00:00:00");
+        isFuture = dObj.getTime() > today.getTime();
         formattedDate = dObj.toLocaleDateString("en-US", {
           weekday: "short",
           month: "short",
@@ -460,7 +326,78 @@ export function generateThaminduMatrix(
         height,
         label: formattedDate,
         date: item?.date || "",
-        isFuture: item?.isFuture ?? false,
+        isFuture,
+      });
+    }
+    cols.push(col);
+  }
+
+  return { matrix: cols, totalContributions };
+}
+
+/**
+ * Deterministically generates realistic activity data when no external data is provided.
+ * 100% offline, zero network requests, zero personal data.
+ */
+export function generateProceduralMatrix(
+  scheme: HeatmapSchemeKey = "default",
+  mode: HeatmapMode = "dark",
+  range: HeatmapRange = "year"
+): {
+  matrix: HeatmapNode[][];
+  totalContributions: number;
+} {
+  const palette = (GITHUB_SCHEMES[scheme] || GITHUB_SCHEMES.default)[mode];
+  const numWeeks = range === "14w" ? 14 : 53;
+  const numDays = 7;
+  const maxCount = 24;
+
+  const cols: HeatmapNode[][] = [];
+  let totalContributions = 0;
+
+  const now = new Date();
+  const currentDayOfWeek = (now.getDay() + 6) % 7; // 0 = Mon, 6 = Sun
+
+  for (let w = 0; w < numWeeks; w++) {
+    const col: HeatmapNode[] = [];
+    for (let d = 0; d < numDays; d++) {
+      const isLastWeek = w === numWeeks - 1;
+      const isFuture = isLastWeek && d > currentDayOfWeek;
+
+      let count = 0;
+      if (!isFuture) {
+        const seed = Math.sin((w + 1) * 12.9898 + (d + 1) * 78.233) * 43758.5453;
+        const rnd = seed - Math.floor(seed);
+        const isWeekend = d >= 5;
+
+        if (isWeekend) {
+          count = rnd > 0.72 ? Math.floor(rnd * 6) : 0;
+        } else {
+          if (rnd > 0.88) {
+            count = 14 + Math.floor(rnd * 10);
+          } else if (rnd > 0.55) {
+            count = 5 + Math.floor(rnd * 8);
+          } else if (rnd > 0.22) {
+            count = 1 + Math.floor(rnd * 4);
+          } else {
+            count = 0;
+          }
+        }
+      }
+
+      totalContributions += count;
+      const tier = calculateTier(count, maxCount);
+      const color = palette.colors[tier];
+      const height = getCommitHeight(count, maxCount, tier);
+
+      col.push({
+        col: w,
+        row: d,
+        count,
+        color,
+        height,
+        label: isFuture ? "Future" : `Day ${d + 1}`,
+        isFuture,
       });
     }
     cols.push(col);
@@ -700,12 +637,12 @@ export function Heatmap({
 
   const palette = (GITHUB_SCHEMES[scheme] || GITHUB_SCHEMES.default)[mode];
 
-  // Resolve grid data (either user provided or generated from real GitHub contributions)
+  // Resolve grid data (either user provided or generated procedurally)
   const resolvedMatrix = useMemo(() => {
     if (providedData && providedData.length > 0) {
       return providedData;
     }
-    return generateThaminduMatrix(scheme, mode, range).matrix;
+    return generateProceduralMatrix(scheme, mode, range).matrix;
   }, [providedData, scheme, mode, range]);
 
   const numCols = resolvedMatrix.length;

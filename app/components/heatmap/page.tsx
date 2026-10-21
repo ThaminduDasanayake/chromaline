@@ -1,13 +1,15 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   Heatmap,
   HeatmapSchemeKey,
   HeatmapMode,
   HeatmapRange,
   GITHUB_SCHEMES,
-  generateThaminduMatrix,
+  RawContributionDay,
+  transformContributionsToMatrix,
+  generateProceduralMatrix,
 } from "@/components/ui/heatmap";
 import { SelectBar } from "@/components/ui/select-bar";
 import { GitCommitIcon } from "@phosphor-icons/react";
@@ -146,13 +148,30 @@ export default function HeatmapDocumentationPage() {
   const [range, setRange] = useState<HeatmapRange>("year");
   const [scheme, setScheme] = useState<HeatmapSchemeKey>("default");
   const [mode, setMode] = useState<HeatmapMode>("dark");
+  const [rawContributions, setRawContributions] = useState<RawContributionDay[] | null>(null);
 
   const activePalette = (GITHUB_SCHEMES[scheme] || GITHUB_SCHEMES.default)[mode];
   const isDark = mode === "dark";
 
+  useEffect(() => {
+    fetch("/api/contributions?username=ThaminduDasanayake")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data?.contributions && Array.isArray(data.contributions)) {
+          setRawContributions(data.contributions);
+        }
+      })
+      .catch(() => {
+        // Fall back gracefully to procedural matrix
+      });
+  }, []);
+
   const { matrix } = useMemo(() => {
-    return generateThaminduMatrix(scheme, mode, range);
-  }, [scheme, mode, range]);
+    if (rawContributions && rawContributions.length > 0) {
+      return transformContributionsToMatrix(rawContributions, scheme, mode, range);
+    }
+    return generateProceduralMatrix(scheme, mode, range);
+  }, [rawContributions, scheme, mode, range]);
 
   return (
     <DocsLayout

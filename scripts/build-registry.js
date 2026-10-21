@@ -9,7 +9,6 @@ function buildRegistry() {
   const selectBarPath = path.join(__dirname, "../components/ui/select-bar.tsx");
   const seekPath = path.join(__dirname, "../components/ui/seek.tsx");
   const heatmapPath = path.join(__dirname, "../components/ui/heatmap.tsx");
-  const thaminduDataPath = path.join(__dirname, "../components/ui/thamindu-data.ts");
 
   if (!fs.existsSync(trayPath)) {
     console.error("Component not found:", trayPath);
@@ -24,9 +23,6 @@ function buildRegistry() {
     : "";
   const seekContent = fs.existsSync(seekPath) ? fs.readFileSync(seekPath, "utf8") : "";
   const heatmapContent = fs.existsSync(heatmapPath) ? fs.readFileSync(heatmapPath, "utf8") : "";
-  const thaminduDataContent = fs.existsSync(thaminduDataPath)
-    ? fs.readFileSync(thaminduDataPath, "utf8")
-    : "";
 
   // 1. Full Folder Tray with Folder Support
   const trayRegistryItem = {
@@ -161,16 +157,6 @@ function buildRegistry() {
         type: "registry:ui",
         target: "components/ui/heatmap.tsx",
       },
-      ...(thaminduDataContent
-        ? [
-            {
-              path: "components/ui/thamindu-data.ts",
-              content: thaminduDataContent,
-              type: "registry:ui",
-              target: "components/ui/thamindu-data.ts",
-            },
-          ]
-        : []),
     ],
   };
 
