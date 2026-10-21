@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { Toggle, ToggleSize, ToggleSizePreset, ToggleVariant } from "@/components/ui/toggle";
 import { SelectBar } from "@/components/ui/select-bar";
+import { Button } from "@/components/ui/button";
 import { ToggleRightIcon, ArrowCounterClockwiseIcon } from "@phosphor-icons/react";
 import {
   DocsLayout,
@@ -307,15 +308,22 @@ export default function ToggleDocumentationPage() {
 
             {/* Reset button */}
             <div className="flex justify-end pb-0.5 sm:justify-start">
-              <button
-                type="button"
+              <Button
+                size="sm"
+                depth="3px"
+                radius="0.625rem"
+                faceColor="#ffffff"
+                faceHighlight="rgba(255, 255, 255, 1)"
+                contentColor="#64748b"
+                baseColor="#e2e8f0"
+                baseShadow="#cbd5e1"
                 onClick={handleReset}
                 title="Reset to defaults"
                 aria-label="Reset to defaults"
-                className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-400 hover:bg-slate-50 hover:text-slate-700 transition-colors shadow-2xs cursor-pointer"
+                className="border border-slate-200/90 rounded-[0.625rem] shadow-2xs"
               >
                 <ArrowCounterClockwiseIcon size={14} weight="bold" />
-              </button>
+              </Button>
             </div>
           </div>
         }
