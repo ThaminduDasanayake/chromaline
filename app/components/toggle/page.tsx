@@ -311,16 +311,16 @@ export default function ToggleDocumentationPage() {
               <Button
                 size="sm"
                 depth="3px"
-                radius="0.625rem"
-                faceColor="#ffffff"
-                faceHighlight="rgba(255, 255, 255, 1)"
-                contentColor="#64748b"
-                baseColor="#e2e8f0"
-                baseShadow="#cbd5e1"
+                radius="0.5rem"
+                faceColor="#f1f5f9"
+                faceHighlight="#ffffff"
+                contentColor="#0f172a"
+                baseColor="#cbd5e1"
+                baseShadow="#94a3b8"
                 onClick={handleReset}
                 title="Reset to defaults"
                 aria-label="Reset to defaults"
-                className="border border-slate-200/90 rounded-[0.625rem] shadow-2xs"
+                className="border border-slate-300/80 rounded-lg shadow-2xs"
               >
                 <ArrowCounterClockwiseIcon size={14} weight="bold" />
               </Button>
