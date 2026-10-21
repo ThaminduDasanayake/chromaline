@@ -27,8 +27,9 @@ import {
    filter necks out between them like liquid mercury.
    ─────────────────────────────────────────────────────────── */
 
-export type ToggleSize = "sm" | "default" | "lg";
-export type ToggleVariant = "default" | "emerald" | "orange" | "indigo" | "dark";
+export type ToggleSizePreset = "xs" | "sm" | "default" | "lg";
+export type ToggleSize = ToggleSizePreset | number;
+export type ToggleVariant = "default" | "light" | "dark";
 
 export interface ToggleProps {
   /** Controlled checked state */
@@ -41,8 +42,12 @@ export interface ToggleProps {
   stretch?: number;
   /** Spring crossing speed (0..100). Default: 50 */
   speed?: number;
-  /** Size preset. Default: 'default' */
+  /** Size preset ('xs' | 'sm' | 'default' | 'lg') or arbitrary track height in pixels (e.g. 24, 32). Default: 'default' */
   size?: ToggleSize;
+  /** Custom track width in pixels (optional override) */
+  width?: number;
+  /** Custom track height in pixels (optional override) */
+  height?: number;
   /** Color theme variant. Default: 'default' */
   variant?: ToggleVariant;
   /** Whether the toggle is disabled */
@@ -53,22 +58,31 @@ export interface ToggleProps {
   style?: React.CSSProperties;
 }
 
-const SIZE_CONFIGS: Record<
-  ToggleSize,
-  {
-    trackWidth: number;
-    trackHeight: number;
-    thumbSize: number;
-    dropSize: number;
-    pad: number;
-  }
-> = {
+export interface ComputedSizeConfig {
+  trackWidth: number;
+  trackHeight: number;
+  thumbSize: number;
+  dropSize: number;
+  pad: number;
+  blur: number;
+}
+
+const PRESET_CONFIGS: Record<ToggleSizePreset, ComputedSizeConfig> = {
+  xs: {
+    trackWidth: 52,
+    trackHeight: 26,
+    thumbSize: 20,
+    dropSize: 14,
+    pad: 3,
+    blur: 4,
+  },
   sm: {
     trackWidth: 72,
     trackHeight: 36,
     thumbSize: 28,
     dropSize: 20,
     pad: 4,
+    blur: 5.5,
   },
   default: {
     trackWidth: 92,
@@ -76,6 +90,7 @@ const SIZE_CONFIGS: Record<
     thumbSize: 36,
     dropSize: 26,
     pad: 5,
+    blur: 7,
   },
   lg: {
     trackWidth: 112,
@@ -83,6 +98,7 @@ const SIZE_CONFIGS: Record<
     thumbSize: 44,
     dropSize: 32,
     pad: 6,
+    blur: 8.5,
   },
 };
 
@@ -98,44 +114,28 @@ const VARIANTS: Record<
   }
 > = {
   default: {
-    trackOff: "#e2e8f0",
-    trackOn: "#0f172a",
-    thumbOff: "#64748b",
+    trackOff: "#e4e4e7",
+    trackOn: "#18181b",
+    thumbOff: "#71717a",
     thumbOn: "#ffffff",
-    borderOff: "rgba(148, 163, 184, 0.4)",
-    borderOn: "rgba(15, 23, 42, 0.2)",
+    borderOff: "rgba(0, 0, 0, 0.06)",
+    borderOn: "rgba(0, 0, 0, 0.2)",
   },
-  emerald: {
-    trackOff: "#e2e8f0",
-    trackOn: "#059669",
-    thumbOff: "#64748b",
+  light: {
+    trackOff: "#e4e4e7",
+    trackOn: "#18181b",
+    thumbOff: "#71717a",
     thumbOn: "#ffffff",
-    borderOff: "rgba(148, 163, 184, 0.4)",
-    borderOn: "rgba(5, 150, 105, 0.25)",
-  },
-  orange: {
-    trackOff: "#e2e8f0",
-    trackOn: "#ea580c",
-    thumbOff: "#64748b",
-    thumbOn: "#ffffff",
-    borderOff: "rgba(148, 163, 184, 0.4)",
-    borderOn: "rgba(234, 88, 12, 0.25)",
-  },
-  indigo: {
-    trackOff: "#e2e8f0",
-    trackOn: "#4f46e5",
-    thumbOff: "#64748b",
-    thumbOn: "#ffffff",
-    borderOff: "rgba(148, 163, 184, 0.4)",
-    borderOn: "rgba(79, 70, 229, 0.25)",
+    borderOff: "rgba(0, 0, 0, 0.06)",
+    borderOn: "rgba(0, 0, 0, 0.2)",
   },
   dark: {
-    trackOff: "#1e293b",
+    trackOff: "#27272a",
     trackOn: "#ffffff",
-    thumbOff: "#94a3b8",
-    thumbOn: "#0f172a",
-    borderOff: "rgba(255, 255, 255, 0.12)",
-    borderOn: "rgba(0, 0, 0, 0.1)",
+    thumbOff: "#52525b",
+    thumbOn: "#18181b",
+    borderOff: "rgba(255, 255, 255, 0.08)",
+    borderOn: "rgba(0, 0, 0, 0.06)",
   },
 };
 
@@ -148,6 +148,8 @@ export function Toggle({
   stretch = 36,
   speed = 50,
   size = "default",
+  width,
+  height,
   variant = "default",
   disabled = false,
   ariaLabel = "Liquid toggle",
@@ -167,7 +169,40 @@ export function Toggle({
   const rail = useRef<HTMLButtonElement | null>(null);
   const grip = useRef<{ id: number; grab: number | null; moved: boolean } | null>(null);
 
-  const cfg = SIZE_CONFIGS[size] || SIZE_CONFIGS.default;
+  const cfg = useMemo<ComputedSizeConfig>(() => {
+    if (
+      typeof size === "string" &&
+      size in PRESET_CONFIGS &&
+      width === undefined &&
+      height === undefined
+    ) {
+      return PRESET_CONFIGS[size as ToggleSizePreset];
+    }
+
+    const baseHeight =
+      typeof size === "number"
+        ? size
+        : typeof size === "string" && size in PRESET_CONFIGS
+          ? PRESET_CONFIGS[size as ToggleSizePreset].trackHeight
+          : 46;
+
+    const finalHeight = Math.max(16, height ?? baseHeight);
+    const finalWidth = Math.max(finalHeight * 1.5, width ?? Math.round(finalHeight * 2));
+    const pad = Math.max(2, Math.round(finalHeight * 0.1));
+    const thumbSize = Math.max(8, finalHeight - pad * 2);
+    const dropSize = Math.max(6, Math.round(thumbSize * 0.72));
+    const blur = Math.max(2.2, Number((thumbSize * 0.195).toFixed(1)));
+
+    return {
+      trackWidth: finalWidth,
+      trackHeight: finalHeight,
+      thumbSize,
+      dropSize,
+      pad,
+      blur,
+    };
+  }, [size, width, height]);
+
   const colors = VARIANTS[variant] || VARIANTS.default;
 
   const SHUT_X = cfg.pad;
@@ -313,7 +348,7 @@ export function Toggle({
             height="200%"
             colorInterpolationFilters="sRGB"
           >
-            <feGaussianBlur in="SourceGraphic" stdDeviation="7" result="smear" />
+            <feGaussianBlur in="SourceGraphic" stdDeviation={cfg.blur} result="smear" />
             <feColorMatrix
               in="smear"
               type="matrix"
@@ -351,26 +386,12 @@ export function Toggle({
           boxShadow: `inset 0 0 0 1px ${currentBorder}`,
         }}
       >
-        {/* Layer 1: Filtered Goo Metaballs (Thumb + Chasing Drop) */}
+        {/* Layer 1: Filtered Liquid Goo Layer (Underneath for trail & necking) */}
         <span
           className="absolute inset-0 block overflow-visible pointer-events-none"
           aria-hidden="true"
           style={{ filter: `url(#${filterId})` }}
         >
-          {/* Main leading droplet */}
-          <motion.span
-            className="absolute left-0 top-1/2 rounded-full pointer-events-none transition-colors duration-300 ease-out motion-reduce:duration-100"
-            style={{
-              width: `${cfg.thumbSize}px`,
-              height: `${cfg.thumbSize}px`,
-              marginTop: `${-cfg.thumbSize / 2}px`,
-              backgroundColor: currentThumbBg,
-              x,
-              scaleX: wide,
-              scaleY: tall,
-            }}
-          />
-
           {/* Secondary trailing droplet chasing on spring */}
           <motion.span
             className="absolute left-0 top-1/2 rounded-full pointer-events-none transition-colors duration-300 ease-out motion-reduce:duration-100"
@@ -382,7 +403,35 @@ export function Toggle({
               x: dropX,
             }}
           />
+
+          {/* Liquid bridge anchor underneath thumb */}
+          <motion.span
+            className="absolute left-0 top-1/2 rounded-full pointer-events-none transition-colors duration-300 ease-out motion-reduce:duration-100"
+            style={{
+              width: `${cfg.thumbSize - 2}px`,
+              height: `${cfg.thumbSize - 2}px`,
+              marginTop: `${-(cfg.thumbSize - 2) / 2}px`,
+              backgroundColor: currentThumbBg,
+              x,
+              scaleX: wide,
+              scaleY: tall,
+            }}
+          />
         </span>
+
+        {/* Layer 2: Pristine Unfiltered Vector Thumb (On top in exact register - ZERO blur) */}
+        <motion.span
+          className="absolute left-0 top-1/2 rounded-full pointer-events-none transition-colors duration-300 ease-out motion-reduce:duration-100 shadow-2xs"
+          style={{
+            width: `${cfg.thumbSize}px`,
+            height: `${cfg.thumbSize}px`,
+            marginTop: `${-cfg.thumbSize / 2}px`,
+            backgroundColor: currentThumbBg,
+            x,
+            scaleX: wide,
+            scaleY: tall,
+          }}
+        />
       </button>
     </div>
   );

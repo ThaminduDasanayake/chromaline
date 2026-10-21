@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
-import { Toggle, ToggleSize, ToggleVariant } from "@/components/ui/toggle";
+import { Toggle, ToggleSize, ToggleSizePreset, ToggleVariant } from "@/components/ui/toggle";
 import { SelectBar } from "@/components/ui/select-bar";
-import { ToggleRightIcon } from "@phosphor-icons/react";
+import { ToggleRightIcon, ArrowCounterClockwiseIcon } from "@phosphor-icons/react";
 import {
   DocsLayout,
   ComponentPreview,
@@ -72,7 +72,7 @@ const CODE_EXAMPLE_LINES = [
   },
   {
     num: 13,
-    parts: [{ text: '      variant="default"' }],
+    parts: [{ text: '      variant="default" // "default" (light) or "dark"' }],
   },
   {
     num: 14,
@@ -94,8 +94,8 @@ export default function ToggleDemo() {
       onChange={setChecked}
       stretch={36}
       speed={50}
-      size="default"
-      variant="default"
+      size="default" // or arbitrary pixel number like size={24}
+      variant="default" // "default" (light) or "dark"
     />
   );
 }`;
@@ -120,6 +120,18 @@ const PROPS_DATA: PropItem[] = [
     desc: "Callback fired when the toggle state flips.",
   },
   {
+    name: "size",
+    type: '"xs" | "sm" | "default" | "lg" | number',
+    default: '"default"',
+    desc: "Size preset or arbitrary track height in pixels (e.g. 24, 32, 60). The SVG blur and travel adapt dynamically.",
+  },
+  {
+    name: "variant",
+    type: '"default" | "dark"',
+    default: '"default"',
+    desc: "Theme variant: 'default' (Light) or 'dark' (Dark).",
+  },
+  {
     name: "stretch",
     type: "number",
     default: "36",
@@ -132,16 +144,16 @@ const PROPS_DATA: PropItem[] = [
     desc: "Spring crossing stiffness (0..100) for how quickly the thumb settles across the track.",
   },
   {
-    name: "size",
-    type: '"sm" | "default" | "lg"',
-    default: '"default"',
-    desc: "Size variant: sm (72x36), default (92x46), or lg (112x56).",
+    name: "width",
+    type: "number",
+    default: "undefined",
+    desc: "Optional custom track width override in pixels (defaults to 2 × height).",
   },
   {
-    name: "variant",
-    type: '"default" | "emerald" | "orange" | "indigo" | "dark"',
-    default: '"default"',
-    desc: "Color theme for the track, thumb, and border accents.",
+    name: "height",
+    type: "number",
+    default: "undefined",
+    desc: "Optional custom track height override in pixels.",
   },
   {
     name: "disabled",
@@ -169,178 +181,156 @@ const PROPS_DATA: PropItem[] = [
   },
 ];
 
-const VARIANTS: { key: ToggleVariant; label: string }[] = [
-  { key: "default", label: "Sky" },
-  { key: "emerald", label: "Emerald" },
-  { key: "orange", label: "Orange" },
-  { key: "indigo", label: "Indigo" },
+const THEME_OPTIONS: { key: ToggleVariant; label: string }[] = [
+  { key: "default", label: "Light" },
   { key: "dark", label: "Dark" },
 ];
 
 export default function ToggleDocumentationPage() {
   const [checked, setChecked] = useState(false);
-  const [size, setSize] = useState<ToggleSize>("default");
+  const [isCustomSize, setIsCustomSize] = useState(false);
+  const [presetSize, setPresetSize] = useState<ToggleSizePreset>("default");
+  const [customPixelHeight, setCustomPixelHeight] = useState(30);
   const [variant, setVariant] = useState<ToggleVariant>("default");
   const [stretch, setStretch] = useState(36);
   const [speed, setSpeed] = useState(50);
-  const [disabled, setDisabled] = useState(false);
+
+  const activeSize: ToggleSize = isCustomSize ? customPixelHeight : presetSize;
+
+  const handleReset = () => {
+    setChecked(false);
+    setIsCustomSize(false);
+    setPresetSize("default");
+    setCustomPixelHeight(30);
+    setVariant("default");
+    setStretch(36);
+    setSpeed(50);
+  };
 
   return (
     <DocsLayout
       title="Toggle"
-      description="A tactile liquid goo switch driven by two-blob spring kinematics. A motion value thumb and trailing chasing drop stretch through an alpha-thresholded SVG filter as you drag or flick."
+      description="A tactile liquid goo switch driven by two-blob spring kinematics. Inverted monochrome design with light and dark themes, supporting standard presets or arbitrary pixel sizing."
       icon={<ToggleRightIcon size={14} weight="bold" />}
     >
       {/* 1. Preview Canvas & Playground */}
       <ComponentPreview
-        canvasClassName="min-h-[340px] p-8"
+        canvasClassName={`min-h-[320px] p-8 transition-colors duration-300 ${
+          variant === "dark" ? "bg-[#18181b]" : "bg-[#f4f4f5]"
+        }`}
         controls={
-          <div className="space-y-6">
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-              {/* Size control */}
-              <div>
-                <label className="text-xs font-semibold text-slate-900">Size</label>
-                <div className="mt-2.5">
-                  <SelectBar<ToggleSize>
+          <div className="grid grid-cols-1 items-end gap-6 sm:grid-cols-2 lg:grid-cols-[1fr_0.8fr_1fr_1fr_auto]">
+            {/* Size control */}
+            <div>
+              <div className="flex items-center justify-between">
+                <label className="text-xs font-semibold text-slate-900">
+                  {isCustomSize ? `Height (${customPixelHeight}px)` : "Size"}
+                </label>
+                <button
+                  type="button"
+                  onClick={() => setIsCustomSize(!isCustomSize)}
+                  className="text-[10px] font-medium text-sky-600 hover:text-sky-700 underline"
+                >
+                  {isCustomSize ? "Presets" : "Custom"}
+                </button>
+              </div>
+              <div className="mt-2.5">
+                {isCustomSize ? (
+                  <input
+                    type="range"
+                    min="18"
+                    max="72"
+                    value={customPixelHeight}
+                    onChange={(e) => setCustomPixelHeight(Number(e.target.value))}
+                    className="isocraft-slider"
+                  />
+                ) : (
+                  <SelectBar<ToggleSizePreset>
                     size="xs"
                     items={[
+                      { key: "xs", label: "XS" },
                       { key: "sm", label: "SM" },
                       { key: "default", label: "MD" },
                       { key: "lg", label: "LG" },
                     ]}
-                    value={size}
-                    onChange={setSize}
+                    value={presetSize}
+                    onChange={setPresetSize}
                   />
-                </div>
+                )}
               </div>
+            </div>
 
-              {/* Variant control */}
-              <div>
-                <label className="text-xs font-semibold text-slate-900">Color Variant</label>
-                <div className="mt-2.5">
-                  <SelectBar<ToggleVariant>
-                    size="xs"
-                    items={VARIANTS}
-                    value={variant}
-                    onChange={setVariant}
-                  />
-                </div>
-              </div>
-
-              {/* Stretch slider */}
-              <div>
-                <div className="flex items-center justify-between">
-                  <label className="text-xs font-semibold text-slate-900">Stretch (Lag)</label>
-                  <span className="font-mono text-xs text-slate-500">{stretch}%</span>
-                </div>
-                <input
-                  type="range"
-                  min="0"
-                  max="100"
-                  value={stretch}
-                  onChange={(e) => setStretch(Number(e.target.value))}
-                  className="isocraft-slider mt-3.5"
-                />
-              </div>
-
-              {/* Speed slider */}
-              <div>
-                <div className="flex items-center justify-between">
-                  <label className="text-xs font-semibold text-slate-900">Spring Speed</label>
-                  <span className="font-mono text-xs text-slate-500">{speed}%</span>
-                </div>
-                <input
-                  type="range"
-                  min="0"
-                  max="100"
-                  value={speed}
-                  onChange={(e) => setSpeed(Number(e.target.value))}
-                  className="isocraft-slider mt-3.5"
+            {/* Theme: Light / Dark */}
+            <div>
+              <label className="text-xs font-semibold text-slate-900">Theme</label>
+              <div className="mt-2.5">
+                <SelectBar<ToggleVariant>
+                  size="xs"
+                  items={THEME_OPTIONS}
+                  value={variant}
+                  onChange={setVariant}
                 />
               </div>
             </div>
 
-            {/* Toggle State & Disabled Checkbox */}
-            <div className="flex flex-wrap items-center gap-6 border-t border-slate-100 pt-4">
-              <label className="inline-flex cursor-pointer items-center gap-2 text-xs font-medium text-slate-700">
-                <input
-                  type="checkbox"
-                  checked={checked}
-                  onChange={(e) => setChecked(e.target.checked)}
-                  className="rounded border-slate-300 text-sky-600 focus:ring-sky-500"
-                />
-                Checked: <span className="font-mono font-semibold">{checked ? "true" : "false"}</span>
-              </label>
+            {/* Stretch slider */}
+            <div>
+              <div className="flex items-center justify-between">
+                <label className="text-xs font-semibold text-slate-900">Stretch</label>
+                <span className="font-mono text-xs text-slate-500">{stretch}%</span>
+              </div>
+              <input
+                type="range"
+                min="0"
+                max="100"
+                value={stretch}
+                onChange={(e) => setStretch(Number(e.target.value))}
+                className="isocraft-slider mt-3.5"
+              />
+            </div>
 
-              <label className="inline-flex cursor-pointer items-center gap-2 text-xs font-medium text-slate-700">
-                <input
-                  type="checkbox"
-                  checked={disabled}
-                  onChange={(e) => setDisabled(e.target.checked)}
-                  className="rounded border-slate-300 text-sky-600 focus:ring-sky-500"
-                />
-                Disabled
-              </label>
+            {/* Speed slider */}
+            <div>
+              <div className="flex items-center justify-between">
+                <label className="text-xs font-semibold text-slate-900">Speed</label>
+                <span className="font-mono text-xs text-slate-500">{speed}%</span>
+              </div>
+              <input
+                type="range"
+                min="0"
+                max="100"
+                value={speed}
+                onChange={(e) => setSpeed(Number(e.target.value))}
+                className="isocraft-slider mt-3.5"
+              />
+            </div>
 
+            {/* Reset button */}
+            <div className="flex justify-end pb-0.5 sm:justify-start">
               <button
                 type="button"
-                onClick={() => {
-                  setChecked(false);
-                  setSize("default");
-                  setVariant("default");
-                  setStretch(36);
-                  setSpeed(50);
-                  setDisabled(false);
-                }}
-                className="text-xs font-medium text-slate-500 hover:text-slate-900 underline"
+                onClick={handleReset}
+                title="Reset to defaults"
+                aria-label="Reset to defaults"
+                className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-400 hover:bg-slate-50 hover:text-slate-700 transition-colors shadow-2xs cursor-pointer"
               >
-                Reset to defaults
+                <ArrowCounterClockwiseIcon size={14} weight="bold" />
               </button>
             </div>
           </div>
         }
       >
-        <div className="flex flex-col items-center justify-center gap-6 py-6">
+        <div className="flex w-full items-center justify-center py-12">
           <Toggle
             checked={checked}
             onChange={setChecked}
             stretch={stretch}
             speed={speed}
-            size={size}
+            size={activeSize}
             variant={variant}
-            disabled={disabled}
           />
-          <p className="text-xs text-slate-400">
-            Click to toggle or drag across smoothly · Fast drags pull an elongated goo bridge
-          </p>
         </div>
       </ComponentPreview>
-
-      {/* 2. Colorways Showcase */}
-      <div className="mt-12 rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm sm:p-8">
-        <h2 className="text-sm font-semibold tracking-tight text-slate-900">All Theme Variants</h2>
-        <p className="mt-1 text-xs text-slate-500">
-          Chromaline palettes crafted with solid, opaque colors to pass through the alpha-thresholding SVG goo filter cleanly.
-        </p>
-
-        <div className="mt-8 grid grid-cols-2 gap-6 sm:grid-cols-3 md:grid-cols-5">
-          {VARIANTS.map((v) => (
-            <div
-              key={v.key}
-              className="flex flex-col items-center gap-3 rounded-xl border border-slate-100 bg-slate-50/50 p-4"
-            >
-              <span className="text-[11px] font-semibold text-slate-600">{v.label}</span>
-              <Toggle
-                defaultChecked={v.key === "default" || v.key === "indigo"}
-                variant={v.key}
-                size="sm"
-                stretch={40}
-                speed={50}
-              />
-            </div>
-          ))}
-        </div>
-      </div>
 
       {/* 3. Installation */}
       <div className="mt-12">
