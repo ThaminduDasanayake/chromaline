@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useEffect, useId, useMemo, useRef } from "react";
+import React, { useCallback, useEffect, useMemo, useRef } from "react";
 
 export type HeatmapSchemeKey = "default" | "winter" | "halloween";
 export type HeatmapMode = "dark" | "light";
@@ -632,8 +632,6 @@ export function Heatmap({
   className = "",
   style = {},
 }: HeatmapProps) {
-  const instanceId = useId();
-
   const palette = (GITHUB_SCHEMES[scheme] || GITHUB_SCHEMES.default)[mode];
 
   // Resolve grid data (either user provided or generated procedurally)
@@ -1065,217 +1063,135 @@ export function Heatmap({
   );
 
   return (
-    <>
-      <style>{`
-        .hl-heatmap-${instanceId} {
-          position: relative;
-          display: block;
-          aspect-ratio: ${VIEW_W} / ${VIEW_H};
-          width: 100%;
-          touch-action: none;
-          user-select: none;
-          cursor: crosshair;
-        }
-
-        .hl-heatmap-${instanceId} svg {
-          position: absolute;
-          inset: 0;
-          width: 100%;
-          height: 100%;
-          display: block;
-          overflow: visible;
-        }
-
-        .hl-heatmap-${instanceId} .plinth-sil {
-          fill: ${palette.plinthFill};
-          stroke: ${palette.plinthStroke};
-          stroke-width: 0.95;
-          stroke-linejoin: round;
-        }
-
-        .hl-heatmap-${instanceId} .plinth-cr {
-          fill: none;
-          stroke: ${palette.plinthCrease};
-          stroke-width: 0.85;
-        }
-
-        .hl-heatmap-${instanceId} .col-sil {
-          fill: var(--base-fill, ${mode === "dark" ? "#151b23" : "#ffffff"});
-          stroke: ${palette.colStroke};
-          stroke-width: 0.85;
-          stroke-linejoin: round;
-          transition: stroke 120ms ease;
-        }
-
-        .hl-heatmap-${instanceId} .col-cr {
-          fill: none;
-          stroke: ${palette.colCrease};
-          stroke-width: 0.65;
-          transition: stroke 120ms ease;
-        }
-
-        /* Per-bar luminance-adaptive outline contrast:
-           Dark colors get a light outline.
-           Light colors get a dark outline. */
-        .hl-heatmap-${instanceId} .is-dark-bar .col-sil {
-          stroke: ${mode === "dark" ? "rgba(255, 255, 255, 0.22)" : "rgba(255, 255, 255, 0.60)"};
-        }
-
-        .hl-heatmap-${instanceId} .is-dark-bar .col-cr {
-          stroke: ${mode === "dark" ? "rgba(255, 255, 255, 0.12)" : "rgba(255, 255, 255, 0.30)"};
-        }
-
-        .hl-heatmap-${instanceId} .is-dark-bar .col-sil.hovered {
-          stroke: #ffffff;
-          stroke-width: 1.15;
-        }
-
-        .hl-heatmap-${instanceId} .is-dark-bar .col-cr.hovered {
-          stroke: rgba(255, 255, 255, 0.70);
-          stroke-width: 0.85;
-        }
-
-        .hl-heatmap-${instanceId} .is-light-bar .col-sil {
-          stroke: ${mode === "dark" ? "rgba(0, 0, 0, 0.50)" : "rgba(15, 23, 42, 0.30)"};
-        }
-
-        .hl-heatmap-${instanceId} .is-light-bar .col-cr {
-          stroke: ${mode === "dark" ? "rgba(0, 0, 0, 0.28)" : "rgba(15, 23, 42, 0.16)"};
-        }
-
-        .hl-heatmap-${instanceId} .is-light-bar .col-sil.hovered {
-          stroke: ${mode === "dark" ? "#000000" : "#0f172a"};
-          stroke-width: 1.15;
-        }
-
-        .hl-heatmap-${instanceId} .is-light-bar .col-cr.hovered {
-          stroke: ${mode === "dark" ? "rgba(0, 0, 0, 0.65)" : "rgba(15, 23, 42, 0.60)"};
-          stroke-width: 0.85;
-        }
-
-        .hl-heatmap-${instanceId} .punch-dot-center {
-          fill: ${palette.dotCenter};
-          stroke: none;
-        }
-
-        .hl-heatmap-${instanceId} .punch-dot-outer {
-          fill: ${palette.dotOuter};
-          stroke: none;
-        }
-
-        .hl-heatmap-${instanceId} .is-dark-bar .punch-dot-center,
-        .hl-heatmap-${instanceId} .for-dark-bar .punch-dot-center {
-          fill: #ffffff;
-        }
-
-        .hl-heatmap-${instanceId} .is-dark-bar .punch-dot-outer,
-        .hl-heatmap-${instanceId} .for-dark-bar .punch-dot-outer {
-          fill: rgba(255, 255, 255, 0.65);
-        }
-
-        .hl-heatmap-${instanceId} .is-light-bar .punch-dot-center,
-        .hl-heatmap-${instanceId} .for-light-bar .punch-dot-center {
-          fill: ${mode === "dark" ? "#000000" : "#0f172a"};
-        }
-
-        .hl-heatmap-${instanceId} .is-light-bar .punch-dot-outer,
-        .hl-heatmap-${instanceId} .for-light-bar .punch-dot-outer {
-          fill: ${mode === "dark" ? "rgba(0, 0, 0, 0.45)" : "rgba(15, 23, 42, 0.45)"};
-        }
-      `}</style>
-
-      <div
-        ref={containerRef}
-        className={`hl-heatmap-${instanceId} ${className}`}
-        style={style}
-        role="region"
-        aria-label={`Interactive 3D GitHub Heatmap with ${numCols} weeks by ${numRows} days`}
+    <div
+      ref={containerRef}
+      className={`relative block w-full select-none cursor-crosshair touch-none ${className}`}
+      style={{ aspectRatio: `${VIEW_W} / ${VIEW_H}`, ...style }}
+      role="region"
+      aria-label={`Interactive 3D GitHub Heatmap with ${numCols} weeks by ${numRows} days`}
+    >
+      <svg
+        ref={svgRef}
+        viewBox={`0 0 ${VIEW_W} ${VIEW_H}`}
+        className="absolute inset-0 block h-full w-full overflow-visible"
+        onPointerMove={handlePointerMove}
+        onPointerLeave={handlePointerLeave}
+        onClick={handleClick}
       >
-        <svg
-          ref={svgRef}
-          viewBox={`0 0 ${VIEW_W} ${VIEW_H}`}
-          onPointerMove={handlePointerMove}
-          onPointerLeave={handlePointerLeave}
-          onClick={handleClick}
-        >
-          {/* Ground Plinth */}
-          <g className="plinth">
-            <path className="plinth-sil" d={plinthPrism.sil} />
-            <path className="plinth-cr" d={plinthPrism.crease} />
-          </g>
+        {/* Ground Plinth */}
+        <g>
+          <path
+            d={plinthPrism.sil}
+            fill={palette.plinthFill}
+            stroke={palette.plinthStroke}
+            strokeWidth="0.95"
+            strokeLinejoin="round"
+          />
+          <path
+            d={plinthPrism.crease}
+            fill="none"
+            stroke={palette.plinthCrease}
+            strokeWidth="0.85"
+          />
+        </g>
 
-          {/* Isometric Pillars */}
-          <g className="pillars">
-            {columns.map((c) => {
-              const key = `${c.i}-${c.j}`;
-              return (
-                <g key={key} className={c.isDark ? "is-dark-bar" : "is-light-bar"}>
-                  <path
-                    ref={(el) => {
-                      let node = domRefs.current.get(key);
-                      if (!node) {
-                        node = { sil: null, cr: null, mark: null };
-                        domRefs.current.set(key, node);
-                      }
-                      node.sil = el;
-                    }}
-                    style={
-                      c.color ? ({ "--base-fill": c.color } as React.CSSProperties) : undefined
+        {/* Isometric Pillars */}
+        <g>
+          {columns.map((c) => {
+            const key = `${c.i}-${c.j}`;
+            return (
+              <g key={key}>
+                <path
+                  ref={(el) => {
+                    let node = domRefs.current.get(key);
+                    if (!node) {
+                      node = { sil: null, cr: null, mark: null };
+                      domRefs.current.set(key, node);
                     }
-                    className="col-sil"
-                  />
-                  <path
-                    ref={(el) => {
-                      let node = domRefs.current.get(key);
-                      if (!node) {
-                        node = { sil: null, cr: null, mark: null };
-                        domRefs.current.set(key, node);
-                      }
-                      node.cr = el;
-                    }}
-                    className="col-cr"
-                  />
-                  <g
-                    ref={(el) => {
-                      let node = domRefs.current.get(key);
-                      if (!node) {
-                        node = { sil: null, cr: null, mark: null };
-                        domRefs.current.set(key, node);
-                      }
-                      node.mark = el;
-                    }}
-                    className="col-mark-slot"
-                  />
-                </g>
+                    node.sil = el;
+                  }}
+                  fill={c.color || (mode === "dark" ? "#151b23" : "#ffffff")}
+                  strokeLinejoin="round"
+                  className={`stroke-[0.85] transition-[stroke,stroke-width] duration-120 ease-out ${
+                    c.isDark
+                      ? mode === "dark"
+                        ? "stroke-[rgba(255,255,255,0.22)] [&.hovered]:stroke-white [&.hovered]:stroke-[1.15]"
+                        : "stroke-[rgba(255,255,255,0.60)] [&.hovered]:stroke-white [&.hovered]:stroke-[1.15]"
+                      : mode === "dark"
+                        ? "stroke-[rgba(0,0,0,0.50)] [&.hovered]:stroke-black [&.hovered]:stroke-[1.15]"
+                        : "stroke-[rgba(15,23,42,0.30)] [&.hovered]:stroke-[#0f172a] [&.hovered]:stroke-[1.15]"
+                  }`}
+                />
+                <path
+                  ref={(el) => {
+                    let node = domRefs.current.get(key);
+                    if (!node) {
+                      node = { sil: null, cr: null, mark: null };
+                      domRefs.current.set(key, node);
+                    }
+                    node.cr = el;
+                  }}
+                  fill="none"
+                  className={`stroke-[0.65] transition-[stroke,stroke-width] duration-120 ease-out ${
+                    c.isDark
+                      ? mode === "dark"
+                        ? "stroke-[rgba(255,255,255,0.12)] [&.hovered]:stroke-[rgba(255,255,255,0.70)] [&.hovered]:stroke-[0.85]"
+                        : "stroke-[rgba(255,255,255,0.30)] [&.hovered]:stroke-[rgba(255,255,255,0.70)] [&.hovered]:stroke-[0.85]"
+                      : mode === "dark"
+                        ? "stroke-[rgba(0,0,0,0.28)] [&.hovered]:stroke-[rgba(0,0,0,0.65)] [&.hovered]:stroke-[0.85]"
+                        : "stroke-[rgba(15,23,42,0.16)] [&.hovered]:stroke-[rgba(15,23,42,0.60)] [&.hovered]:stroke-[0.85]"
+                  }`}
+                />
+                <g
+                  ref={(el) => {
+                    let node = domRefs.current.get(key);
+                    if (!node) {
+                      node = { sil: null, cr: null, mark: null };
+                      domRefs.current.set(key, node);
+                    }
+                    node.mark = el;
+                  }}
+                />
+              </g>
+            );
+          })}
+        </g>
+
+        {/* Hidden Host for the 9-dot punch matrix when unattached */}
+        <g ref={hiddenHostRef} className="hidden">
+          <g
+            ref={markGroupRef}
+            className="group pointer-events-none opacity-0 transition-opacity duration-120"
+          >
+            {Array.from({ length: 9 }).map((_, k) => {
+              const isCenter = k === 4;
+              return (
+                <ellipse
+                  key={k}
+                  ref={(el) => {
+                    dotRefs.current[k] = el;
+                  }}
+                  rx={r2((isCenter ? 0.65 : 0.52) * C.S)}
+                  ry={r2((isCenter ? 0.65 : 0.52) * C.S * C.k)}
+                  className={
+                    isCenter
+                      ? `stroke-none fill-white ${
+                          mode === "dark"
+                            ? "group-[.for-light-bar]:fill-black"
+                            : "group-[.for-light-bar]:fill-[#0f172a]"
+                        }`
+                      : `stroke-none fill-[rgba(255,255,255,0.65)] ${
+                          mode === "dark"
+                            ? "group-[.for-light-bar]:fill-[rgba(0,0,0,0.45)]"
+                            : "group-[.for-light-bar]:fill-[rgba(15,23,42,0.45)]"
+                        }`
+                  }
+                />
               );
             })}
           </g>
-
-          {/* Hidden Host for the 9-dot punch matrix when unattached */}
-          <g ref={hiddenHostRef} style={{ display: "none" }}>
-            <g
-              ref={markGroupRef}
-              className="hl-punch-matrix"
-              style={{ opacity: 0, pointerEvents: "none", transition: "opacity 120ms ease" }}
-            >
-              {Array.from({ length: 9 }).map((_, k) => {
-                const isCenter = k === 4;
-                return (
-                  <ellipse
-                    key={k}
-                    ref={(el) => {
-                      dotRefs.current[k] = el;
-                    }}
-                    rx={r2((isCenter ? 0.65 : 0.52) * C.S)}
-                    ry={r2((isCenter ? 0.65 : 0.52) * C.S * C.k)}
-                    className={isCenter ? "punch-dot-center" : "punch-dot-outer"}
-                  />
-                );
-              })}
-            </g>
-          </g>
-        </svg>
-      </div>
-    </>
+        </g>
+      </svg>
+    </div>
   );
 }
