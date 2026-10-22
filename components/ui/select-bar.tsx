@@ -160,190 +160,97 @@ export function SelectBar<T extends string = string>({
 
   const curveStyles = settle(bounce);
 
-  const vars = {
-    "--nav-pad": `${actualHug}px`,
-    "--ind-stretch": `${Math.round(190 * rate(speed))}ms`,
-    "--ind-settle": `${Math.round(420 * rate(speed))}ms`,
-    "--ind-move": curveStyles.move,
-    "--ind-size": curveStyles.size,
-  } as React.CSSProperties;
+  const transitionString =
+    phase === "stretch"
+      ? `transform ${Math.round(190 * rate(speed))}ms cubic-bezier(0.32, 0.72, 0.24, 1), width ${Math.round(
+          190 * rate(speed)
+        )}ms cubic-bezier(0.32, 0.72, 0.24, 1)`
+      : phase === "settle"
+        ? `transform ${Math.round(420 * rate(speed))}ms ${curveStyles.move}, width ${Math.round(
+            420 * rate(speed)
+          )}ms ${curveStyles.size}`
+        : "none";
 
-  const style: React.CSSProperties = ind
-    ? { transform: `translate3d(${ind.p}px, 0, 0)`, width: ind.s }
+  const indStyle: React.CSSProperties = ind
+    ? {
+        transform: `translate3d(${ind.p}px, 0, 0)`,
+        width: `${ind.s}px`,
+        top: `${actualHug}px`,
+        height: `calc(100% - ${actualHug * 2}px)`,
+        transition: transitionString,
+      }
     : { opacity: 0 };
 
   return (
-    <>
-      <style>{`
-        /* ── signature frosted glass dock ──────────────────────── */
-        .gnav {
-          position: relative;
-          background: rgba(255, 255, 255, 0.6);
-          -webkit-backdrop-filter: blur(8px) saturate(150%) brightness(100%);
-          backdrop-filter: blur(8px) saturate(150%) brightness(100%);
-          isolation: isolate;
-          color: #0f172a;
-          display: inline-flex;
-          align-items: center;
-          gap: 2px;
-          padding: var(--nav-pad);
-          border-radius: 999px;
-          user-select: none;
-          box-shadow:
-            inset 0 1px 0 rgba(255, 255, 255, 0.9),
-            0 10px 40px rgba(15, 23, 42, 0.08);
-        }
+    <nav
+      ref={trackRef as React.RefObject<HTMLElement>}
+      className={`relative inline-flex items-center gap-0.5 rounded-full select-none isolate text-slate-900 bg-white/60 backdrop-blur-md backdrop-saturate-150 shadow-[inset_0_1px_0_rgba(255,255,255,0.9),0_10px_40px_rgba(15,23,42,0.08)] ${className}`}
+      style={{ padding: `${actualHug}px` }}
+      aria-label={ariaLabel}
+    >
+      {/* Prismatic specular lit rim */}
+      <span
+        className="pointer-events-none absolute inset-0 z-3 rounded-full border border-transparent [mask-composite:exclude] [-webkit-mask-composite:xor] [mask:linear-gradient(#000_0_0)_padding-box,linear-gradient(#000_0_0)] [-webkit-mask:linear-gradient(#000_0_0)_padding-box,linear-gradient(#000_0_0)] [background:linear-gradient(142deg,rgba(255,255,255,0.7)_0%,rgba(255,255,255,0.15)_26%,rgba(255,255,255,0.05)_62%,rgba(255,255,255,0.4)_100%)_border-box]"
+        aria-hidden="true"
+      />
 
-        /* Prismatic specular lit rim */
-        .gnav::before {
-          content: "";
-          position: absolute;
-          inset: 0;
-          border-radius: inherit;
-          border: 1px solid transparent;
-          pointer-events: none;
-          z-index: 3;
-          background:
-            linear-gradient(
-              142deg,
-              rgba(255, 255, 255, 0.7) 0%,
-              rgba(255, 255, 255, 0.15) 26%,
-              rgba(255, 255, 255, 0.05) 62%,
-              rgba(255, 255, 255, 0.4) 100%
-            ) border-box;
-          -webkit-mask:
-            linear-gradient(#000 0 0) padding-box,
-            linear-gradient(#000 0 0);
-          -webkit-mask-composite: xor;
-          mask:
-            linear-gradient(#000 0 0) padding-box,
-            linear-gradient(#000 0 0);
-          mask-composite: exclude;
-        }
+      {/* Two-phase mercury indicator wash */}
+      <span
+        className="pointer-events-none absolute left-0 z-1 rounded-full border-0 bg-black/6 shadow-none will-change-[transform,width]"
+        style={indStyle}
+        aria-hidden="true"
+      />
 
-        /* ── two-phase indicator wash ──────────────────────────── */
-        .gnav-ind {
-          position: absolute;
-          top: var(--nav-pad);
-          left: 0;
-          height: calc(100% - var(--nav-pad) * 2);
-          border-radius: 999px;
-          background: rgba(0, 0, 0, 0.06);
-          border: 0;
-          box-shadow: none;
-          pointer-events: none;
-          will-change: transform, width;
-          z-index: 1;
-        }
+      {items.map((item) => {
+        const isSelected = active === item.key;
+        const isSwatch = Boolean(item.color);
+        const isIconOnly = Boolean(item.icon && (!item.label || item.showLabel === false));
+        const slotTitle = item.title || item.label || item.key;
 
-        /* Phase one: leading edge jumps, pill dilates */
-        .gnav-ind[data-phase="stretch"] {
-          --d: var(--ind-stretch, 190ms);
-          transition:
-            transform var(--d) cubic-bezier(0.32, 0.72, 0.24, 1),
-            width var(--d) cubic-bezier(0.32, 0.72, 0.24, 1);
-        }
+        const dim = size === "xs" ? 26 : size === "default" ? 36 : 30;
+        const padH = size === "xs" ? 11 : size === "default" ? 16 : 13;
 
-        /* Phase two: trailing edge catches up, overshoots */
-        .gnav-ind[data-phase="settle"] {
-          --d: var(--ind-settle, 420ms);
-          transition:
-            transform var(--d) var(--ind-move, cubic-bezier(0.28, 1.28, 0.36, 1)),
-            width var(--d) var(--ind-size, cubic-bezier(0.24, 1.34, 0.38, 1));
-        }
+        const slotStyle: React.CSSProperties =
+          isSwatch || isIconOnly
+            ? {
+                width: `${dim}px`,
+                height: `${dim}px`,
+                minWidth: `${dim}px`,
+                padding: 0,
+                flexShrink: 0,
+              }
+            : {
+                width: "auto",
+                minWidth: `${dim}px`,
+                height: `${dim}px`,
+                padding: `0 ${padH}px`,
+                whiteSpace: "nowrap",
+                flexShrink: 0,
+              };
 
-        .gnav-ind[data-phase="idle"] {
-          transition: none;
-        }
-
-        /* ── slots ─────────────────────────────────────────────── */
-        .gnav-item {
-          position: relative;
-          z-index: 2;
-          border: 0;
-          border-radius: 999px;
-          background: none;
-          color: #0f172a;
-          opacity: 0.5;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          cursor: pointer;
-          transition: opacity 260ms cubic-bezier(0.32, 0.72, 0.24, 1);
-          line-height: 1;
-        }
-
-        .gnav-item:hover {
-          opacity: 0.85;
-        }
-
-        .gnav-item[data-active="true"],
-        .gnav-item[data-swatch="true"] {
-          opacity: 1;
-        }
-
-        .gnav-item:focus-visible {
-          outline: 1.5px solid #0f172a;
-          outline-offset: 2px;
-        }
-      `}</style>
-
-      <nav
-        ref={trackRef as React.RefObject<HTMLElement>}
-        className={`gnav ${className}`}
-        style={vars}
-        aria-label={ariaLabel}
-      >
-        <span className="gnav-ind" data-phase={phase} style={style} aria-hidden />
-
-        {items.map((item) => {
-          const isSelected = active === item.key;
-          const isSwatch = Boolean(item.color);
-          const isIconOnly = Boolean(item.icon && (!item.label || item.showLabel === false));
-          const slotTitle = item.title || item.label || item.key;
-
-          const dim = size === "xs" ? 26 : size === "default" ? 36 : 30;
-          const padH = size === "xs" ? 11 : size === "default" ? 16 : 13;
-
-          const slotStyle: React.CSSProperties =
-            isSwatch || isIconOnly
-              ? {
-                  width: `${dim}px`,
-                  height: `${dim}px`,
-                  minWidth: `${dim}px`,
-                  padding: 0,
-                  flexShrink: 0,
-                }
-              : {
-                  width: "auto",
-                  minWidth: `${dim}px`,
-                  height: `${dim}px`,
-                  padding: `0 ${padH}px`,
-                  whiteSpace: "nowrap",
-                  flexShrink: 0,
-                };
-
-          return (
-            <button
-              key={item.key}
-              ref={(el) => {
-                refs.current[item.key] = el;
-              }}
-              type="button"
-              className="gnav-item"
-              data-active={isSelected}
-              data-swatch={isSwatch}
-              aria-label={slotTitle}
-              title={slotTitle}
-              aria-current={isSelected ? "page" : undefined}
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                select(item.key);
-                onChange?.(item.key);
-              }}
-              style={slotStyle}
-            >
+        return (
+          <button
+            key={item.key}
+            ref={(el) => {
+              refs.current[item.key] = el;
+            }}
+            type="button"
+            className={`relative z-2 flex items-center justify-center rounded-full border-0 bg-transparent text-slate-900 leading-none cursor-pointer transition-opacity duration-260 ease-[cubic-bezier(0.32,0.72,0.24,1)] focus-visible:outline-2 focus-visible:outline-slate-900 focus-visible:outline-offset-2 ${
+              isSelected || isSwatch ? "opacity-100" : "opacity-50 hover:opacity-85"
+            }`}
+            data-active={isSelected}
+            data-swatch={isSwatch}
+            aria-label={slotTitle}
+            title={slotTitle}
+            aria-current={isSelected ? "page" : undefined}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              select(item.key);
+              onChange?.(item.key);
+            }}
+            style={slotStyle}
+          >
               {item.color ? (
                 <span
                   className={`block rounded-full border transition-transform duration-150 ${
@@ -381,7 +288,6 @@ export function SelectBar<T extends string = string>({
           );
         })}
       </nav>
-    </>
   );
 }
 
