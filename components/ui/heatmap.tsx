@@ -1065,7 +1065,7 @@ export function Heatmap({
   return (
     <div
       ref={containerRef}
-      className={`relative block w-full select-none cursor-crosshair touch-none ${className}`}
+      className={`relative block w-full cursor-crosshair touch-none select-none ${className}`}
       style={{ aspectRatio: `${VIEW_W} / ${VIEW_H}`, ...style }}
       role="region"
       aria-label={`Interactive 3D GitHub Heatmap with ${numCols} weeks by ${numRows} days`}
@@ -1175,12 +1175,12 @@ export function Heatmap({
                   ry={r2((isCenter ? 0.65 : 0.52) * C.S * C.k)}
                   className={
                     isCenter
-                      ? `stroke-none fill-white ${
+                      ? `fill-white stroke-none ${
                           mode === "dark"
                             ? "group-[.for-light-bar]:fill-black"
                             : "group-[.for-light-bar]:fill-[#0f172a]"
                         }`
-                      : `stroke-none fill-[rgba(255,255,255,0.65)] ${
+                      : `fill-[rgba(255,255,255,0.65)] stroke-none ${
                           mode === "dark"
                             ? "group-[.for-light-bar]:fill-[rgba(0,0,0,0.45)]"
                             : "group-[.for-light-bar]:fill-[rgba(15,23,42,0.45)]"

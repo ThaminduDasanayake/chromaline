@@ -268,7 +268,7 @@ export function Seek({
       data-busy={busy}
     >
       <div
-        className={`group/seek relative overflow-hidden isolate bg-white/65 backdrop-blur-md backdrop-saturate-150 shadow-[inset_0_1px_0_rgba(255,255,255,0.95),0_10px_32px_rgba(15,23,42,0.08)] ${
+        className={`group/seek relative isolate overflow-hidden bg-white/65 shadow-[inset_0_1px_0_rgba(255,255,255,0.95),0_10px_32px_rgba(15,23,42,0.08)] backdrop-blur-md backdrop-saturate-150 ${
           !open ? "[@media(hover:hover)]:hover:scale-[1.04]" : ""
         }`}
         style={{
@@ -281,7 +281,7 @@ export function Seek({
       >
         {/* Prismatic specular lit rim */}
         <span
-          className="pointer-events-none absolute inset-0 z-2 rounded-full border border-transparent [mask-composite:exclude] [-webkit-mask-composite:xor] [mask:linear-gradient(#000_0_0)_padding-box,linear-gradient(#000_0_0)] [-webkit-mask:linear-gradient(#000_0_0)_padding-box,linear-gradient(#000_0_0)] [background:linear-gradient(142deg,rgba(255,255,255,0.75)_0%,rgba(255,255,255,0.18)_26%,rgba(255,255,255,0.06)_62%,rgba(255,255,255,0.45)_100%)_border-box]"
+          className="pointer-events-none absolute inset-0 z-2 rounded-full border border-transparent [mask-composite:exclude] [-webkit-mask-composite:xor] [-webkit-mask:linear-gradient(#000_0_0)_padding-box,linear-gradient(#000_0_0)] [background:linear-gradient(142deg,rgba(255,255,255,0.75)_0%,rgba(255,255,255,0.18)_26%,rgba(255,255,255,0.06)_62%,rgba(255,255,255,0.45)_100%)_border-box] [mask:linear-gradient(#000_0_0)_padding-box,linear-gradient(#000_0_0)]"
           style={{ borderRadius: `${actualCorner}px` }}
           aria-hidden="true"
         />
@@ -319,7 +319,7 @@ export function Seek({
           onChange={handleChange}
           onBlur={handleBlur}
           onKeyDown={handleKeyDown}
-          className="absolute top-0 z-3 h-full border-0 bg-transparent font-sans font-medium tracking-tight text-slate-900 placeholder:text-slate-400 outline-none"
+          className="absolute top-0 z-3 h-full border-0 bg-transparent font-sans font-medium tracking-tight text-slate-900 outline-none placeholder:text-slate-400"
           style={{
             left: `${inset + lens + (size === "sm" ? 8 : 11)}px`,
             right: `${open && currentValue ? (size === "sm" ? 34 : 40) : 16}px`,
@@ -334,7 +334,7 @@ export function Seek({
         {open && currentValue && (
           <button
             type="button"
-            className="absolute top-1/2 -translate-y-1/2 z-5 flex items-center justify-center rounded-full border-0 bg-slate-900/7 text-slate-600 hover:bg-slate-900/14 hover:text-slate-900 cursor-pointer transition-all duration-150"
+            className="absolute top-1/2 z-5 flex -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border-0 bg-slate-900/7 text-slate-600 transition-all duration-150 hover:bg-slate-900/14 hover:text-slate-900"
             aria-label="Clear search"
             onClick={handleClear}
             style={{
@@ -362,7 +362,7 @@ export function Seek({
         {!open && (
           <button
             type="button"
-            className="absolute inset-0 z-4 border-0 rounded-inherit bg-transparent cursor-pointer focus-visible:outline-2 focus-visible:outline-slate-900 focus-visible:outline-offset-2"
+            className="rounded-inherit absolute inset-0 z-4 cursor-pointer border-0 bg-transparent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-900"
             aria-label={placeholder}
             onClick={start}
             disabled={disabled}
