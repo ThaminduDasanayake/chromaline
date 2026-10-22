@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useId, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 /* ══ Seek ═══════════════════════════════════════════════════
    A search icon that springs into a search field.
@@ -99,7 +99,6 @@ export function Seek({
   disabled = false,
   autoFocus = false,
 }: SeekProps) {
-  const instanceId = useId();
   const cfg = SIZE_CONFIGS[size] || SIZE_CONFIGS.default;
   const shut = cfg.shut;
   const lens = cfg.lens;
@@ -257,221 +256,120 @@ export function Seek({
   const sayProgress = clamp((p - 0.55) / 0.45, 0, 1);
 
   return (
-    <>
-      <style>{`
-        .sek-${instanceId} {
-          position: relative;
-          display: inline-grid;
-          place-items: center;
-          width: ${Math.max(shut, span) + 24}px;
-          height: ${shut + 24}px;
-          user-select: none;
-        }
-
-        .sek-skin-${instanceId} {
-          position: relative;
-          width: ${w.toFixed(2)}px;
-          height: ${shut}px;
-          border-radius: ${actualCorner}px;
-          background: rgba(255, 255, 255, 0.65);
-          -webkit-backdrop-filter: blur(10px) saturate(150%) brightness(100%);
-          backdrop-filter: blur(10px) saturate(150%) brightness(100%);
-          isolation: isolate;
-          transform: translate(${lean.x.toFixed(2)}px, ${lean.y.toFixed(2)}px) scale(${press ? 0.93 : 1});
-          transition:
-            transform ${press ? "160ms" : "220ms"} cubic-bezier(0.22, 1, 0.36, 1),
-            background 220ms ease;
-          overflow: hidden;
-          box-shadow:
-            inset 0 1px 0 rgba(255, 255, 255, 0.95),
-            0 10px 32px rgba(15, 23, 42, 0.08);
-        }
-
-        /* Prismatic specular lit rim */
-        .sek-skin-${instanceId}::before {
-          content: "";
-          position: absolute;
-          inset: 0;
-          border-radius: inherit;
-          border: 1px solid transparent;
-          pointer-events: none;
-          z-index: 2;
-          background:
-            linear-gradient(
-              142deg,
-              rgba(255, 255, 255, 0.75) 0%,
-              rgba(255, 255, 255, 0.18) 26%,
-              rgba(255, 255, 255, 0.06) 62%,
-              rgba(255, 255, 255, 0.45) 100%
-            ) border-box;
-          -webkit-mask:
-            linear-gradient(#000 0 0) padding-box,
-            linear-gradient(#000 0 0);
-          -webkit-mask-composite: xor;
-          mask:
-            linear-gradient(#000 0 0) padding-box,
-            linear-gradient(#000 0 0);
-          mask-composite: exclude;
-        }
-
-        .sek-${instanceId}:not([data-open="true"]) .sek-skin-${instanceId}:hover {
-          transform: translate(${lean.x.toFixed(2)}px, ${lean.y.toFixed(2)}px) scale(1.04);
-        }
-
-        .sek-lens-${instanceId} {
-          position: absolute;
-          left: ${inset}px;
-          top: 50%;
-          width: ${lens}px;
-          height: ${lens}px;
-          margin-top: -${lens / 2}px;
-          fill: none;
-          stroke: #64748b;
-          stroke-width: ${busy ? 2.0 : 1.75};
-          stroke-linecap: round;
-          pointer-events: none;
-          z-index: 3;
-          transition: stroke 220ms ease, stroke-width 220ms ease;
-        }
-
-        .sek-skin-${instanceId}:hover .sek-lens-${instanceId} {
-          stroke: #0f172a;
-        }
-
-        .sek-${instanceId}[data-busy="true"] .sek-lens-${instanceId} {
-          stroke: #0f172a;
-        }
-
-        .sek-field-${instanceId} {
-          position: absolute;
-          left: ${inset + lens + (size === "sm" ? 8 : 11)}px;
-          right: ${open && currentValue ? (size === "sm" ? 34 : 40) : 16}px;
-          top: 0;
-          height: 100%;
-          border: 0;
-          background: none;
-          font-family: inherit;
-          font-size: ${cfg.font}px;
-          font-weight: 450;
-          letter-spacing: -0.01em;
-          color: #0f172a;
-          outline: none;
-          opacity: ${sayProgress.toFixed(3)};
-          transform: translateX(${(1 - sayProgress) * -6}px);
-          pointer-events: ${open ? "auto" : "none"};
-          z-index: 3;
-        }
-
-        .sek-field-${instanceId}::placeholder {
-          color: #94a3b8;
-        }
-
-        .sek-hit-${instanceId} {
-          position: absolute;
-          inset: 0;
-          border: 0;
-          border-radius: inherit;
-          background: none;
-          cursor: pointer;
-          z-index: 4;
-        }
-
-        .sek-hit-${instanceId}:focus-visible {
-          outline: 2px solid #0f172a;
-          outline-offset: 2px;
-        }
-
-        .sek-clear-${instanceId} {
-          position: absolute;
-          right: ${size === "sm" ? 10 : 13}px;
-          top: 50%;
-          transform: translateY(-50%);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          width: ${size === "sm" ? 20 : 24}px;
-          height: ${size === "sm" ? 20 : 24}px;
-          border-radius: 999px;
-          border: 0;
-          background: rgba(15, 23, 42, 0.07);
-          color: #475569;
-          cursor: pointer;
-          opacity: ${sayProgress > 0.8 ? 1 : 0};
-          transition: opacity 150ms ease, background 150ms ease, color 150ms ease;
-          z-index: 5;
-        }
-
-        .sek-clear-${instanceId}:hover {
-          background: rgba(15, 23, 42, 0.14);
-          color: #0f172a;
-        }
-      `}</style>
-
+    <div
+      ref={frameRef}
+      className={`relative inline-grid place-items-center select-none ${className}`}
+      style={{
+        width: `${Math.max(shut, span) + 24}px`,
+        height: `${shut + 24}px`,
+      }}
+      data-open={open}
+      data-press={press}
+      data-busy={busy}
+    >
       <div
-        ref={frameRef}
-        className={`sek-${instanceId} ${className}`}
-        data-open={open}
-        data-press={press}
-        data-busy={busy}
+        className={`group/seek relative overflow-hidden isolate bg-white/65 backdrop-blur-md backdrop-saturate-150 shadow-[inset_0_1px_0_rgba(255,255,255,0.95),0_10px_32px_rgba(15,23,42,0.08)] ${
+          !open ? "[@media(hover:hover)]:hover:scale-[1.04]" : ""
+        }`}
+        style={{
+          width: `${w.toFixed(2)}px`,
+          height: `${shut}px`,
+          borderRadius: `${actualCorner}px`,
+          transform: `translate(${lean.x.toFixed(2)}px, ${lean.y.toFixed(2)}px) scale(${press ? 0.93 : 1})`,
+          transition: `transform ${press ? "160ms" : "220ms"} cubic-bezier(0.22, 1, 0.36, 1), background 220ms ease`,
+        }}
       >
-        <div className={`sek-skin-${instanceId}`}>
-          {/* Custom continuous vector lens */}
-          <svg className={`sek-lens-${instanceId}`} viewBox="0 0 18 18" aria-hidden="true">
-            <circle cx="7.6" cy="7.6" r="5.4" />
-            <path d="M11.6 11.6 L15.4 15.4" />
-          </svg>
+        {/* Prismatic specular lit rim */}
+        <span
+          className="pointer-events-none absolute inset-0 z-2 rounded-full border border-transparent [mask-composite:exclude] [-webkit-mask-composite:xor] [mask:linear-gradient(#000_0_0)_padding-box,linear-gradient(#000_0_0)] [-webkit-mask:linear-gradient(#000_0_0)_padding-box,linear-gradient(#000_0_0)] [background:linear-gradient(142deg,rgba(255,255,255,0.75)_0%,rgba(255,255,255,0.18)_26%,rgba(255,255,255,0.06)_62%,rgba(255,255,255,0.45)_100%)_border-box]"
+          style={{ borderRadius: `${actualCorner}px` }}
+          aria-hidden="true"
+        />
 
-          {/* Expandable Search Input */}
-          <input
-            ref={inputRef}
-            className={`sek-field-${instanceId}`}
-            type="text"
-            value={currentValue}
-            placeholder={placeholder}
-            aria-label={placeholder}
-            inputMode={touch ? "none" : undefined}
-            tabIndex={open ? 0 : -1}
-            disabled={disabled}
-            onChange={handleChange}
-            onBlur={handleBlur}
-            onKeyDown={handleKeyDown}
-          />
+        {/* Custom continuous vector lens */}
+        <svg
+          className={`pointer-events-none absolute top-1/2 z-3 fill-none transition-[stroke,stroke-width] duration-220 ease-out ${
+            busy ? "stroke-slate-900" : "stroke-slate-500 group-hover/seek:stroke-slate-900"
+          }`}
+          viewBox="0 0 18 18"
+          aria-hidden="true"
+          style={{
+            left: `${inset}px`,
+            width: `${lens}px`,
+            height: `${lens}px`,
+            marginTop: `${-lens / 2}px`,
+            strokeWidth: busy ? 2.0 : 1.75,
+            strokeLinecap: "round",
+          }}
+        >
+          <circle cx="7.6" cy="7.6" r="5.4" />
+          <path d="M11.6 11.6 L15.4 15.4" />
+        </svg>
 
-          {/* Clear button when field has content */}
-          {open && currentValue && (
-            <button
-              type="button"
-              className={`sek-clear-${instanceId}`}
-              aria-label="Clear search"
-              onClick={handleClear}
+        {/* Expandable Search Input */}
+        <input
+          ref={inputRef}
+          type="text"
+          value={currentValue}
+          placeholder={placeholder}
+          aria-label={placeholder}
+          inputMode={touch ? "none" : undefined}
+          tabIndex={open ? 0 : -1}
+          disabled={disabled}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          onKeyDown={handleKeyDown}
+          className="absolute top-0 z-3 h-full border-0 bg-transparent font-sans font-medium tracking-tight text-slate-900 placeholder:text-slate-400 outline-none"
+          style={{
+            left: `${inset + lens + (size === "sm" ? 8 : 11)}px`,
+            right: `${open && currentValue ? (size === "sm" ? 34 : 40) : 16}px`,
+            fontSize: `${cfg.font}px`,
+            opacity: Number(sayProgress.toFixed(3)),
+            transform: `translateX(${(1 - sayProgress) * -6}px)`,
+            pointerEvents: open ? "auto" : "none",
+          }}
+        />
+
+        {/* Clear button when field has content */}
+        {open && currentValue && (
+          <button
+            type="button"
+            className="absolute top-1/2 -translate-y-1/2 z-5 flex items-center justify-center rounded-full border-0 bg-slate-900/7 text-slate-600 hover:bg-slate-900/14 hover:text-slate-900 cursor-pointer transition-all duration-150"
+            aria-label="Clear search"
+            onClick={handleClear}
+            style={{
+              right: `${size === "sm" ? 10 : 13}px`,
+              width: `${size === "sm" ? 20 : 24}px`,
+              height: `${size === "sm" ? 20 : 24}px`,
+              opacity: sayProgress > 0.8 ? 1 : 0,
+            }}
+          >
+            <svg
+              width={cfg.clearSize}
+              height={cfg.clearSize}
+              viewBox="0 0 16 16"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
             >
-              <svg
-                width={cfg.clearSize}
-                height={cfg.clearSize}
-                viewBox="0 0 16 16"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-              >
-                <path d="M4 4 L12 12 M12 4 L4 12" />
-              </svg>
-            </button>
-          )}
+              <path d="M4 4 L12 12 M12 4 L4 12" />
+            </svg>
+          </button>
+        )}
 
-          {/* Target button when closed */}
-          {!open && (
-            <button
-              type="button"
-              className={`sek-hit-${instanceId}`}
-              aria-label={placeholder}
-              onClick={start}
-              disabled={disabled}
-            />
-          )}
-        </div>
+        {/* Target button when closed */}
+        {!open && (
+          <button
+            type="button"
+            className="absolute inset-0 z-4 border-0 rounded-inherit bg-transparent cursor-pointer focus-visible:outline-2 focus-visible:outline-slate-900 focus-visible:outline-offset-2"
+            aria-label={placeholder}
+            onClick={start}
+            disabled={disabled}
+          />
+        )}
       </div>
-    </>
+    </div>
   );
 }
 
