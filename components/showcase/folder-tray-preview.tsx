@@ -239,7 +239,7 @@ function isDarkColor(hex?: string): boolean {
 
 export function FolderTrayPreview({ showControls = true }: { showControls?: boolean }) {
   const [folders, setFolders] = useState<FolderItem<WorkspaceData>[]>(WORKSPACE_FOLDERS);
-  const [variant, setVariant] = useState<"color" | "original">("color");
+  const [variant, setVariant] = useState<"color" | "original">("original");
   const [modalFolder, setModalFolder] = useState<FolderItem<WorkspaceData> | null>(null);
 
   // Close on Escape key
@@ -302,21 +302,21 @@ export function FolderTrayPreview({ showControls = true }: { showControls?: bool
         />
       </div>
 
-      {/* Visual Theme Selector: Color vs No color (Original theme) */}
+      {/* Visual Theme Selector: Monochrome (Default) vs Chromatic */}
       {showControls && (
         <div className="absolute inset-x-0 bottom-4 z-10 flex items-center justify-center gap-2">
           <SelectBar<"color" | "original">
             size="xs"
             items={[
               {
-                key: "color",
-                label: "Color",
-                icon: <PaletteIcon size={13} weight="bold" />,
+                key: "original",
+                label: "Monochrome",
+                icon: <CircleHalfIcon size={13} weight="bold" />,
               },
               {
-                key: "original",
-                label: "No color",
-                icon: <CircleHalfIcon size={13} weight="bold" />,
+                key: "color",
+                label: "Chromatic",
+                icon: <PaletteIcon size={13} weight="bold" />,
               },
             ]}
             value={variant}
