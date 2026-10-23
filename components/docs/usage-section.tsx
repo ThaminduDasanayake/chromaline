@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
-import { CopyIcon, CheckIcon } from "@phosphor-icons/react";
+import React from "react";
+import { CopyButton } from "@/components/ui/copy-button";
 
 export interface CodeLinePart {
   text: string;
@@ -26,14 +26,6 @@ export function UsageSection({
   codeText,
   codeLines,
 }: UsageSectionProps) {
-  const [copied, setCopied] = useState(false);
-
-  const handleCopy = () => {
-    navigator.clipboard.writeText(codeText);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
-
   return (
     <section>
       <div className="flex items-center justify-between">
@@ -42,24 +34,7 @@ export function UsageSection({
           {description && <p className="mt-1 text-xs text-slate-500">{description}</p>}
         </div>
 
-        <button
-          type="button"
-          onClick={handleCopy}
-          className="flex items-center gap-1.5 rounded-lg border border-slate-200/80 bg-white px-2.5 py-1 text-xs font-medium text-slate-600 shadow-2xs transition-colors hover:bg-slate-50 hover:text-slate-900"
-          title="Copy code"
-        >
-          {copied ? (
-            <>
-              <CheckIcon size={13} weight="bold" className="text-emerald-600" />
-              <span className="font-semibold text-emerald-600">Copied</span>
-            </>
-          ) : (
-            <>
-              <CopyIcon size={13} weight="bold" />
-              <span>Copy</span>
-            </>
-          )}
-        </button>
+        <CopyButton value={codeText} title="Copy code" />
       </div>
 
       <div className="mt-4 overflow-hidden rounded-2xl border border-slate-200/90 bg-[#F9FAFB] shadow-2xs">
