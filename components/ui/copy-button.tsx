@@ -4,8 +4,10 @@ import React from "react";
 import { CheckIcon, CopyIcon } from "@phosphor-icons/react";
 import { useCopyToClipboard } from "@/hooks/use-copy-to-clipboard";
 
-export interface CopyButtonProps
-  extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "onCopy"> {
+export interface CopyButtonProps extends Omit<
+  React.ButtonHTMLAttributes<HTMLButtonElement>,
+  "onCopy"
+> {
   /** The text or code string to copy to the clipboard */
   value: string;
   /** Label to display next to the icon in resting state (default: "Copy") */
