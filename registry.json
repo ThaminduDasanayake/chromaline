@@ -104,6 +104,22 @@
           "target": "components/ui/toggle.tsx"
         }
       ]
+    },
+    {
+      "name": "label-input",
+      "type": "registry:ui",
+      "title": "Label Input",
+      "description": "A field whose label is its placeholder until focused. Outline parts from middle outward with letter-by-letter hopping text.",
+      "dependencies": [
+        "@phosphor-icons/react@^2.1.10"
+      ],
+      "files": [
+        {
+          "path": "components/ui/label-input.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/label-input.tsx"
+        }
+      ]
     }
   ]
 }

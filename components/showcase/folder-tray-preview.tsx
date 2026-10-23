@@ -19,9 +19,9 @@ export const WORKSPACE_FOLDERS: FolderItem<WorkspaceData>[] = [
   {
     id: "f-1",
     name: "The Tactile Web",
-    bodyColor: "#E54F10", // Vivid Terracotta Orange
-    darkOutline: "#7C2D12",
-    lightOutline: "#FED7AA",
+    bodyColor: "#E461F5", // macOS Finder Tag Purple
+    darkOutline: "#C137D5",
+    lightOutline: "#F9D8FD",
     category: "Essay",
     description:
       "An inquiry into why physical metaphors, paper grain, and spring physics make digital software feel durable and human.",
@@ -58,9 +58,9 @@ export const WORKSPACE_FOLDERS: FolderItem<WorkspaceData>[] = [
     name: "Button Component",
     href: "/components/button",
     target: "_blank",
-    bodyColor: "#0A90D2", // Vivid Electric Blue
-    darkOutline: "#075985",
-    lightOutline: "#BAE6FD",
+    bodyColor: "#4FA7FF", // macOS Finder Tag Blue
+    darkOutline: "#1A82E0",
+    lightOutline: "#CCE5FF",
     category: "Primitive",
     description:
       "Tactile micro-interaction button with spring press dynamics and dual-tone border bevels.",
@@ -76,9 +76,9 @@ export const WORKSPACE_FOLDERS: FolderItem<WorkspaceData>[] = [
   {
     id: "f-3",
     name: "Design Notes",
-    bodyColor: "#53F399", // Vivid Mint Spring Green
-    darkOutline: "#047857",
-    lightOutline: "#D1FAE5",
+    bodyColor: "#68DB7B", // macOS Finder Tag Green
+    darkOutline: "#37B954",
+    lightOutline: "#D2F6D8",
     category: "Guidelines",
     description: "Core design rules and specifications for tactile UI components.",
     content: (
@@ -100,7 +100,7 @@ export const WORKSPACE_FOLDERS: FolderItem<WorkspaceData>[] = [
     data: {
       branch: "main",
       status: "deployed",
-      updated: "3h ago",
+      updated: "2h ago",
       filesCount: 22,
       files: ["principles.md", "tokens.json"],
       envVars: [],
@@ -111,16 +111,16 @@ export const WORKSPACE_FOLDERS: FolderItem<WorkspaceData>[] = [
     name: "Folder Primitive",
     href: "/components/folder",
     target: "_blank",
-    bodyColor: "#8B5CF6", // Vivid Bright Violet
-    darkOutline: "#4C1D95",
-    lightOutline: "#DDD6FE",
+    bodyColor: "#FFDE55", // macOS Finder Tag Yellow
+    darkOutline: "#DFBC1F",
+    lightOutline: "#FFF4C2",
     category: "Primitive",
     description:
       "Individual SVG manila folder card with 5 ruled lines, dual-layer borders, and dynamic fill.",
     data: {
       branch: "main",
       status: "synced",
-      updated: "4h ago",
+      updated: "3h ago",
       filesCount: 8,
       files: ["folder.tsx", "registry.json"],
       envVars: [],
@@ -129,9 +129,9 @@ export const WORKSPACE_FOLDERS: FolderItem<WorkspaceData>[] = [
   {
     id: "f-5",
     name: "Release Notes",
-    bodyColor: "#F59E0B", // Vivid Bright Amber
-    darkOutline: "#92400E",
-    lightOutline: "#FEF08A",
+    bodyColor: "#FFA85F", // macOS Finder Tag Orange
+    darkOutline: "#E08433",
+    lightOutline: "#FFE3CC",
     category: "Changelog",
     description: "Version 0.1.0 release notes and feature changelog.",
     content: (
@@ -141,7 +141,7 @@ export const WORKSPACE_FOLDERS: FolderItem<WorkspaceData>[] = [
         </p>
         <p>• Hairline Riffle 3D isometric tray with interactive spring card riffle physics.</p>
         <p>
-          • Floating 9-color inspector with true-opacity swatches and dynamic text contrast
+          • Floating 8-color inspector with true-opacity swatches and dynamic text contrast
           inversion.
         </p>
         <p>
@@ -153,7 +153,7 @@ export const WORKSPACE_FOLDERS: FolderItem<WorkspaceData>[] = [
     data: {
       branch: "v0.1.0",
       status: "deployed",
-      updated: "5h ago",
+      updated: "4h ago",
       filesCount: 54,
       files: ["CHANGELOG.md"],
       envVars: [],
@@ -161,35 +161,41 @@ export const WORKSPACE_FOLDERS: FolderItem<WorkspaceData>[] = [
   },
   {
     id: "f-6",
-    name: "Brand Palette",
-    bodyColor: "#F43F5E", // Vivid Bright Rose
-    darkOutline: "#881337",
-    lightOutline: "#FECDD3",
-    category: "Tokens",
-    description:
-      "9 high-saturation ink tones formulated for deep contrast on both dark and light surfaces.",
+    name: "Hotfixes & Alerts",
+    bodyColor: "#FF6C6C", // macOS Finder Tag Red
+    darkOutline: "#DF4144",
+    lightOutline: "#FFD1D2",
+    category: "Incident",
+    description: "Active hotfixes, security patches, and critical operational notices.",
+    content: (
+      <div className="space-y-2.5">
+        <p className="font-mono text-xs tracking-wider uppercase opacity-75">Notice Queue</p>
+        <p>• Zero pending high-priority vulnerabilities in current release branch.</p>
+        <p>• Hairline vector geometry isolated with scoped attribute selectors.</p>
+      </div>
+    ),
     data: {
       branch: "main",
       status: "deployed",
-      updated: "1d ago",
-      filesCount: 16,
-      files: ["palette.json", "swatches.ase"],
+      updated: "5h ago",
+      filesCount: 6,
+      files: ["alerts.log", "audit.json"],
       envVars: [],
     },
   },
   {
     id: "f-7",
-    name: "Architecture",
-    bodyColor: "#06B6D4", // Vivid Bright Cyan
-    darkOutline: "#155E75",
-    lightOutline: "#CFFAFE",
+    name: "System Architecture",
+    bodyColor: "#ADACB0", // macOS Finder Tag Gray
+    darkOutline: "#88888E",
+    lightOutline: "#E4E3E6",
     category: "Engineering",
     description:
       "Hairline canvas pipeline driving SVG geometry through CSS variables for instantaneous 0ms repaint performance.",
     data: {
       branch: "v2-release",
       status: "synced",
-      updated: "2d ago",
+      updated: "1d ago",
       filesCount: 40,
       files: ["architecture.md", "pipeline.ts"],
       envVars: [],
@@ -198,16 +204,16 @@ export const WORKSPACE_FOLDERS: FolderItem<WorkspaceData>[] = [
   {
     id: "f-8",
     name: "Manifesto",
-    bodyColor: "#6366F1", // Vivid Bright Indigo
-    darkOutline: "#312E81",
-    lightOutline: "#E0E7FF",
+    bodyColor: "#FFFFFF", // White Cardstock
+    darkOutline: "#232327",
+    lightOutline: "#E0E0E4",
     category: "Philosophy",
     description:
       "Software should feel like fine stationery: carefully folded, pleasing to touch, and crafted to last.",
     data: {
       branch: "main",
       status: "deployed",
-      updated: "3d ago",
+      updated: "2d ago",
       filesCount: 12,
       files: ["manifesto.md"],
       envVars: [],
@@ -216,15 +222,14 @@ export const WORKSPACE_FOLDERS: FolderItem<WorkspaceData>[] = [
 ];
 
 export const FOLDER_COLOR_OPTIONS = [
-  { name: "Original", body: "#FFFFFF", dark: "#232327", light: "#E0E0E4" },
-  { name: "Orange", body: "#E54F10", dark: "#7C2D12", light: "#FED7AA" },
-  { name: "Electric Blue", body: "#0A90D2", dark: "#075985", light: "#BAE6FD" },
-  { name: "Mint Green", body: "#53F399", dark: "#047857", light: "#D1FAE5" },
-  { name: "Violet", body: "#8B5CF6", dark: "#4C1D95", light: "#DDD6FE" },
-  { name: "Amber", body: "#F59E0B", dark: "#92400E", light: "#FEF08A" },
-  { name: "Rose", body: "#F43F5E", dark: "#881337", light: "#FECDD3" },
-  { name: "Cyan", body: "#06B6D4", dark: "#155E75", light: "#CFFAFE" },
-  { name: "Indigo", body: "#6366F1", dark: "#312E81", light: "#E0E7FF" },
+  { name: "Purple", body: "#E461F5", dark: "#C137D5", light: "#F9D8FD" },
+  { name: "Blue", body: "#4FA7FF", dark: "#1A82E0", light: "#CCE5FF" },
+  { name: "Green", body: "#68DB7B", dark: "#37B954", light: "#D2F6D8" },
+  { name: "Yellow", body: "#FFDE55", dark: "#DFBC1F", light: "#FFF4C2" },
+  { name: "Orange", body: "#FFA85F", dark: "#E08433", light: "#FFE3CC" },
+  { name: "Red", body: "#FF6C6C", dark: "#DF4144", light: "#FFD1D2" },
+  { name: "Gray", body: "#ADACB0", dark: "#88888E", light: "#E4E3E6" },
+  { name: "White", body: "#FFFFFF", dark: "#232327", light: "#E0E0E4" },
 ];
 
 function isDarkColor(hex?: string): boolean {
@@ -239,7 +244,7 @@ function isDarkColor(hex?: string): boolean {
 
 export function FolderTrayPreview({ showControls = true }: { showControls?: boolean }) {
   const [folders, setFolders] = useState<FolderItem<WorkspaceData>[]>(WORKSPACE_FOLDERS);
-  const [variant, setVariant] = useState<"color" | "original">("color");
+  const [variant, setVariant] = useState<"color" | "original">("original");
   const [modalFolder, setModalFolder] = useState<FolderItem<WorkspaceData> | null>(null);
 
   // Close on Escape key
@@ -302,21 +307,21 @@ export function FolderTrayPreview({ showControls = true }: { showControls?: bool
         />
       </div>
 
-      {/* Visual Theme Selector: Color vs No color (Original theme) */}
+      {/* Visual Theme Selector: Monochrome (Default) vs Chromatic */}
       {showControls && (
         <div className="absolute inset-x-0 bottom-4 z-10 flex items-center justify-center gap-2">
           <SelectBar<"color" | "original">
             size="xs"
             items={[
               {
-                key: "color",
-                label: "Color",
-                icon: <PaletteIcon size={13} weight="bold" />,
+                key: "original",
+                label: "Monochrome",
+                icon: <CircleHalfIcon size={13} weight="bold" />,
               },
               {
-                key: "original",
-                label: "No color",
-                icon: <CircleHalfIcon size={13} weight="bold" />,
+                key: "color",
+                label: "Chromatic",
+                icon: <PaletteIcon size={13} weight="bold" />,
               },
             ]}
             value={variant}

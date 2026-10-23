@@ -46,11 +46,11 @@ export interface FolderTrayProps<T = unknown> {
   folders: FolderItem<T>[];
   /** Visual theme variant: "color" for vibrant colored folders, "original" for clean monochrome white line-art (default: "color") */
   variant?: "color" | "original";
-  /** Default body color (default: "#E54F10") */
+  /** Default body color (default: "#E461F5") */
   defaultBodyColor?: string;
-  /** Default dark outline (default: "#7C2D12") */
+  /** Default dark outline (default: "#C137D5") */
   defaultDarkOutline?: string;
-  /** Default light outline (default: "#FED7AA") */
+  /** Default light outline (default: "#F9D8FD") */
   defaultLightOutline?: string;
   /** Callback triggered when a folder is clicked */
   onOpen?: (folder: FolderItem<T>) => void;
@@ -63,20 +63,22 @@ export interface FolderTrayProps<T = unknown> {
   /** Spring intensity from 0 to 1 (default: 0.65) */
   intensity?: number;
   className?: string;
+  style?: React.CSSProperties;
 }
 
 export function FolderTray<T = unknown>({
   folders,
   variant = "color",
-  defaultBodyColor = "#E54F10",
-  defaultDarkOutline = "#7C2D12",
-  defaultLightOutline = "#FED7AA",
+  defaultBodyColor = "#E461F5",
+  defaultDarkOutline = "#C137D5",
+  defaultLightOutline = "#F9D8FD",
   onOpen,
   onSelect,
   onHover,
   defaultSelected = 0,
   intensity = 0.65,
   className = "",
+  style,
 }: FolderTrayProps<T>) {
   const [selectedIndex, setSelectedIndex] = useState(defaultSelected);
   const [hoverIndex, setHoverIndex] = useState<number | null>(null);
@@ -141,17 +143,30 @@ export function FolderTray<T = unknown>({
       if (cardGroups.length === 0) return false;
 
       cardGroups.forEach((grp, idx) => {
-        grp.setAttribute("data-card-index", String(idx));
-        (grp as HTMLElement).style.cursor = "pointer";
+        const item = folders[idx];
+        const body = isOriginal
+          ? "#FFFFFF"
+          : item?.bodyColor || item?.fill || item?.color || defaultBodyColor;
+        const dark = isOriginal
+          ? "#232327"
+          : item?.darkOutline || item?.outline || defaultDarkOutline;
+        const light = isOriginal ? "#E0E0E4" : item?.lightOutline || defaultLightOutline;
+
+        const grpEl = grp as HTMLElement;
+        grpEl.setAttribute("data-card-index", String(idx));
+        grpEl.style.cursor = "pointer";
+        grpEl.style.setProperty("--folder-body", body);
+        grpEl.style.setProperty("--folder-dark", dark);
+        grpEl.style.setProperty("--folder-light", light);
 
         if (idx === selectedIndex) {
-          grp.setAttribute("data-selected", "true");
+          grpEl.setAttribute("data-selected", "true");
         } else {
-          grp.removeAttribute("data-selected");
+          grpEl.removeAttribute("data-selected");
         }
 
         // Attach click listener
-        (grp as HTMLElement).onclick = (e) => {
+        grpEl.onclick = (e) => {
           e.stopPropagation();
           setSelectedIndex(idx);
           const f = getFolderItem(idx);
@@ -193,7 +208,16 @@ export function FolderTray<T = unknown>({
       cancelled = true;
       observer?.disconnect();
     };
-  }, [folders, getFolderItem, selectedIndex, triggerCardAction]);
+  }, [
+    folders,
+    getFolderItem,
+    selectedIndex,
+    triggerCardAction,
+    isOriginal,
+    defaultBodyColor,
+    defaultDarkOutline,
+    defaultLightOutline,
+  ]);
 
   // Smooth throttled onRead: only update hover index when crossing between distinct folders
   const handleRead = useCallback(
@@ -265,252 +289,9 @@ export function FolderTray<T = unknown>({
 
   return (
     <div
-      className={`folder-tray relative aspect-[5/4] w-full max-w-[460px] select-none ${className}`}
-      style={cssColorVariables as React.CSSProperties}
+      className={`folder-tray relative aspect-[5/4] w-full max-w-[460px] select-none [&_[data-card-index]_path.sil]:![fill:var(--folder-body,#fff)] [&_[data-card-index]_path.sil]:![stroke:var(--folder-dark,#232327)] [&_[data-card-index]_path.lo:not(.nf)]:![fill:var(--folder-body,#fff)] [&_[data-card-index]_path.lo:not(.nf)]:![stroke:var(--folder-light,#e0e0e4)] [&_[data-card-index]_path.nf:not(.lo)]:![fill:none] [&_[data-card-index]_path.nf:not(.lo)]:![stroke:var(--folder-dark,#232327)] [&_[data-card-index]_path.nf.lo]:![fill:none] [&_[data-card-index]_path.nf.lo]:![stroke:var(--folder-light,#e0e0e4)] [&_[data-card-index]_circle.dot]:![stroke:none] [&_[data-card-index]_circle.dot]:![fill:var(--folder-dark,#232327)] [&_[data-card-index]_circle.dot.off]:![fill:var(--folder-light,#e0e0e4)] [&_[data-card-index]_circle.dot.m]:![fill:var(--folder-dark,#232327)] ${className}`}
+      style={{ ...(style || {}), ...cssColorVariables } as React.CSSProperties}
     >
-      {/* 3-Color hairline riffle architecture: body of folder, dark outline, and light outline */}
-      <style jsx global>{`
-        /* Folder 1 */
-        .folder-tray [data-card-index="0"] path.sil {
-          fill: var(--folder-body-0, #fff) !important;
-          stroke: var(--folder-dark-0, #232327) !important;
-        }
-        .folder-tray [data-card-index="0"] path.lo:not(.nf) {
-          fill: var(--folder-body-0, #fff) !important;
-          stroke: var(--folder-light-0, #e0e0e4) !important;
-        }
-        .folder-tray [data-card-index="0"] path.nf:not(.lo) {
-          fill: none !important;
-          stroke: var(--folder-dark-0, #232327) !important;
-        }
-        .folder-tray [data-card-index="0"] path.nf.lo {
-          fill: none !important;
-          stroke: var(--folder-light-0, #e0e0e4) !important;
-        }
-        .folder-tray [data-card-index="0"] circle.dot {
-          fill: var(--folder-dark-0, #232327) !important;
-          stroke: none !important;
-        }
-        .folder-tray [data-card-index="0"] circle.dot.off {
-          fill: var(--folder-light-0, #e0e0e4) !important;
-          stroke: none !important;
-        }
-        .folder-tray [data-card-index="0"] circle.dot.m {
-          fill: var(--folder-dark-0, #232327) !important;
-          stroke: none !important;
-        }
-
-        /* Folder 2 */
-        .folder-tray [data-card-index="1"] path.sil {
-          fill: var(--folder-body-1, #fff) !important;
-          stroke: var(--folder-dark-1, #232327) !important;
-        }
-        .folder-tray [data-card-index="1"] path.lo:not(.nf) {
-          fill: var(--folder-body-1, #fff) !important;
-          stroke: var(--folder-light-1, #e0e0e4) !important;
-        }
-        .folder-tray [data-card-index="1"] path.nf:not(.lo) {
-          fill: none !important;
-          stroke: var(--folder-dark-1, #232327) !important;
-        }
-        .folder-tray [data-card-index="1"] path.nf.lo {
-          fill: none !important;
-          stroke: var(--folder-light-1, #e0e0e4) !important;
-        }
-        .folder-tray [data-card-index="1"] circle.dot {
-          fill: var(--folder-dark-1, #232327) !important;
-          stroke: none !important;
-        }
-        .folder-tray [data-card-index="1"] circle.dot.off {
-          fill: var(--folder-light-1, #e0e0e4) !important;
-          stroke: none !important;
-        }
-        .folder-tray [data-card-index="1"] circle.dot.m {
-          fill: var(--folder-dark-1, #232327) !important;
-          stroke: none !important;
-        }
-
-        /* Folder 3 */
-        .folder-tray [data-card-index="2"] path.sil {
-          fill: var(--folder-body-2, #fff) !important;
-          stroke: var(--folder-dark-2, #232327) !important;
-        }
-        .folder-tray [data-card-index="2"] path.lo:not(.nf) {
-          fill: var(--folder-body-2, #fff) !important;
-          stroke: var(--folder-light-2, #e0e0e4) !important;
-        }
-        .folder-tray [data-card-index="2"] path.nf:not(.lo) {
-          fill: none !important;
-          stroke: var(--folder-dark-2, #232327) !important;
-        }
-        .folder-tray [data-card-index="2"] path.nf.lo {
-          fill: none !important;
-          stroke: var(--folder-light-2, #e0e0e4) !important;
-        }
-        .folder-tray [data-card-index="2"] circle.dot {
-          fill: var(--folder-dark-2, #232327) !important;
-          stroke: none !important;
-        }
-        .folder-tray [data-card-index="2"] circle.dot.off {
-          fill: var(--folder-light-2, #e0e0e4) !important;
-          stroke: none !important;
-        }
-        .folder-tray [data-card-index="2"] circle.dot.m {
-          fill: var(--folder-dark-2, #232327) !important;
-          stroke: none !important;
-        }
-
-        /* Folder 4 */
-        .folder-tray [data-card-index="3"] path.sil {
-          fill: var(--folder-body-3, #fff) !important;
-          stroke: var(--folder-dark-3, #232327) !important;
-        }
-        .folder-tray [data-card-index="3"] path.lo:not(.nf) {
-          fill: var(--folder-body-3, #fff) !important;
-          stroke: var(--folder-light-3, #e0e0e4) !important;
-        }
-        .folder-tray [data-card-index="3"] path.nf:not(.lo) {
-          fill: none !important;
-          stroke: var(--folder-dark-3, #232327) !important;
-        }
-        .folder-tray [data-card-index="3"] path.nf.lo {
-          fill: none !important;
-          stroke: var(--folder-light-3, #e0e0e4) !important;
-        }
-        .folder-tray [data-card-index="3"] circle.dot {
-          fill: var(--folder-dark-3, #232327) !important;
-          stroke: none !important;
-        }
-        .folder-tray [data-card-index="3"] circle.dot.off {
-          fill: var(--folder-light-3, #e0e0e4) !important;
-          stroke: none !important;
-        }
-        .folder-tray [data-card-index="3"] circle.dot.m {
-          fill: var(--folder-dark-3, #232327) !important;
-          stroke: none !important;
-        }
-
-        /* Folder 5 */
-        .folder-tray [data-card-index="4"] path.sil {
-          fill: var(--folder-body-4, #fff) !important;
-          stroke: var(--folder-dark-4, #232327) !important;
-        }
-        .folder-tray [data-card-index="4"] path.lo:not(.nf) {
-          fill: var(--folder-body-4, #fff) !important;
-          stroke: var(--folder-light-4, #e0e0e4) !important;
-        }
-        .folder-tray [data-card-index="4"] path.nf:not(.lo) {
-          fill: none !important;
-          stroke: var(--folder-dark-4, #232327) !important;
-        }
-        .folder-tray [data-card-index="4"] path.nf.lo {
-          fill: none !important;
-          stroke: var(--folder-light-4, #e0e0e4) !important;
-        }
-        .folder-tray [data-card-index="4"] circle.dot {
-          fill: var(--folder-dark-4, #232327) !important;
-          stroke: none !important;
-        }
-        .folder-tray [data-card-index="4"] circle.dot.off {
-          fill: var(--folder-light-4, #e0e0e4) !important;
-          stroke: none !important;
-        }
-        .folder-tray [data-card-index="4"] circle.dot.m {
-          fill: var(--folder-dark-4, #232327) !important;
-          stroke: none !important;
-        }
-
-        /* Folder 6 */
-        .folder-tray [data-card-index="5"] path.sil {
-          fill: var(--folder-body-5, #fff) !important;
-          stroke: var(--folder-dark-5, #232327) !important;
-        }
-        .folder-tray [data-card-index="5"] path.lo:not(.nf) {
-          fill: var(--folder-body-5, #fff) !important;
-          stroke: var(--folder-light-5, #e0e0e4) !important;
-        }
-        .folder-tray [data-card-index="5"] path.nf:not(.lo) {
-          fill: none !important;
-          stroke: var(--folder-dark-5, #232327) !important;
-        }
-        .folder-tray [data-card-index="5"] path.nf.lo {
-          fill: none !important;
-          stroke: var(--folder-light-5, #e0e0e4) !important;
-        }
-        .folder-tray [data-card-index="5"] circle.dot {
-          fill: var(--folder-dark-5, #232327) !important;
-          stroke: none !important;
-        }
-        .folder-tray [data-card-index="5"] circle.dot.off {
-          fill: var(--folder-light-5, #e0e0e4) !important;
-          stroke: none !important;
-        }
-        .folder-tray [data-card-index="5"] circle.dot.m {
-          fill: var(--folder-dark-5, #232327) !important;
-          stroke: none !important;
-        }
-
-        /* Folder 7 */
-        .folder-tray [data-card-index="6"] path.sil {
-          fill: var(--folder-body-6, #fff) !important;
-          stroke: var(--folder-dark-6, #232327) !important;
-        }
-        .folder-tray [data-card-index="6"] path.lo:not(.nf) {
-          fill: var(--folder-body-6, #fff) !important;
-          stroke: var(--folder-light-6, #e0e0e4) !important;
-        }
-        .folder-tray [data-card-index="6"] path.nf:not(.lo) {
-          fill: none !important;
-          stroke: var(--folder-dark-6, #232327) !important;
-        }
-        .folder-tray [data-card-index="6"] path.nf.lo {
-          fill: none !important;
-          stroke: var(--folder-light-6, #e0e0e4) !important;
-        }
-        .folder-tray [data-card-index="6"] circle.dot {
-          fill: var(--folder-dark-6, #232327) !important;
-          stroke: none !important;
-        }
-        .folder-tray [data-card-index="6"] circle.dot.off {
-          fill: var(--folder-light-6, #e0e0e4) !important;
-          stroke: none !important;
-        }
-        .folder-tray [data-card-index="6"] circle.dot.m {
-          fill: var(--folder-dark-6, #232327) !important;
-          stroke: none !important;
-        }
-
-        /* Folder 8 */
-        .folder-tray [data-card-index="7"] path.sil {
-          fill: var(--folder-body-7, #fff) !important;
-          stroke: var(--folder-dark-7, #232327) !important;
-        }
-        .folder-tray [data-card-index="7"] path.lo:not(.nf) {
-          fill: var(--folder-body-7, #fff) !important;
-          stroke: var(--folder-light-7, #e0e0e4) !important;
-        }
-        .folder-tray [data-card-index="7"] path.nf:not(.lo) {
-          fill: none !important;
-          stroke: var(--folder-dark-7, #232327) !important;
-        }
-        .folder-tray [data-card-index="7"] path.nf.lo {
-          fill: none !important;
-          stroke: var(--folder-light-7, #e0e0e4) !important;
-        }
-        .folder-tray [data-card-index="7"] circle.dot {
-          fill: var(--folder-dark-7, #232327) !important;
-          stroke: none !important;
-        }
-        .folder-tray [data-card-index="7"] circle.dot.off {
-          fill: var(--folder-light-7, #e0e0e4) !important;
-          stroke: none !important;
-        }
-        .folder-tray [data-card-index="7"] circle.dot.m {
-          fill: var(--folder-dark-7, #232327) !important;
-          stroke: none !important;
-        }
-      `}</style>
-
       {/* 3D Isometric Folder Tray Container */}
       <div
         ref={containerRef}

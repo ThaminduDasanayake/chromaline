@@ -9,9 +9,9 @@ export const NAV_FOLDERS: FolderItem[] = [
     id: "nav-home",
     name: "Overview",
     href: "/",
-    bodyColor: "#E54F10", // Vivid Orange
-    darkOutline: "#7C2D12",
-    lightOutline: "#FED7AA",
+    bodyColor: "#E461F5", // Purple
+    darkOutline: "#C137D5",
+    lightOutline: "#F9D8FD",
     category: "Route",
     description: "Chromaline design system homepage and showcase.",
   },
@@ -19,9 +19,9 @@ export const NAV_FOLDERS: FolderItem[] = [
     id: "nav-button",
     name: "Button",
     href: "/components/button",
-    bodyColor: "#0A90D2", // Electric Blue
-    darkOutline: "#075985",
-    lightOutline: "#BAE6FD",
+    bodyColor: "#4FA7FF", // Blue
+    darkOutline: "#1A82E0",
+    lightOutline: "#CCE5FF",
     category: "Component",
     description: "Tactile micro-interaction button with spring press dynamics.",
   },
@@ -29,9 +29,9 @@ export const NAV_FOLDERS: FolderItem[] = [
     id: "nav-folder",
     name: "Folder",
     href: "/components/folder",
-    bodyColor: "#53F399", // Mint Green
-    darkOutline: "#047857",
-    lightOutline: "#D1FAE5",
+    bodyColor: "#68DB7B", // Green
+    darkOutline: "#37B954",
+    lightOutline: "#D2F6D8",
     category: "Component",
     description: "Standalone 2D vector folder with exact filleted tabs.",
   },
@@ -39,9 +39,9 @@ export const NAV_FOLDERS: FolderItem[] = [
     id: "nav-tray",
     name: "Folder Tray",
     href: "/components/folder-tray",
-    bodyColor: "#8B5CF6", // Violet
-    darkOutline: "#4C1D95",
-    lightOutline: "#DDD6FE",
+    bodyColor: "#FFDE55", // Yellow
+    darkOutline: "#DFBC1F",
+    lightOutline: "#FFF4C2",
     category: "Component",
     description: "3D kinematic card tray with hairline riffle physics.",
   },
@@ -50,9 +50,9 @@ export const NAV_FOLDERS: FolderItem[] = [
     name: "GitHub",
     href: "https://github.com",
     target: "_blank",
-    bodyColor: "#F59E0B", // Amber
-    darkOutline: "#92400E",
-    lightOutline: "#FEF08A",
+    bodyColor: "#FFA85F", // Orange
+    darkOutline: "#E08433",
+    lightOutline: "#FFE3CC",
     category: "External",
     description: "View repository, release notes, and source code.",
   },
@@ -60,9 +60,9 @@ export const NAV_FOLDERS: FolderItem[] = [
     id: "nav-changelog",
     name: "Changelog",
     href: "/",
-    bodyColor: "#F43F5E", // Rose
-    darkOutline: "#881337",
-    lightOutline: "#FECDD3",
+    bodyColor: "#FF6C6C", // Red
+    darkOutline: "#DF4144",
+    lightOutline: "#FFD1D2",
     category: "Updates",
     description: "Latest component updates and release notes.",
   },
@@ -71,9 +71,9 @@ export const NAV_FOLDERS: FolderItem[] = [
     name: "Registry JSON",
     href: "/r/folder-tray.json",
     target: "_blank",
-    bodyColor: "#06B6D4", // Cyan
-    darkOutline: "#155E75",
-    lightOutline: "#CFFAFE",
+    bodyColor: "#ADACB0", // Gray
+    darkOutline: "#88888E",
+    lightOutline: "#E4E3E6",
     category: "API",
     description: "Direct shadcn registry schema endpoint for CLI installation.",
   },
@@ -81,9 +81,9 @@ export const NAV_FOLDERS: FolderItem[] = [
     id: "nav-select",
     name: "Select Bar",
     href: "/components/select-bar",
-    bodyColor: "#6366F1", // Indigo
-    darkOutline: "#312E81",
-    lightOutline: "#E0E7FF",
+    bodyColor: "#FFFFFF", // White
+    darkOutline: "#232327",
+    lightOutline: "#E0E0E4",
     category: "Component",
     description: "Elastic kinetic segmented pill and color swatch selector.",
   },

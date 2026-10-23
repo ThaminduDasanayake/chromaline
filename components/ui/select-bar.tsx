@@ -184,13 +184,13 @@ export function SelectBar<T extends string = string>({
   return (
     <nav
       ref={trackRef as React.RefObject<HTMLElement>}
-      className={`relative inline-flex items-center gap-0.5 rounded-full select-none isolate text-slate-900 bg-white/60 backdrop-blur-md backdrop-saturate-150 shadow-[inset_0_1px_0_rgba(255,255,255,0.9),0_10px_40px_rgba(15,23,42,0.08)] ${className}`}
+      className={`relative isolate inline-flex items-center gap-0.5 rounded-full bg-white/60 text-slate-900 shadow-[inset_0_1px_0_rgba(255,255,255,0.9),0_10px_40px_rgba(15,23,42,0.08)] backdrop-blur-md backdrop-saturate-150 select-none ${className}`}
       style={{ padding: `${actualHug}px` }}
       aria-label={ariaLabel}
     >
       {/* Prismatic specular lit rim */}
       <span
-        className="pointer-events-none absolute inset-0 z-3 rounded-full border border-transparent [mask-composite:exclude] [-webkit-mask-composite:xor] [mask:linear-gradient(#000_0_0)_padding-box,linear-gradient(#000_0_0)] [-webkit-mask:linear-gradient(#000_0_0)_padding-box,linear-gradient(#000_0_0)] [background:linear-gradient(142deg,rgba(255,255,255,0.7)_0%,rgba(255,255,255,0.15)_26%,rgba(255,255,255,0.05)_62%,rgba(255,255,255,0.4)_100%)_border-box]"
+        className="pointer-events-none absolute inset-0 z-3 rounded-full border border-transparent [mask-composite:exclude] [-webkit-mask-composite:xor] [-webkit-mask:linear-gradient(#000_0_0)_padding-box,linear-gradient(#000_0_0)] [background:linear-gradient(142deg,rgba(255,255,255,0.7)_0%,rgba(255,255,255,0.15)_26%,rgba(255,255,255,0.05)_62%,rgba(255,255,255,0.4)_100%)_border-box] [mask:linear-gradient(#000_0_0)_padding-box,linear-gradient(#000_0_0)]"
         aria-hidden="true"
       />
 
@@ -235,7 +235,7 @@ export function SelectBar<T extends string = string>({
               refs.current[item.key] = el;
             }}
             type="button"
-            className={`relative z-2 flex items-center justify-center rounded-full border-0 bg-transparent text-slate-900 leading-none cursor-pointer transition-opacity duration-260 ease-[cubic-bezier(0.32,0.72,0.24,1)] focus-visible:outline-2 focus-visible:outline-slate-900 focus-visible:outline-offset-2 ${
+            className={`relative z-2 flex cursor-pointer items-center justify-center rounded-full border-0 bg-transparent leading-none text-slate-900 transition-opacity duration-260 ease-[cubic-bezier(0.32,0.72,0.24,1)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-900 ${
               isSelected || isSwatch ? "opacity-100" : "opacity-50 hover:opacity-85"
             }`}
             data-active={isSelected}
@@ -251,43 +251,43 @@ export function SelectBar<T extends string = string>({
             }}
             style={slotStyle}
           >
-              {item.color ? (
-                <span
-                  className={`block rounded-full border transition-transform duration-150 ${
-                    isSelected ? "scale-110" : "hover:scale-105"
-                  }`}
-                  style={{
-                    backgroundColor: item.color,
-                    borderColor: item.darkOutline || item.color,
-                    width: size === "xs" ? "12px" : size === "default" ? "16px" : "14px",
-                    height: size === "xs" ? "12px" : size === "default" ? "16px" : "14px",
-                  }}
-                />
-              ) : isIconOnly ? (
-                <span className="flex items-center justify-center text-current">{item.icon}</span>
-              ) : (
-                <span
-                  className={`inline-flex items-center justify-center gap-1.5 font-sans ${
-                    size === "xs"
-                      ? "text-[11.5px] font-medium"
-                      : size === "default"
-                        ? "text-[13px] font-medium"
-                        : "text-xs font-medium"
-                  }`}
-                  style={{ whiteSpace: "nowrap" }}
-                >
-                  {item.icon && (
-                    <span className="inline-flex shrink-0 items-center justify-center">
-                      {item.icon}
-                    </span>
-                  )}
-                  {item.label && <span className="shrink-0">{item.label}</span>}
-                </span>
-              )}
-            </button>
-          );
-        })}
-      </nav>
+            {item.color ? (
+              <span
+                className={`block rounded-full border transition-transform duration-150 ${
+                  isSelected ? "scale-110" : "hover:scale-105"
+                }`}
+                style={{
+                  backgroundColor: item.color,
+                  borderColor: item.darkOutline || item.color,
+                  width: size === "xs" ? "12px" : size === "default" ? "16px" : "14px",
+                  height: size === "xs" ? "12px" : size === "default" ? "16px" : "14px",
+                }}
+              />
+            ) : isIconOnly ? (
+              <span className="flex items-center justify-center text-current">{item.icon}</span>
+            ) : (
+              <span
+                className={`inline-flex items-center justify-center gap-1.5 font-sans ${
+                  size === "xs"
+                    ? "text-[11.5px] font-medium"
+                    : size === "default"
+                      ? "text-[13px] font-medium"
+                      : "text-xs font-medium"
+                }`}
+                style={{ whiteSpace: "nowrap" }}
+              >
+                {item.icon && (
+                  <span className="inline-flex shrink-0 items-center justify-center">
+                    {item.icon}
+                  </span>
+                )}
+                {item.label && <span className="shrink-0">{item.label}</span>}
+              </span>
+            )}
+          </button>
+        );
+      })}
+    </nav>
   );
 }
 

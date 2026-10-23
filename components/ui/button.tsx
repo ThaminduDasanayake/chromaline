@@ -117,11 +117,11 @@ export const Button = React.forwardRef<HTMLButtonElement & HTMLAnchorElement, Bu
     const innerContent = (
       <>
         {/* 3D Base extrusion shadow */}
-        <span className="absolute inset-x-0 top-[var(--tactile-depth)] bottom-0 rounded-[var(--tactile-radius)] bg-[var(--tactile-base)] shadow-[inset_0_-1px_0_var(--tactile-base-shadow)]" />
+        <span className="absolute inset-x-0 top-(--tactile-depth) bottom-0 rounded-(--tactile-radius) bg-(--tactile-base) shadow-[inset_0_-1px_0_var(--tactile-base-shadow)]" />
 
         {/* 3D Surface Face with mechanical push kinematics */}
         <span
-          className={`relative flex items-center justify-center rounded-[var(--tactile-radius)] bg-[var(--tactile-face)] font-medium text-[var(--tactile-content)] shadow-[inset_0_1px_0_var(--tactile-face-highlight)] transition-transform duration-150 [transition-timing-function:cubic-bezier(0.23,1,0.32,1)] group-active/tactile:translate-y-[var(--tactile-depth)] motion-reduce:transform-none motion-reduce:transition-none [@media(hover:hover)_and_(pointer:fine)]:group-hover/tactile:translate-y-0.5 ${s.inner}`}
+          className={`relative flex items-center justify-center rounded-(--tactile-radius) bg-(--tactile-face) font-medium text-(--tactile-content) shadow-[inset_0_1px_0_var(--tactile-face-highlight)] transition-transform duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] group-active/tactile:translate-y-(--tactile-depth) motion-reduce:transform-none motion-reduce:transition-none [@media(hover:hover)_and_(pointer:fine)]:group-hover/tactile:translate-y-0.5 ${s.inner}`}
         >
           {children}
         </span>

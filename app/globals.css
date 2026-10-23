@@ -137,3 +137,22 @@ input[type="reset"] {
   border-radius: 50%;
   margin-top: -6px;
 }
+
+/* LabelInput Animations */
+@keyframes lbi-hop {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  38% {
+    transform: translateY(-3px);
+  }
+}
+
+@keyframes lbi-flip {
+  from {
+    filter: blur(3px);
+    opacity: 0.5;
+  }
+}
+

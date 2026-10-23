@@ -91,9 +91,9 @@ const SILHOUETTES = [
  * using geometric vector paths, tab fillets, ruled lines, and punch dots.
  */
 export function Folder({
-  bodyColor = "#E54F10",
-  darkOutline = "#7C2D12",
-  lightOutline = "#FED7AA",
+  bodyColor = "#E461F5",
+  darkOutline = "#C137D5",
+  lightOutline = "#F9D8FD",
   borderWidth = 1.2,
   depth = true,
   folderIndex = 0,

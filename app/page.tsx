@@ -9,6 +9,7 @@ import {
   SeekCardPreview,
   HeatmapCardPreview,
   ToggleCardPreview,
+  LabelInputCardPreview,
 } from "@/components/showcase";
 
 export default function ChromalineHomePage() {
@@ -93,6 +94,15 @@ export default function ChromalineHomePage() {
             href="/components/toggle"
           >
             <ToggleCardPreview />
+          </ComponentCard>
+
+          {/* Card 8: Label Input */}
+          <ComponentCard
+            title="Label Input"
+            description="Tactile outline input with letter-by-letter hopping label and dynamic center-parting notch."
+            href="/components/label-input"
+          >
+            <LabelInputCardPreview />
           </ComponentCard>
         </div>
       </main>
