@@ -46,11 +46,11 @@ export interface FolderTrayProps<T = unknown> {
   folders: FolderItem<T>[];
   /** Visual theme variant: "color" for vibrant colored folders, "original" for clean monochrome white line-art (default: "color") */
   variant?: "color" | "original";
-  /** Default body color (default: "#E54F10") */
+  /** Default body color (default: "#E461F5") */
   defaultBodyColor?: string;
-  /** Default dark outline (default: "#7C2D12") */
+  /** Default dark outline (default: "#C137D5") */
   defaultDarkOutline?: string;
-  /** Default light outline (default: "#FED7AA") */
+  /** Default light outline (default: "#F9D8FD") */
   defaultLightOutline?: string;
   /** Callback triggered when a folder is clicked */
   onOpen?: (folder: FolderItem<T>) => void;
@@ -69,9 +69,9 @@ export interface FolderTrayProps<T = unknown> {
 export function FolderTray<T = unknown>({
   folders,
   variant = "color",
-  defaultBodyColor = "#E54F10",
-  defaultDarkOutline = "#7C2D12",
-  defaultLightOutline = "#FED7AA",
+  defaultBodyColor = "#E461F5",
+  defaultDarkOutline = "#C137D5",
+  defaultLightOutline = "#F9D8FD",
   onOpen,
   onSelect,
   onHover,

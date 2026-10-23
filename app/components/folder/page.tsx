@@ -14,13 +14,14 @@ import {
 } from "@/components/docs";
 
 const COLOR_PRESETS = [
-  { name: "Original", body: "#FFFFFF", dark: "#232327", light: "#E0E0E4" },
-  { name: "Orange", body: "#E54F10", dark: "#7C2D12", light: "#FED7AA" },
-  { name: "Electric Blue", body: "#0A90D2", dark: "#075985", light: "#BAE6FD" },
-  { name: "Mint Green", body: "#53F399", dark: "#047857", light: "#D1FAE5" },
-  { name: "Violet", body: "#8B5CF6", dark: "#4C1D95", light: "#DDD6FE" },
-  { name: "Amber", body: "#F59E0B", dark: "#92400E", light: "#FEF08A" },
-  { name: "Rose", body: "#F43F5E", dark: "#881337", light: "#FECDD3" },
+  { name: "Purple", body: "#E461F5", dark: "#C137D5", light: "#F9D8FD" },
+  { name: "Blue", body: "#4FA7FF", dark: "#1A82E0", light: "#CCE5FF" },
+  { name: "Green", body: "#68DB7B", dark: "#37B954", light: "#D2F6D8" },
+  { name: "Yellow", body: "#FFDE55", dark: "#DFBC1F", light: "#FFF4C2" },
+  { name: "Orange", body: "#FFA85F", dark: "#E08433", light: "#FFE3CC" },
+  { name: "Red", body: "#FF6C6C", dark: "#DF4144", light: "#FFD1D2" },
+  { name: "Gray", body: "#ADACB0", dark: "#88888E", light: "#E4E3E6" },
+  { name: "White", body: "#FFFFFF", dark: "#232327", light: "#E0E0E4" },
 ];
 
 const TAB_POSITIONS = [
@@ -71,15 +72,15 @@ const CODE_EXAMPLE_LINES = [
   },
   {
     num: 6,
-    parts: [{ text: "      bodyColor", cls: "text-purple-600" }, { text: '="#E54F10"' }],
+    parts: [{ text: "      bodyColor", cls: "text-purple-600" }, { text: '="#E461F5"' }],
   },
   {
     num: 7,
-    parts: [{ text: "      darkOutline", cls: "text-purple-600" }, { text: '="#7C2D12"' }],
+    parts: [{ text: "      darkOutline", cls: "text-purple-600" }, { text: '="#C137D5"' }],
   },
   {
     num: 8,
-    parts: [{ text: "      lightOutline", cls: "text-purple-600" }, { text: '="#FED7AA"' }],
+    parts: [{ text: "      lightOutline", cls: "text-purple-600" }, { text: '="#F9D8FD"' }],
   },
   {
     num: 9,
@@ -99,9 +100,9 @@ const CODE_EXAMPLE_TEXT = `import { Folder } from "@/components/ui/folder";
 export default function FolderDemo() {
   return (
     <Folder
-      bodyColor="#E54F10"
-      darkOutline="#7C2D12"
-      lightOutline="#FED7AA"
+      bodyColor="#E461F5"
+      darkOutline="#C137D5"
+      lightOutline="#F9D8FD"
       tabPosition="center"
       className="w-56 h-auto"
     />
@@ -112,19 +113,19 @@ const PROPS_DATA: PropItem[] = [
   {
     name: "bodyColor",
     type: "string",
-    default: '"#E54F10"',
+    default: '"#E461F5"',
     desc: "Hex fill color for the folder card face.",
   },
   {
     name: "darkOutline",
     type: "string",
-    default: '"#7C2D12"',
+    default: '"#C137D5"',
     desc: "Stroke color for silhouette outline, header line, and active tab dot.",
   },
   {
     name: "lightOutline",
     type: "string",
-    default: '"#FED7AA"',
+    default: '"#F9D8FD"',
     desc: "Stroke color for the 4 ruled lines and inactive punch dots.",
   },
   {
