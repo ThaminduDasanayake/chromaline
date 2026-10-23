@@ -191,6 +191,7 @@ export default function FolderPage() {
               <label className="text-xs font-semibold text-slate-900">Colorway</label>
               <div className="mt-2.5">
                 <SelectBar
+                  variant="swatches"
                   size="xs"
                   items={COLOR_PRESETS.map((preset, idx) => ({
                     key: String(idx),
