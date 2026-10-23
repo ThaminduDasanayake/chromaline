@@ -11,6 +11,8 @@ function buildRegistry() {
   const heatmapPath = path.join(__dirname, "../components/ui/heatmap.tsx");
   const togglePath = path.join(__dirname, "../components/ui/toggle.tsx");
   const labelInputPath = path.join(__dirname, "../components/ui/label-input.tsx");
+  const copyButtonPath = path.join(__dirname, "../components/ui/copy-button.tsx");
+  const copyHookPath = path.join(__dirname, "../hooks/use-copy-to-clipboard.ts");
 
   if (!fs.existsSync(trayPath)) {
     console.error("Component not found:", trayPath);
@@ -29,6 +31,10 @@ function buildRegistry() {
   const labelInputContent = fs.existsSync(labelInputPath)
     ? fs.readFileSync(labelInputPath, "utf8")
     : "";
+  const copyButtonContent = fs.existsSync(copyButtonPath)
+    ? fs.readFileSync(copyButtonPath, "utf8")
+    : "";
+  const copyHookContent = fs.existsSync(copyHookPath) ? fs.readFileSync(copyHookPath, "utf8") : "";
 
   // 1. Full Folder Tray with Folder Support
   const trayRegistryItem = {
@@ -208,6 +214,33 @@ function buildRegistry() {
     ],
   };
 
+  // 9. Copy Button with Hook
+  const copyButtonRegistryItem = {
+    $schema: "https://ui.shadcn.com/schema/registry-item.json",
+    name: "copy-button",
+    type: "registry:ui",
+    title: "Copy Button",
+    description:
+      "Tactile copy-to-clipboard button component and custom React hook with animated visual feedback.",
+    dependencies: ["@phosphor-icons/react@^2.1.10"],
+    devDependencies: [],
+    registryDependencies: [],
+    files: [
+      {
+        path: "components/ui/copy-button.tsx",
+        content: copyButtonContent,
+        type: "registry:ui",
+        target: "components/ui/copy-button.tsx",
+      },
+      {
+        path: "hooks/use-copy-to-clipboard.ts",
+        content: copyHookContent,
+        type: "registry:hook",
+        target: "hooks/use-copy-to-clipboard.ts",
+      },
+    ],
+  };
+
   const outDir = path.join(__dirname, "../public/r");
   fs.mkdirSync(outDir, { recursive: true });
 
@@ -232,6 +265,10 @@ function buildRegistry() {
     path.join(outDir, "label-input.json"),
     JSON.stringify(labelInputRegistryItem, null, 2)
   );
+  fs.writeFileSync(
+    path.join(outDir, "copy-button.json"),
+    JSON.stringify(copyButtonRegistryItem, null, 2)
+  );
 
   const indexRegistry = {
     $schema: "https://ui.shadcn.com/schema/registry.json",
@@ -246,6 +283,7 @@ function buildRegistry() {
       heatmapRegistryItem,
       toggleRegistryItem,
       labelInputRegistryItem,
+      copyButtonRegistryItem,
     ],
   };
   fs.writeFileSync(path.join(outDir, "index.json"), JSON.stringify(indexRegistry, null, 2));
@@ -376,12 +414,32 @@ function buildRegistry() {
           },
         ],
       },
+      {
+        name: "copy-button",
+        type: "registry:ui",
+        title: "Copy Button",
+        description:
+          "Tactile copy-to-clipboard button component and custom React hook with animated visual feedback.",
+        dependencies: ["@phosphor-icons/react@^2.1.10"],
+        files: [
+          {
+            path: "components/ui/copy-button.tsx",
+            type: "registry:ui",
+            target: "components/ui/copy-button.tsx",
+          },
+          {
+            path: "hooks/use-copy-to-clipboard.ts",
+            type: "registry:hook",
+            target: "hooks/use-copy-to-clipboard.ts",
+          },
+        ],
+      },
     ],
   };
   fs.writeFileSync(path.join(__dirname, "../registry.json"), JSON.stringify(rootRegistry, null, 2));
 
   console.log(
-    "✓ Chromaline registry generated at public/r/folder-tray.json, public/r/folder.json, public/r/button.json, public/r/select-bar.json, public/r/seek.json, public/r/heatmap.json, public/r/toggle.json, and public/r/label-input.json"
+    "✓ Chromaline registry generated at public/r/folder-tray.json, public/r/folder.json, public/r/button.json, public/r/select-bar.json, public/r/seek.json, public/r/heatmap.json, public/r/toggle.json, public/r/label-input.json, and public/r/copy-button.json"
   );
 }
 

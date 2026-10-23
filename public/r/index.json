@@ -158,6 +158,32 @@
           "target": "components/ui/label-input.tsx"
         }
       ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "copy-button",
+      "type": "registry:ui",
+      "title": "Copy Button",
+      "description": "Tactile copy-to-clipboard button component and custom React hook with animated visual feedback.",
+      "dependencies": [
+        "@phosphor-icons/react@^2.1.10"
+      ],
+      "devDependencies": [],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "components/ui/copy-button.tsx",
+          "content": "\"use client\";\n\nimport React from \"react\";\nimport { CheckIcon, CopyIcon } from \"@phosphor-icons/react\";\nimport { useCopyToClipboard } from \"@/hooks/use-copy-to-clipboard\";\n\nexport interface CopyButtonProps\n  extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, \"onCopy\"> {\n  /** The text or code string to copy to the clipboard */\n  value: string;\n  /** Label to display next to the icon in resting state (default: \"Copy\") */\n  label?: React.ReactNode;\n  /** Label to display next to the check icon when copied (default: \"Copied\") */\n  copiedLabel?: React.ReactNode;\n  /** Duration in milliseconds before resetting copied state (default: 2000) */\n  timeout?: number;\n  /** Render only the icon without text label */\n  iconOnly?: boolean;\n  /** Callback fired after successfully copying */\n  onCopy?: (value: string) => void;\n}\n\n/**\n * CopyButton\n *\n * Interactive tactile button component that copies text to the clipboard\n * using the useCopyToClipboard hook with animated visual feedback.\n */\nexport function CopyButton({\n  value,\n  label = \"Copy\",\n  copiedLabel = \"Copied\",\n  timeout = 2000,\n  iconOnly = false,\n  className = \"\",\n  title,\n  onClick,\n  onCopy,\n  ...props\n}: CopyButtonProps) {\n  const { copied, copy } = useCopyToClipboard({ timeout, onCopy });\n\n  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {\n    onClick?.(e);\n    if (!e.defaultPrevented) {\n      copy(value);\n    }\n  };\n\n  return (\n    <button\n      type=\"button\"\n      onClick={handleClick}\n      title={title || (copied ? \"Copied to clipboard\" : \"Copy to clipboard\")}\n      aria-label={typeof label === \"string\" ? label : \"Copy to clipboard\"}\n      className={`flex cursor-pointer items-center gap-1.5 rounded-lg border border-slate-200/80 bg-white px-2.5 py-1 text-xs font-medium text-slate-600 shadow-2xs transition-colors hover:bg-slate-50 hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-slate-900 ${\n        copied ? \"border-emerald-200 bg-emerald-50/50 text-emerald-700\" : \"\"\n      } ${className}`}\n      {...props}\n    >\n      {copied ? (\n        <>\n          <CheckIcon size={13} weight=\"bold\" className=\"shrink-0 text-emerald-600\" />\n          {!iconOnly && copiedLabel && (\n            <span className=\"font-semibold text-emerald-600\">{copiedLabel}</span>\n          )}\n        </>\n      ) : (\n        <>\n          <CopyIcon size={13} weight=\"bold\" className=\"shrink-0\" />\n          {!iconOnly && label && <span>{label}</span>}\n        </>\n      )}\n    </button>\n  );\n}\n",
+          "type": "registry:ui",
+          "target": "components/ui/copy-button.tsx"
+        },
+        {
+          "path": "hooks/use-copy-to-clipboard.ts",
+          "content": "\"use client\";\n\nimport { useState, useCallback, useRef, useEffect } from \"react\";\n\nexport interface UseCopyToClipboardOptions {\n  /** Duration in milliseconds before resetting copied state (default: 2000) */\n  timeout?: number;\n  /** Optional callback fired when text is successfully copied */\n  onCopy?: (text: string) => void;\n}\n\nexport interface UseCopyToClipboardReturn {\n  /** Whether text was recently copied to clipboard */\n  copied: boolean;\n  /** Function to copy text to clipboard */\n  copy: (text: string) => Promise<boolean>;\n}\n\n/**\n * useCopyToClipboard\n *\n * Custom React hook to copy arbitrary text to the clipboard\n * with cross-browser fallback and automatic timeout reset.\n */\nexport function useCopyToClipboard({\n  timeout = 2000,\n  onCopy,\n}: UseCopyToClipboardOptions = {}): UseCopyToClipboardReturn {\n  const [copied, setCopied] = useState(false);\n  const timeoutRef = useRef<NodeJS.Timeout | null>(null);\n\n  const copy = useCallback(\n    async (text: string): Promise<boolean> => {\n      if (!text && text !== \"\") return false;\n\n      try {\n        if (typeof navigator !== \"undefined\" && navigator?.clipboard?.writeText) {\n          await navigator.clipboard.writeText(text);\n        } else if (typeof document !== \"undefined\") {\n          // Fallback for non-secure contexts or older browsers\n          const textarea = document.createElement(\"textarea\");\n          textarea.value = text;\n          textarea.style.position = \"fixed\";\n          textarea.style.left = \"-9999px\";\n          textarea.style.top = \"-9999px\";\n          textarea.style.opacity = \"0\";\n          document.body.appendChild(textarea);\n          textarea.focus();\n          textarea.select();\n          document.execCommand(\"copy\");\n          document.body.removeChild(textarea);\n        } else {\n          return false;\n        }\n\n        setCopied(true);\n        onCopy?.(text);\n\n        if (timeoutRef.current) {\n          clearTimeout(timeoutRef.current);\n        }\n\n        timeoutRef.current = setTimeout(() => {\n          setCopied(false);\n          timeoutRef.current = null;\n        }, timeout);\n\n        return true;\n      } catch (err) {\n        console.error(\"Failed to copy to clipboard:\", err);\n        setCopied(false);\n        return false;\n      }\n    },\n    [timeout, onCopy]\n  );\n\n  useEffect(() => {\n    return () => {\n      if (timeoutRef.current) {\n        clearTimeout(timeoutRef.current);\n      }\n    };\n  }, []);\n\n  return { copied, copy };\n}\n",
+          "type": "registry:hook",
+          "target": "hooks/use-copy-to-clipboard.ts"
+        }
+      ]
     }
   ]
 }
