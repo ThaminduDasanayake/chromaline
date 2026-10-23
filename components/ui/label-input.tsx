@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useId, useRef, useState } from "react";
+import React, { useCallback, useEffect, useId, useRef, useState } from "react";
 import { EyeClosedIcon, EyeIcon } from "@phosphor-icons/react";
 
 const clamp = (v: number, a: number, b: number) => Math.min(b, Math.max(a, v));
@@ -67,12 +67,27 @@ export function LabelInput({
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   // Measure the rendered label width to calculate the exact top border notch
-  const [lw, setLw] = useState(48);
+  const [lw, setLw] = useState(() => Math.max(36, displayLabel.length * 10));
+  const labelNodeRef = useRef<HTMLLabelElement | null>(null);
+
   const labRef = useCallback((node: HTMLLabelElement | null) => {
+    labelNodeRef.current = node;
     if (node) {
-      setLw(node.offsetWidth);
+      const width = node.offsetWidth || node.scrollWidth;
+      if (width > 0) {
+        setLw(width);
+      }
     }
   }, []);
+
+  useEffect(() => {
+    if (labelNodeRef.current) {
+      const width = labelNodeRef.current.offsetWidth || labelNodeRef.current.scrollWidth;
+      if (width > 0) {
+        setLw(width);
+      }
+    }
+  }, [displayLabel]);
 
   // Adjust internal state if field preset changes during render
   const [prevField, setPrevField] = useState(field);
@@ -94,7 +109,7 @@ export function LabelInput({
   */
   const lx = Math.max(14, r + 4);
   const x0 = Math.max(r * 0.6, lx - 5);
-  const x1 = lx + lw * S + 5;
+  const x1 = lx + lw * S + 6;
   const a = r - IN;
   const R = W - IN;
   const B = H - IN;
@@ -222,6 +237,7 @@ export function LabelInput({
 
         {/* Floating Label with Letter-by-Letter Hop Animation */}
         <label
+          key={displayLabel}
           ref={labRef}
           htmlFor={id}
           className={`absolute top-1/2 origin-left cursor-text text-[16px] leading-none tracking-[-0.01em] whitespace-pre transition-[transform,color] duration-420 ease-[cubic-bezier(0.22,1,0.36,1)] select-none ${
