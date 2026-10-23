@@ -10,6 +10,7 @@ function buildRegistry() {
   const seekPath = path.join(__dirname, "../components/ui/seek.tsx");
   const heatmapPath = path.join(__dirname, "../components/ui/heatmap.tsx");
   const togglePath = path.join(__dirname, "../components/ui/toggle.tsx");
+  const labelInputPath = path.join(__dirname, "../components/ui/label-input.tsx");
 
   if (!fs.existsSync(trayPath)) {
     console.error("Component not found:", trayPath);
@@ -25,6 +26,9 @@ function buildRegistry() {
   const seekContent = fs.existsSync(seekPath) ? fs.readFileSync(seekPath, "utf8") : "";
   const heatmapContent = fs.existsSync(heatmapPath) ? fs.readFileSync(heatmapPath, "utf8") : "";
   const toggleContent = fs.existsSync(togglePath) ? fs.readFileSync(togglePath, "utf8") : "";
+  const labelInputContent = fs.existsSync(labelInputPath)
+    ? fs.readFileSync(labelInputPath, "utf8")
+    : "";
 
   // 1. Full Folder Tray with Folder Support
   const trayRegistryItem = {
@@ -183,6 +187,27 @@ function buildRegistry() {
     ],
   };
 
+  // 8. Label Input Component
+  const labelInputRegistryItem = {
+    $schema: "https://ui.shadcn.com/schema/registry-item.json",
+    name: "label-input",
+    type: "registry:ui",
+    title: "Label Input",
+    description:
+      "A field whose label is its placeholder until focused. Outline parts from middle outward with letter-by-letter hopping text.",
+    dependencies: ["@phosphor-icons/react@^2.1.10"],
+    devDependencies: [],
+    registryDependencies: [],
+    files: [
+      {
+        path: "components/ui/label-input.tsx",
+        content: labelInputContent,
+        type: "registry:ui",
+        target: "components/ui/label-input.tsx",
+      },
+    ],
+  };
+
   const outDir = path.join(__dirname, "../public/r");
   fs.mkdirSync(outDir, { recursive: true });
 
@@ -203,6 +228,10 @@ function buildRegistry() {
   fs.writeFileSync(path.join(outDir, "seek.json"), JSON.stringify(seekRegistryItem, null, 2));
   fs.writeFileSync(path.join(outDir, "heatmap.json"), JSON.stringify(heatmapRegistryItem, null, 2));
   fs.writeFileSync(path.join(outDir, "toggle.json"), JSON.stringify(toggleRegistryItem, null, 2));
+  fs.writeFileSync(
+    path.join(outDir, "label-input.json"),
+    JSON.stringify(labelInputRegistryItem, null, 2)
+  );
 
   const indexRegistry = {
     $schema: "https://ui.shadcn.com/schema/registry.json",
@@ -216,6 +245,7 @@ function buildRegistry() {
       seekRegistryItem,
       heatmapRegistryItem,
       toggleRegistryItem,
+      labelInputRegistryItem,
     ],
   };
   fs.writeFileSync(path.join(outDir, "index.json"), JSON.stringify(indexRegistry, null, 2));
@@ -331,12 +361,27 @@ function buildRegistry() {
           },
         ],
       },
+      {
+        name: "label-input",
+        type: "registry:ui",
+        title: "Label Input",
+        description:
+          "A field whose label is its placeholder until focused. Outline parts from middle outward with letter-by-letter hopping text.",
+        dependencies: ["@phosphor-icons/react@^2.1.10"],
+        files: [
+          {
+            path: "components/ui/label-input.tsx",
+            type: "registry:ui",
+            target: "components/ui/label-input.tsx",
+          },
+        ],
+      },
     ],
   };
   fs.writeFileSync(path.join(__dirname, "../registry.json"), JSON.stringify(rootRegistry, null, 2));
 
   console.log(
-    "✓ Chromaline registry generated at public/r/folder-tray.json, public/r/folder.json, public/r/button.json, public/r/select-bar.json, public/r/seek.json, public/r/heatmap.json, and public/r/toggle.json"
+    "✓ Chromaline registry generated at public/r/folder-tray.json, public/r/folder.json, public/r/button.json, public/r/select-bar.json, public/r/seek.json, public/r/heatmap.json, public/r/toggle.json, and public/r/label-input.json"
   );
 }
 

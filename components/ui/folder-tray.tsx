@@ -289,7 +289,7 @@ export function FolderTray<T = unknown>({
 
   return (
     <div
-      className={`folder-tray relative aspect-[5/4] w-full max-w-[460px] select-none [&_circle.dot]:![stroke:none] [&_circle.dot.m]:![fill:var(--folder-dark,#232327)] [&_circle.dot.off]:![fill:var(--folder-light,#e0e0e4)] [&_path.lo]:![fill:var(--folder-body,#fff)] [&_path.lo]:![stroke:var(--folder-light,#e0e0e4)] [&_path.nf]:![fill:none] [&_path.nf]:![stroke:var(--folder-dark,#232327)] [&_path.nf.lo]:![fill:none] [&_path.nf.lo]:![stroke:var(--folder-light,#e0e0e4)] [&_path.sil]:![fill:var(--folder-body,#fff)] [&_path.sil]:![stroke:var(--folder-dark,#232327)] ${className}`}
+      className={`folder-tray relative aspect-[5/4] w-full max-w-[460px] select-none [&_[data-card-index]_path.sil]:![fill:var(--folder-body,#fff)] [&_[data-card-index]_path.sil]:![stroke:var(--folder-dark,#232327)] [&_[data-card-index]_path.lo:not(.nf)]:![fill:var(--folder-body,#fff)] [&_[data-card-index]_path.lo:not(.nf)]:![stroke:var(--folder-light,#e0e0e4)] [&_[data-card-index]_path.nf:not(.lo)]:![fill:none] [&_[data-card-index]_path.nf:not(.lo)]:![stroke:var(--folder-dark,#232327)] [&_[data-card-index]_path.nf.lo]:![fill:none] [&_[data-card-index]_path.nf.lo]:![stroke:var(--folder-light,#e0e0e4)] [&_[data-card-index]_circle.dot]:![stroke:none] [&_[data-card-index]_circle.dot]:![fill:var(--folder-dark,#232327)] [&_[data-card-index]_circle.dot.off]:![fill:var(--folder-light,#e0e0e4)] [&_[data-card-index]_circle.dot.m]:![fill:var(--folder-dark,#232327)] ${className}`}
       style={{ ...(style || {}), ...cssColorVariables } as React.CSSProperties}
     >
       {/* 3D Isometric Folder Tray Container */}

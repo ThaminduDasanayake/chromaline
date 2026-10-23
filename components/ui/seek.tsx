@@ -281,7 +281,7 @@ export function Seek({
       >
         {/* Prismatic specular lit rim */}
         <span
-          className="pointer-events-none absolute inset-0 z-2 rounded-full border border-transparent [mask-composite:exclude] [-webkit-mask-composite:xor] [-webkit-mask:linear-gradient(#000_0_0)_padding-box,linear-gradient(#000_0_0)] [background:linear-gradient(142deg,rgba(255,255,255,0.75)_0%,rgba(255,255,255,0.18)_26%,rgba(255,255,255,0.06)_62%,rgba(255,255,255,0.45)_100%)_border-box] [mask:linear-gradient(#000_0_0)_padding-box,linear-gradient(#000_0_0)]"
+          className="pointer-events-none absolute inset-0 z-2 rounded-full border border-transparent mask-exclude [-webkit-mask-composite:xor] [-webkit-mask:linear-gradient(#000_0_0)_padding-box,linear-gradient(#000_0_0)] [background:linear-gradient(142deg,rgba(255,255,255,0.75)_0%,rgba(255,255,255,0.18)_26%,rgba(255,255,255,0.06)_62%,rgba(255,255,255,0.45)_100%)_border-box] [mask:linear-gradient(#000_0_0)_padding-box,linear-gradient(#000_0_0)]"
           style={{ borderRadius: `${actualCorner}px` }}
           aria-hidden="true"
         />
@@ -372,5 +372,3 @@ export function Seek({
     </div>
   );
 }
-
-export { Seek as SearchBar, Seek as SearchInput };
