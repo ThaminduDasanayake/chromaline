@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useRef, useState } from "react";
+import { cn } from "@/lib/utils";
 
 /* ── inlined from lab/motion ──────────────────────── */
 /* ── elastic, as numbers a person can hold ─────────────────
@@ -167,7 +168,7 @@ export function Aspect({
 
   return (
     <div
-      className={`relative flex flex-col items-center gap-4 font-sans ${className}`}
+      className={cn("relative flex flex-col items-center gap-4 font-sans select-none", className)}
       style={{
         width: W,
         height: W + GAP + BAR,

@@ -253,7 +253,7 @@ function buildRegistry() {
     title: "Aspect Ratio",
     description:
       "Equal-area crop switcher with constant 276-square bounding box, leading slider thumb, and 520ms morph transitions.",
-    dependencies: [],
+    dependencies: ["clsx", "tailwind-merge"],
     devDependencies: [],
     registryDependencies: [],
     files: [
@@ -274,7 +274,7 @@ function buildRegistry() {
     title: "Counter",
     description:
       "Rolling odometer counter with forward-only column rolling, staggered carry ripples, velocity blur smear, and drag coasting physics.",
-    dependencies: ["@phosphor-icons/react@^2.1.10"],
+    dependencies: ["@phosphor-icons/react@^2.1.10", "clsx", "tailwind-merge"],
     devDependencies: [],
     registryDependencies: [],
     files: [
@@ -493,6 +493,7 @@ function buildRegistry() {
         title: "Aspect Ratio",
         description:
           "Equal-area crop switcher with constant 276-square bounding box, leading slider thumb, and 520ms morph transitions.",
+        dependencies: ["clsx", "tailwind-merge"],
         files: [
           {
             path: "components/ui/aspect-ratio.tsx",
@@ -507,7 +508,7 @@ function buildRegistry() {
         title: "Counter",
         description:
           "Rolling odometer counter with forward-only column rolling, staggered carry ripples, velocity blur smear, and drag coasting physics.",
-        dependencies: ["@phosphor-icons/react@^2.1.10"],
+        dependencies: ["@phosphor-icons/react@^2.1.10", "clsx", "tailwind-merge"],
         files: [
           {
             path: "components/ui/counter.tsx",

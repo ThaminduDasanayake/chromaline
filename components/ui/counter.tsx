@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import { MinusIcon, PlusIcon } from "@phosphor-icons/react";
+import { cn } from "@/lib/utils";
 
 /* ══ Rolling counter ══════════════════════════════════════
    A number between a minus and a plus. Every digit is a strip
@@ -347,7 +348,10 @@ export function Counter({
 
   return (
     <div
-      className={`relative flex items-center gap-0 p-[5px] bg-white text-slate-900 shadow-[0_0_0_1px_rgba(0,0,0,0.08),0_2px_8px_-2px_rgba(15,23,42,0.06)] font-sans select-none ${className}`}
+      className={cn(
+        "relative flex items-center gap-0 p-[5px] bg-white text-slate-900 shadow-[0_0_0_1px_rgba(0,0,0,0.08),0_2px_8px_-2px_rgba(15,23,42,0.06)] font-sans select-none",
+        className
+      )}
       style={{
         borderRadius: `${r}px`,
         ...style,
@@ -407,9 +411,10 @@ export function Counter({
           return (
             <span key={p} className="flex">
               <span
-                className={`overflow-hidden transition-[width,opacity] duration-[320ms] ease-[cubic-bezier(0.3,1.2,0.4,1)] ${
+                className={cn(
+                  "overflow-hidden transition-[width,opacity] duration-[320ms] ease-[cubic-bezier(0.3,1.2,0.4,1)]",
                   p < shown ? "w-[0.64em] opacity-100" : "w-0 opacity-0"
-                }`}
+                )}
                 style={{ height: `${CELL}px` }}
               >
                 <span
@@ -427,9 +432,10 @@ export function Counter({
               </span>
               {p === 3 && (
                 <span
-                  className={`overflow-hidden transition-[width,opacity] duration-[320ms] ease-[cubic-bezier(0.3,1.2,0.4,1)] ${
+                  className={cn(
+                    "overflow-hidden transition-[width,opacity] duration-[320ms] ease-[cubic-bezier(0.3,1.2,0.4,1)]",
                     shown > 3 ? "w-[0.26em] opacity-100" : "w-0 opacity-0"
-                  }`}
+                  )}
                 >
                   ,
                 </span>
