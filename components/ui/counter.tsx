@@ -168,7 +168,9 @@ export function Counter({
   );
   const raf = useRef(0);
   const knobs = useRef({ bounce, stagger, blur });
-  knobs.current = { bounce, stagger, blur };
+  useEffect(() => {
+    knobs.current = { bounce, stagger, blur };
+  }, [bounce, stagger, blur]);
 
   /* ── paint ─────────────────────────────────────────────── */
   const paint = () => {
@@ -221,10 +223,13 @@ export function Counter({
     paint();
   }, [blur]);
 
-  useEffect(() => () => {
-    cancelAnimationFrame(raf.current);
-    raf.current = 0;
-  }, []);
+  useEffect(
+    () => () => {
+      cancelAnimationFrame(raf.current);
+      raf.current = 0;
+    },
+    []
+  );
 
   /* ── the one way the number changes ────────────────────── */
   const bump = (n: number) => {
@@ -252,10 +257,15 @@ export function Counter({
     else run();
   };
 
+  const bumpRef = useRef(bump);
+  useEffect(() => {
+    bumpRef.current = bump;
+  });
+
   /* React to external controlled value changes */
   useEffect(() => {
     if (isControlled && controlledValue !== val.current) {
-      bump(controlledValue - val.current);
+      bumpRef.current(controlledValue - val.current);
     }
   }, [controlledValue, isControlled]);
 

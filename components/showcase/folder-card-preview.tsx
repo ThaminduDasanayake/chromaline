@@ -4,10 +4,7 @@ import React, { useState } from "react";
 import { Folder } from "@/components/ui/folder";
 import { SelectBar } from "@/components/ui/select-bar";
 import { TextAlignCenterIcon, TextAlignLeftIcon, TextAlignRightIcon } from "@phosphor-icons/react";
-import {
-  FolderColorSelectBar,
-  FOLDER_COLOR_PRESETS,
-} from "./folder-color-select-bar";
+import { FolderColorSelectBar, FOLDER_COLOR_PRESETS } from "./folder-color-select-bar";
 
 export { FOLDER_COLOR_PRESETS } from "./folder-color-select-bar";
 

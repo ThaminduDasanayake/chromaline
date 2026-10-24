@@ -2,10 +2,7 @@
 
 import React, { useState } from "react";
 import { SelectBar, SelectBarItem } from "@/components/ui/select-bar";
-import {
-  FolderColorSelectBar,
-  FOLDER_COLOR_SWATCHES,
-} from "@/components/showcase";
+import { FolderColorSelectBar, FOLDER_COLOR_SWATCHES } from "@/components/showcase";
 import {
   CodeIcon,
   EyeIcon,

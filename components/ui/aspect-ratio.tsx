@@ -233,7 +233,7 @@ export function Aspect({
               ref={(el) => {
                 tabs.current[i] = el;
               }}
-              className="relative grid h-8 cursor-pointer place-items-center rounded-full border-0 bg-transparent p-0 text-slate-500 transition-[color,transform] duration-160 ease-out hover:text-slate-900 active:scale-96 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900/25 focus-visible:ring-offset-2 focus-visible:ring-offset-white aria-checked:text-slate-900 motion-reduce:transition-none"
+              className="relative grid h-8 cursor-pointer place-items-center rounded-full border-0 bg-transparent p-0 text-slate-500 transition-[color,transform] duration-160 ease-out hover:text-slate-900 focus-visible:ring-2 focus-visible:ring-slate-900/25 focus-visible:ring-offset-2 focus-visible:ring-offset-white focus-visible:outline-none active:scale-96 aria-checked:text-slate-900 motion-reduce:transition-none"
               role="radio"
               aria-checked={i === at}
               aria-label={s.label}
