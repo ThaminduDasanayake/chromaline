@@ -119,6 +119,8 @@ const clamp = (v: number, a: number, b: number) => Math.min(b, Math.max(a, v));
 
 type Col = { pos: number; vel: number; target: number; due: number[]; next: number[] };
 
+export type CounterTheme = "light" | "dark";
+
 export interface CounterProps {
   /** How lively a digit lands, 0..100 (default: 45) */
   bounce?: number;
@@ -132,6 +134,8 @@ export interface CounterProps {
   start?: number;
   /** Controlled count value */
   value?: number;
+  /** Visual theme mode (default: "light") */
+  theme?: CounterTheme;
   /** Callback fired when count changes */
   onChange?: (value: number) => void;
   className?: string;
@@ -148,6 +152,7 @@ export function Counter({
   /* the slab's corner, px */
   corner = 16,
   start = 22,
+  theme = "light",
   value: controlledValue,
   onChange,
   className = "",
@@ -345,11 +350,15 @@ export function Counter({
   const shown = Math.max(1, String(displayValue).length);
   const r = clamp(corner, 0, H / 2);
   const inner = Math.max(0, r - PAD);
+  const isDark = theme === "dark";
 
   return (
     <div
       className={cn(
-        "relative flex items-center gap-0 p-[5px] bg-white text-slate-900 shadow-[0_0_0_1px_rgba(0,0,0,0.08),0_2px_8px_-2px_rgba(15,23,42,0.06)] font-sans select-none",
+        "relative flex items-center gap-0 p-[5px] font-sans select-none transition-colors duration-300",
+        isDark
+          ? "bg-[#18181b] text-zinc-100 shadow-[0_0_0_1px_rgba(255,255,255,0.12),0_4px_20px_-4px_rgba(0,0,0,0.6)]"
+          : "bg-white text-slate-900 shadow-[0_0_0_1px_rgba(0,0,0,0.08),0_2px_8px_-2px_rgba(15,23,42,0.06)]",
         className
       )}
       style={{
@@ -359,7 +368,12 @@ export function Counter({
     >
       <button
         type="button"
-        className="grid w-10 shrink-0 place-items-center border-0 p-0 text-inherit cursor-pointer bg-slate-900/[0.06] hover:bg-slate-900/[0.1] active:scale-90 transition-[transform,background-color] duration-[200ms] active:duration-[110ms] ease-[cubic-bezier(0.3,0.9,0.4,1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900/25 focus-visible:ring-offset-2 focus-visible:ring-offset-white [-webkit-tap-highlight-color:transparent]"
+        className={cn(
+          "grid w-10 shrink-0 place-items-center border-0 p-0 text-inherit cursor-pointer active:scale-90 transition-[transform,background-color] duration-[200ms] active:duration-[110ms] ease-[cubic-bezier(0.3,0.9,0.4,1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 [-webkit-tap-highlight-color:transparent]",
+          isDark
+            ? "bg-white/[0.08] hover:bg-white/[0.14] focus-visible:ring-white/30 focus-visible:ring-offset-[#18181b]"
+            : "bg-slate-900/[0.06] hover:bg-slate-900/[0.1] focus-visible:ring-slate-900/25 focus-visible:ring-offset-white"
+        )}
         style={{
           height: `${CELL}px`,
           borderRadius: `${inner}px`,
@@ -380,7 +394,12 @@ export function Counter({
       </button>
 
       <div
-        className="flex justify-center px-3.5 text-[30px] font-medium tabular-nums tracking-[-0.02em] cursor-ns-resize touch-none select-none rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900/25 focus-visible:ring-offset-2 focus-visible:ring-offset-white [mask-image:linear-gradient(transparent,#000_20%,#000_80%,transparent)] [-webkit-mask-image:linear-gradient(transparent,#000_20%,#000_80%,transparent)]"
+        className={cn(
+          "flex justify-center px-3.5 text-[30px] font-medium tabular-nums tracking-[-0.02em] cursor-ns-resize touch-none select-none rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 [mask-image:linear-gradient(transparent,#000_20%,#000_80%,transparent)] [-webkit-mask-image:linear-gradient(transparent,#000_20%,#000_80%,transparent)]",
+          isDark
+            ? "focus-visible:ring-white/30 focus-visible:ring-offset-[#18181b]"
+            : "focus-visible:ring-slate-900/25 focus-visible:ring-offset-white"
+        )}
         style={{
           height: `${CELL}px`,
           lineHeight: `${CELL}px`,
@@ -447,7 +466,12 @@ export function Counter({
 
       <button
         type="button"
-        className="grid w-10 shrink-0 place-items-center border-0 p-0 text-inherit cursor-pointer bg-slate-900/[0.06] hover:bg-slate-900/[0.1] active:scale-90 transition-[transform,background-color] duration-[200ms] active:duration-[110ms] ease-[cubic-bezier(0.3,0.9,0.4,1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900/25 focus-visible:ring-offset-2 focus-visible:ring-offset-white [-webkit-tap-highlight-color:transparent]"
+        className={cn(
+          "grid w-10 shrink-0 place-items-center border-0 p-0 text-inherit cursor-pointer active:scale-90 transition-[transform,background-color] duration-[200ms] active:duration-[110ms] ease-[cubic-bezier(0.3,0.9,0.4,1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 [-webkit-tap-highlight-color:transparent]",
+          isDark
+            ? "bg-white/[0.08] hover:bg-white/[0.14] focus-visible:ring-white/30 focus-visible:ring-offset-[#18181b]"
+            : "bg-slate-900/[0.06] hover:bg-slate-900/[0.1] focus-visible:ring-slate-900/25 focus-visible:ring-offset-white"
+        )}
         style={{
           height: `${CELL}px`,
           borderRadius: `${inner}px`,

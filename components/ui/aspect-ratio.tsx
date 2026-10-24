@@ -93,6 +93,8 @@ const MARK = {
 
 const BASE = 520;
 
+export type AspectTheme = "light" | "dark";
+
 export interface AspectProps {
   /** Optional image URL (recommended 3:4 portrait source) */
   src?: string;
@@ -106,6 +108,8 @@ export interface AspectProps {
   ratio?: AspectRatioType;
   /** Default ratio format when uncontrolled (default: "square") */
   defaultRatio?: AspectRatioType;
+  /** Visual theme mode (default: "light") */
+  theme?: AspectTheme;
   /** Callback fired when format changes */
   onRatioChange?: (ratio: AspectRatioType) => void;
   className?: string;
@@ -120,6 +124,7 @@ export function Aspect({
   morph = 50,
   ratio,
   defaultRatio = "square",
+  theme = "light",
   onRatioChange,
   className = "",
   style,
@@ -166,6 +171,8 @@ export function Aspect({
     pick((at + d + SHAPES.length) % SHAPES.length, true);
   };
 
+  const isDark = theme === "dark";
+
   return (
     <div
       className={cn("relative flex flex-col items-center gap-4 font-sans select-none", className)}
@@ -193,7 +200,12 @@ export function Aspect({
             what it is, rather than as an image being
             squashed. */}
         <div
-          className="bg-slate-100 bg-cover bg-center shadow-[0_10px_30px_-10px_rgba(15,23,42,0.12),0_0_0_1px_rgba(15,23,42,0.06)] motion-reduce:transition-none"
+          className={cn(
+            "bg-cover bg-center motion-reduce:transition-none transition-shadow duration-300",
+            isDark
+              ? "bg-zinc-800 shadow-[0_10px_30px_-10px_rgba(0,0,0,0.6),0_0_0_1px_rgba(255,255,255,0.12)]"
+              : "bg-slate-100 shadow-[0_10px_30px_-10px_rgba(15,23,42,0.12),0_0_0_1px_rgba(15,23,42,0.06)]"
+          )}
           role="img"
           aria-label={alt}
           style={{
@@ -207,7 +219,10 @@ export function Aspect({
       </div>
 
       <div
-        className="relative grid grid-cols-[repeat(3,40px)] rounded-full bg-slate-900/[0.06] p-[2px]"
+        className={cn(
+          "relative grid grid-cols-[repeat(3,40px)] rounded-full p-[2px] transition-colors duration-300",
+          isDark ? "bg-white/[0.08]" : "bg-slate-900/[0.06]"
+        )}
         role="radiogroup"
         aria-label="Aspect ratio"
         onKeyDown={key}
@@ -219,7 +234,12 @@ export function Aspect({
             travels is one, and it is the one that says these
             three are positions of the same control. */}
         <span
-          className="pointer-events-none absolute top-[2px] left-[2px] h-[calc(100%-4px)] w-[calc((100%-4px)/3)] rounded-full bg-white shadow-[0_1px_3px_rgba(15,23,42,0.1),0_1px_2px_rgba(15,23,42,0.06)] motion-reduce:transition-none"
+          className={cn(
+            "pointer-events-none absolute top-[2px] left-[2px] h-[calc(100%-4px)] w-[calc((100%-4px)/3)] rounded-full motion-reduce:transition-none transition-colors duration-300",
+            isDark
+              ? "bg-[#27272a] shadow-[0_1px_3px_rgba(0,0,0,0.5),0_0_0_1px_rgba(255,255,255,0.08)]"
+              : "bg-white shadow-[0_1px_3px_rgba(15,23,42,0.1),0_1px_2px_rgba(15,23,42,0.06)]"
+          )}
           aria-hidden="true"
           style={{
             transform: `translateX(${at * 100}%)`,
@@ -234,7 +254,12 @@ export function Aspect({
               ref={(el) => {
                 tabs.current[i] = el;
               }}
-              className="relative grid h-8 cursor-pointer place-items-center rounded-full border-0 bg-transparent p-0 text-slate-500 transition-[color,transform] duration-160 ease-out hover:text-slate-900 focus-visible:ring-2 focus-visible:ring-slate-900/25 focus-visible:ring-offset-2 focus-visible:ring-offset-white focus-visible:outline-none active:scale-96 aria-checked:text-slate-900 motion-reduce:transition-none"
+              className={cn(
+                "relative grid h-8 cursor-pointer place-items-center rounded-full border-0 bg-transparent p-0 transition-[color,transform] duration-160 ease-out focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none active:scale-96 motion-reduce:transition-none",
+                isDark
+                  ? "text-zinc-400 hover:text-zinc-100 aria-checked:text-zinc-100 focus-visible:ring-white/30 focus-visible:ring-offset-zinc-900"
+                  : "text-slate-500 hover:text-slate-900 aria-checked:text-slate-900 focus-visible:ring-slate-900/25 focus-visible:ring-offset-white"
+              )}
               role="radio"
               aria-checked={i === at}
               aria-label={s.label}

@@ -270,7 +270,7 @@ export function getCommitHeight(count: number, maxCount: number = 25, level?: nu
 export function transformContributionsToMatrix(
   contributions: RawContributionDay[],
   scheme: HeatmapSchemeKey = "default",
-  mode: HeatmapMode = "dark",
+  mode: HeatmapMode = "light",
   range: HeatmapRange = "year"
 ): {
   matrix: HeatmapNode[][];
@@ -340,7 +340,7 @@ export function transformContributionsToMatrix(
  */
 export function generateProceduralMatrix(
   scheme: HeatmapSchemeKey = "default",
-  mode: HeatmapMode = "dark",
+  mode: HeatmapMode = "light",
   range: HeatmapRange = "year"
 ): {
   matrix: HeatmapNode[][];
@@ -623,7 +623,7 @@ interface ColumnMeta {
 export function Heatmap({
   data: providedData,
   scheme = "default",
-  mode = "dark",
+  mode = "light",
   range = "year",
   intensity = 0.6,
   colorOnHover = true,

@@ -9,7 +9,7 @@ export function HeatmapCardPreview() {
   return (
     <div className="flex h-full w-full flex-col items-center justify-center p-6">
       <div className="w-full max-w-[340px]">
-        <Heatmap scheme="default" mode="dark" range="14w" colorOnHover onHover={setHoveredNode} />
+        <Heatmap scheme="default" mode="light" range="14w" colorOnHover onHover={setHoveredNode} />
       </div>
 
       {/* Tactile Coordinate Badge */}
@@ -20,7 +20,7 @@ export function HeatmapCardPreview() {
       >
         <span
           className="inline-block h-1.5 w-1.5 rounded-full"
-          style={{ backgroundColor: hoveredNode?.color || "#56d364" }}
+          style={{ backgroundColor: hoveredNode?.color || "#216e39" }}
         />
         <span>
           {hoveredNode?.label} · {hoveredNode?.count} commit{hoveredNode?.count === 1 ? "" : "s"}
