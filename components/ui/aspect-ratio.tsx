@@ -201,7 +201,7 @@ export function Aspect({
             squashed. */}
         <div
           className={cn(
-            "bg-cover bg-center motion-reduce:transition-none transition-shadow duration-300",
+            "bg-cover bg-center transition-shadow duration-300 motion-reduce:transition-none",
             isDark
               ? "bg-zinc-800 shadow-[0_10px_30px_-10px_rgba(0,0,0,0.6),0_0_0_1px_rgba(255,255,255,0.12)]"
               : "bg-slate-100 shadow-[0_10px_30px_-10px_rgba(15,23,42,0.12),0_0_0_1px_rgba(15,23,42,0.06)]"
@@ -235,7 +235,7 @@ export function Aspect({
             three are positions of the same control. */}
         <span
           className={cn(
-            "pointer-events-none absolute top-[2px] left-[2px] h-[calc(100%-4px)] w-[calc((100%-4px)/3)] rounded-full motion-reduce:transition-none transition-colors duration-300",
+            "pointer-events-none absolute top-[2px] left-[2px] h-[calc(100%-4px)] w-[calc((100%-4px)/3)] rounded-full transition-colors duration-300 motion-reduce:transition-none",
             isDark
               ? "bg-[#27272a] shadow-[0_1px_3px_rgba(0,0,0,0.5),0_0_0_1px_rgba(255,255,255,0.08)]"
               : "bg-white shadow-[0_1px_3px_rgba(15,23,42,0.1),0_1px_2px_rgba(15,23,42,0.06)]"
@@ -257,8 +257,8 @@ export function Aspect({
               className={cn(
                 "relative grid h-8 cursor-pointer place-items-center rounded-full border-0 bg-transparent p-0 transition-[color,transform] duration-160 ease-out focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none active:scale-96 motion-reduce:transition-none",
                 isDark
-                  ? "text-zinc-400 hover:text-zinc-100 aria-checked:text-zinc-100 focus-visible:ring-white/30 focus-visible:ring-offset-zinc-900"
-                  : "text-slate-500 hover:text-slate-900 aria-checked:text-slate-900 focus-visible:ring-slate-900/25 focus-visible:ring-offset-white"
+                  ? "text-zinc-400 hover:text-zinc-100 focus-visible:ring-white/30 focus-visible:ring-offset-zinc-900 aria-checked:text-zinc-100"
+                  : "text-slate-500 hover:text-slate-900 focus-visible:ring-slate-900/25 focus-visible:ring-offset-white aria-checked:text-slate-900"
               )}
               role="radio"
               aria-checked={i === at}
