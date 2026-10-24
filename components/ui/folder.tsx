@@ -92,7 +92,7 @@ const SILHOUETTES = [
  */
 export function Folder({
   bodyColor = "#E461F5",
-  darkOutline = "#C137D5",
+  darkOutline = "#232327",
   lightOutline = "#F9D8FD",
   borderWidth = 1.2,
   depth = true,

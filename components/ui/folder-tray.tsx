@@ -48,7 +48,7 @@ export interface FolderTrayProps<T = unknown> {
   variant?: "color" | "original";
   /** Default body color (default: "#E461F5") */
   defaultBodyColor?: string;
-  /** Default dark outline (default: "#C137D5") */
+  /** Default dark outline (default: "#232327") */
   defaultDarkOutline?: string;
   /** Default light outline (default: "#F9D8FD") */
   defaultLightOutline?: string;
@@ -70,7 +70,7 @@ export function FolderTray<T = unknown>({
   folders,
   variant = "color",
   defaultBodyColor = "#E461F5",
-  defaultDarkOutline = "#C137D5",
+  defaultDarkOutline = "#232327",
   defaultLightOutline = "#F9D8FD",
   onOpen,
   onSelect,

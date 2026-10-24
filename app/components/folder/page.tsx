@@ -14,13 +14,13 @@ import {
 } from "@/components/docs";
 
 const COLOR_PRESETS = [
-  { name: "Purple", body: "#E461F5", dark: "#C137D5", light: "#F9D8FD" },
-  { name: "Blue", body: "#4FA7FF", dark: "#1A82E0", light: "#CCE5FF" },
-  { name: "Green", body: "#68DB7B", dark: "#37B954", light: "#D2F6D8" },
-  { name: "Yellow", body: "#FFDE55", dark: "#DFBC1F", light: "#FFF4C2" },
-  { name: "Orange", body: "#FFA85F", dark: "#E08433", light: "#FFE3CC" },
-  { name: "Red", body: "#FF6C6C", dark: "#DF4144", light: "#FFD1D2" },
-  { name: "Gray", body: "#ADACB0", dark: "#88888E", light: "#E4E3E6" },
+  { name: "Purple", body: "#E461F5", dark: "#232327", light: "#F9D8FD" },
+  { name: "Blue", body: "#4FA7FF", dark: "#232327", light: "#CCE5FF" },
+  { name: "Green", body: "#68DB7B", dark: "#232327", light: "#D2F6D8" },
+  { name: "Yellow", body: "#FFDE55", dark: "#232327", light: "#FFF4C2" },
+  { name: "Orange", body: "#FFA85F", dark: "#232327", light: "#FFE3CC" },
+  { name: "Red", body: "#FF6C6C", dark: "#232327", light: "#FFD1D2" },
+  { name: "Gray", body: "#ADACB0", dark: "#232327", light: "#E4E3E6" },
   { name: "White", body: "#FFFFFF", dark: "#232327", light: "#E0E0E4" },
 ];
 
@@ -76,7 +76,7 @@ const CODE_EXAMPLE_LINES = [
   },
   {
     num: 7,
-    parts: [{ text: "      darkOutline", cls: "text-purple-600" }, { text: '="#C137D5"' }],
+    parts: [{ text: "      darkOutline", cls: "text-purple-600" }, { text: '="#232327"' }],
   },
   {
     num: 8,
@@ -101,7 +101,7 @@ export default function FolderDemo() {
   return (
     <Folder
       bodyColor="#E461F5"
-      darkOutline="#C137D5"
+      darkOutline="#232327"
       lightOutline="#F9D8FD"
       tabPosition="center"
       className="w-56 h-auto"
@@ -119,7 +119,7 @@ const PROPS_DATA: PropItem[] = [
   {
     name: "darkOutline",
     type: "string",
-    default: '"#C137D5"',
+    default: '"#232327"',
     desc: "Stroke color for silhouette outline, header line, and active tab dot.",
   },
   {

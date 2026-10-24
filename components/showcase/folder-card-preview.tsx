@@ -6,13 +6,13 @@ import { SelectBar } from "@/components/ui/select-bar";
 import { TextAlignCenterIcon, TextAlignLeftIcon, TextAlignRightIcon } from "@phosphor-icons/react";
 
 export const FOLDER_COLOR_PRESETS = [
-  { name: "Purple", body: "#E461F5", dark: "#C137D5", light: "#F9D8FD" },
-  { name: "Blue", body: "#4FA7FF", dark: "#1A82E0", light: "#CCE5FF" },
-  { name: "Green", body: "#68DB7B", dark: "#37B954", light: "#D2F6D8" },
-  { name: "Yellow", body: "#FFDE55", dark: "#DFBC1F", light: "#FFF4C2" },
-  { name: "Orange", body: "#FFA85F", dark: "#E08433", light: "#FFE3CC" },
-  { name: "Red", body: "#FF6C6C", dark: "#DF4144", light: "#FFD1D2" },
-  { name: "Gray", body: "#ADACB0", dark: "#88888E", light: "#E4E3E6" },
+  { name: "Purple", body: "#E461F5", dark: "#232327", light: "#F9D8FD" },
+  { name: "Blue", body: "#4FA7FF", dark: "#232327", light: "#CCE5FF" },
+  { name: "Green", body: "#68DB7B", dark: "#232327", light: "#D2F6D8" },
+  { name: "Yellow", body: "#FFDE55", dark: "#232327", light: "#FFF4C2" },
+  { name: "Orange", body: "#FFA85F", dark: "#232327", light: "#FFE3CC" },
+  { name: "Red", body: "#FF6C6C", dark: "#232327", light: "#FFD1D2" },
+  { name: "Gray", body: "#ADACB0", dark: "#232327", light: "#E4E3E6" },
   { name: "White", body: "#FFFFFF", dark: "#232327", light: "#E0E0E4" },
 ];
 

@@ -47,7 +47,7 @@ const CODE_EXAMPLE_LINES = [
       { text: ", " },
       { text: "darkOutline", cls: "text-purple-600" },
       { text: ": " },
-      { text: '"#C137D5"', cls: "text-[#0284c7]" },
+      { text: '"#232327"', cls: "text-[#0284c7]" },
       { text: ", " },
       { text: "lightOutline", cls: "text-purple-600" },
       { text: ": " },
@@ -73,7 +73,7 @@ const CODE_EXAMPLE_LINES = [
       { text: ", " },
       { text: "darkOutline", cls: "text-purple-600" },
       { text: ": " },
-      { text: '"#1A82E0"', cls: "text-[#0284c7]" },
+      { text: '"#232327"', cls: "text-[#0284c7]" },
       { text: ", " },
       { text: "lightOutline", cls: "text-purple-600" },
       { text: ": " },
@@ -99,7 +99,7 @@ const CODE_EXAMPLE_LINES = [
       { text: ", " },
       { text: "darkOutline", cls: "text-purple-600" },
       { text: ": " },
-      { text: '"#37B954"', cls: "text-[#0284c7]" },
+      { text: '"#232327"', cls: "text-[#0284c7]" },
       { text: ", " },
       { text: "lightOutline", cls: "text-purple-600" },
       { text: ": " },
@@ -138,9 +138,9 @@ const CODE_EXAMPLE_TEXT = `import { FolderTray } from "@/components/ui/folder-tr
 
 export default function Workspace() {
   const folders = [
-    { id: "p1", name: "Project 1", bodyColor: "#E461F5", darkOutline: "#C137D5", lightOutline: "#F9D8FD" },
-    { id: "p2", name: "Project 2", bodyColor: "#4FA7FF", darkOutline: "#1A82E0", lightOutline: "#CCE5FF" },
-    { id: "p3", name: "Project 3", bodyColor: "#68DB7B", darkOutline: "#37B954", lightOutline: "#D2F6D8" },
+    { id: "p1", name: "Project 1", bodyColor: "#E461F5", darkOutline: "#232327", lightOutline: "#F9D8FD" },
+    { id: "p2", name: "Project 2", bodyColor: "#4FA7FF", darkOutline: "#232327", lightOutline: "#CCE5FF" },
+    { id: "p3", name: "Project 3", bodyColor: "#68DB7B", darkOutline: "#232327", lightOutline: "#D2F6D8" },
   ];
 
   return (
