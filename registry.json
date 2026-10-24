@@ -152,11 +152,6 @@
           "path": "components/ui/aspect-ratio.tsx",
           "type": "registry:ui",
           "target": "components/ui/aspect-ratio.tsx"
-        },
-        {
-          "path": "components/ui/aspect-ratio.css",
-          "type": "registry:ui",
-          "target": "components/ui/aspect-ratio.css"
         }
       ]
     }

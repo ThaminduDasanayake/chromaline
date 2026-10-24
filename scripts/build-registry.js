@@ -14,7 +14,6 @@ function buildRegistry() {
   const copyButtonPath = path.join(__dirname, "../components/ui/copy-button.tsx");
   const copyHookPath = path.join(__dirname, "../hooks/use-copy-to-clipboard.ts");
   const aspectPath = path.join(__dirname, "../components/ui/aspect-ratio.tsx");
-  const aspectCssPath = path.join(__dirname, "../components/ui/aspect-ratio.css");
 
   if (!fs.existsSync(trayPath)) {
     console.error("Component not found:", trayPath);
@@ -38,9 +37,6 @@ function buildRegistry() {
     : "";
   const copyHookContent = fs.existsSync(copyHookPath) ? fs.readFileSync(copyHookPath, "utf8") : "";
   const aspectContent = fs.existsSync(aspectPath) ? fs.readFileSync(aspectPath, "utf8") : "";
-  const aspectCssContent = fs.existsSync(aspectCssPath)
-    ? fs.readFileSync(aspectCssPath, "utf8")
-    : "";
 
   // 1. Full Folder Tray with Folder Support
   const trayRegistryItem = {
@@ -265,16 +261,6 @@ function buildRegistry() {
         type: "registry:ui",
         target: "components/ui/aspect-ratio.tsx",
       },
-      ...(aspectCssContent
-        ? [
-            {
-              path: "components/ui/aspect-ratio.css",
-              content: aspectCssContent,
-              type: "registry:ui",
-              target: "components/ui/aspect-ratio.css",
-            },
-          ]
-        : []),
     ],
   };
 
@@ -487,11 +473,6 @@ function buildRegistry() {
             path: "components/ui/aspect-ratio.tsx",
             type: "registry:ui",
             target: "components/ui/aspect-ratio.tsx",
-          },
-          {
-            path: "components/ui/aspect-ratio.css",
-            type: "registry:ui",
-            target: "components/ui/aspect-ratio.css",
           },
         ],
       },

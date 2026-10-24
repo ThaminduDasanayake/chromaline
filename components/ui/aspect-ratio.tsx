@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useRef, useState } from "react";
-import "./aspect-ratio.css";
 
 /* ── inlined from lab/motion ──────────────────────── */
 /* ── elastic, as numbers a person can hold ─────────────────
@@ -168,11 +167,10 @@ export function Aspect({
 
   return (
     <div
-      className={`asp ${className}`}
+      className={`relative flex flex-col items-center gap-4 font-sans ${className}`}
       style={{
         width: W,
         height: W + GAP + BAR,
-        ["--asp-ms" as string]: `${ms}ms`,
         ...style,
       }}
     >
@@ -182,7 +180,7 @@ export function Aspect({
           the tabs below it climb and drop as the shape
           changed — the one thing on this block that has no
           business moving. */}
-      <div className="asp-stage" style={{ height: W }}>
+      <div className="grid w-full place-items-center" style={{ height: W }}>
         {/* ── width and height, NEVER a scale ─────────────
             The same rule the detail overlay's block follows,
             for the same reason: a scaled box drags its corner
@@ -194,7 +192,7 @@ export function Aspect({
             what it is, rather than as an image being
             squashed. */}
         <div
-          className="asp-pic"
+          className="bg-slate-100 bg-cover bg-center shadow-[0_10px_30px_-10px_rgba(15,23,42,0.12),0_0_0_1px_rgba(15,23,42,0.06)] motion-reduce:transition-none"
           role="img"
           aria-label={alt}
           style={{
@@ -202,11 +200,17 @@ export function Aspect({
             height: shape.h,
             borderRadius: clamp(corner, 0, 40),
             backgroundImage: `url(${imageSrc})`,
+            transition: `width ${ms}ms cubic-bezier(0.22, 1, 0.36, 1), height ${ms}ms cubic-bezier(0.22, 1, 0.36, 1)`,
           }}
         />
       </div>
 
-      <div className="asp-tabs" role="radiogroup" aria-label="Aspect ratio" onKeyDown={key}>
+      <div
+        className="relative grid grid-cols-[repeat(3,40px)] rounded-full bg-slate-900/[0.06] p-[2px]"
+        role="radiogroup"
+        aria-label="Aspect ratio"
+        onKeyDown={key}
+      >
         {/* ── the thumb ───────────────────────────────────
             One element sliding, not three backgrounds fading.
             A fill that appears under the new tab while
@@ -214,9 +218,12 @@ export function Aspect({
             travels is one, and it is the one that says these
             three are positions of the same control. */}
         <span
-          className="asp-thumb"
+          className="pointer-events-none absolute top-[2px] left-[2px] h-[calc(100%-4px)] w-[calc((100%-4px)/3)] rounded-full bg-white shadow-[0_1px_3px_rgba(15,23,42,0.1),0_1px_2px_rgba(15,23,42,0.06)] motion-reduce:transition-none"
           aria-hidden="true"
-          style={{ transform: `translateX(${at * 100}%)` }}
+          style={{
+            transform: `translateX(${at * 100}%)`,
+            transition: `transform ${Math.round(ms * 0.55)}ms cubic-bezier(0.22, 1, 0.36, 1)`,
+          }}
         />
         {SHAPES.map((s, i) => {
           const m = MARK[s.id];
@@ -226,7 +233,7 @@ export function Aspect({
               ref={(el) => {
                 tabs.current[i] = el;
               }}
-              className="asp-tab"
+              className="relative grid h-8 cursor-pointer place-items-center rounded-full border-0 bg-transparent p-0 text-slate-500 transition-[color,transform] duration-160 ease-out hover:text-slate-900 active:scale-96 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900/25 focus-visible:ring-offset-2 focus-visible:ring-offset-white aria-checked:text-slate-900 motion-reduce:transition-none"
               role="radio"
               aria-checked={i === at}
               aria-label={s.label}
