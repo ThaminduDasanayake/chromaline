@@ -147,6 +147,10 @@
       "type": "registry:ui",
       "title": "Aspect Ratio",
       "description": "Equal-area crop switcher with constant 276-square bounding box, leading slider thumb, and 520ms morph transitions.",
+      "dependencies": [
+        "clsx",
+        "tailwind-merge"
+      ],
       "files": [
         {
           "path": "components/ui/aspect-ratio.tsx",
@@ -161,18 +165,15 @@
       "title": "Counter",
       "description": "Rolling odometer counter with forward-only column rolling, staggered carry ripples, velocity blur smear, and drag coasting physics.",
       "dependencies": [
-        "@phosphor-icons/react@^2.1.10"
+        "@phosphor-icons/react@^2.1.10",
+        "clsx",
+        "tailwind-merge"
       ],
       "files": [
         {
           "path": "components/ui/counter.tsx",
           "type": "registry:ui",
           "target": "components/ui/counter.tsx"
-        },
-        {
-          "path": "components/ui/counter.css",
-          "type": "registry:ui",
-          "target": "components/ui/counter.css"
         }
       ]
     }

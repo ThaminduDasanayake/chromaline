@@ -15,7 +15,6 @@ function buildRegistry() {
   const copyHookPath = path.join(__dirname, "../hooks/use-copy-to-clipboard.ts");
   const aspectPath = path.join(__dirname, "../components/ui/aspect-ratio.tsx");
   const counterPath = path.join(__dirname, "../components/ui/counter.tsx");
-  const counterCssPath = path.join(__dirname, "../components/ui/counter.css");
 
   if (!fs.existsSync(trayPath)) {
     console.error("Component not found:", trayPath);
@@ -40,9 +39,6 @@ function buildRegistry() {
   const copyHookContent = fs.existsSync(copyHookPath) ? fs.readFileSync(copyHookPath, "utf8") : "";
   const aspectContent = fs.existsSync(aspectPath) ? fs.readFileSync(aspectPath, "utf8") : "";
   const counterContent = fs.existsSync(counterPath) ? fs.readFileSync(counterPath, "utf8") : "";
-  const counterCssContent = fs.existsSync(counterCssPath)
-    ? fs.readFileSync(counterCssPath, "utf8")
-    : "";
 
   // 1. Full Folder Tray with Folder Support
   const trayRegistryItem = {
@@ -257,7 +253,7 @@ function buildRegistry() {
     title: "Aspect Ratio",
     description:
       "Equal-area crop switcher with constant 276-square bounding box, leading slider thumb, and 520ms morph transitions.",
-    dependencies: [],
+    dependencies: ["clsx", "tailwind-merge"],
     devDependencies: [],
     registryDependencies: [],
     files: [
@@ -278,7 +274,7 @@ function buildRegistry() {
     title: "Counter",
     description:
       "Rolling odometer counter with forward-only column rolling, staggered carry ripples, velocity blur smear, and drag coasting physics.",
-    dependencies: ["@phosphor-icons/react@^2.1.10"],
+    dependencies: ["@phosphor-icons/react@^2.1.10", "clsx", "tailwind-merge"],
     devDependencies: [],
     registryDependencies: [],
     files: [
@@ -288,16 +284,6 @@ function buildRegistry() {
         type: "registry:ui",
         target: "components/ui/counter.tsx",
       },
-      ...(counterCssContent
-        ? [
-            {
-              path: "components/ui/counter.css",
-              content: counterCssContent,
-              type: "registry:ui",
-              target: "components/ui/counter.css",
-            },
-          ]
-        : []),
     ],
   };
 
@@ -507,6 +493,7 @@ function buildRegistry() {
         title: "Aspect Ratio",
         description:
           "Equal-area crop switcher with constant 276-square bounding box, leading slider thumb, and 520ms morph transitions.",
+        dependencies: ["clsx", "tailwind-merge"],
         files: [
           {
             path: "components/ui/aspect-ratio.tsx",
@@ -521,17 +508,12 @@ function buildRegistry() {
         title: "Counter",
         description:
           "Rolling odometer counter with forward-only column rolling, staggered carry ripples, velocity blur smear, and drag coasting physics.",
-        dependencies: ["@phosphor-icons/react@^2.1.10"],
+        dependencies: ["@phosphor-icons/react@^2.1.10", "clsx", "tailwind-merge"],
         files: [
           {
             path: "components/ui/counter.tsx",
             type: "registry:ui",
             target: "components/ui/counter.tsx",
-          },
-          {
-            path: "components/ui/counter.css",
-            type: "registry:ui",
-            target: "components/ui/counter.css",
           },
         ],
       },

@@ -12,7 +12,7 @@ import {
   generateProceduralMatrix,
 } from "@/components/ui/heatmap";
 import { SelectBar } from "@/components/ui/select-bar";
-import { GitCommitIcon } from "@phosphor-icons/react";
+import { GitCommitIcon, SunIcon, MoonIcon } from "@phosphor-icons/react";
 import {
   DocsLayout,
   ComponentPreview,
@@ -66,7 +66,7 @@ const CODE_EXAMPLE_LINES = [
   },
   {
     num: 8,
-    parts: [{ text: '      mode="dark"' }, { text: ' // "dark" | "light"', cls: "text-slate-400" }],
+    parts: [{ text: '      mode="light"' }, { text: ' // "light" | "dark"', cls: "text-slate-400" }],
   },
   {
     num: 9,
@@ -87,7 +87,7 @@ export default function ContributionDemo() {
     <Heatmap
       range="year" // "year" (full 52w) | "14w"
       scheme="default" // "default" | "winter" | "halloween"
-      mode="dark" // "dark" | "light"
+      mode="light" // "light" | "dark"
       colorOnHover
     />
   );
@@ -108,9 +108,9 @@ const PROPS_DATA: PropItem[] = [
   },
   {
     name: "mode",
-    type: '"dark" | "light"',
-    default: '"dark"',
-    desc: "Visual theme mode. In dark mode, peaks glow bright; in light mode, peaks saturate dark.",
+    type: '"light" | "dark"',
+    default: '"light"',
+    desc: "Visual theme mode. In light mode, peaks saturate dark; in dark mode, peaks glow bright.",
   },
   {
     name: "data",
@@ -147,7 +147,7 @@ const PROPS_DATA: PropItem[] = [
 export default function HeatmapDocumentationPage() {
   const [range, setRange] = useState<HeatmapRange>("year");
   const [scheme, setScheme] = useState<HeatmapSchemeKey>("default");
-  const [mode, setMode] = useState<HeatmapMode>("dark");
+  const [mode, setMode] = useState<HeatmapMode>("light");
   const [rawContributions, setRawContributions] = useState<RawContributionDay[] | null>(null);
 
   const activePalette = (GITHUB_SCHEMES[scheme] || GITHUB_SCHEMES.default)[mode];
@@ -232,8 +232,8 @@ export default function HeatmapDocumentationPage() {
                   <SelectBar<HeatmapMode>
                     size="xs"
                     items={[
-                      { key: "dark", label: "Dark" },
-                      { key: "light", label: "Light" },
+                      { key: "light", label: "Light", icon: <SunIcon size={12} weight="bold" /> },
+                      { key: "dark", label: "Dark", icon: <MoonIcon size={12} weight="bold" /> },
                     ]}
                     value={mode}
                     onChange={setMode}

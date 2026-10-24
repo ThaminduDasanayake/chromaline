@@ -15,7 +15,7 @@ export function ToggleCardPreview() {
           stretch={42}
           speed={52}
           size="default"
-          variant="default"
+          variant="light"
         />
       </div>
     </div>

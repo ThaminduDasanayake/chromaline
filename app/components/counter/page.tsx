@@ -1,7 +1,9 @@
 "use client";
 
-import React from "react";
-import { Counter } from "@/components/ui/counter";
+import React, { useState } from "react";
+import { Counter, CounterTheme } from "@/components/ui/counter";
+import { SelectBar } from "@/components/ui/select-bar";
+import { SunIcon, MoonIcon } from "@phosphor-icons/react";
 import {
   DocsLayout,
   ComponentPreview,
@@ -57,7 +59,7 @@ const CODE_EXAMPLE_LINES = [
   },
   {
     num: 10,
-    parts: [{ text: "      start", cls: "text-purple-600" }, { text: "={95}" }],
+    parts: [{ text: "      start", cls: "text-purple-600" }, { text: "={22}" }],
   },
   { num: 11, parts: [{ text: "    />", cls: "text-slate-500" }] },
   { num: 12, parts: [{ text: "  );" }] },
@@ -73,7 +75,7 @@ export default function CounterDemo() {
       stagger={45}
       blur={50}
       corner={16}
-      start={95}
+      start={22}
     />
   );
 }`;
@@ -106,8 +108,14 @@ const PROPS_DATA: PropItem[] = [
   {
     name: "start",
     type: "number",
-    default: "95",
+    default: "22",
     desc: "Initial count value when uncontrolled.",
+  },
+  {
+    name: "theme",
+    type: '"light" | "dark"',
+    default: '"light"',
+    desc: "Visual theme mode: light slab or dark slab with high-contrast inverted numerals.",
   },
   {
     name: "value",
@@ -124,15 +132,41 @@ const PROPS_DATA: PropItem[] = [
 ];
 
 export default function CounterDocumentationPage() {
+  const [theme, setTheme] = useState<CounterTheme>("light");
+
   return (
     <DocsLayout
       title="Counter"
       description="Rolling odometer counter with forward-only column rolling, staggered carry ripples, velocity blur smear, and drag coasting physics."
     >
       {/* 1. Preview */}
-      <ComponentPreview canvasClassName="min-h-[320px] p-8">
+      <ComponentPreview
+        canvasClassName={`min-h-[320px] p-8 transition-colors duration-300 ${
+          theme === "dark" ? "bg-[#09090b]" : "bg-[#F9FAFB]"
+        }`}
+        controls={
+          <div className="flex flex-col gap-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <label className="text-xs font-semibold text-slate-900">Theme Mode</label>
+                <p className="mt-0.5 text-xs text-slate-500">Toggle light and dark color schemes</p>
+              </div>
+              <SelectBar<CounterTheme>
+                size="xs"
+                items={[
+                  { key: "light", label: "Light", icon: <SunIcon size={12} weight="bold" /> },
+                  { key: "dark", label: "Dark", icon: <MoonIcon size={12} weight="bold" /> },
+                ]}
+                value={theme}
+                onChange={setTheme}
+                ariaLabel="Select counter theme mode"
+              />
+            </div>
+          </div>
+        }
+      >
         <div className="py-6">
-          <Counter bounce={45} stagger={45} blur={50} corner={16} start={95} />
+          <Counter bounce={45} stagger={45} blur={50} corner={16} start={22} theme={theme} />
         </div>
       </ComponentPreview>
 

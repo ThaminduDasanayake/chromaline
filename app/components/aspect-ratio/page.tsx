@@ -1,7 +1,9 @@
 "use client";
 
-import React from "react";
-import { Aspect } from "@/components/ui/aspect-ratio";
+import React, { useState } from "react";
+import { Aspect, AspectTheme } from "@/components/ui/aspect-ratio";
+import { SelectBar } from "@/components/ui/select-bar";
+import { SunIcon, MoonIcon } from "@phosphor-icons/react";
 import {
   DocsLayout,
   ComponentPreview,
@@ -101,6 +103,12 @@ const PROPS_DATA: PropItem[] = [
     desc: "Initial uncontrolled aspect ratio format.",
   },
   {
+    name: "theme",
+    type: '"light" | "dark"',
+    default: '"light"',
+    desc: "Visual theme mode: light minimal frame or dark slate frame.",
+  },
+  {
     name: "onRatioChange",
     type: '(ratio: "land" | "square" | "tall") => void',
     default: "undefined",
@@ -109,15 +117,41 @@ const PROPS_DATA: PropItem[] = [
 ];
 
 export default function AspectRatioPage() {
+  const [theme, setTheme] = useState<AspectTheme>("light");
+
   return (
     <DocsLayout
       title="Aspect Ratio"
       description="Equal-area crop switcher where landscape, square, and portrait formats occupy the same surface area inside a fixed 276-square stage."
     >
       {/* 1. Preview */}
-      <ComponentPreview canvasClassName="min-h-[380px] p-8">
+      <ComponentPreview
+        canvasClassName={`min-h-[380px] p-8 transition-colors duration-300 ${
+          theme === "dark" ? "bg-[#09090b]" : "bg-[#F9FAFB]"
+        }`}
+        controls={
+          <div className="flex flex-col gap-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <label className="text-xs font-semibold text-slate-900">Theme Mode</label>
+                <p className="mt-0.5 text-xs text-slate-500">Toggle light and dark color schemes</p>
+              </div>
+              <SelectBar<AspectTheme>
+                size="xs"
+                items={[
+                  { key: "light", label: "Light", icon: <SunIcon size={12} weight="bold" /> },
+                  { key: "dark", label: "Dark", icon: <MoonIcon size={12} weight="bold" /> },
+                ]}
+                value={theme}
+                onChange={setTheme}
+                ariaLabel="Select aspect ratio theme mode"
+              />
+            </div>
+          </div>
+        }
+      >
         <div className="py-4">
-          <Aspect corner={20} morph={50} />
+          <Aspect corner={20} morph={50} theme={theme} />
         </div>
       </ComponentPreview>
 
