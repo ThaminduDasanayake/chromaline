@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { SelectBar, SelectBarItem } from "@/components/ui/select-bar";
+import { FolderColorSelectBar } from "./folder-color-select-bar";
 import {
   CodeIcon,
   EyeIcon,
@@ -27,18 +28,10 @@ const TOOLBAR_ITEMS: SelectBarItem<"cursor" | "draw" | "text" | "shapes">[] = [
   { key: "shapes", icon: <SquareIcon size={14} weight="bold" />, title: "Shapes" },
 ];
 
-const SWATCH_ITEMS = [
-  { key: "white", color: "#FFFFFF", darkOutline: "#232327" },
-  { key: "orange", color: "#E54F10", darkOutline: "#7C2D12" },
-  { key: "blue", color: "#0A90D2", darkOutline: "#075985" },
-  { key: "emerald", color: "#059669", darkOutline: "#047857" },
-  { key: "violet", color: "#8B5CF6", darkOutline: "#4C1D95" },
-];
-
 export function SelectBarCardPreview() {
   const [activeTab, setActiveTab] = useState<"design" | "code" | "preview" | "motion">("design");
   const [activeTool, setActiveTool] = useState<"cursor" | "draw" | "text" | "shapes">("cursor");
-  const [activeSwatch, setActiveSwatch] = useState("orange");
+  const [activeSwatch, setActiveSwatch] = useState("purple");
 
   return (
     <div className="flex w-full flex-col items-center justify-center gap-4 p-4">
@@ -61,11 +54,10 @@ export function SelectBarCardPreview() {
       />
 
       {/* Kinetic Color Swatches */}
-      <SelectBar
+      <FolderColorSelectBar
         size="xs"
-        items={SWATCH_ITEMS}
         value={activeSwatch}
-        onChange={setActiveSwatch}
+        onChange={(key) => setActiveSwatch(key)}
         ariaLabel="Showcase color swatches"
       />
     </div>

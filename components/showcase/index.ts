@@ -1,3 +1,10 @@
+export {
+  FolderColorSelectBar,
+  FOLDER_COLOR_PRESETS,
+  FOLDER_COLOR_SWATCHES,
+  type FolderColorPreset,
+  type FolderColorSelectBarProps,
+} from "./folder-color-select-bar";
 export { ComponentCard, type ComponentCardProps } from "./component-card";
 export { FolderTrayPreview } from "./folder-tray-preview";
 export { FolderCardPreview } from "./folder-card-preview";
