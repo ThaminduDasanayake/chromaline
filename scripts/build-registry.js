@@ -13,6 +13,8 @@ function buildRegistry() {
   const labelInputPath = path.join(__dirname, "../components/ui/label-input.tsx");
   const copyButtonPath = path.join(__dirname, "../components/ui/copy-button.tsx");
   const copyHookPath = path.join(__dirname, "../hooks/use-copy-to-clipboard.ts");
+  const aspectPath = path.join(__dirname, "../components/ui/aspect-ratio.tsx");
+  const aspectCssPath = path.join(__dirname, "../components/ui/aspect-ratio.css");
 
   if (!fs.existsSync(trayPath)) {
     console.error("Component not found:", trayPath);
@@ -35,6 +37,10 @@ function buildRegistry() {
     ? fs.readFileSync(copyButtonPath, "utf8")
     : "";
   const copyHookContent = fs.existsSync(copyHookPath) ? fs.readFileSync(copyHookPath, "utf8") : "";
+  const aspectContent = fs.existsSync(aspectPath) ? fs.readFileSync(aspectPath, "utf8") : "";
+  const aspectCssContent = fs.existsSync(aspectCssPath)
+    ? fs.readFileSync(aspectCssPath, "utf8")
+    : "";
 
   // 1. Full Folder Tray with Folder Support
   const trayRegistryItem = {
@@ -241,6 +247,37 @@ function buildRegistry() {
     ],
   };
 
+  // 10. Aspect Ratio / Aspect
+  const aspectRatioRegistryItem = {
+    $schema: "https://ui.shadcn.com/schema/registry-item.json",
+    name: "aspect-ratio",
+    type: "registry:ui",
+    title: "Aspect Ratio",
+    description:
+      "Equal-area crop switcher with constant 276-square bounding box, leading slider thumb, and 520ms morph transitions.",
+    dependencies: [],
+    devDependencies: [],
+    registryDependencies: [],
+    files: [
+      {
+        path: "components/ui/aspect-ratio.tsx",
+        content: aspectContent,
+        type: "registry:ui",
+        target: "components/ui/aspect-ratio.tsx",
+      },
+      ...(aspectCssContent
+        ? [
+            {
+              path: "components/ui/aspect-ratio.css",
+              content: aspectCssContent,
+              type: "registry:ui",
+              target: "components/ui/aspect-ratio.css",
+            },
+          ]
+        : []),
+    ],
+  };
+
   const outDir = path.join(__dirname, "../public/r");
   fs.mkdirSync(outDir, { recursive: true });
 
@@ -269,6 +306,10 @@ function buildRegistry() {
     path.join(outDir, "copy-button.json"),
     JSON.stringify(copyButtonRegistryItem, null, 2)
   );
+  fs.writeFileSync(
+    path.join(outDir, "aspect-ratio.json"),
+    JSON.stringify(aspectRatioRegistryItem, null, 2)
+  );
 
   const indexRegistry = {
     $schema: "https://ui.shadcn.com/schema/registry.json",
@@ -284,6 +325,7 @@ function buildRegistry() {
       toggleRegistryItem,
       labelInputRegistryItem,
       copyButtonRegistryItem,
+      aspectRatioRegistryItem,
     ],
   };
   fs.writeFileSync(path.join(outDir, "index.json"), JSON.stringify(indexRegistry, null, 2));
@@ -431,6 +473,25 @@ function buildRegistry() {
             path: "hooks/use-copy-to-clipboard.ts",
             type: "registry:hook",
             target: "hooks/use-copy-to-clipboard.ts",
+          },
+        ],
+      },
+      {
+        name: "aspect-ratio",
+        type: "registry:ui",
+        title: "Aspect Ratio",
+        description:
+          "Equal-area crop switcher with constant 276-square bounding box, leading slider thumb, and 520ms morph transitions.",
+        files: [
+          {
+            path: "components/ui/aspect-ratio.tsx",
+            type: "registry:ui",
+            target: "components/ui/aspect-ratio.tsx",
+          },
+          {
+            path: "components/ui/aspect-ratio.css",
+            type: "registry:ui",
+            target: "components/ui/aspect-ratio.css",
           },
         ],
       },

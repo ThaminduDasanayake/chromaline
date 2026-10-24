@@ -141,6 +141,24 @@
           "target": "hooks/use-copy-to-clipboard.ts"
         }
       ]
+    },
+    {
+      "name": "aspect-ratio",
+      "type": "registry:ui",
+      "title": "Aspect Ratio",
+      "description": "Equal-area crop switcher with constant 276-square bounding box, leading slider thumb, and 520ms morph transitions.",
+      "files": [
+        {
+          "path": "components/ui/aspect-ratio.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/aspect-ratio.tsx"
+        },
+        {
+          "path": "components/ui/aspect-ratio.css",
+          "type": "registry:ui",
+          "target": "components/ui/aspect-ratio.css"
+        }
+      ]
     }
   ]
 }

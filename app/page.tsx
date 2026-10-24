@@ -10,6 +10,7 @@ import {
   HeatmapCardPreview,
   ToggleCardPreview,
   LabelInputCardPreview,
+  AspectRatioCardPreview,
 } from "@/components/showcase";
 
 export default function ChromalineHomePage() {
@@ -103,6 +104,15 @@ export default function ChromalineHomePage() {
             href="/components/label-input"
           >
             <LabelInputCardPreview />
+          </ComponentCard>
+
+          {/* Card 9: Aspect Ratio */}
+          <ComponentCard
+            title="Aspect Ratio"
+            description="Equal-area crop switcher where landscape, square, and portrait formats occupy the same surface area inside a fixed 276-square stage."
+            href="/components/aspect-ratio"
+          >
+            <AspectRatioCardPreview />
           </ComponentCard>
         </div>
       </main>
