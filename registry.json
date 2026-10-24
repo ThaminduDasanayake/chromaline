@@ -168,11 +168,6 @@
           "path": "components/ui/counter.tsx",
           "type": "registry:ui",
           "target": "components/ui/counter.tsx"
-        },
-        {
-          "path": "components/ui/counter.css",
-          "type": "registry:ui",
-          "target": "components/ui/counter.css"
         }
       ]
     }

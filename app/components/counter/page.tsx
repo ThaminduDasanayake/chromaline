@@ -57,7 +57,7 @@ const CODE_EXAMPLE_LINES = [
   },
   {
     num: 10,
-    parts: [{ text: "      start", cls: "text-purple-600" }, { text: "={95}" }],
+    parts: [{ text: "      start", cls: "text-purple-600" }, { text: "={22}" }],
   },
   { num: 11, parts: [{ text: "    />", cls: "text-slate-500" }] },
   { num: 12, parts: [{ text: "  );" }] },
@@ -73,7 +73,7 @@ export default function CounterDemo() {
       stagger={45}
       blur={50}
       corner={16}
-      start={95}
+      start={22}
     />
   );
 }`;
@@ -106,7 +106,7 @@ const PROPS_DATA: PropItem[] = [
   {
     name: "start",
     type: "number",
-    default: "95",
+    default: "22",
     desc: "Initial count value when uncontrolled.",
   },
   {
@@ -132,7 +132,7 @@ export default function CounterDocumentationPage() {
       {/* 1. Preview */}
       <ComponentPreview canvasClassName="min-h-[320px] p-8">
         <div className="py-6">
-          <Counter bounce={45} stagger={45} blur={50} corner={16} start={95} />
+          <Counter bounce={45} stagger={45} blur={50} corner={16} start={22} />
         </div>
       </ComponentPreview>
 

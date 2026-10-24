@@ -2,7 +2,6 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import { MinusIcon, PlusIcon } from "@phosphor-icons/react";
-import "./counter.css";
 
 /* ══ Rolling counter ══════════════════════════════════════
    A number between a minus and a plus. Every digit is a strip
@@ -128,7 +127,7 @@ export interface CounterProps {
   blur?: number;
   /** Slab container corner radius in pixels (default: 16) */
   corner?: number;
-  /** Initial count when uncontrolled (default: 95) */
+  /** Initial count when uncontrolled (default: 22) */
   start?: number;
   /** Controlled count value */
   value?: number;
@@ -147,7 +146,7 @@ export function Counter({
   blur = 50,
   /* the slab's corner, px */
   corner = 16,
-  start = 95,
+  start = 22,
   value: controlledValue,
   onChange,
   className = "",
@@ -348,19 +347,19 @@ export function Counter({
 
   return (
     <div
-      className={`rct ${className}`}
-      style={
-        {
-          "--rct-r": `${r}px`,
-          "--rct-in": `${inner}px`,
-          "--rct-cell": `${CELL}px`,
-          ...style,
-        } as React.CSSProperties
-      }
+      className={`relative flex items-center gap-0 p-[5px] bg-white text-slate-900 shadow-[0_0_0_1px_rgba(0,0,0,0.08),0_2px_8px_-2px_rgba(15,23,42,0.06)] font-sans select-none ${className}`}
+      style={{
+        borderRadius: `${r}px`,
+        ...style,
+      }}
     >
       <button
         type="button"
-        className="rct-btn"
+        className="grid w-10 shrink-0 place-items-center border-0 p-0 text-inherit cursor-pointer bg-slate-900/[0.06] hover:bg-slate-900/[0.1] active:scale-90 transition-[transform,background-color] duration-[200ms] active:duration-[110ms] ease-[cubic-bezier(0.3,0.9,0.4,1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900/25 focus-visible:ring-offset-2 focus-visible:ring-offset-white [-webkit-tap-highlight-color:transparent]"
+        style={{
+          height: `${CELL}px`,
+          borderRadius: `${inner}px`,
+        }}
         aria-label="Less"
         onPointerDown={() => press(-1)}
         onPointerUp={release}
@@ -377,7 +376,11 @@ export function Counter({
       </button>
 
       <div
-        className="rct-num"
+        className="flex justify-center px-3.5 text-[30px] font-medium tabular-nums tracking-[-0.02em] cursor-ns-resize touch-none select-none rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900/25 focus-visible:ring-offset-2 focus-visible:ring-offset-white [mask-image:linear-gradient(transparent,#000_20%,#000_80%,transparent)] [-webkit-mask-image:linear-gradient(transparent,#000_20%,#000_80%,transparent)]"
+        style={{
+          height: `${CELL}px`,
+          lineHeight: `${CELL}px`,
+        }}
         role="spinbutton"
         aria-valuenow={displayValue}
         aria-valuemin={0}
@@ -402,21 +405,32 @@ export function Counter({
         {Array.from({ length: PLACES }, (_, i) => {
           const p = PLACES - 1 - i;
           return (
-            <span key={p} className="rct-pair">
-              <span className="rct-col" data-on={p < shown || undefined}>
+            <span key={p} className="flex">
+              <span
+                className={`overflow-hidden transition-[width,opacity] duration-[320ms] ease-[cubic-bezier(0.3,1.2,0.4,1)] ${
+                  p < shown ? "w-[0.64em] opacity-100" : "w-0 opacity-0"
+                }`}
+                style={{ height: `${CELL}px` }}
+              >
                 <span
-                  className="rct-strip"
+                  className="flex flex-col items-center will-change-transform"
                   ref={(el) => {
                     strips.current[p] = el as HTMLDivElement | null;
                   }}
                 >
                   {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0].map((d, j) => (
-                    <span key={j}>{d}</span>
+                    <span key={j} style={{ height: `${CELL}px` }}>
+                      {d}
+                    </span>
                   ))}
                 </span>
               </span>
               {p === 3 && (
-                <span className="rct-sep" data-on={shown > 3 || undefined}>
+                <span
+                  className={`overflow-hidden transition-[width,opacity] duration-[320ms] ease-[cubic-bezier(0.3,1.2,0.4,1)] ${
+                    shown > 3 ? "w-[0.26em] opacity-100" : "w-0 opacity-0"
+                  }`}
+                >
                   ,
                 </span>
               )}
@@ -427,7 +441,11 @@ export function Counter({
 
       <button
         type="button"
-        className="rct-btn"
+        className="grid w-10 shrink-0 place-items-center border-0 p-0 text-inherit cursor-pointer bg-slate-900/[0.06] hover:bg-slate-900/[0.1] active:scale-90 transition-[transform,background-color] duration-[200ms] active:duration-[110ms] ease-[cubic-bezier(0.3,0.9,0.4,1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900/25 focus-visible:ring-offset-2 focus-visible:ring-offset-white [-webkit-tap-highlight-color:transparent]"
+        style={{
+          height: `${CELL}px`,
+          borderRadius: `${inner}px`,
+        }}
         aria-label="More"
         onPointerDown={() => press(1)}
         onPointerUp={release}
