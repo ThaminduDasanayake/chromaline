@@ -255,38 +255,6 @@ export default function LabelInputDocumentationPage() {
 
       {/* 4. Props */}
       <PropsTable componentName="LabelInput" props={PROPS_DATA} />
-
-      {/* 5. Examples */}
-      <section>
-        <h2 className="text-xl font-bold tracking-tight text-slate-900 sm:text-2xl">Examples</h2>
-        <div className="mt-4 grid grid-cols-1 gap-6 sm:grid-cols-2">
-          {/* Card A: Pill Form */}
-          <div className="overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-2xs">
-            <div className="border-b border-slate-100 px-5 py-4">
-              <h3 className="text-sm font-semibold text-slate-900">Pill Shape (`corner={26}`)</h3>
-              <p className="mt-1 text-xs text-slate-500">
-                Full semi-circular capsules with proportional notch offsets.
-              </p>
-            </div>
-            <div className="flex min-h-[160px] items-center justify-center bg-[#F9FAFB] p-6">
-              <LabelInput field="Email" corner={26} />
-            </div>
-          </div>
-
-          {/* Card B: Sharp Rectangular */}
-          <div className="overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-2xs">
-            <div className="border-b border-slate-100 px-5 py-4">
-              <h3 className="text-sm font-semibold text-slate-900">Modern Box (`corner={8}`)</h3>
-              <p className="mt-1 text-xs text-slate-500">
-                Crisp architectural borders with subtle 8px fillets.
-              </p>
-            </div>
-            <div className="flex min-h-[160px] items-center justify-center bg-[#F9FAFB] p-6">
-              <LabelInput field="Password" corner={8} />
-            </div>
-          </div>
-        </div>
-      </section>
     </DocsLayout>
   );
 }
