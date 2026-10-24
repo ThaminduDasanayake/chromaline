@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { Aspect } from "@/components/ui/aspect-ratio";
 import {
   DocsLayout,
@@ -106,55 +106,15 @@ const PROPS_DATA: PropItem[] = [
 ];
 
 export default function AspectRatioPage() {
-  const [corner, setCorner] = useState(20);
-  const [morph, setMorph] = useState(50);
-
   return (
     <DocsLayout
       title="Aspect Ratio"
       description="Equal-area crop switcher where landscape, square, and portrait formats occupy the same surface area inside a fixed 276-square stage."
     >
       {/* 1. Preview */}
-      <ComponentPreview
-        canvasClassName="min-h-[380px] p-8"
-        controls={
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-            {/* Corner Radius Slider */}
-            <div>
-              <div className="flex items-center justify-between">
-                <label className="text-xs font-semibold text-slate-900">Corner Radius</label>
-                <span className="font-mono text-xs text-slate-500">{corner}px</span>
-              </div>
-              <input
-                type="range"
-                min="0"
-                max="40"
-                value={corner}
-                onChange={(e) => setCorner(Number(e.target.value))}
-                className="isocraft-slider mt-3.5"
-              />
-            </div>
-
-            {/* Morph Speed Slider */}
-            <div>
-              <div className="flex items-center justify-between">
-                <label className="text-xs font-semibold text-slate-900">Morph Speed</label>
-                <span className="font-mono text-xs text-slate-500">{morph}%</span>
-              </div>
-              <input
-                type="range"
-                min="0"
-                max="100"
-                value={morph}
-                onChange={(e) => setMorph(Number(e.target.value))}
-                className="isocraft-slider mt-3.5"
-              />
-            </div>
-          </div>
-        }
-      >
+      <ComponentPreview canvasClassName="min-h-[380px] p-8">
         <div className="py-4">
-          <Aspect corner={corner} morph={morph} />
+          <Aspect corner={20} morph={50} />
         </div>
       </ComponentPreview>
 
