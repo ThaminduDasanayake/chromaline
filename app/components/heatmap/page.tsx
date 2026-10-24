@@ -66,7 +66,10 @@ const CODE_EXAMPLE_LINES = [
   },
   {
     num: 8,
-    parts: [{ text: '      mode="light"' }, { text: ' // "light" | "dark"', cls: "text-slate-400" }],
+    parts: [
+      { text: '      mode="light"' },
+      { text: ' // "light" | "dark"', cls: "text-slate-400" },
+    ],
   },
   {
     num: 9,

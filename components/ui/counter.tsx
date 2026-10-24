@@ -355,7 +355,7 @@ export function Counter({
   return (
     <div
       className={cn(
-        "relative flex items-center gap-0 p-[5px] font-sans select-none transition-colors duration-300",
+        "relative flex items-center gap-0 p-[5px] font-sans transition-colors duration-300 select-none",
         isDark
           ? "bg-[#18181b] text-zinc-100 shadow-[0_0_0_1px_rgba(255,255,255,0.12),0_4px_20px_-4px_rgba(0,0,0,0.6)]"
           : "bg-white text-slate-900 shadow-[0_0_0_1px_rgba(0,0,0,0.08),0_2px_8px_-2px_rgba(15,23,42,0.06)]",
@@ -369,7 +369,7 @@ export function Counter({
       <button
         type="button"
         className={cn(
-          "grid w-10 shrink-0 place-items-center border-0 p-0 text-inherit cursor-pointer active:scale-90 transition-[transform,background-color] duration-[200ms] active:duration-[110ms] ease-[cubic-bezier(0.3,0.9,0.4,1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 [-webkit-tap-highlight-color:transparent]",
+          "grid w-10 shrink-0 cursor-pointer place-items-center border-0 p-0 text-inherit transition-[transform,background-color] duration-[200ms] ease-[cubic-bezier(0.3,0.9,0.4,1)] [-webkit-tap-highlight-color:transparent] focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none active:scale-90 active:duration-[110ms]",
           isDark
             ? "bg-white/[0.08] hover:bg-white/[0.14] focus-visible:ring-white/30 focus-visible:ring-offset-[#18181b]"
             : "bg-slate-900/[0.06] hover:bg-slate-900/[0.1] focus-visible:ring-slate-900/25 focus-visible:ring-offset-white"
@@ -395,7 +395,7 @@ export function Counter({
 
       <div
         className={cn(
-          "flex justify-center px-3.5 text-[30px] font-medium tabular-nums tracking-[-0.02em] cursor-ns-resize touch-none select-none rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 [mask-image:linear-gradient(transparent,#000_20%,#000_80%,transparent)] [-webkit-mask-image:linear-gradient(transparent,#000_20%,#000_80%,transparent)]",
+          "flex cursor-ns-resize touch-none justify-center rounded-lg [mask-image:linear-gradient(transparent,#000_20%,#000_80%,transparent)] px-3.5 text-[30px] font-medium tracking-[-0.02em] tabular-nums select-none [-webkit-mask-image:linear-gradient(transparent,#000_20%,#000_80%,transparent)] focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none",
           isDark
             ? "focus-visible:ring-white/30 focus-visible:ring-offset-[#18181b]"
             : "focus-visible:ring-slate-900/25 focus-visible:ring-offset-white"
@@ -467,7 +467,7 @@ export function Counter({
       <button
         type="button"
         className={cn(
-          "grid w-10 shrink-0 place-items-center border-0 p-0 text-inherit cursor-pointer active:scale-90 transition-[transform,background-color] duration-[200ms] active:duration-[110ms] ease-[cubic-bezier(0.3,0.9,0.4,1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 [-webkit-tap-highlight-color:transparent]",
+          "grid w-10 shrink-0 cursor-pointer place-items-center border-0 p-0 text-inherit transition-[transform,background-color] duration-[200ms] ease-[cubic-bezier(0.3,0.9,0.4,1)] [-webkit-tap-highlight-color:transparent] focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none active:scale-90 active:duration-[110ms]",
           isDark
             ? "bg-white/[0.08] hover:bg-white/[0.14] focus-visible:ring-white/30 focus-visible:ring-offset-[#18181b]"
             : "bg-slate-900/[0.06] hover:bg-slate-900/[0.1] focus-visible:ring-slate-900/25 focus-visible:ring-offset-white"
