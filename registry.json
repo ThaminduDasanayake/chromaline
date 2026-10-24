@@ -154,6 +154,27 @@
           "target": "components/ui/aspect-ratio.tsx"
         }
       ]
+    },
+    {
+      "name": "counter",
+      "type": "registry:ui",
+      "title": "Counter",
+      "description": "Rolling odometer counter with forward-only column rolling, staggered carry ripples, velocity blur smear, and drag coasting physics.",
+      "dependencies": [
+        "@phosphor-icons/react@^2.1.10"
+      ],
+      "files": [
+        {
+          "path": "components/ui/counter.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/counter.tsx"
+        },
+        {
+          "path": "components/ui/counter.css",
+          "type": "registry:ui",
+          "target": "components/ui/counter.css"
+        }
+      ]
     }
   ]
 }

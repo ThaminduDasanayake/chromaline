@@ -11,6 +11,7 @@ import {
   ToggleCardPreview,
   LabelInputCardPreview,
   AspectRatioCardPreview,
+  CounterCardPreview,
 } from "@/components/showcase";
 
 export default function ChromalineHomePage() {
@@ -113,6 +114,15 @@ export default function ChromalineHomePage() {
             href="/components/aspect-ratio"
           >
             <AspectRatioCardPreview />
+          </ComponentCard>
+
+          {/* Card 10: Counter */}
+          <ComponentCard
+            title="Counter"
+            description="Rolling odometer counter with forward-only column rolling, staggered carry ripples, velocity blur smear, and drag coasting physics."
+            href="/components/counter"
+          >
+            <CounterCardPreview />
           </ComponentCard>
         </div>
       </main>
