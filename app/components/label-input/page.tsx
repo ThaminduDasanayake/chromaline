@@ -241,9 +241,6 @@ export default function LabelInputDocumentationPage() {
             value={demoValue}
             onChange={(e) => setDemoValue(e.target.value)}
           />
-          <p className="mt-6 text-xs text-slate-400">
-            Click inside to focus · Watch the label hop and the top notch part outward
-          </p>
         </div>
       </ComponentPreview>
 

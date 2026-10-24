@@ -16,9 +16,6 @@ export function LabelInputCardPreview() {
           onChange={(e) => setVal(e.target.value)}
         />
       </div>
-      <p className="mt-4 text-[11px] font-medium text-slate-400">
-        Click to focus · Label lifts into the top edge as the notch parts
-      </p>
     </div>
   );
 }

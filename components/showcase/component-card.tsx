@@ -31,7 +31,7 @@ export function ComponentCard({
       {/* Bottom Card Footer - Link */}
       <Link
         href={href}
-        className="block flex cursor-pointer items-center justify-between border-t border-slate-100 bg-white p-5 transition-colors hover:bg-slate-50/60 sm:p-6"
+        className="flex cursor-pointer items-center justify-between border-t border-slate-100 bg-white p-5 transition-colors hover:bg-slate-50/60 sm:p-6"
       >
         <div>
           <h2 className="text-sm font-semibold text-slate-900 group-hover:text-slate-950 sm:text-base">

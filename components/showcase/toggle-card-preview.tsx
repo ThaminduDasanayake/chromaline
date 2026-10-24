@@ -18,10 +18,6 @@ export function ToggleCardPreview() {
           variant="default"
         />
       </div>
-
-      <p className="mt-4 text-[11px] font-medium text-slate-400">
-        Drag or flick across · Feel the liquid goo stretch
-      </p>
     </div>
   );
 }

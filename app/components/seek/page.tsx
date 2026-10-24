@@ -252,9 +252,6 @@ export default function SeekDocumentationPage() {
           onChange={setSearchVal}
           placeholder="Search components..."
         />
-        <p className="mt-6 text-xs text-slate-400">
-          Click circle to expand · Hover nearby to test magnetic lean
-        </p>
       </ComponentPreview>
 
       {/* 2. Installation */}
