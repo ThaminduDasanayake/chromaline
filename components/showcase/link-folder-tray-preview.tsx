@@ -10,7 +10,7 @@ export const NAV_FOLDERS: FolderItem[] = [
     name: "Overview",
     href: "/",
     bodyColor: "#E461F5", // Purple
-    darkOutline: "#C137D5",
+    darkOutline: "#232327",
     lightOutline: "#F9D8FD",
     category: "Route",
     description: "Chromaline design system homepage and showcase.",
@@ -20,7 +20,7 @@ export const NAV_FOLDERS: FolderItem[] = [
     name: "Button",
     href: "/components/button",
     bodyColor: "#4FA7FF", // Blue
-    darkOutline: "#1A82E0",
+    darkOutline: "#232327",
     lightOutline: "#CCE5FF",
     category: "Component",
     description: "Tactile micro-interaction button with spring press dynamics.",
@@ -30,7 +30,7 @@ export const NAV_FOLDERS: FolderItem[] = [
     name: "Folder",
     href: "/components/folder",
     bodyColor: "#68DB7B", // Green
-    darkOutline: "#37B954",
+    darkOutline: "#232327",
     lightOutline: "#D2F6D8",
     category: "Component",
     description: "Standalone 2D vector folder with exact filleted tabs.",
@@ -40,7 +40,7 @@ export const NAV_FOLDERS: FolderItem[] = [
     name: "Folder Tray",
     href: "/components/folder-tray",
     bodyColor: "#FFDE55", // Yellow
-    darkOutline: "#DFBC1F",
+    darkOutline: "#232327",
     lightOutline: "#FFF4C2",
     category: "Component",
     description: "3D kinematic card tray with hairline riffle physics.",
@@ -51,7 +51,7 @@ export const NAV_FOLDERS: FolderItem[] = [
     href: "https://github.com",
     target: "_blank",
     bodyColor: "#FFA85F", // Orange
-    darkOutline: "#E08433",
+    darkOutline: "#232327",
     lightOutline: "#FFE3CC",
     category: "External",
     description: "View repository, release notes, and source code.",
@@ -61,7 +61,7 @@ export const NAV_FOLDERS: FolderItem[] = [
     name: "Changelog",
     href: "/",
     bodyColor: "#FF6C6C", // Red
-    darkOutline: "#DF4144",
+    darkOutline: "#232327",
     lightOutline: "#FFD1D2",
     category: "Updates",
     description: "Latest component updates and release notes.",
@@ -72,7 +72,7 @@ export const NAV_FOLDERS: FolderItem[] = [
     href: "/r/folder-tray.json",
     target: "_blank",
     bodyColor: "#ADACB0", // Gray
-    darkOutline: "#88888E",
+    darkOutline: "#232327",
     lightOutline: "#E4E3E6",
     category: "API",
     description: "Direct shadcn registry schema endpoint for CLI installation.",

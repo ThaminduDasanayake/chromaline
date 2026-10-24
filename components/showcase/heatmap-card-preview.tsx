@@ -13,18 +13,18 @@ export function HeatmapCardPreview() {
       </div>
 
       {/* Tactile Coordinate Badge */}
-      <div className="mt-2 flex items-center gap-2 font-mono text-[11px] text-slate-500">
+      <div
+        className={`mt-2 flex h-4 items-center gap-2 font-mono text-[11px] text-slate-500 transition-opacity duration-150 ${
+          hoveredNode ? "opacity-100" : "opacity-0"
+        }`}
+      >
         <span
-          className="inline-block h-1.5 w-1.5 rounded-full transition-colors duration-150"
+          className="inline-block h-1.5 w-1.5 rounded-full"
           style={{ backgroundColor: hoveredNode?.color || "#56d364" }}
         />
-        {hoveredNode ? (
-          <span>
-            {hoveredNode.label} · {hoveredNode.count} commit{hoveredNode.count === 1 ? "" : "s"}
-          </span>
-        ) : (
-          <span>Hover pillars to inspect GitHub activity</span>
-        )}
+        <span>
+          {hoveredNode?.label} · {hoveredNode?.count} commit{hoveredNode?.count === 1 ? "" : "s"}
+        </span>
       </div>
     </div>
   );

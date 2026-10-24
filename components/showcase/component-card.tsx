@@ -18,12 +18,12 @@ export function ComponentCard({
   description,
   href,
   children,
-  previewClassName = "relative flex h-80 flex-col items-center justify-center overflow-hidden bg-[#F9FAFB] p-6 sm:h-88",
+  previewClassName = "relative flex h-80 sm:h-88 shrink-0 flex-col items-center justify-center overflow-hidden bg-[#F9FAFB] p-6",
   className = "",
 }: ComponentCardProps) {
   return (
     <div
-      className={`group flex flex-col justify-between overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-2xs transition-all hover:border-slate-300 ${className}`}
+      className={`group flex flex-col overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-2xs transition-all hover:border-slate-300 ${className}`}
     >
       {/* Interactive Preview Canvas */}
       <div className={previewClassName}>{children}</div>
@@ -31,7 +31,7 @@ export function ComponentCard({
       {/* Bottom Card Footer - Link */}
       <Link
         href={href}
-        className="block flex cursor-pointer items-center justify-between border-t border-slate-100 bg-white p-5 transition-colors hover:bg-slate-50/60 sm:p-6"
+        className="flex flex-1 cursor-pointer items-center justify-between border-t border-slate-100 bg-white p-5 transition-colors hover:bg-slate-50/60 sm:p-6"
       >
         <div>
           <h2 className="text-sm font-semibold text-slate-900 group-hover:text-slate-950 sm:text-base">

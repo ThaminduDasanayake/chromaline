@@ -13,6 +13,9 @@ function buildRegistry() {
   const labelInputPath = path.join(__dirname, "../components/ui/label-input.tsx");
   const copyButtonPath = path.join(__dirname, "../components/ui/copy-button.tsx");
   const copyHookPath = path.join(__dirname, "../hooks/use-copy-to-clipboard.ts");
+  const aspectPath = path.join(__dirname, "../components/ui/aspect-ratio.tsx");
+  const counterPath = path.join(__dirname, "../components/ui/counter.tsx");
+  const counterCssPath = path.join(__dirname, "../components/ui/counter.css");
 
   if (!fs.existsSync(trayPath)) {
     console.error("Component not found:", trayPath);
@@ -35,6 +38,11 @@ function buildRegistry() {
     ? fs.readFileSync(copyButtonPath, "utf8")
     : "";
   const copyHookContent = fs.existsSync(copyHookPath) ? fs.readFileSync(copyHookPath, "utf8") : "";
+  const aspectContent = fs.existsSync(aspectPath) ? fs.readFileSync(aspectPath, "utf8") : "";
+  const counterContent = fs.existsSync(counterPath) ? fs.readFileSync(counterPath, "utf8") : "";
+  const counterCssContent = fs.existsSync(counterCssPath)
+    ? fs.readFileSync(counterCssPath, "utf8")
+    : "";
 
   // 1. Full Folder Tray with Folder Support
   const trayRegistryItem = {
@@ -241,6 +249,58 @@ function buildRegistry() {
     ],
   };
 
+  // 10. Aspect Ratio / Aspect
+  const aspectRatioRegistryItem = {
+    $schema: "https://ui.shadcn.com/schema/registry-item.json",
+    name: "aspect-ratio",
+    type: "registry:ui",
+    title: "Aspect Ratio",
+    description:
+      "Equal-area crop switcher with constant 276-square bounding box, leading slider thumb, and 520ms morph transitions.",
+    dependencies: [],
+    devDependencies: [],
+    registryDependencies: [],
+    files: [
+      {
+        path: "components/ui/aspect-ratio.tsx",
+        content: aspectContent,
+        type: "registry:ui",
+        target: "components/ui/aspect-ratio.tsx",
+      },
+    ],
+  };
+
+  // 11. Rolling Counter
+  const counterRegistryItem = {
+    $schema: "https://ui.shadcn.com/schema/registry-item.json",
+    name: "counter",
+    type: "registry:ui",
+    title: "Counter",
+    description:
+      "Rolling odometer counter with forward-only column rolling, staggered carry ripples, velocity blur smear, and drag coasting physics.",
+    dependencies: ["@phosphor-icons/react@^2.1.10"],
+    devDependencies: [],
+    registryDependencies: [],
+    files: [
+      {
+        path: "components/ui/counter.tsx",
+        content: counterContent,
+        type: "registry:ui",
+        target: "components/ui/counter.tsx",
+      },
+      ...(counterCssContent
+        ? [
+            {
+              path: "components/ui/counter.css",
+              content: counterCssContent,
+              type: "registry:ui",
+              target: "components/ui/counter.css",
+            },
+          ]
+        : []),
+    ],
+  };
+
   const outDir = path.join(__dirname, "../public/r");
   fs.mkdirSync(outDir, { recursive: true });
 
@@ -269,6 +329,14 @@ function buildRegistry() {
     path.join(outDir, "copy-button.json"),
     JSON.stringify(copyButtonRegistryItem, null, 2)
   );
+  fs.writeFileSync(
+    path.join(outDir, "aspect-ratio.json"),
+    JSON.stringify(aspectRatioRegistryItem, null, 2)
+  );
+  fs.writeFileSync(
+    path.join(outDir, "counter.json"),
+    JSON.stringify(counterRegistryItem, null, 2)
+  );
 
   const indexRegistry = {
     $schema: "https://ui.shadcn.com/schema/registry.json",
@@ -284,6 +352,8 @@ function buildRegistry() {
       toggleRegistryItem,
       labelInputRegistryItem,
       copyButtonRegistryItem,
+      aspectRatioRegistryItem,
+      counterRegistryItem,
     ],
   };
   fs.writeFileSync(path.join(outDir, "index.json"), JSON.stringify(indexRegistry, null, 2));
@@ -431,6 +501,40 @@ function buildRegistry() {
             path: "hooks/use-copy-to-clipboard.ts",
             type: "registry:hook",
             target: "hooks/use-copy-to-clipboard.ts",
+          },
+        ],
+      },
+      {
+        name: "aspect-ratio",
+        type: "registry:ui",
+        title: "Aspect Ratio",
+        description:
+          "Equal-area crop switcher with constant 276-square bounding box, leading slider thumb, and 520ms morph transitions.",
+        files: [
+          {
+            path: "components/ui/aspect-ratio.tsx",
+            type: "registry:ui",
+            target: "components/ui/aspect-ratio.tsx",
+          },
+        ],
+      },
+      {
+        name: "counter",
+        type: "registry:ui",
+        title: "Counter",
+        description:
+          "Rolling odometer counter with forward-only column rolling, staggered carry ripples, velocity blur smear, and drag coasting physics.",
+        dependencies: ["@phosphor-icons/react@^2.1.10"],
+        files: [
+          {
+            path: "components/ui/counter.tsx",
+            type: "registry:ui",
+            target: "components/ui/counter.tsx",
+          },
+          {
+            path: "components/ui/counter.css",
+            type: "registry:ui",
+            target: "components/ui/counter.css",
           },
         ],
       },

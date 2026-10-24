@@ -200,7 +200,6 @@ const PROPS_DATA: PropItem[] = [
 
 export default function LabelInputDocumentationPage() {
   const [field, setField] = useState<string>("Email");
-  const [corner, setCorner] = useState<number>(20);
   const [demoValue, setDemoValue] = useState<string>("");
 
   return (
@@ -211,68 +210,37 @@ export default function LabelInputDocumentationPage() {
     >
       {/* 1. Interactive Preview */}
       <ComponentPreview
-        canvasClassName="min-h-[300px] p-8"
+        canvasClassName="min-h-[280px] p-8"
         controls={
-          <div className="space-y-4">
-            <div className="flex flex-wrap items-center justify-between gap-4">
-              <div>
-                <label className="text-xs font-semibold text-slate-700">Field Type</label>
-                <p className="text-[11px] text-slate-400">
-                  Switch between Email and Password with visibility reveal
-                </p>
-              </div>
-              <SelectBar
-                items={[
-                  { key: "Email", label: "Email" },
-                  { key: "Password", label: "Password" },
-                  { key: "Username", label: "Username" },
-                ]}
-                value={field}
-                onChange={(key) => {
-                  setField(key);
-                  setDemoValue("");
-                }}
-                size="sm"
-              />
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <div>
+              <label className="text-xs font-semibold text-slate-700">Field Type</label>
+              <p className="text-[11px] text-slate-400">
+                Switch between Email, Password (with eye toggle), and Username
+              </p>
             </div>
-
-            <div className="pt-2">
-              <div className="flex items-center justify-between">
-                <div>
-                  <label className="text-xs font-semibold text-slate-700">Corner Radius</label>
-                  <p className="text-[11px] text-slate-400">
-                    {corner === 0
-                      ? "0px (Sharp rectangle)"
-                      : corner === 26
-                        ? "26px (Full rounded pill)"
-                        : `${corner}px (${corner < 16 ? "Subtle fillet" : "Smooth curve"})`}
-                  </p>
-                </div>
-                <span className="font-mono text-xs font-medium text-slate-500">{corner}px</span>
-              </div>
-              <input
-                type="range"
-                min="0"
-                max="26"
-                step="1"
-                value={corner}
-                onChange={(e) => setCorner(Number(e.target.value))}
-                className="isocraft-slider mt-3.5"
-              />
-            </div>
+            <SelectBar
+              items={[
+                { key: "Email", label: "Email" },
+                { key: "Password", label: "Password" },
+                { key: "Username", label: "Username" },
+              ]}
+              value={field}
+              onChange={(key) => {
+                setField(key);
+                setDemoValue("");
+              }}
+              size="sm"
+            />
           </div>
         }
       >
         <div className="flex flex-col items-center justify-center py-6">
           <LabelInput
             field={field}
-            corner={corner}
             value={demoValue}
             onChange={(e) => setDemoValue(e.target.value)}
           />
-          <p className="mt-6 text-xs text-slate-400">
-            Click inside to focus · Watch the label hop and the top notch part outward
-          </p>
         </div>
       </ComponentPreview>
 
@@ -284,38 +252,6 @@ export default function LabelInputDocumentationPage() {
 
       {/* 4. Props */}
       <PropsTable componentName="LabelInput" props={PROPS_DATA} />
-
-      {/* 5. Examples */}
-      <section>
-        <h2 className="text-xl font-bold tracking-tight text-slate-900 sm:text-2xl">Examples</h2>
-        <div className="mt-4 grid grid-cols-1 gap-6 sm:grid-cols-2">
-          {/* Card A: Pill Form */}
-          <div className="overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-2xs">
-            <div className="border-b border-slate-100 px-5 py-4">
-              <h3 className="text-sm font-semibold text-slate-900">Pill Shape (`corner={26}`)</h3>
-              <p className="mt-1 text-xs text-slate-500">
-                Full semi-circular capsules with proportional notch offsets.
-              </p>
-            </div>
-            <div className="flex min-h-[160px] items-center justify-center bg-[#F9FAFB] p-6">
-              <LabelInput field="Email" corner={26} />
-            </div>
-          </div>
-
-          {/* Card B: Sharp Rectangular */}
-          <div className="overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-2xs">
-            <div className="border-b border-slate-100 px-5 py-4">
-              <h3 className="text-sm font-semibold text-slate-900">Modern Box (`corner={8}`)</h3>
-              <p className="mt-1 text-xs text-slate-500">
-                Crisp architectural borders with subtle 8px fillets.
-              </p>
-            </div>
-            <div className="flex min-h-[160px] items-center justify-center bg-[#F9FAFB] p-6">
-              <LabelInput field="Password" corner={8} />
-            </div>
-          </div>
-        </div>
-      </section>
     </DocsLayout>
   );
 }

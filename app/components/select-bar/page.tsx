@@ -3,6 +3,10 @@
 import React, { useState } from "react";
 import { SelectBar, SelectBarItem } from "@/components/ui/select-bar";
 import {
+  FolderColorSelectBar,
+  FOLDER_COLOR_SWATCHES,
+} from "@/components/showcase";
+import {
   CodeIcon,
   EyeIcon,
   PaintBrushIcon,
@@ -184,13 +188,7 @@ const ICON_ITEMS: SelectBarItem[] = [
   { key: "pan", icon: <HandPalmIcon size={14} weight="bold" />, title: "Pan" },
 ];
 
-const SWATCH_ITEMS: SelectBarItem[] = [
-  { key: "white", color: "#FFFFFF", darkOutline: "#232327", label: "White" },
-  { key: "orange", color: "#E54F10", darkOutline: "#7C2D12", label: "Orange" },
-  { key: "blue", color: "#0A90D2", darkOutline: "#075985", label: "Blue" },
-  { key: "emerald", color: "#059669", darkOutline: "#047857", label: "Emerald" },
-  { key: "violet", color: "#8B5CF6", darkOutline: "#4C1D95", label: "Violet" },
-];
+const SWATCH_ITEMS = FOLDER_COLOR_SWATCHES;
 
 export default function SelectBarDocumentationPage() {
   const [contentType, setContentType] = useState<"pills" | "icons" | "swatches">("pills");
@@ -198,7 +196,7 @@ export default function SelectBarDocumentationPage() {
 
   const [activePill, setActivePill] = useState("design");
   const [activeIcon, setActiveIcon] = useState("cursor");
-  const [activeSwatch, setActiveSwatch] = useState("orange");
+  const [activeSwatch, setActiveSwatch] = useState("purple");
 
   const currentItems =
     contentType === "pills" ? PILL_ITEMS : contentType === "icons" ? ICON_ITEMS : SWATCH_ITEMS;
@@ -256,12 +254,20 @@ export default function SelectBarDocumentationPage() {
         }
       >
         <div className="py-8">
-          <SelectBar
-            items={currentItems}
-            value={currentValue}
-            onChange={handleValueChange}
-            size={size}
-          />
+          {contentType === "swatches" ? (
+            <FolderColorSelectBar
+              size={size}
+              value={activeSwatch}
+              onChange={(key) => setActiveSwatch(key)}
+            />
+          ) : (
+            <SelectBar
+              items={currentItems}
+              value={currentValue}
+              onChange={handleValueChange}
+              size={size}
+            />
+          )}
         </div>
       </ComponentPreview>
 
@@ -297,15 +303,14 @@ export default function SelectBarDocumentationPage() {
             <div className="border-b border-slate-100 p-4">
               <h3 className="text-sm font-semibold text-slate-900">Color Swatches</h3>
               <p className="mt-0.5 text-xs text-slate-500">
-                Auto-detected via the <code>color</code> item prop.
+                Auto-detected via the <code>color</code> item prop with reversed chromatic order.
               </p>
             </div>
             <div className="flex h-36 items-center justify-center bg-[#F9FAFB] p-6">
-              <SelectBar
+              <FolderColorSelectBar
                 size="xs"
-                items={SWATCH_ITEMS}
                 value={activeSwatch}
-                onChange={setActiveSwatch}
+                onChange={(key) => setActiveSwatch(key)}
               />
             </div>
           </div>

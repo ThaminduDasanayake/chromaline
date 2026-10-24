@@ -19,11 +19,6 @@ export function SeekCardPreview() {
           spring={55}
         />
       </div>
-
-      {/* Helpful Hint */}
-      <p className="mt-4 text-[11px] font-medium text-slate-400">
-        Click to expand · Hover near to feel magnetic pull
-      </p>
     </div>
   );
 }

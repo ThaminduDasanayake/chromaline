@@ -20,7 +20,7 @@ export const WORKSPACE_FOLDERS: FolderItem<WorkspaceData>[] = [
     id: "f-1",
     name: "The Tactile Web",
     bodyColor: "#E461F5", // macOS Finder Tag Purple
-    darkOutline: "#C137D5",
+    darkOutline: "#232327",
     lightOutline: "#F9D8FD",
     category: "Essay",
     description:
@@ -59,7 +59,7 @@ export const WORKSPACE_FOLDERS: FolderItem<WorkspaceData>[] = [
     href: "/components/button",
     target: "_blank",
     bodyColor: "#4FA7FF", // macOS Finder Tag Blue
-    darkOutline: "#1A82E0",
+    darkOutline: "#232327",
     lightOutline: "#CCE5FF",
     category: "Primitive",
     description:
@@ -77,7 +77,7 @@ export const WORKSPACE_FOLDERS: FolderItem<WorkspaceData>[] = [
     id: "f-3",
     name: "Design Notes",
     bodyColor: "#68DB7B", // macOS Finder Tag Green
-    darkOutline: "#37B954",
+    darkOutline: "#232327",
     lightOutline: "#D2F6D8",
     category: "Guidelines",
     description: "Core design rules and specifications for tactile UI components.",
@@ -112,7 +112,7 @@ export const WORKSPACE_FOLDERS: FolderItem<WorkspaceData>[] = [
     href: "/components/folder",
     target: "_blank",
     bodyColor: "#FFDE55", // macOS Finder Tag Yellow
-    darkOutline: "#DFBC1F",
+    darkOutline: "#232327",
     lightOutline: "#FFF4C2",
     category: "Primitive",
     description:
@@ -130,7 +130,7 @@ export const WORKSPACE_FOLDERS: FolderItem<WorkspaceData>[] = [
     id: "f-5",
     name: "Release Notes",
     bodyColor: "#FFA85F", // macOS Finder Tag Orange
-    darkOutline: "#E08433",
+    darkOutline: "#232327",
     lightOutline: "#FFE3CC",
     category: "Changelog",
     description: "Version 0.1.0 release notes and feature changelog.",
@@ -163,7 +163,7 @@ export const WORKSPACE_FOLDERS: FolderItem<WorkspaceData>[] = [
     id: "f-6",
     name: "Hotfixes & Alerts",
     bodyColor: "#FF6C6C", // macOS Finder Tag Red
-    darkOutline: "#DF4144",
+    darkOutline: "#232327",
     lightOutline: "#FFD1D2",
     category: "Incident",
     description: "Active hotfixes, security patches, and critical operational notices.",
@@ -187,7 +187,7 @@ export const WORKSPACE_FOLDERS: FolderItem<WorkspaceData>[] = [
     id: "f-7",
     name: "System Architecture",
     bodyColor: "#ADACB0", // macOS Finder Tag Gray
-    darkOutline: "#88888E",
+    darkOutline: "#232327",
     lightOutline: "#E4E3E6",
     category: "Engineering",
     description:
@@ -222,13 +222,13 @@ export const WORKSPACE_FOLDERS: FolderItem<WorkspaceData>[] = [
 ];
 
 export const FOLDER_COLOR_OPTIONS = [
-  { name: "Purple", body: "#E461F5", dark: "#C137D5", light: "#F9D8FD" },
-  { name: "Blue", body: "#4FA7FF", dark: "#1A82E0", light: "#CCE5FF" },
-  { name: "Green", body: "#68DB7B", dark: "#37B954", light: "#D2F6D8" },
-  { name: "Yellow", body: "#FFDE55", dark: "#DFBC1F", light: "#FFF4C2" },
-  { name: "Orange", body: "#FFA85F", dark: "#E08433", light: "#FFE3CC" },
-  { name: "Red", body: "#FF6C6C", dark: "#DF4144", light: "#FFD1D2" },
-  { name: "Gray", body: "#ADACB0", dark: "#88888E", light: "#E4E3E6" },
+  { name: "Purple", body: "#E461F5", dark: "#232327", light: "#F9D8FD" },
+  { name: "Blue", body: "#4FA7FF", dark: "#232327", light: "#CCE5FF" },
+  { name: "Green", body: "#68DB7B", dark: "#232327", light: "#D2F6D8" },
+  { name: "Yellow", body: "#FFDE55", dark: "#232327", light: "#FFF4C2" },
+  { name: "Orange", body: "#FFA85F", dark: "#232327", light: "#FFE3CC" },
+  { name: "Red", body: "#FF6C6C", dark: "#232327", light: "#FFD1D2" },
+  { name: "Gray", body: "#ADACB0", dark: "#232327", light: "#E4E3E6" },
   { name: "White", body: "#FFFFFF", dark: "#232327", light: "#E0E0E4" },
 ];
 

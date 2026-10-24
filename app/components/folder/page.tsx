@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { Folder } from "@/components/ui/folder";
 import { SelectBar } from "@/components/ui/select-bar";
+import { FolderColorSelectBar, FOLDER_COLOR_PRESETS } from "@/components/showcase";
 import { TextAlignLeftIcon, TextAlignCenterIcon, TextAlignRightIcon } from "@phosphor-icons/react";
 import {
   DocsLayout,
@@ -12,17 +13,6 @@ import {
   PropsTable,
   PropItem,
 } from "@/components/docs";
-
-const COLOR_PRESETS = [
-  { name: "Purple", body: "#E461F5", dark: "#C137D5", light: "#F9D8FD" },
-  { name: "Blue", body: "#4FA7FF", dark: "#1A82E0", light: "#CCE5FF" },
-  { name: "Green", body: "#68DB7B", dark: "#37B954", light: "#D2F6D8" },
-  { name: "Yellow", body: "#FFDE55", dark: "#DFBC1F", light: "#FFF4C2" },
-  { name: "Orange", body: "#FFA85F", dark: "#E08433", light: "#FFE3CC" },
-  { name: "Red", body: "#FF6C6C", dark: "#DF4144", light: "#FFD1D2" },
-  { name: "Gray", body: "#ADACB0", dark: "#88888E", light: "#E4E3E6" },
-  { name: "White", body: "#FFFFFF", dark: "#232327", light: "#E0E0E4" },
-];
 
 const TAB_POSITIONS = [
   {
@@ -76,7 +66,7 @@ const CODE_EXAMPLE_LINES = [
   },
   {
     num: 7,
-    parts: [{ text: "      darkOutline", cls: "text-purple-600" }, { text: '="#C137D5"' }],
+    parts: [{ text: "      darkOutline", cls: "text-purple-600" }, { text: '="#232327"' }],
   },
   {
     num: 8,
@@ -101,7 +91,7 @@ export default function FolderDemo() {
   return (
     <Folder
       bodyColor="#E461F5"
-      darkOutline="#C137D5"
+      darkOutline="#232327"
       lightOutline="#F9D8FD"
       tabPosition="center"
       className="w-56 h-auto"
@@ -119,7 +109,7 @@ const PROPS_DATA: PropItem[] = [
   {
     name: "darkOutline",
     type: "string",
-    default: '"#C137D5"',
+    default: '"#232327"',
     desc: "Stroke color for silhouette outline, header line, and active tab dot.",
   },
   {
@@ -173,10 +163,12 @@ const PROPS_DATA: PropItem[] = [
 ];
 
 export default function FolderPage() {
-  const [selectedColorIdx, setSelectedColorIdx] = useState(0);
+  const [selectedColorKey, setSelectedColorKey] = useState("purple");
   const [selectedTabPos, setSelectedTabPos] = useState<"left" | "center" | "right">("center");
 
-  const activeColor = COLOR_PRESETS[selectedColorIdx];
+  const activeColor =
+    FOLDER_COLOR_PRESETS.find((p) => p.name.toLowerCase() === selectedColorKey) ||
+    FOLDER_COLOR_PRESETS[FOLDER_COLOR_PRESETS.length - 1];
 
   return (
     <DocsLayout
@@ -190,18 +182,9 @@ export default function FolderPage() {
             <div>
               <label className="text-xs font-semibold text-slate-900">Colorway</label>
               <div className="mt-2.5">
-                <SelectBar
-                  variant="swatches"
-                  size="xs"
-                  items={COLOR_PRESETS.map((preset, idx) => ({
-                    key: String(idx),
-                    color: preset.body,
-                    darkOutline: preset.dark,
-                    label: preset.name,
-                  }))}
-                  value={String(selectedColorIdx)}
-                  onChange={(k) => setSelectedColorIdx(Number(k))}
-                  ariaLabel="Select folder color"
+                <FolderColorSelectBar
+                  value={selectedColorKey}
+                  onChange={(key) => setSelectedColorKey(key)}
                 />
               </div>
             </div>
