@@ -26,7 +26,10 @@ const CODE_EXAMPLE_LINES = [
   { num: 2, parts: [{ text: "" }] },
   {
     num: 3,
-    parts: [{ text: "export default function", cls: "text-[#f43f5e]" }, { text: " CounterDemo() {" }],
+    parts: [
+      { text: "export default function", cls: "text-[#f43f5e]" },
+      { text: " CounterDemo() {" },
+    ],
   },
   { num: 4, parts: [{ text: "  return (" }] },
   {
@@ -129,13 +132,7 @@ export default function CounterDocumentationPage() {
       {/* 1. Preview */}
       <ComponentPreview canvasClassName="min-h-[320px] p-8">
         <div className="py-6">
-          <Counter
-            bounce={45}
-            stagger={45}
-            blur={50}
-            corner={16}
-            start={95}
-          />
+          <Counter bounce={45} stagger={45} blur={50} corner={16} start={95} />
         </div>
       </ComponentPreview>
 

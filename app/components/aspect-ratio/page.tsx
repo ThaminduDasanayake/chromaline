@@ -26,7 +26,10 @@ const CODE_EXAMPLE_LINES = [
   { num: 2, parts: [{ text: "" }] },
   {
     num: 3,
-    parts: [{ text: "export default function", cls: "text-[#f43f5e]" }, { text: " AspectDemo() {" }],
+    parts: [
+      { text: "export default function", cls: "text-[#f43f5e]" },
+      { text: " AspectDemo() {" },
+    ],
   },
   { num: 4, parts: [{ text: "  return (" }] },
   {

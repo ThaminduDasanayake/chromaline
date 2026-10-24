@@ -333,10 +333,7 @@ function buildRegistry() {
     path.join(outDir, "aspect-ratio.json"),
     JSON.stringify(aspectRatioRegistryItem, null, 2)
   );
-  fs.writeFileSync(
-    path.join(outDir, "counter.json"),
-    JSON.stringify(counterRegistryItem, null, 2)
-  );
+  fs.writeFileSync(path.join(outDir, "counter.json"), JSON.stringify(counterRegistryItem, null, 2));
 
   const indexRegistry = {
     $schema: "https://ui.shadcn.com/schema/registry.json",
