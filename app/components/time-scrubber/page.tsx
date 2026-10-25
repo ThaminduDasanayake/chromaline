@@ -152,7 +152,7 @@ export default function TimeScrubberPage() {
     >
       {/* 1. Preview */}
       <ComponentPreview
-        canvasClassName={`min-h-[340px] p-8 transition-colors duration-300 ${
+        canvasClassName={`min-h-[380px] p-8 transition-colors duration-300 ${
           theme === "dark" ? "bg-[#1b1b1b]" : "bg-[#F9FAFB]"
         }`}
         controls={
@@ -247,7 +247,7 @@ export default function TimeScrubberPage() {
           </div>
         }
       >
-        <div className="py-6">
+        <div className="flex items-center justify-center py-8">
           <TimeScrubber
             step={step}
             momentum={momentum}

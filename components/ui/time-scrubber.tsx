@@ -49,9 +49,10 @@ export interface TimeScrubberProps {
   style?: React.CSSProperties;
 }
 
-const W = 300;
-const PX = 2; // px per minute along the ruler
-const HALF = (W - 36) / 2;
+// Native dimensions matching the reference workbench display (375px width)
+const W = 375;
+const PX = 2.5; // px per minute along the ruler
+const HALF = (W - 45) / 2; // 165px
 const DAY = 1440;
 
 const clamp = (v: number, a: number, b: number) => Math.min(b, Math.max(a, v));
@@ -293,7 +294,7 @@ export function TimeScrubber({
   return (
     <div
       className={cn(
-        "relative w-[300px] px-[20px] pt-[20px] pb-[16px] select-none font-sans transition-colors duration-300",
+        "relative w-[375px] px-[25px] pt-[25px] pb-[20px] select-none font-sans transition-colors duration-300",
         isDark
           ? "bg-[#1b1b1b] text-[#ffffff] shadow-[0_0_0_1px_rgba(255,255,255,0.12)]"
           : "bg-[#ffffff] text-[#18181b] shadow-[0_0_0_1px_rgba(0,0,0,0.08)]",
@@ -311,11 +312,11 @@ export function TimeScrubber({
       `}</style>
 
       <div
-        className="flex items-baseline justify-center gap-[8px]"
+        className="flex items-baseline justify-center gap-[10px]"
         aria-live="polite"
         aria-label={`${time} ${mer}`}
       >
-        <span className="inline-flex text-[30px] font-medium leading-none tracking-[-0.03em] tabular-nums">
+        <span className="inline-flex text-[38px] font-medium leading-none tracking-[-0.03em] tabular-nums">
           {time.split("").map((c, i) =>
             c === ":" ? (
               <span key={`c${i}`} className="px-[0.02em]">
@@ -329,7 +330,7 @@ export function TimeScrubber({
         {mer && (
           <span
             className={cn(
-              "text-[14px] font-medium tracking-[-0.01em]",
+              "text-[17px] font-medium tracking-[-0.01em]",
               isDark ? "text-[#a1a1aa]" : "text-[#71717a]"
             )}
           >
@@ -347,7 +348,7 @@ export function TimeScrubber({
         aria-valuenow={wrap(Math.round(pos))}
         aria-valuemin={0}
         aria-valuemax={DAY - 1}
-        className="relative h-[58px] mt-[16px] cursor-grab active:cursor-grabbing touch-pan-y outline-none [mask-image:linear-gradient(90deg,transparent,#000_22%,#000_78%,transparent)] [-webkit-mask-image:linear-gradient(90deg,transparent,#000_22%,#000_78%,transparent)]"
+        className="relative h-[72px] mt-[20px] cursor-grab active:cursor-grabbing touch-pan-y outline-none [mask-image:linear-gradient(90deg,transparent,#000_22%,#000_78%,transparent)] [-webkit-mask-image:linear-gradient(90deg,transparent,#000_22%,#000_78%,transparent)]"
         onPointerDown={onDown}
         onPointerMove={onMove}
         onPointerUp={onUp}
@@ -366,9 +367,9 @@ export function TimeScrubber({
               key={t.m}
               data-kind={t.kind}
               className={cn(
-                "absolute left-[-1px] top-[8px] w-[2px] rounded-[1px] origin-[50%_0] h-[10px]",
-                t.kind === "quarter" && "h-[17px]",
-                t.kind === "hour" && "h-[25px]",
+                "absolute left-[-1.25px] top-[10px] w-[2.5px] rounded-[1.25px] origin-[50%_0] h-[12px]",
+                t.kind === "quarter" && "h-[21px]",
+                t.kind === "hour" && "h-[31px]",
                 isDark ? "bg-[#ffffff]" : "bg-[#18181b]"
               )}
               style={{
@@ -385,7 +386,7 @@ export function TimeScrubber({
                 <span
                   key={`l${t.m}`}
                   className={cn(
-                    "absolute left-0 top-[38px] text-[11px] font-normal whitespace-nowrap tracking-normal",
+                    "absolute left-0 top-[48px] text-[13px] font-normal whitespace-nowrap tracking-normal",
                     isDark ? "text-[#a1a1aa]" : "text-[#71717a]"
                   )}
                   style={{
@@ -399,7 +400,7 @@ export function TimeScrubber({
             })}
         </div>
         <span
-          className="absolute left-1/2 top-[2px] w-[3px] h-[32px] ml-[-1.5px] rounded-[2px] bg-[#e5484d] pointer-events-none"
+          className="absolute left-1/2 top-[2.5px] w-[4px] h-[40px] ml-[-2px] rounded-[2px] bg-[#e5484d] pointer-events-none"
           aria-hidden="true"
         />
       </div>
