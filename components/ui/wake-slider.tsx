@@ -198,7 +198,7 @@ export function WakeSlider({
     <div
       className={cn(
         "relative flex items-center gap-4 select-none transition-colors duration-300",
-        isDark ? "text-zinc-100" : "text-slate-900",
+        isDark ? "text-[#c2c2c2]" : "text-[#0f172a]",
         disabled && "opacity-40 pointer-events-none",
         className
       )}
@@ -215,8 +215,8 @@ export function WakeSlider({
         className={cn(
           "relative flex items-center cursor-ew-resize touch-none select-none rounded-md outline-none transition-colors duration-300 focus-visible:ring-2 focus-visible:ring-offset-4 [-webkit-tap-highlight-color:transparent]",
           isDark
-            ? "focus-visible:ring-white/40 focus-visible:ring-offset-zinc-950"
-            : "focus-visible:ring-slate-900/30 focus-visible:ring-offset-white"
+            ? "focus-visible:ring-[#ffffff]/40 focus-visible:ring-offset-[#1b1b1b]"
+            : "focus-visible:ring-[#0f172a]/30 focus-visible:ring-offset-white"
         )}
         style={{
           width: n * (BAR + GAP) - GAP,
@@ -286,11 +286,11 @@ export function WakeSlider({
                 "flex-none rounded-full origin-center transition-colors duration-160 will-change-transform",
                 isLit
                   ? isDark
-                    ? "bg-zinc-100"
-                    : "bg-slate-900"
+                    ? "bg-[#ffffff]"
+                    : "bg-[#0f172a]"
                   : isDark
-                    ? "bg-zinc-700/60"
-                    : "bg-slate-900/25"
+                    ? "bg-[#6b6b6b]"
+                    : "bg-[#0f172a]/25"
               )}
               style={{
                 width: `${BAR}px`,
@@ -305,7 +305,7 @@ export function WakeSlider({
         <span
           className={cn(
             "min-w-[3ch] font-mono text-sm font-medium tabular-nums tracking-tight transition-colors duration-300",
-            isDark ? "text-zinc-300" : "text-slate-600"
+            isDark ? "text-[#c2c2c2]" : "text-[#475569]"
           )}
         >
           {currentValue}
