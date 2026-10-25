@@ -11,7 +11,7 @@ import React, { useEffect, useLayoutEffect, useRef, useState, useCallback } from
 
 const useIsomorphicLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
-/* ── elastic motion tuning (exact curves from lab/motion) ── */
+/* ── Elastic motion tuning (two-phase mercury dilation with overshoot landing) ── */
 const rate = (speed: number) => 1.6 - (speed / 100) * 1.2;
 
 const overshoot = (bounce: number, tuned: number) =>

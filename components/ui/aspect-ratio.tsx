@@ -3,64 +3,31 @@
 import React, { useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 
-/* ── inlined from lab/motion ──────────────────────── */
-/* ── elastic, as numbers a person can hold ─────────────────
-   Several blocks here are the same idea in different clothes:
-   something travels, stretches on the way, and overshoots
-   when it lands. Their character lives in a duration and in
-   one control point of a bezier — which is exactly the kind
-   of thing nobody should have to name in order to tune.
+/**
+ * ══ Aspect (Equal-Area Crop Switcher) ═════════════════════════════
+ * An image container and three format crops: 4:3 (land), 1:1 (square), and 3:4 (tall).
+ *
+ * Architecture & Mathematics:
+ * - Constant Surface Area: Rather than pinning width and distorting scale, all three formats
+ *   maintain the same surface area (within 0.02%):
+ *   - Landscape (4:3): 276 x 207 px (~57,132 px²)
+ *   - Square (1:1):    239 x 239 px (~57,121 px²)
+ *   - Portrait (3:4):  207 x 276 px (~57,132 px²)
+ * - Stable Bounding Stage: Every format fits inside a fixed 276x276 px stage, preventing layout shift.
+ * - Non-destructive CSS Cover: Changing crops animates width & height independently, preserving corner radius.
+ * - Leading Indicator Thumb: The slider thumb travels ahead of the frame transition to convey causation.
+ * ═════════════════════════════════════════════════════════════════
+ */
 
-   So the outside of every elastic knob is 0..100 and the
-   inside is real units, and **50 is always what the component
-   was already tuned to**. Turn every knob on the bench to the
-   middle and nothing has changed. That is what makes these
-   safe to expose: the default is not a number somebody has to
-   remember, it is the middle of the slider.
-
-   Both ends have to be shippable, which is the constraint
-   that actually shapes these curves. The ranges below stop
-   where the effect stops being the thing it is — a bar that
-   moves in 40ms still reads as a bar snapping to a slot; one
-   that moves in 20ms reads as broken. */
-
-/* How long it takes, slower to faster, as a multiplier on
-   whatever the component's own tuned duration is. 0 is a
-   little over half again as slow, 100 is two and a half times
-   as fast, 50 is exactly 1. */
+/** Multiplier for kinematic morph rate (0: ~1.6x slower, 50: 1.0x baseline 520ms, 100: ~0.4x faster) */
 const rate = (speed: number) => 1.6 - (speed / 100) * 1.2;
 
 /* Default 3:4 portrait image for tactile preview */
-const DEFAULT_IMAGE =
-  "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=800&auto=format&fit=crop&q=80";
-
-/* ══ Aspect ═══════════════════════════════════════════════
-   A picture and three shapes to put it in.
-
-   THE THREE FORMATS HAVE THE SAME AREA. That is the whole
-   idea and it is not how most crop switchers are built —
-   the common version fixes the width and lets the height do
-   whatever the ratio says, which means the landscape is a
-   third of the portrait and switching feels like the picture
-   grew rather than like it was cropped. Equal area is what a
-   crop actually is: the same amount of picture, held a
-   different way. 276x207, 239x239 and 207x276 are within
-   0.02% of each other.
-
-   It also decides the frame. Every shape fits inside one
-   276x276 square, so the block's bounding box is the biggest
-   any of them gets and the wall never rescales it mid-move.
-
-   NO CROP IN THE FILE. The source is 3:4 and stays that way
-   — see scripts/sheep.sh — so `cover` does all three crops
-   from one picture, and the portrait tab is the whole
-   illustration rather than a slice of it. */
+const DEFAULT_IMAGE = "/mountain.webp";
 
 const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v));
 
-/* the square the three shapes fit inside, and the block's
-   own width */
-const W = 276;
+const W = 276; // Bounding stage width & max dimension
 const GAP = 16;
 const BAR = 36;
 
@@ -72,19 +39,7 @@ export const SHAPES = [
   { id: "tall" as const, w: 207, h: 276, label: "Portrait, 3 by 4" },
 ] as const;
 
-/* ── the icons are the shapes ──────────────────────────────
-   Drawn rather than imported, and lucide does ship a
-   rectangle in each orientation. The reason not to use them
-   is that here the icon is not a symbol FOR the format, it
-   IS the format — so it has to be at the real ratio, and
-   lucide's rectangles are at whatever ratio looked right in
-   a 24 grid.
-
-   Same constant area as the pictures, for the same reason:
-   three marks of visibly different size would say the
-   formats are different sizes, which is the thing the block
-   is at pains to say they are not. 13 square, and the other
-   two are that area at 4:3 and 3:4. */
+/** Exact-ratio SVG viewport coordinates matching the three equal-area formats */
 const MARK = {
   land: { x: 1.5, y: 3.38, w: 15, h: 11.25 },
   square: { x: 2.5, y: 2.5, w: 13, h: 13 },
@@ -182,23 +137,9 @@ export function Aspect({
         ...style,
       }}
     >
-      {/* The stage is the full square and never changes, so
-          the picture is centred in a box that is not moving.
-          Sizing the stage to the picture instead would make
-          the tabs below it climb and drop as the shape
-          changed — the one thing on this block that has no
-          business moving. */}
+      {/* Fixed square bounding stage prevents layout shift when formats switch */}
       <div className="grid w-full place-items-center" style={{ height: W }}>
-        {/* ── width and height, NEVER a scale ─────────────
-            The same rule the detail overlay's block follows,
-            for the same reason: a scaled box drags its corner
-            radius with it, and the corner has to read as the
-            same rounded frame throughout rather than as a
-            rectangle being stretched. `cover` is what keeps
-            the picture itself undistorted while the frame
-            moves — so this reads as a crop changing, which is
-            what it is, rather than as an image being
-            squashed. */}
+        {/* Frame width and height animate directly to maintain consistent corner radius */}
         <div
           className={cn(
             "bg-cover bg-center transition-shadow duration-300 motion-reduce:transition-none",
@@ -227,12 +168,7 @@ export function Aspect({
         aria-label="Aspect ratio"
         onKeyDown={key}
       >
-        {/* ── the thumb ───────────────────────────────────
-            One element sliding, not three backgrounds fading.
-            A fill that appears under the new tab while
-            another disappears is two events; a thumb that
-            travels is one, and it is the one that says these
-            three are positions of the same control. */}
+        {/* Sliding thumb indicator travels ahead (55% duration) to communicate causality */}
         <span
           className={cn(
             "pointer-events-none absolute top-[2px] left-[2px] h-[calc(100%-4px)] w-[calc((100%-4px)/3)] rounded-full transition-colors duration-300 motion-reduce:transition-none",
@@ -263,8 +199,6 @@ export function Aspect({
               role="radio"
               aria-checked={i === at}
               aria-label={s.label}
-              /* the chosen one is the only one in the tab
-                 order — see the note on `key` */
               tabIndex={i === at ? 0 : -1}
               onClick={() => pick(i)}
             >
