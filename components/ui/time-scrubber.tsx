@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import "./time-scrubber.css";
 
@@ -123,30 +123,36 @@ export function TimeScrubber({
   const p = useRef({ x: initialTime, v: 0, to: initialTime });
   const raf = useRef(0);
   const knobs = useRef({ step: parsedStep, momentum });
-  knobs.current = { step: parsedStep, momentum };
   const ruler = useRef<HTMLDivElement>(null);
   const lastStep = useRef(Math.floor(initialTime / parsedStep));
   const onChangeRef = useRef(onChange);
-  onChangeRef.current = onChange;
+
+  useEffect(() => {
+    knobs.current = { step: parsedStep, momentum };
+    onChangeRef.current = onChange;
+  }, [parsedStep, momentum, onChange]);
 
   // Haptic/audio step trigger
-  const hear = (x: number) => {
+  const hear = useCallback((x: number) => {
     const s = knobs.current.step;
     const k = Math.floor(x / s);
     if (k === lastStep.current) return;
     lastStep.current = k;
-  };
+  }, []);
 
-  const set = (x: number, notify = true) => {
-    p.current.x = x;
-    hear(x);
-    setPos(x);
-    if (notify) {
-      onChangeRef.current?.(wrap(Math.round(x)));
-    }
-  };
+  const set = useCallback(
+    (x: number, notify = true) => {
+      p.current.x = x;
+      hear(x);
+      setPos(x);
+      if (notify) {
+        onChangeRef.current?.(wrap(Math.round(x)));
+      }
+    },
+    [hear]
+  );
 
-  const run = () => {
+  const run = useCallback(() => {
     if (raf.current) return;
     let prev = 0;
     const tick = (t: number) => {
@@ -166,7 +172,7 @@ export function TimeScrubber({
       raf.current = requestAnimationFrame(tick);
     };
     raf.current = requestAnimationFrame(tick);
-  };
+  }, [set]);
 
   useEffect(() => {
     return () => {
@@ -175,23 +181,26 @@ export function TimeScrubber({
     };
   }, []);
 
-  const goTo = (to: number, v = p.current.v) => {
-    p.current.to = to;
-    p.current.v = v;
-    if (stillness()) {
-      p.current.v = 0;
-      set(to);
-      return;
-    }
-    run();
-  };
+  const goTo = useCallback(
+    (to: number, v = p.current.v) => {
+      p.current.to = to;
+      p.current.v = v;
+      if (stillness()) {
+        p.current.v = 0;
+        set(to);
+        return;
+      }
+      run();
+    },
+    [run, set]
+  );
 
   // Sync external controlled value
   useEffect(() => {
     if (isControlled && Math.abs(controlledValue - p.current.x) > 0.01) {
       goTo(controlledValue, 0);
     }
-  }, [controlledValue, isControlled]);
+  }, [controlledValue, isControlled, goTo]);
 
   /* ── Pointer Drag Handling ────────────────────────────── */
   const drag = useRef<null | { x: number; t: number; v: number; k: number }>(null);
@@ -261,7 +270,7 @@ export function TimeScrubber({
       el.removeEventListener("wheel", wheel);
       clearTimeout(idle);
     };
-  }, [disabled]);
+  }, [disabled, goTo, set]);
 
   /* ── Dial Ticks Calculation ────────────────────────────── */
   const ticks: { m: number; x: number; f: number; kind: "hour" | "quarter" | "five" }[] = [];
