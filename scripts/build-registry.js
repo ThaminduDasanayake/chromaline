@@ -17,7 +17,6 @@ function buildRegistry() {
   const counterPath = path.join(__dirname, "../components/ui/counter.tsx");
   const wakeSliderPath = path.join(__dirname, "../components/ui/wake-slider.tsx");
   const palettePath = path.join(__dirname, "../components/ui/palette.tsx");
-  const paletteCssPath = path.join(__dirname, "../components/ui/palette.css");
 
   if (!fs.existsSync(trayPath)) {
     console.error("Component not found:", trayPath);
@@ -46,9 +45,6 @@ function buildRegistry() {
     ? fs.readFileSync(wakeSliderPath, "utf8")
     : "";
   const paletteContent = fs.existsSync(palettePath) ? fs.readFileSync(palettePath, "utf8") : "";
-  const paletteCssContent = fs.existsSync(paletteCssPath)
-    ? fs.readFileSync(paletteCssPath, "utf8")
-    : "";
 
   // 1. Full Folder Tray with Folder Support
   const trayRegistryItem = {
@@ -336,12 +332,6 @@ function buildRegistry() {
         type: "registry:ui",
         target: "components/ui/palette.tsx",
       },
-      {
-        path: "components/ui/palette.css",
-        content: paletteCssContent,
-        type: "registry:ui",
-        target: "components/ui/palette.css",
-      },
     ],
   };
 
@@ -612,11 +602,6 @@ function buildRegistry() {
             path: "components/ui/palette.tsx",
             type: "registry:ui",
             target: "components/ui/palette.tsx",
-          },
-          {
-            path: "components/ui/palette.css",
-            type: "registry:ui",
-            target: "components/ui/palette.css",
           },
         ],
       },

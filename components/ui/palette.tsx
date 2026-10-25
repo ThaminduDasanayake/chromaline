@@ -3,7 +3,6 @@
 import React, { useId, useRef, useState, useEffect } from "react";
 import { ArrowsClockwiseIcon, CheckIcon } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
-import "./palette.css";
 
 /**
  * ══ Palette (OKLCH Harmonic Color Generator) ════════════════════
@@ -182,7 +181,7 @@ function generatePalette(n: number): Swatch[] {
 function useGoo(blur = 7, cut = 28) {
   const id = `goo-${useId().replace(/:/g, "")}`;
   const goo = (
-    <svg className="liq-defs" aria-hidden="true" focusable="false">
+    <svg className="absolute h-0 w-0 overflow-hidden" aria-hidden="true" focusable="false">
       <defs>
         <filter
           id={id}
@@ -323,21 +322,21 @@ export function Palette({
 
   return (
     <div
-      className={cn("pal relative select-none", className)}
+      className={cn("relative flex items-stretch select-none font-sans", className)}
       style={{ width: W, gap: GAP, ...style }}
     >
       {/* Pill 1: Swatches Container */}
       <div
         className={cn(
-          "pal-slab transition-colors duration-300",
+          "flex items-center justify-center transition-colors duration-300",
           isDark
             ? "bg-[#1b1b1b] shadow-[0_0_0_1px_rgba(255,255,255,0.12)]"
             : "bg-[#ffffff] shadow-[0_0_0_1px_rgba(0,0,0,0.08)]"
         )}
         style={{ padding: PAD, borderRadius: slabR, scale: beat }}
       >
-        <div className="pal-bar" style={{ height: BAR_H, width: barW }}>
-          <div className="pal-blobs" aria-hidden="true" style={{ filter: gooUrl }}>
+        <div className="relative flex-none" style={{ height: BAR_H, width: barW }}>
+          <div className="absolute inset-0" aria-hidden="true" style={{ filter: gooUrl }}>
             {pal.map((c, i) => {
               const ti = clamp(t, 0, 1);
               const shown = next && ti >= OUT ? next[i].hex : c.hex;
@@ -354,7 +353,7 @@ export function Palette({
                   onClick={() => handleCopy(shown)}
                   title={`Copy ${shown}`}
                   aria-label={`Copy color ${shown}`}
-                  className="pal-seg cursor-pointer border-0 p-0 outline-none transition-transform duration-100 focus-visible:ring-2 focus-visible:ring-offset-2"
+                  className="absolute left-0 top-0 cursor-pointer border-0 p-0 outline-none transition-transform duration-100 focus-visible:ring-2 focus-visible:ring-offset-2"
                   style={{
                     background: shown,
                     width: side,
@@ -379,7 +378,7 @@ export function Palette({
       {/* Pill 2: Refresh Tool Button */}
       <div
         className={cn(
-          "pal-slab pal-tool transition-colors duration-300",
+          "flex flex-none items-center justify-center transition-all duration-160 ease-[cubic-bezier(0.22,1,0.36,1)] has-active:scale-[0.96] motion-reduce:duration-160",
           isDark
             ? "bg-[#1b1b1b] shadow-[0_0_0_1px_rgba(255,255,255,0.12)]"
             : "bg-[#ffffff] shadow-[0_0_0_1px_rgba(0,0,0,0.08)]"
@@ -389,7 +388,7 @@ export function Palette({
         <button
           type="button"
           className={cn(
-            "pal-go outline-none transition-colors duration-160 focus-visible:ring-2 focus-visible:ring-offset-2",
+            "flex-none grid place-items-center border-0 bg-transparent cursor-pointer outline-none transition-colors duration-160 motion-reduce:duration-160 focus-visible:ring-2 focus-visible:ring-offset-2",
             isDark
               ? "text-[#ffffff] hover:text-[#a1a1aa] focus-visible:ring-[#ffffff]/40 focus-visible:ring-offset-[#1b1b1b]"
               : "text-[#18181b] hover:text-[#71717a] focus-visible:ring-[#18181b]/30 focus-visible:ring-offset-[#ffffff]"
@@ -399,8 +398,8 @@ export function Palette({
           style={{ width: TOOL, height: BAR_H, borderRadius: r }}
         >
           <ArrowsClockwiseIcon
-            size={18}
-            weight="bold"
+            size={24}
+            className="transition-transform duration-600 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:duration-160"
             style={{ transform: `rotate(${spins * 180}deg)` }}
           />
         </button>

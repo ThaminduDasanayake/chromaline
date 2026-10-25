@@ -209,11 +209,6 @@
           "path": "components/ui/palette.tsx",
           "type": "registry:ui",
           "target": "components/ui/palette.tsx"
-        },
-        {
-          "path": "components/ui/palette.css",
-          "type": "registry:ui",
-          "target": "components/ui/palette.css"
         }
       ]
     }
