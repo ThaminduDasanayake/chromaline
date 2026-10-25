@@ -1,0 +1,80 @@
+/* ── the goo's defs hold nothing you can see ────────────────
+   `useGoo` renders an <svg> carrying a <defs> and nothing
+   else, and an <svg> with no dimensions is a replaced element:
+   the browser gives it the default 300x150 and puts it in the
+   flow. Every block that mounts one has been carrying an
+   invisible 300x150 box ever since.
+   Nothing inside a <defs> is rendered, so taking the element
+   out of flow entirely costs nothing and is what it always wanted. */
+.liq-defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+/* ══ Palette ════════════════════════════════════════════════
+   A filled bar of colours and the refresh at its end. */
+.pal {
+  font-family: var(--font-ui, system-ui, -apple-system, sans-serif);
+  display: flex;
+  align-items: stretch;
+}
+
+/* ── the slab ───────────────────────────────────────────────
+   White when filled light and dark when filled dark. */
+.pal-slab {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── the tool pill ──────────────────────────────────────────
+   Sinks under a press on the refresh button. */
+.pal-tool {
+  flex: none;
+  transition: transform 160ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.pal-tool:has(.pal-go:active) {
+  transform: scale(0.96);
+}
+
+.pal-bar {
+  position: relative;
+  flex: none;
+}
+
+.pal-blobs {
+  position: absolute;
+  inset: 0;
+}
+
+.pal-seg {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+}
+
+/* ── the refresh button ──────────────────────────────────── */
+.pal-go {
+  flex: none;
+  display: grid;
+  place-items: center;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.pal-go svg {
+  transition: transform 600ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pal-go,
+  .pal-go svg,
+  .pal-tool {
+    transition-duration: 160ms;
+  }
+}

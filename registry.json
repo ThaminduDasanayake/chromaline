@@ -193,6 +193,29 @@
           "target": "components/ui/wake-slider.tsx"
         }
       ]
+    },
+    {
+      "name": "palette",
+      "type": "registry:ui",
+      "title": "Palette",
+      "description": "Perceptual OKLCH harmonic color palette generator with 5 generative moods and liquid elastic overshoot morphing.",
+      "dependencies": [
+        "@phosphor-icons/react@^2.1.10",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "components/ui/palette.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/palette.tsx"
+        },
+        {
+          "path": "components/ui/palette.css",
+          "type": "registry:ui",
+          "target": "components/ui/palette.css"
+        }
+      ]
     }
   ]
 }

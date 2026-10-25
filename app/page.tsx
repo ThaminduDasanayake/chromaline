@@ -13,6 +13,7 @@ import {
   AspectRatioCardPreview,
   CounterCardPreview,
   WakeSliderCardPreview,
+  PaletteCardPreview,
 } from "@/components/showcase";
 
 export default function ChromalineHomePage() {
@@ -133,6 +134,15 @@ export default function ChromalineHomePage() {
             href="/components/wake-slider"
           >
             <WakeSliderCardPreview />
+          </ComponentCard>
+
+          {/* Card 12: Palette */}
+          <ComponentCard
+            title="Palette"
+            description="Perceptual OKLCH harmonic color palette generator with 5 generative moods and liquid elastic morphing."
+            href="/components/palette"
+          >
+            <PaletteCardPreview />
           </ComponentCard>
         </div>
       </main>
