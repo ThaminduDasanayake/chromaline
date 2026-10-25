@@ -115,7 +115,7 @@ export function LabelInput({
      x1 = right notch edge (accommodates the scaled label + padding)
   */
   const lx = Math.max(14, r + 4);
-  const x0 = Math.max(r * 0.6, lx - 5);
+  const x0 = Math.max(r, lx - 4);
   const x1 = lx + lw * S + 6;
   const a = r - IN;
   const R = W - IN;
@@ -136,7 +136,7 @@ export function LabelInput({
   // Left contour: from left notch edge, counter-clockwise to bottom center
   const leftPath =
     r > 0
-      ? `M${x0},${IN} L${r},${IN} A${a},${a} 0 0 0 ${IN},${r} L${IN},${H - r} A${a},${a} 0 0 0 ${r},${B} L${mid},${B}`
+      ? `M${x0},${IN} ${x0 > r ? `L${r},${IN} ` : ""}A${a},${a} 0 0 0 ${IN},${r} L${IN},${H - r} A${a},${a} 0 0 0 ${r},${B} L${mid},${B}`
       : `M${x0},${IN} L${IN},${IN} L${IN},${B} L${mid},${B}`;
 
   const reveal = () => {
