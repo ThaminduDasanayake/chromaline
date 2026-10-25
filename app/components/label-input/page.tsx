@@ -191,6 +191,12 @@ const PROPS_DATA: PropItem[] = [
     desc: "Standard change event handler fired whenever text is input.",
   },
   {
+    name: "theme",
+    type: '"light" | "dark"',
+    default: '"light"',
+    desc: "Visual color theme mode: 'light' or 'dark'.",
+  },
+  {
     name: "className",
     type: "string",
     default: '""',
@@ -199,6 +205,7 @@ const PROPS_DATA: PropItem[] = [
 ];
 
 export default function LabelInputDocumentationPage() {
+  const [theme, setTheme] = useState<"light" | "dark">("light");
   const [field, setField] = useState<string>("Email");
   const [demoValue, setDemoValue] = useState<string>("");
 
@@ -210,33 +217,51 @@ export default function LabelInputDocumentationPage() {
     >
       {/* 1. Interactive Preview */}
       <ComponentPreview
-        canvasClassName="min-h-[280px] p-8"
+        canvasClassName={`min-h-[280px] p-8 transition-colors duration-300 ${
+          theme === "dark" ? "bg-[#18181b]" : "bg-[#f4f4f5]"
+        }`}
         controls={
           <div className="flex flex-wrap items-center justify-between gap-4">
-            <div>
-              <label className="text-xs font-semibold text-slate-700">Field Type</label>
-              <p className="text-[11px] text-slate-400">
-                Switch between Email, Password (with eye toggle), and Username
-              </p>
+            <div className="flex items-center gap-6">
+              <div>
+                <label className="text-xs font-semibold text-slate-700">Theme</label>
+                <div className="mt-1">
+                  <SelectBar<"light" | "dark">
+                    items={[
+                      { key: "light", label: "Light" },
+                      { key: "dark", label: "Dark" },
+                    ]}
+                    value={theme}
+                    onChange={setTheme}
+                    size="sm"
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="text-xs font-semibold text-slate-700">Field Type</label>
+                <div className="mt-1">
+                  <SelectBar
+                    items={[
+                      { key: "Email", label: "Email" },
+                      { key: "Password", label: "Password" },
+                      { key: "Username", label: "Username" },
+                    ]}
+                    value={field}
+                    onChange={(key) => {
+                      setField(key);
+                      setDemoValue("");
+                    }}
+                    size="sm"
+                  />
+                </div>
+              </div>
             </div>
-            <SelectBar
-              items={[
-                { key: "Email", label: "Email" },
-                { key: "Password", label: "Password" },
-                { key: "Username", label: "Username" },
-              ]}
-              value={field}
-              onChange={(key) => {
-                setField(key);
-                setDemoValue("");
-              }}
-              size="sm"
-            />
           </div>
         }
       >
         <div className="flex flex-col items-center justify-center py-6">
           <LabelInput
+            theme={theme}
             field={field}
             value={demoValue}
             onChange={(e) => setDemoValue(e.target.value)}

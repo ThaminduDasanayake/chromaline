@@ -2,8 +2,11 @@
 
 import React, { useCallback, useEffect, useId, useRef, useState } from "react";
 import { EyeClosedIcon, EyeIcon } from "@phosphor-icons/react";
+import { cn } from "@/lib/utils";
 
 const clamp = (v: number, a: number, b: number) => Math.min(b, Math.max(a, v));
+
+export type LabelInputTheme = "light" | "dark";
 
 export interface LabelInputProps extends Omit<
   React.InputHTMLAttributes<HTMLInputElement>,
@@ -21,6 +24,8 @@ export interface LabelInputProps extends Omit<
   height?: number;
   /** Showcase preview mode (disables mobile virtual keyboard popup). Default: false */
   showcase?: boolean;
+  /** Visual color theme mode: "light" | "dark". Default: "light" */
+  theme?: LabelInputTheme;
   className?: string;
 }
 
@@ -31,6 +36,7 @@ export function LabelInput({
   width: W = 280,
   height: H = 52,
   showcase = false,
+  theme = "light",
   className = "",
   value: controlledValue,
   defaultValue,
@@ -42,6 +48,7 @@ export function LabelInput({
   style,
   ...restProps
 }: LabelInputProps) {
+  const isDark = theme === "dark";
   const secret = field === "Password" || propType === "password";
   const displayLabel = customLabel || field;
   const generatedId = useId().replace(/:/g, "");
@@ -154,8 +161,20 @@ export function LabelInput({
     onBlur?.(e);
   };
 
+  const ringStroke = focus
+    ? isDark
+      ? "stroke-[#ffffff]"
+      : "stroke-[#18181b]"
+    : currentValue.length > 0
+      ? isDark
+        ? "stroke-[#646464]"
+        : "stroke-[#b5b5b6]"
+      : isDark
+        ? "stroke-[#ffffff]/20"
+        : "stroke-[#18181b]/20";
+
   return (
-    <div className={`relative grid place-items-center pt-3 select-none ${className}`}>
+    <div className={cn("relative grid place-items-center pt-3 select-none", className)}>
       <div
         className="relative cursor-text bg-transparent select-none"
         style={{ width: W, height: H, borderRadius: r, ...style }}
@@ -174,13 +193,10 @@ export function LabelInput({
             fill="none"
             strokeLinecap="butt"
             strokeWidth={focus ? 1.5 : 1}
-            className={`transition-[stroke,stroke-width] duration-220 ease-out ${
-              focus
-                ? "stroke-slate-900"
-                : currentValue.length > 0
-                  ? "stroke-slate-900/35"
-                  : "stroke-slate-900/18"
-            }`}
+            className={cn(
+              "transition-[stroke,stroke-width] duration-220 ease-out motion-reduce:duration-160",
+              ringStroke
+            )}
           />
 
           {/* Left Perimeter Outline */}
@@ -189,13 +205,10 @@ export function LabelInput({
             fill="none"
             strokeLinecap="butt"
             strokeWidth={focus ? 1.5 : 1}
-            className={`transition-[stroke,stroke-width] duration-220 ease-out ${
-              focus
-                ? "stroke-slate-900"
-                : currentValue.length > 0
-                  ? "stroke-slate-900/35"
-                  : "stroke-slate-900/18"
-            }`}
+            className={cn(
+              "transition-[stroke,stroke-width] duration-220 ease-out motion-reduce:duration-160",
+              ringStroke
+            )}
           />
 
           {/* Left Gap Notch (Parts outward from center) */}
@@ -207,13 +220,10 @@ export function LabelInput({
             strokeWidth={focus ? 1.5 : 1}
             strokeDasharray="1 2"
             strokeDashoffset={up ? -1 : 0}
-            className={`transition-[stroke-dashoffset,stroke,stroke-width] duration-320 ease-[cubic-bezier(0.22,1,0.36,1)] ${
-              focus
-                ? "stroke-slate-900"
-                : currentValue.length > 0
-                  ? "stroke-slate-900/35"
-                  : "stroke-slate-900/18"
-            }`}
+            className={cn(
+              "transition-[stroke-dashoffset,stroke,stroke-width] duration-320 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:duration-160",
+              ringStroke
+            )}
           />
 
           {/* Right Gap Notch (Parts outward from center) */}
@@ -225,13 +235,10 @@ export function LabelInput({
             strokeWidth={focus ? 1.5 : 1}
             strokeDasharray="1 2"
             strokeDashoffset={up ? -1 : 0}
-            className={`transition-[stroke-dashoffset,stroke,stroke-width] duration-320 ease-[cubic-bezier(0.22,1,0.36,1)] ${
-              focus
-                ? "stroke-slate-900"
-                : currentValue.length > 0
-                  ? "stroke-slate-900/35"
-                  : "stroke-slate-900/18"
-            }`}
+            className={cn(
+              "transition-[stroke-dashoffset,stroke,stroke-width] duration-320 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:duration-160",
+              ringStroke
+            )}
           />
         </svg>
 
@@ -240,9 +247,20 @@ export function LabelInput({
           key={displayLabel}
           ref={labRef}
           htmlFor={id}
-          className={`absolute top-1/2 origin-left cursor-text text-[16px] leading-none tracking-[-0.01em] whitespace-pre transition-[transform,color] duration-420 ease-[cubic-bezier(0.22,1,0.36,1)] select-none ${
-            focus ? "text-slate-900" : up ? "text-slate-500" : "text-slate-400"
-          }`}
+          className={cn(
+            "absolute top-1/2 origin-left cursor-text text-[16px] leading-none tracking-[-0.01em] whitespace-pre transition-[transform,color] duration-420 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:duration-160 select-none",
+            focus
+              ? isDark
+                ? "text-[#ffffff]"
+                : "text-[#18181b]"
+              : up
+                ? isDark
+                  ? "text-[#a1a1aa]"
+                  : "text-[#71717a]"
+                : isDark
+                  ? "text-[#71717a]"
+                  : "text-[#a1a1aa]"
+          )}
           style={{
             left: lx,
             transform: up ? "translateY(-50%) translateY(-26px) scale(0.78)" : "translateY(-50%)",
@@ -265,9 +283,11 @@ export function LabelInput({
         <input
           ref={inputRef}
           id={id}
-          className={`absolute inset-0 h-full w-full rounded-[inherit] border-0 bg-transparent text-[16px] tracking-[-0.01em] text-slate-900 transition-[filter,opacity] duration-260 outline-none ${
+          className={cn(
+            "absolute inset-0 h-full w-full rounded-[inherit] border-0 bg-transparent text-[16px] tracking-[-0.01em] transition-[filter,opacity] duration-260 outline-none",
+            isDark ? "text-[#ffffff]" : "text-[#18181b]",
             flip > 0 ? "animate-[lbi-flip_260ms_ease-out]" : ""
-          }`}
+          )}
           style={{
             paddingLeft: lx,
             paddingRight: secret ? 48 : lx,
@@ -297,7 +317,10 @@ export function LabelInput({
         {secret && (
           <button
             type="button"
-            className="group absolute top-1/2 right-2.5 grid h-7 w-7 -translate-y-1/2 place-items-center rounded-full bg-transparent p-0 text-slate-400 transition-[color,transform] duration-160 hover:text-slate-900 active:scale-95"
+            className={cn(
+              "group absolute top-1/2 right-2.5 grid h-7 w-7 -translate-y-1/2 place-items-center rounded-full bg-transparent p-0 transition-[color,transform] duration-160 active:scale-95",
+              isDark ? "text-[#71717a] hover:text-[#ffffff]" : "text-[#a1a1aa] hover:text-[#18181b]"
+            )}
             onPointerDown={(e) => e.preventDefault()}
             onClick={reveal}
             aria-label={show ? "Hide password" : "Show password"}
