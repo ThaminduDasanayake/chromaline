@@ -411,6 +411,10 @@ function buildRegistry() {
     path.join(outDir, "palette.json"),
     JSON.stringify(paletteRegistryItem, null, 2)
   );
+  fs.writeFileSync(
+    path.join(outDir, "time-scrubber.json"),
+    JSON.stringify(timeScrubberRegistryItem, null, 2)
+  );
 
   const indexRegistry = {
     $schema: "https://ui.shadcn.com/schema/registry.json",
@@ -430,6 +434,7 @@ function buildRegistry() {
       counterRegistryItem,
       wakeSliderRegistryItem,
       paletteRegistryItem,
+      timeScrubberRegistryItem,
     ],
   };
   fs.writeFileSync(path.join(outDir, "index.json"), JSON.stringify(indexRegistry, null, 2));
