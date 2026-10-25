@@ -37,6 +37,8 @@ export interface PaletteProps {
   morph?: number;
   /** Visual theme mode (default: "light") */
   theme?: PaletteTheme;
+  /** Initial array of hex colors for SSR hydration consistency */
+  initialPalette?: string[];
   /** Callback fired when a new palette is generated */
   onGenerate?: (colors: string[]) => void;
   /** Callback fired when a swatch hex is copied */
@@ -226,11 +228,24 @@ const swellOf = (ti: number) =>
 
 const mix = (a: number, b: number, t: number) => a + (b - a) * t;
 
+const INITIAL_PALETTES: Record<number, Swatch[]> = {
+  3: [{ hex: "#fe5a5f" }, { hex: "#5e86fe" }, { hex: "#0ca854" }],
+  4: [{ hex: "#feaaa6" }, { hex: "#fe5a5f" }, { hex: "#5e86fe" }, { hex: "#0ca854" }],
+  5: [
+    { hex: "#feaaa6" },
+    { hex: "#fe5a5f" },
+    { hex: "#5e86fe" },
+    { hex: "#0ca854" },
+    { hex: "#8a3ffc" },
+  ],
+};
+
 export function Palette({
   count = 4,
   corner = CORNER,
   morph = 50,
   theme = "light",
+  initialPalette,
   onGenerate,
   onCopy,
   className = "",
@@ -239,7 +254,22 @@ export function Palette({
   const isDark = theme === "dark";
   const n = clamp(Math.round(count), 3, 5);
 
-  const [pal, setPal] = useState<Swatch[]>(() => generatePalette(n));
+  const [pal, setPal] = useState<Swatch[]>(() => {
+    if (initialPalette && initialPalette.length >= n) {
+      return initialPalette.slice(0, n).map((h) => ({ hex: h }));
+    }
+    return INITIAL_PALETTES[n] || INITIAL_PALETTES[4];
+  });
+  const [prevN, setPrevN] = useState(n);
+  if (prevN !== n) {
+    setPrevN(n);
+    if (initialPalette && initialPalette.length >= n) {
+      setPal(initialPalette.slice(0, n).map((h) => ({ hex: h })));
+    } else {
+      setPal(INITIAL_PALETTES[n] || INITIAL_PALETTES[4]);
+    }
+  }
+
   const [next, setNext] = useState<Swatch[] | null>(null);
   const [t, setT] = useState(0);
   const [spins, setSpins] = useState(0);
@@ -247,7 +277,6 @@ export function Palette({
 
   const raf = useRef(0);
   const copyTimer = useRef<number | null>(null);
-  const still = stillness();
 
   const heat = Math.sin(Math.PI * clamp(t, 0, 1)) * HEAT;
   const { url: gooUrl, goo } = useGoo(heat, 26);
@@ -260,10 +289,9 @@ export function Palette({
   }, []);
 
   if (pal.length !== n) {
-    const fresh = generatePalette(n);
+    const fresh = INITIAL_PALETTES[n] || INITIAL_PALETTES[4];
     setPal(fresh);
     setNext(null);
-    onGenerate?.(fresh.map((s) => s.hex));
   }
 
   const roll = () => {
@@ -273,7 +301,7 @@ export function Palette({
     const fresh = generatePalette(n);
     onGenerate?.(fresh.map((s) => s.hex));
 
-    if (still) {
+    if (stillness()) {
       setPal(fresh);
       return;
     }
