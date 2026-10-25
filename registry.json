@@ -226,11 +226,6 @@
           "path": "components/ui/time-scrubber.tsx",
           "type": "registry:ui",
           "target": "components/ui/time-scrubber.tsx"
-        },
-        {
-          "path": "components/ui/time-scrubber.css",
-          "type": "registry:ui",
-          "target": "components/ui/time-scrubber.css"
         }
       ]
     }

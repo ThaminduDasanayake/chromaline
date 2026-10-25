@@ -2,7 +2,6 @@
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
-import "./time-scrubber.css";
 
 /**
  * ══ Time Scrubber ═════════════════════════════════════════════════
@@ -76,14 +75,20 @@ function Digit({ d }: { d: string }) {
   }
 
   return (
-    <span className="tms-col">
+    <span className="inline-block h-[1.5em] my-[-0.25em] overflow-hidden [mask-image:linear-gradient(transparent,#000_30%,#000_70%,transparent)] [-webkit-mask-image:linear-gradient(transparent,#000_30%,#000_70%,transparent)]">
       <span
-        className="tms-strip"
         data-flip={flip ?? undefined}
+        className={cn(
+          "flex flex-col transition-transform duration-[220ms] [transition-timing-function:cubic-bezier(0.24,1.34,0.38,1)] motion-reduce:transition-none motion-reduce:animate-none",
+          flip === "a" && "[animation:tms-blur-a_260ms_ease-out]",
+          flip === "b" && "[animation:tms-blur-b_260ms_ease-out]"
+        )}
         style={{ transform: `translateY(${-Number(d) * 1.5}em)` }}
       >
         {"0123456789".split("").map((n) => (
-          <span key={n}>{n}</span>
+          <span key={n} className="h-[1.5em] leading-[1.5em] text-center">
+            {n}
+          </span>
         ))}
       </span>
     </span>
@@ -288,7 +293,7 @@ export function TimeScrubber({
   return (
     <div
       className={cn(
-        "tms font-sans transition-colors duration-300",
+        "relative w-[300px] px-[20px] pt-[20px] pb-[16px] select-none font-sans transition-colors duration-300",
         isDark
           ? "bg-[#1b1b1b] text-[#ffffff] shadow-[0_0_0_1px_rgba(255,255,255,0.12)]"
           : "bg-[#ffffff] text-[#18181b] shadow-[0_0_0_1px_rgba(0,0,0,0.08)]",
@@ -296,15 +301,24 @@ export function TimeScrubber({
         className
       )}
       style={{
+        borderRadius: `${Math.max(0, corner)}px`,
         ...style,
-        "--tms-r": `${Math.max(0, corner)}px`,
-      } as React.CSSProperties}
+      }}
     >
-      <div className="tms-read" aria-live="polite" aria-label={`${time} ${mer}`}>
-        <span className="tms-time">
+      <style>{`
+        @keyframes tms-blur-a { from { filter: blur(2px); } to { filter: blur(0); } }
+        @keyframes tms-blur-b { from { filter: blur(2px); } to { filter: blur(0); } }
+      `}</style>
+
+      <div
+        className="flex items-baseline justify-center gap-[8px]"
+        aria-live="polite"
+        aria-label={`${time} ${mer}`}
+      >
+        <span className="inline-flex text-[30px] font-medium leading-none tracking-[-0.03em] tabular-nums">
           {time.split("").map((c, i) =>
             c === ":" ? (
-              <span key={`c${i}`} className="tms-colon">
+              <span key={`c${i}`} className="px-[0.02em]">
                 :
               </span>
             ) : (
@@ -313,7 +327,12 @@ export function TimeScrubber({
           )}
         </span>
         {mer && (
-          <span className={cn("tms-mer", isDark ? "text-[#a1a1aa]" : "text-[#71717a]")}>
+          <span
+            className={cn(
+              "text-[14px] font-medium tracking-[-0.01em]",
+              isDark ? "text-[#a1a1aa]" : "text-[#71717a]"
+            )}
+          >
             {mer}
           </span>
         )}
@@ -321,7 +340,6 @@ export function TimeScrubber({
 
       <div
         ref={ruler}
-        className="tms-ruler"
         role="slider"
         tabIndex={disabled ? -1 : 0}
         aria-label="Time scrubber"
@@ -329,6 +347,7 @@ export function TimeScrubber({
         aria-valuenow={wrap(Math.round(pos))}
         aria-valuemin={0}
         aria-valuemax={DAY - 1}
+        className="relative h-[58px] mt-[16px] cursor-grab active:cursor-grabbing touch-pan-y outline-none [mask-image:linear-gradient(90deg,transparent,#000_22%,#000_78%,transparent)] [-webkit-mask-image:linear-gradient(90deg,transparent,#000_22%,#000_78%,transparent)]"
         onPointerDown={onDown}
         onPointerMove={onMove}
         onPointerUp={onUp}
@@ -341,12 +360,17 @@ export function TimeScrubber({
           goTo(Math.round(p.current.to / currentStep) * currentStep + d, 0);
         }}
       >
-        <div className="tms-track">
+        <div className="absolute left-1/2 top-0 bottom-0">
           {ticks.map((t) => (
             <span
               key={t.m}
-              className={cn("tms-tick", isDark ? "bg-[#ffffff]" : "bg-[#18181b]")}
               data-kind={t.kind}
+              className={cn(
+                "absolute left-[-1px] top-[8px] w-[2px] rounded-[1px] origin-[50%_0] h-[10px]",
+                t.kind === "quarter" && "h-[17px]",
+                t.kind === "hour" && "h-[25px]",
+                isDark ? "bg-[#ffffff]" : "bg-[#18181b]"
+              )}
               style={{
                 transform: `translateX(${t.x.toFixed(2)}px) scaleY(${(0.55 + 0.45 * t.f).toFixed(3)})`,
                 opacity: 0.18 + 0.82 * t.f,
@@ -360,7 +384,10 @@ export function TimeScrubber({
               return (
                 <span
                   key={`l${t.m}`}
-                  className={cn("tms-hour", isDark ? "text-[#a1a1aa]" : "text-[#71717a]")}
+                  className={cn(
+                    "absolute left-0 top-[38px] text-[11px] font-normal whitespace-nowrap tracking-normal",
+                    isDark ? "text-[#a1a1aa]" : "text-[#71717a]"
+                  )}
                   style={{
                     transform: `translateX(${t.x.toFixed(2)}px) translateX(-50%)`,
                     opacity: 0.15 + 0.85 * t.f,
@@ -371,7 +398,10 @@ export function TimeScrubber({
               );
             })}
         </div>
-        <span className="tms-mark bg-[#e5484d]" aria-hidden="true" />
+        <span
+          className="absolute left-1/2 top-[2px] w-[3px] h-[32px] ml-[-1.5px] rounded-[2px] bg-[#e5484d] pointer-events-none"
+          aria-hidden="true"
+        />
       </div>
     </div>
   );

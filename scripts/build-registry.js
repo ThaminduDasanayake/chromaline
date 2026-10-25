@@ -18,7 +18,6 @@ function buildRegistry() {
   const wakeSliderPath = path.join(__dirname, "../components/ui/wake-slider.tsx");
   const palettePath = path.join(__dirname, "../components/ui/palette.tsx");
   const timeScrubberPath = path.join(__dirname, "../components/ui/time-scrubber.tsx");
-  const timeScrubberCssPath = path.join(__dirname, "../components/ui/time-scrubber.css");
 
   if (!fs.existsSync(trayPath)) {
     console.error("Component not found:", trayPath);
@@ -49,9 +48,6 @@ function buildRegistry() {
   const paletteContent = fs.existsSync(palettePath) ? fs.readFileSync(palettePath, "utf8") : "";
   const timeScrubberContent = fs.existsSync(timeScrubberPath)
     ? fs.readFileSync(timeScrubberPath, "utf8")
-    : "";
-  const timeScrubberCssContent = fs.existsSync(timeScrubberCssPath)
-    ? fs.readFileSync(timeScrubberCssPath, "utf8")
     : "";
 
   // 1. Full Folder Tray with Folder Support
@@ -361,12 +357,6 @@ function buildRegistry() {
         type: "registry:ui",
         target: "components/ui/time-scrubber.tsx",
       },
-      {
-        path: "components/ui/time-scrubber.css",
-        content: timeScrubberCssContent,
-        type: "registry:ui",
-        target: "components/ui/time-scrubber.css",
-      },
     ],
   };
 
@@ -657,11 +647,6 @@ function buildRegistry() {
             path: "components/ui/time-scrubber.tsx",
             type: "registry:ui",
             target: "components/ui/time-scrubber.tsx",
-          },
-          {
-            path: "components/ui/time-scrubber.css",
-            type: "registry:ui",
-            target: "components/ui/time-scrubber.css",
           },
         ],
       },
