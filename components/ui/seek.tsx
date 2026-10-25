@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
+import { cn } from "@/lib/utils";
 
 /* ══ Seek ═══════════════════════════════════════════════════
    A search icon that springs into a search field.
@@ -8,6 +9,8 @@ import React, { useEffect, useRef, useState } from "react";
    Continuous physics, cursor magnetic pull, and tactile yield.
    Ported & adapted for Chromaline design system.
    ─────────────────────────────────────────────────────────── */
+
+export type SeekTheme = "light" | "dark";
 
 export interface SeekProps {
   value?: string;
@@ -21,6 +24,7 @@ export interface SeekProps {
   give?: number; // 0..100 cursor magnet pull
   spring?: number; // 0..100 spring overshoot & settling rate
   corner?: number;
+  theme?: SeekTheme;
   className?: string;
   disabled?: boolean;
   autoFocus?: boolean;
@@ -95,10 +99,12 @@ export function Seek({
   give = 50,
   spring = 50,
   corner,
+  theme = "light",
   className = "",
   disabled = false,
   autoFocus = false,
 }: SeekProps) {
+  const isDark = theme === "dark";
   const cfg = SIZE_CONFIGS[size] || SIZE_CONFIGS.default;
   const shut = cfg.shut;
   const lens = cfg.lens;
@@ -268,9 +274,13 @@ export function Seek({
       data-busy={busy}
     >
       <div
-        className={`group/seek relative isolate overflow-hidden bg-white/65 shadow-[inset_0_1px_0_rgba(255,255,255,0.95),0_10px_32px_rgba(15,23,42,0.08)] backdrop-blur-md backdrop-saturate-150 ${
-          !open ? "[@media(hover:hover)]:hover:scale-[1.04]" : ""
-        }`}
+        className={cn(
+          "group/seek relative isolate overflow-hidden transition-colors duration-220",
+          isDark
+            ? "bg-[#1b1b1b] shadow-[0_0_0_1px_rgba(255,255,255,0.12)]"
+            : "bg-[#ffffff] shadow-[0_0_0_1px_rgba(0,0,0,0.08)]",
+          !open ? "[@media(hover:hover)]:hover:scale-[1.045]" : ""
+        )}
         style={{
           width: `${w.toFixed(2)}px`,
           height: `${shut}px`,
@@ -279,18 +289,22 @@ export function Seek({
           transition: `transform ${press ? "160ms" : "220ms"} cubic-bezier(0.22, 1, 0.36, 1), background 220ms ease`,
         }}
       >
-        {/* Prismatic specular lit rim */}
-        <span
-          className="pointer-events-none absolute inset-0 z-2 rounded-full border border-transparent mask-exclude [-webkit-mask-composite:xor] [-webkit-mask:linear-gradient(#000_0_0)_padding-box,linear-gradient(#000_0_0)] [background:linear-gradient(142deg,rgba(255,255,255,0.75)_0%,rgba(255,255,255,0.18)_26%,rgba(255,255,255,0.06)_62%,rgba(255,255,255,0.45)_100%)_border-box] [mask:linear-gradient(#000_0_0)_padding-box,linear-gradient(#000_0_0)]"
-          style={{ borderRadius: `${actualCorner}px` }}
-          aria-hidden="true"
-        />
-
-        {/* Custom continuous vector lens */}
+        {/* Continuous vector lens (18-unit viewBox: 1.5 stroke width at rest, 1.8 when typing) */}
         <svg
-          className={`pointer-events-none absolute top-1/2 z-3 fill-none transition-[stroke,stroke-width] duration-220 ease-out ${
-            busy ? "stroke-slate-900" : "stroke-slate-500 group-hover/seek:stroke-slate-900"
-          }`}
+          className={cn(
+            "pointer-events-none absolute top-1/2 z-3 fill-none transition-[stroke,stroke-width] duration-220 ease-out",
+            busy
+              ? isDark
+                ? "stroke-[#ffffff]"
+                : "stroke-[#18181b]"
+              : open
+                ? isDark
+                  ? "stroke-[#71717a]"
+                  : "stroke-[#a1a1aa]"
+                : isDark
+                  ? "stroke-[#a1a1aa] group-hover/seek:stroke-[#ffffff]"
+                  : "stroke-[#71717a] group-hover/seek:stroke-[#18181b]"
+          )}
           viewBox="0 0 18 18"
           aria-hidden="true"
           style={{
@@ -298,7 +312,7 @@ export function Seek({
             width: `${lens}px`,
             height: `${lens}px`,
             marginTop: `${-lens / 2}px`,
-            strokeWidth: busy ? 2.0 : 1.75,
+            strokeWidth: busy ? 1.8 : 1.5,
             strokeLinecap: "round",
           }}
         >
@@ -319,7 +333,10 @@ export function Seek({
           onChange={handleChange}
           onBlur={handleBlur}
           onKeyDown={handleKeyDown}
-          className="absolute top-0 z-3 h-full border-0 bg-transparent font-sans font-medium tracking-tight text-slate-900 outline-none placeholder:text-slate-400"
+          className={cn(
+            "absolute top-0 z-3 h-full border-0 bg-transparent font-sans font-medium tracking-tight outline-none transition-colors duration-220",
+            isDark ? "text-[#ffffff] placeholder:text-[#6b6b6b]" : "text-[#18181b] placeholder:text-[#a1a1aa]"
+          )}
           style={{
             left: `${inset + lens + (size === "sm" ? 8 : 11)}px`,
             right: `${open && currentValue ? (size === "sm" ? 34 : 40) : 16}px`,
@@ -334,7 +351,12 @@ export function Seek({
         {open && currentValue && (
           <button
             type="button"
-            className="absolute top-1/2 z-5 flex -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border-0 bg-slate-900/7 text-slate-600 transition-all duration-150 hover:bg-slate-900/14 hover:text-slate-900"
+            className={cn(
+              "absolute top-1/2 z-5 flex -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border-0 transition-all duration-150",
+              isDark
+                ? "bg-[#ffffff]/10 text-[#a1a1aa] hover:bg-[#ffffff]/20 hover:text-[#ffffff]"
+                : "bg-[#18181b]/[0.06] text-[#71717a] hover:bg-[#18181b]/[0.12] hover:text-[#18181b]"
+            )}
             aria-label="Clear search"
             onClick={handleClear}
             style={{
@@ -362,7 +384,12 @@ export function Seek({
         {!open && (
           <button
             type="button"
-            className="rounded-inherit absolute inset-0 z-4 cursor-pointer border-0 bg-transparent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-900"
+            className={cn(
+              "rounded-inherit absolute inset-0 z-4 cursor-pointer border-0 bg-transparent outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
+              isDark
+                ? "focus-visible:ring-[#ffffff]/40 focus-visible:ring-offset-[#1b1b1b]"
+                : "focus-visible:ring-[#18181b]/30 focus-visible:ring-offset-[#ffffff]"
+            )}
             aria-label={placeholder}
             onClick={start}
             disabled={disabled}

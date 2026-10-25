@@ -76,10 +76,14 @@ const CODE_EXAMPLE_LINES = [
   },
   {
     num: 14,
+    parts: [{ text: '      theme="light" // "light" | "dark"' }],
+  },
+  {
+    num: 15,
     parts: [{ text: "    />", cls: "text-slate-500" }],
   },
-  { num: 15, parts: [{ text: "  );" }] },
-  { num: 16, parts: [{ text: "}" }] },
+  { num: 16, parts: [{ text: "  );" }] },
+  { num: 17, parts: [{ text: "}" }] },
 ];
 
 const CODE_EXAMPLE_TEXT = `import { useState } from "react";
@@ -94,11 +98,12 @@ export default function SearchDemo() {
       onChange={setQuery}
       placeholder="Search components..."
       size="default"
+      theme="light" // "light" | "dark"
       give={50}
       spring={50}
     />
   );
-}`;
+};`;
 
 const PROPS_DATA: PropItem[] = [
   {
@@ -168,6 +173,12 @@ const PROPS_DATA: PropItem[] = [
     desc: "Border radius of the pill container.",
   },
   {
+    name: "theme",
+    type: '"light" | "dark"',
+    default: '"light"',
+    desc: "Visual color theme mode: 'light' or 'dark'.",
+  },
+  {
     name: "disabled",
     type: "boolean",
     default: "false",
@@ -176,6 +187,7 @@ const PROPS_DATA: PropItem[] = [
 ];
 
 export default function SeekDocumentationPage() {
+  const [theme, setTheme] = useState<"light" | "dark">("light");
   const [size, setSize] = useState<"sm" | "default" | "lg">("default");
   const [give, setGive] = useState(50);
   const [spring, setSpring] = useState(50);
@@ -190,9 +202,27 @@ export default function SeekDocumentationPage() {
     >
       {/* 1. Preview */}
       <ComponentPreview
-        canvasClassName="min-h-[340px] p-8"
+        canvasClassName={`min-h-[340px] p-8 transition-colors duration-300 ${
+          theme === "dark" ? "bg-[#18181b]" : "bg-[#f4f4f5]"
+        }`}
         controls={
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {/* Theme control */}
+            <div>
+              <label className="text-xs font-semibold text-slate-900">Theme</label>
+              <div className="mt-2.5">
+                <SelectBar<"light" | "dark">
+                  size="xs"
+                  items={[
+                    { key: "light", label: "Light" },
+                    { key: "dark", label: "Dark" },
+                  ]}
+                  value={theme}
+                  onChange={setTheme}
+                />
+              </div>
+            </div>
+
             {/* Size control */}
             <div>
               <label className="text-xs font-semibold text-slate-900">Size</label>
@@ -246,6 +276,7 @@ export default function SeekDocumentationPage() {
       >
         <Seek
           size={size}
+          theme={theme}
           give={give}
           spring={spring}
           value={searchVal}
