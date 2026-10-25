@@ -235,8 +235,8 @@ function buildRegistry() {
     type: "registry:ui",
     title: "Copy Button",
     description:
-      "Tactile copy-to-clipboard button component and custom React hook with animated visual feedback.",
-    dependencies: ["@phosphor-icons/react@^2.1.10"],
+      "Fluid morphing copy button with animated content width measuring and popLayout icon/text transitions.",
+    dependencies: ["@phosphor-icons/react@^2.1.10", "framer-motion@^14.4.0"],
     devDependencies: [],
     registryDependencies: [],
     files: [
@@ -560,8 +560,8 @@ function buildRegistry() {
         type: "registry:ui",
         title: "Copy Button",
         description:
-          "Tactile copy-to-clipboard button component and custom React hook with animated visual feedback.",
-        dependencies: ["@phosphor-icons/react@^2.1.10"],
+          "Fluid morphing copy button with animated content width measuring and popLayout icon/text transitions.",
+        dependencies: ["@phosphor-icons/react@^2.1.10", "framer-motion@^14.4.0"],
         files: [
           {
             path: "components/ui/copy-button.tsx",
