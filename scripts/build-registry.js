@@ -15,6 +15,7 @@ function buildRegistry() {
   const copyHookPath = path.join(__dirname, "../hooks/use-copy-to-clipboard.ts");
   const aspectPath = path.join(__dirname, "../components/ui/aspect-ratio.tsx");
   const counterPath = path.join(__dirname, "../components/ui/counter.tsx");
+  const wakeSliderPath = path.join(__dirname, "../components/ui/wake-slider.tsx");
 
   if (!fs.existsSync(trayPath)) {
     console.error("Component not found:", trayPath);
@@ -39,6 +40,9 @@ function buildRegistry() {
   const copyHookContent = fs.existsSync(copyHookPath) ? fs.readFileSync(copyHookPath, "utf8") : "";
   const aspectContent = fs.existsSync(aspectPath) ? fs.readFileSync(aspectPath, "utf8") : "";
   const counterContent = fs.existsSync(counterPath) ? fs.readFileSync(counterPath, "utf8") : "";
+  const wakeSliderContent = fs.existsSync(wakeSliderPath)
+    ? fs.readFileSync(wakeSliderPath, "utf8")
+    : "";
 
   // 1. Full Folder Tray with Folder Support
   const trayRegistryItem = {
@@ -287,6 +291,27 @@ function buildRegistry() {
     ],
   };
 
+  // 12. Wake Slider
+  const wakeSliderRegistryItem = {
+    $schema: "https://ui.shadcn.com/schema/registry-item.json",
+    name: "wake-slider",
+    type: "registry:ui",
+    title: "Wake Slider",
+    description:
+      "Thumbless range control with dynamic kinetic wave energy and velocity-sensitive exponential decay wake.",
+    dependencies: ["clsx", "tailwind-merge"],
+    devDependencies: [],
+    registryDependencies: [],
+    files: [
+      {
+        path: "components/ui/wake-slider.tsx",
+        content: wakeSliderContent,
+        type: "registry:ui",
+        target: "components/ui/wake-slider.tsx",
+      },
+    ],
+  };
+
   const outDir = path.join(__dirname, "../public/r");
   fs.mkdirSync(outDir, { recursive: true });
 
@@ -320,6 +345,10 @@ function buildRegistry() {
     JSON.stringify(aspectRatioRegistryItem, null, 2)
   );
   fs.writeFileSync(path.join(outDir, "counter.json"), JSON.stringify(counterRegistryItem, null, 2));
+  fs.writeFileSync(
+    path.join(outDir, "wake-slider.json"),
+    JSON.stringify(wakeSliderRegistryItem, null, 2)
+  );
 
   const indexRegistry = {
     $schema: "https://ui.shadcn.com/schema/registry.json",
@@ -337,6 +366,7 @@ function buildRegistry() {
       copyButtonRegistryItem,
       aspectRatioRegistryItem,
       counterRegistryItem,
+      wakeSliderRegistryItem,
     ],
   };
   fs.writeFileSync(path.join(outDir, "index.json"), JSON.stringify(indexRegistry, null, 2));
@@ -514,6 +544,21 @@ function buildRegistry() {
             path: "components/ui/counter.tsx",
             type: "registry:ui",
             target: "components/ui/counter.tsx",
+          },
+        ],
+      },
+      {
+        name: "wake-slider",
+        type: "registry:ui",
+        title: "Wake Slider",
+        description:
+          "Thumbless range control with dynamic kinetic wave energy and velocity-sensitive exponential decay wake.",
+        dependencies: ["clsx", "tailwind-merge"],
+        files: [
+          {
+            path: "components/ui/wake-slider.tsx",
+            type: "registry:ui",
+            target: "components/ui/wake-slider.tsx",
           },
         ],
       },

@@ -176,6 +176,23 @@
           "target": "components/ui/counter.tsx"
         }
       ]
+    },
+    {
+      "name": "wake-slider",
+      "type": "registry:ui",
+      "title": "Wake Slider",
+      "description": "Thumbless range control with dynamic kinetic wave energy and velocity-sensitive exponential decay wake.",
+      "dependencies": [
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "components/ui/wake-slider.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/wake-slider.tsx"
+        }
+      ]
     }
   ]
 }

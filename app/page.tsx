@@ -12,6 +12,7 @@ import {
   LabelInputCardPreview,
   AspectRatioCardPreview,
   CounterCardPreview,
+  WakeSliderCardPreview,
 } from "@/components/showcase";
 
 export default function ChromalineHomePage() {
@@ -123,6 +124,15 @@ export default function ChromalineHomePage() {
             href="/components/counter"
           >
             <CounterCardPreview />
+          </ComponentCard>
+
+          {/* Card 11: Wake Slider */}
+          <ComponentCard
+            title="Wake Slider"
+            description="Thumbless range control with dynamic kinetic wave energy and velocity-sensitive exponential decay wake."
+            href="/components/wake-slider"
+          >
+            <WakeSliderCardPreview />
           </ComponentCard>
         </div>
       </main>
