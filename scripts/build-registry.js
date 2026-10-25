@@ -17,6 +17,8 @@ function buildRegistry() {
   const counterPath = path.join(__dirname, "../components/ui/counter.tsx");
   const wakeSliderPath = path.join(__dirname, "../components/ui/wake-slider.tsx");
   const palettePath = path.join(__dirname, "../components/ui/palette.tsx");
+  const timeScrubberPath = path.join(__dirname, "../components/ui/time-scrubber.tsx");
+  const timeScrubberCssPath = path.join(__dirname, "../components/ui/time-scrubber.css");
 
   if (!fs.existsSync(trayPath)) {
     console.error("Component not found:", trayPath);
@@ -45,6 +47,12 @@ function buildRegistry() {
     ? fs.readFileSync(wakeSliderPath, "utf8")
     : "";
   const paletteContent = fs.existsSync(palettePath) ? fs.readFileSync(palettePath, "utf8") : "";
+  const timeScrubberContent = fs.existsSync(timeScrubberPath)
+    ? fs.readFileSync(timeScrubberPath, "utf8")
+    : "";
+  const timeScrubberCssContent = fs.existsSync(timeScrubberCssPath)
+    ? fs.readFileSync(timeScrubberCssPath, "utf8")
+    : "";
 
   // 1. Full Folder Tray with Folder Support
   const trayRegistryItem = {
@@ -331,6 +339,33 @@ function buildRegistry() {
         content: paletteContent,
         type: "registry:ui",
         target: "components/ui/palette.tsx",
+      },
+    ],
+  };
+
+  // 14. Time Scrubber
+  const timeScrubberRegistryItem = {
+    $schema: "https://ui.shadcn.com/schema/registry-item.json",
+    name: "time-scrubber",
+    type: "registry:ui",
+    title: "Time Scrubber",
+    description:
+      "Tactile time picker over a rolling ruler dial with inertia fling coasting, unified spring settling, and front-dial cylindrical tick projection.",
+    dependencies: ["clsx", "tailwind-merge"],
+    devDependencies: [],
+    registryDependencies: [],
+    files: [
+      {
+        path: "components/ui/time-scrubber.tsx",
+        content: timeScrubberContent,
+        type: "registry:ui",
+        target: "components/ui/time-scrubber.tsx",
+      },
+      {
+        path: "components/ui/time-scrubber.css",
+        content: timeScrubberCssContent,
+        type: "registry:ui",
+        target: "components/ui/time-scrubber.css",
       },
     ],
   };

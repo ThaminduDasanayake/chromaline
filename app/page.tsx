@@ -14,6 +14,7 @@ import {
   CounterCardPreview,
   WakeSliderCardPreview,
   PaletteCardPreview,
+  TimeScrubberCardPreview,
 } from "@/components/showcase";
 
 export default function ChromalineHomePage() {
@@ -143,6 +144,15 @@ export default function ChromalineHomePage() {
             href="/components/palette"
           >
             <PaletteCardPreview />
+          </ComponentCard>
+
+          {/* Card 13: Time Scrubber */}
+          <ComponentCard
+            title="Time Scrubber"
+            description="Tactile time ruler with inertia throw, unified spring snapping, and front-dial cylindrical tick projection."
+            href="/components/time-scrubber"
+          >
+            <TimeScrubberCardPreview />
           </ComponentCard>
         </div>
       </main>
