@@ -334,8 +334,10 @@ export function Seek({
           onBlur={handleBlur}
           onKeyDown={handleKeyDown}
           className={cn(
-            "absolute top-0 z-3 h-full border-0 bg-transparent font-sans font-medium tracking-tight outline-none transition-colors duration-220",
-            isDark ? "text-[#ffffff] placeholder:text-[#6b6b6b]" : "text-[#18181b] placeholder:text-[#a1a1aa]"
+            "absolute top-0 z-3 h-full border-0 bg-transparent font-sans font-medium tracking-tight transition-colors duration-220 outline-none",
+            isDark
+              ? "text-[#ffffff] placeholder:text-[#6b6b6b]"
+              : "text-[#18181b] placeholder:text-[#a1a1aa]"
           )}
           style={{
             left: `${inset + lens + (size === "sm" ? 8 : 11)}px`,

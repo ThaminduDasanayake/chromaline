@@ -397,10 +397,7 @@ function buildRegistry() {
     path.join(outDir, "wake-slider.json"),
     JSON.stringify(wakeSliderRegistryItem, null, 2)
   );
-  fs.writeFileSync(
-    path.join(outDir, "palette.json"),
-    JSON.stringify(paletteRegistryItem, null, 2)
-  );
+  fs.writeFileSync(path.join(outDir, "palette.json"), JSON.stringify(paletteRegistryItem, null, 2));
   fs.writeFileSync(
     path.join(outDir, "time-scrubber.json"),
     JSON.stringify(timeScrubberRegistryItem, null, 2)

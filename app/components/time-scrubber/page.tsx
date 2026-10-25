@@ -1,11 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import {
-  TimeScrubber,
-  TimeScrubberTheme,
-  TimeScrubberFormat,
-} from "@/components/ui/time-scrubber";
+import { TimeScrubber, TimeScrubberTheme, TimeScrubberFormat } from "@/components/ui/time-scrubber";
 import { SelectBar } from "@/components/ui/select-bar";
 import { ClockIcon, SunIcon, MoonIcon } from "@phosphor-icons/react";
 import {
@@ -179,7 +175,9 @@ export default function TimeScrubberPage() {
             <div className="flex items-center justify-between">
               <div>
                 <label className="text-xs font-semibold text-slate-900">Format</label>
-                <p className="mt-0.5 text-xs text-slate-500">12-hour with AM/PM or 24-hour military</p>
+                <p className="mt-0.5 text-xs text-slate-500">
+                  12-hour with AM/PM or 24-hour military
+                </p>
               </div>
               <SelectBar<TimeScrubberFormat>
                 size="xs"
@@ -197,7 +195,9 @@ export default function TimeScrubberPage() {
             <div className="flex items-center justify-between">
               <div>
                 <label className="text-xs font-semibold text-slate-900">Snap Step</label>
-                <p className="mt-0.5 text-xs text-slate-500">Ruler settling resolution in minutes</p>
+                <p className="mt-0.5 text-xs text-slate-500">
+                  Ruler settling resolution in minutes
+                </p>
               </div>
               <SelectBar<string>
                 size="xs"

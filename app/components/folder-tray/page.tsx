@@ -1,14 +1,14 @@
 "use client";
 
 import React from "react";
-import { FolderTrayPreview, LinkFolderTrayPreview } from "@/components/showcase";
+import { FolderTrayPreview } from "@/components/showcase";
 import {
-  DocsLayout,
   ComponentPreview,
+  DocsLayout,
   InstallationSection,
-  UsageSection,
-  PropsTable,
   PropItem,
+  PropsTable,
+  UsageSection,
 } from "@/components/docs";
 
 const CODE_EXAMPLE_LINES = [
@@ -222,23 +222,6 @@ export default function FolderTrayDocumentationPage() {
 
       {/* 4. Props */}
       <PropsTable componentName="FolderTray" props={PROPS_DATA} />
-
-      {/* Extra Example: Link Navigation Tray */}
-      <section>
-        <h2 className="text-xl font-bold tracking-tight text-slate-900 sm:text-2xl">Examples</h2>
-        <div className="mt-4 overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-2xs">
-          <div className="border-b border-slate-100 px-5 py-4">
-            <h3 className="text-sm font-semibold text-slate-900">Direct Link Navigation</h3>
-            <p className="mt-1 text-xs text-slate-500">
-              Each folder item specifies an <code>href</code> destination. Hovering over a card
-              stands it up, and clicking opens the link.
-            </p>
-          </div>
-          <div className="bg-[#F9FAFB]">
-            <LinkFolderTrayPreview />
-          </div>
-        </div>
-      </section>
     </DocsLayout>
   );
 }

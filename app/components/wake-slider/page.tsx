@@ -176,13 +176,7 @@ export default function WakeSliderPage() {
         }
       >
         <div className="py-6">
-          <WakeSlider
-            bars={36}
-            wake={60}
-            value={value}
-            onChange={setValue}
-            theme={theme}
-          />
+          <WakeSlider bars={36} wake={60} value={value} onChange={setValue} theme={theme} />
         </div>
       </ComponentPreview>
 

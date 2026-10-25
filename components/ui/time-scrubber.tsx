@@ -76,18 +76,18 @@ function Digit({ d }: { d: string }) {
   }
 
   return (
-    <span className="inline-block h-[1.5em] my-[-0.25em] overflow-hidden [mask-image:linear-gradient(transparent,#000_30%,#000_70%,transparent)] [-webkit-mask-image:linear-gradient(transparent,#000_30%,#000_70%,transparent)]">
+    <span className="my-[-0.25em] inline-block h-[1.5em] overflow-hidden [mask-image:linear-gradient(transparent,#000_30%,#000_70%,transparent)] [-webkit-mask-image:linear-gradient(transparent,#000_30%,#000_70%,transparent)]">
       <span
         data-flip={flip ?? undefined}
         className={cn(
-          "flex flex-col transition-transform duration-[220ms] [transition-timing-function:cubic-bezier(0.24,1.34,0.38,1)] motion-reduce:transition-none motion-reduce:animate-none",
+          "flex flex-col transition-transform duration-[220ms] [transition-timing-function:cubic-bezier(0.24,1.34,0.38,1)] motion-reduce:animate-none motion-reduce:transition-none",
           flip === "a" && "[animation:tms-blur-a_260ms_ease-out]",
           flip === "b" && "[animation:tms-blur-b_260ms_ease-out]"
         )}
         style={{ transform: `translateY(${-Number(d) * 1.5}em)` }}
       >
         {"0123456789".split("").map((n) => (
-          <span key={n} className="h-[1.5em] leading-[1.5em] text-center">
+          <span key={n} className="h-[1.5em] text-center leading-[1.5em]">
             {n}
           </span>
         ))}
@@ -294,11 +294,11 @@ export function TimeScrubber({
   return (
     <div
       className={cn(
-        "relative w-[375px] px-[25px] pt-[25px] pb-[20px] select-none font-sans transition-colors duration-300",
+        "relative w-[375px] px-[25px] pt-[25px] pb-[20px] font-sans transition-colors duration-300 select-none",
         isDark
           ? "bg-[#1b1b1b] text-[#ffffff] shadow-[0_0_0_1px_rgba(255,255,255,0.12)]"
           : "bg-[#ffffff] text-[#18181b] shadow-[0_0_0_1px_rgba(0,0,0,0.08)]",
-        disabled && "opacity-40 pointer-events-none",
+        disabled && "pointer-events-none opacity-40",
         className
       )}
       style={{
@@ -316,7 +316,7 @@ export function TimeScrubber({
         aria-live="polite"
         aria-label={`${time} ${mer}`}
       >
-        <span className="inline-flex text-[38px] font-medium leading-none tracking-[-0.03em] tabular-nums">
+        <span className="inline-flex text-[38px] leading-none font-medium tracking-[-0.03em] tabular-nums">
           {time.split("").map((c, i) =>
             c === ":" ? (
               <span key={`c${i}`} className="px-[0.02em]">
@@ -348,7 +348,7 @@ export function TimeScrubber({
         aria-valuenow={wrap(Math.round(pos))}
         aria-valuemin={0}
         aria-valuemax={DAY - 1}
-        className="relative h-[72px] mt-[20px] cursor-grab active:cursor-grabbing touch-pan-y outline-none [mask-image:linear-gradient(90deg,transparent,#000_22%,#000_78%,transparent)] [-webkit-mask-image:linear-gradient(90deg,transparent,#000_22%,#000_78%,transparent)]"
+        className="relative mt-[20px] h-[72px] cursor-grab touch-pan-y [mask-image:linear-gradient(90deg,transparent,#000_22%,#000_78%,transparent)] outline-none [-webkit-mask-image:linear-gradient(90deg,transparent,#000_22%,#000_78%,transparent)] active:cursor-grabbing"
         onPointerDown={onDown}
         onPointerMove={onMove}
         onPointerUp={onUp}
@@ -361,13 +361,13 @@ export function TimeScrubber({
           goTo(Math.round(p.current.to / currentStep) * currentStep + d, 0);
         }}
       >
-        <div className="absolute left-1/2 top-0 bottom-0">
+        <div className="absolute top-0 bottom-0 left-1/2">
           {ticks.map((t) => (
             <span
               key={t.m}
               data-kind={t.kind}
               className={cn(
-                "absolute left-[-1.25px] top-[10px] w-[2.5px] rounded-[1.25px] origin-[50%_0] h-[12px]",
+                "absolute top-[10px] left-[-1.25px] h-[12px] w-[2.5px] origin-[50%_0] rounded-[1.25px]",
                 t.kind === "quarter" && "h-[21px]",
                 t.kind === "hour" && "h-[31px]",
                 isDark ? "bg-[#ffffff]" : "bg-[#18181b]"
@@ -386,7 +386,7 @@ export function TimeScrubber({
                 <span
                   key={`l${t.m}`}
                   className={cn(
-                    "absolute left-0 top-[48px] text-[13px] font-normal whitespace-nowrap tracking-normal",
+                    "absolute top-[48px] left-0 text-[13px] font-normal tracking-normal whitespace-nowrap",
                     isDark ? "text-[#a1a1aa]" : "text-[#71717a]"
                   )}
                   style={{
@@ -400,7 +400,7 @@ export function TimeScrubber({
             })}
         </div>
         <span
-          className="absolute left-1/2 top-[2.5px] w-[4px] h-[40px] ml-[-2px] rounded-[2px] bg-[#e5484d] pointer-events-none"
+          className="pointer-events-none absolute top-[2.5px] left-1/2 ml-[-2px] h-[40px] w-[4px] rounded-[2px] bg-[#e5484d]"
           aria-hidden="true"
         />
       </div>

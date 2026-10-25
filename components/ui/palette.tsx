@@ -156,9 +156,7 @@ function generatePalette(n: number): Swatch[] {
       default: {
         const deep = i === n - 1;
         out.push(
-          deep
-            ? [0.52, 0.26, base + 180 * dir]
-            : [rnd(0.8, 0.87), 0.18, base + i * 18 * dir]
+          deep ? [0.52, 0.26, base + 180 * dir] : [rnd(0.8, 0.87), 0.18, base + i * 18 * dir]
         );
       }
     }
@@ -322,7 +320,7 @@ export function Palette({
 
   return (
     <div
-      className={cn("relative flex items-stretch select-none font-sans", className)}
+      className={cn("relative flex items-stretch font-sans select-none", className)}
       style={{ width: W, gap: GAP, ...style }}
     >
       {/* Pill 1: Swatches Container */}
@@ -353,7 +351,7 @@ export function Palette({
                   onClick={() => handleCopy(shown)}
                   title={`Copy ${shown}`}
                   aria-label={`Copy color ${shown}`}
-                  className="absolute left-0 top-0 cursor-pointer border-0 p-0 outline-none transition-transform duration-100 focus-visible:ring-2 focus-visible:ring-offset-2"
+                  className="absolute top-0 left-0 cursor-pointer border-0 p-0 transition-transform duration-100 outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
                   style={{
                     background: shown,
                     width: side,
@@ -364,7 +362,7 @@ export function Palette({
                   }}
                 >
                   {isCopied && (
-                    <span className="flex h-full w-full items-center justify-center text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)] animate-in fade-in zoom-in-75 duration-150">
+                    <span className="animate-in fade-in zoom-in-75 flex h-full w-full items-center justify-center text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)] duration-150">
                       <CheckIcon size={16} weight="bold" />
                     </span>
                   )}
@@ -388,7 +386,7 @@ export function Palette({
         <button
           type="button"
           className={cn(
-            "flex-none grid place-items-center border-0 bg-transparent cursor-pointer outline-none transition-colors duration-160 motion-reduce:duration-160 focus-visible:ring-2 focus-visible:ring-offset-2",
+            "grid flex-none cursor-pointer place-items-center border-0 bg-transparent transition-colors duration-160 outline-none focus-visible:ring-2 focus-visible:ring-offset-2 motion-reduce:duration-160",
             isDark
               ? "text-[#ffffff] hover:text-[#a1a1aa] focus-visible:ring-[#ffffff]/40 focus-visible:ring-offset-[#1b1b1b]"
               : "text-[#18181b] hover:text-[#71717a] focus-visible:ring-[#18181b]/30 focus-visible:ring-offset-[#ffffff]"
