@@ -645,6 +645,26 @@ function buildRegistry() {
           },
         ],
       },
+      {
+        name: "time-scrubber",
+        type: "registry:ui",
+        title: "Time Scrubber",
+        description:
+          "Tactile time picker over a rolling ruler dial with inertia fling coasting, unified spring settling, and front-dial cylindrical tick projection.",
+        dependencies: ["clsx", "tailwind-merge"],
+        files: [
+          {
+            path: "components/ui/time-scrubber.tsx",
+            type: "registry:ui",
+            target: "components/ui/time-scrubber.tsx",
+          },
+          {
+            path: "components/ui/time-scrubber.css",
+            type: "registry:ui",
+            target: "components/ui/time-scrubber.css",
+          },
+        ],
+      },
     ],
   };
   fs.writeFileSync(path.join(__dirname, "../registry.json"), JSON.stringify(rootRegistry, null, 2));
