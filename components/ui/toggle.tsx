@@ -107,28 +107,28 @@ const VARIANTS: Record<
   }
 > = {
   default: {
-    trackOff: "#e4e4e7",
+    trackOff: "#ffffff",
     trackOn: "#18181b",
-    thumbOff: "#71717a",
+    thumbOff: "#d3d3d4",
     thumbOn: "#ffffff",
-    borderOff: "rgba(0, 0, 0, 0.06)",
-    borderOn: "rgba(0, 0, 0, 0.2)",
+    borderOff: "rgba(0, 0, 0, 0.08)",
+    borderOn: "rgba(0, 0, 0, 0.15)",
   },
   light: {
-    trackOff: "#e4e4e7",
+    trackOff: "#ffffff",
     trackOn: "#18181b",
-    thumbOff: "#71717a",
+    thumbOff: "#d3d3d4",
     thumbOn: "#ffffff",
-    borderOff: "rgba(0, 0, 0, 0.06)",
-    borderOn: "rgba(0, 0, 0, 0.2)",
+    borderOff: "rgba(0, 0, 0, 0.08)",
+    borderOn: "rgba(0, 0, 0, 0.15)",
   },
   dark: {
-    trackOff: "#27272a",
+    trackOff: "#1b1b1b",
     trackOn: "#ffffff",
-    thumbOff: "#52525b",
-    thumbOn: "#18181b",
-    borderOff: "rgba(255, 255, 255, 0.08)",
-    borderOn: "rgba(0, 0, 0, 0.06)",
+    thumbOff: "#464646",
+    thumbOn: "#1b1b1b",
+    borderOff: "rgba(255, 255, 255, 0.12)",
+    borderOn: "rgba(0, 0, 0, 0.08)",
   },
 };
 
@@ -371,7 +371,7 @@ export function Toggle({
             setToggle(!on);
           }
         }}
-        className="relative block cursor-pointer touch-none rounded-full border-0 p-0 transition-colors duration-300 ease-out outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 motion-reduce:duration-100"
+        className="relative block cursor-pointer touch-none rounded-full border-0 p-0 transition-colors duration-[420ms] ease-out outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 motion-reduce:duration-[160ms]"
         style={{
           width: `${cfg.trackWidth}px`,
           height: `${cfg.trackHeight}px`,
@@ -387,7 +387,7 @@ export function Toggle({
         >
           {/* Secondary trailing droplet chasing on spring */}
           <motion.span
-            className="pointer-events-none absolute top-1/2 left-0 rounded-full transition-colors duration-300 ease-out motion-reduce:duration-100"
+            className="pointer-events-none absolute top-1/2 left-0 rounded-full transition-colors duration-[420ms] ease-out motion-reduce:duration-[160ms]"
             style={{
               width: `${cfg.dropSize}px`,
               height: `${cfg.dropSize}px`,
@@ -399,7 +399,7 @@ export function Toggle({
 
           {/* Liquid bridge anchor underneath thumb */}
           <motion.span
-            className="pointer-events-none absolute top-1/2 left-0 rounded-full transition-colors duration-300 ease-out motion-reduce:duration-100"
+            className="pointer-events-none absolute top-1/2 left-0 rounded-full transition-colors duration-[420ms] ease-out motion-reduce:duration-[160ms]"
             style={{
               width: `${cfg.thumbSize - 2}px`,
               height: `${cfg.thumbSize - 2}px`,
@@ -414,7 +414,7 @@ export function Toggle({
 
         {/* Layer 2: Pristine Unfiltered Vector Thumb (On top in exact register - ZERO blur) */}
         <motion.span
-          className="pointer-events-none absolute top-1/2 left-0 rounded-full shadow-2xs transition-colors duration-300 ease-out motion-reduce:duration-100"
+          className="pointer-events-none absolute top-1/2 left-0 rounded-full shadow-2xs transition-colors duration-[420ms] ease-out motion-reduce:duration-[160ms]"
           style={{
             width: `${cfg.thumbSize}px`,
             height: `${cfg.thumbSize}px`,
