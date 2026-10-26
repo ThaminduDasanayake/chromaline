@@ -209,12 +209,7 @@ export default function ChecklistPage() {
         }
       >
         <div className="flex items-center justify-center py-6">
-          <Checklist
-            corner={corner}
-            bounce={bounce}
-            box={box}
-            theme={theme}
-          />
+          <Checklist corner={corner} bounce={bounce} box={box} theme={theme} />
         </div>
       </ComponentPreview>
 
