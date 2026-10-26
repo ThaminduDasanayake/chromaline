@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { TimeScrubber, TimeScrubberTheme, TimeScrubberFormat } from "@/components/ui/time-scrubber";
+import { TimeScrubber, TimeScrubberFormat } from "@/components/ui/time-scrubber";
 import { SelectBar } from "@/components/ui/select-bar";
 import { ClockIcon } from "@phosphor-icons/react";
 import {
@@ -12,6 +12,7 @@ import {
   PropsTable,
   PropItem,
   ThemeControl,
+  useComponentTheme,
 } from "@/components/docs";
 
 const CODE_EXAMPLE_LINES = [
@@ -135,7 +136,7 @@ const PROPS_DATA: PropItem[] = [
 ];
 
 export default function TimeScrubberPage() {
-  const [theme, setTheme] = useState<TimeScrubberTheme>("light");
+  const [theme, setTheme] = useComponentTheme<"light" | "dark">();
   const [format, setFormat] = useState<TimeScrubberFormat>("12h");
   const [step, setStep] = useState<string>("5");
   const [momentum, setMomentum] = useState<number>(50);
@@ -150,7 +151,7 @@ export default function TimeScrubberPage() {
       {/* 1. Preview */}
       <ComponentPreview
         canvasClassName={`min-h-[380px] p-8 transition-colors duration-300 ${
-          theme === "dark" ? "bg-[#1b1b1b]" : "bg-[#F9FAFB]"
+          theme === "dark" ? "bg-[#09090b]" : "bg-[#F9FAFB]"
         }`}
         controls={
           <div className="flex flex-col gap-6">

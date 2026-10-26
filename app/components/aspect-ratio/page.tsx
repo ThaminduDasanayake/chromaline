@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
-import { Aspect, AspectTheme } from "@/components/ui/aspect-ratio";
+import React from "react";
+import { Aspect } from "@/components/ui/aspect-ratio";
 import {
   DocsLayout,
   ComponentPreview,
@@ -10,6 +10,7 @@ import {
   PropsTable,
   PropItem,
   ThemeControl,
+  useComponentTheme,
 } from "@/components/docs";
 
 const CODE_EXAMPLE_LINES = [
@@ -116,7 +117,7 @@ const PROPS_DATA: PropItem[] = [
 ];
 
 export default function AspectRatioPage() {
-  const [theme, setTheme] = useState<AspectTheme>("light");
+  const [theme, setTheme] = useComponentTheme<"light" | "dark">();
 
   return (
     <DocsLayout

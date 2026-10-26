@@ -18,7 +18,7 @@ export function BackLink({
   return (
     <Link
       href={href}
-      className={`group mb-8 inline-flex items-center gap-1.5 font-mono text-xs text-slate-500 transition-colors hover:text-slate-950 ${className}`}
+      className={`group mb-8 inline-flex items-center gap-1.5 font-mono text-xs text-slate-500 transition-colors hover:text-slate-950 dark:text-zinc-400 dark:hover:text-white ${className}`}
     >
       <ArrowLeftIcon
         size={12}

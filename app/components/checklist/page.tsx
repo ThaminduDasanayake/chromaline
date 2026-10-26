@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Checklist, ChecklistTheme } from "@/components/ui/checklist";
+import { Checklist } from "@/components/ui/checklist";
 import { ListChecksIcon } from "@phosphor-icons/react";
 import {
   DocsLayout,
@@ -11,6 +11,7 @@ import {
   PropsTable,
   PropItem,
   ThemeControl,
+  useComponentTheme,
 } from "@/components/docs";
 
 const CODE_EXAMPLE_LINES = [
@@ -122,7 +123,7 @@ const PROPS_DATA: PropItem[] = [
 ];
 
 export default function ChecklistPage() {
-  const [theme, setTheme] = useState<ChecklistTheme>("light");
+  const [theme, setTheme] = useComponentTheme<"light" | "dark">();
   const [bounce, setBounce] = useState<number>(50);
   const [box, setBox] = useState<number>(18);
   const [corner, setCorner] = useState<number>(20);
@@ -136,12 +137,16 @@ export default function ChecklistPage() {
       {/* 1. Preview */}
       <ComponentPreview
         canvasClassName={`min-h-[380px] p-8 transition-colors duration-300 ${
-          theme === "dark" ? "bg-[#1b1b1b]" : "bg-[#F9FAFB]"
+          theme === "dark" ? "bg-[#09090b]" : "bg-[#F9FAFB]"
         }`}
         controls={
           <div className="flex flex-col gap-6">
             {/* Theme Mode */}
-            <ThemeControl value={theme} onChange={setTheme} ariaLabel="Select checklist theme mode" />
+            <ThemeControl
+              value={theme}
+              onChange={setTheme}
+              ariaLabel="Select checklist theme mode"
+            />
 
             {/* Bounce Overshoot */}
             <div className="flex items-center justify-between">

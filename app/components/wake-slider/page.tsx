@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { WakeSlider, WakeSliderTheme } from "@/components/ui/wake-slider";
+import { WakeSlider } from "@/components/ui/wake-slider";
 import { SlidersHorizontalIcon } from "@phosphor-icons/react";
 import {
   DocsLayout,
@@ -11,6 +11,7 @@ import {
   PropsTable,
   PropItem,
   ThemeControl,
+  useComponentTheme,
 } from "@/components/docs";
 
 const CODE_EXAMPLE_LINES = [
@@ -140,7 +141,7 @@ const PROPS_DATA: PropItem[] = [
 ];
 
 export default function WakeSliderPage() {
-  const [theme, setTheme] = useState<WakeSliderTheme>("light");
+  const [theme, setTheme] = useComponentTheme<"light" | "dark">();
   const [value, setValue] = useState(54);
 
   return (
@@ -152,7 +153,7 @@ export default function WakeSliderPage() {
       {/* 1. Preview */}
       <ComponentPreview
         canvasClassName={`min-h-[320px] p-8 transition-colors duration-300 ${
-          theme === "dark" ? "bg-[#1b1b1b]" : "bg-[#F9FAFB]"
+          theme === "dark" ? "bg-[#09090b]" : "bg-[#F9FAFB]"
         }`}
         controls={
           <div className="flex flex-col gap-6">

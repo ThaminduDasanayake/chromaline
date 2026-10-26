@@ -2,19 +2,21 @@
 
 import React, { useState } from "react";
 import { Heatmap, HeatmapNode } from "@/components/ui/heatmap";
+import { useTheme } from "@/components/providers/theme-provider";
 
 export function HeatmapCardPreview() {
   const [hoveredNode, setHoveredNode] = useState<HeatmapNode | null>(null);
+  const { theme } = useTheme();
 
   return (
     <div className="flex h-full w-full flex-col items-center justify-center p-6">
       <div className="w-full max-w-[340px]">
-        <Heatmap scheme="default" mode="light" range="14w" colorOnHover onHover={setHoveredNode} />
+        <Heatmap scheme="default" mode={theme} range="14w" colorOnHover onHover={setHoveredNode} />
       </div>
 
       {/* Tactile Coordinate Badge */}
       <div
-        className={`mt-2 flex h-4 items-center gap-2 font-mono text-[11px] text-slate-500 transition-opacity duration-150 ${
+        className={`mt-2 flex h-4 items-center gap-2 font-mono text-[11px] text-slate-500 transition-opacity duration-150 dark:text-zinc-400 ${
           hoveredNode ? "opacity-100" : "opacity-0"
         }`}
       >

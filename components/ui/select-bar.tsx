@@ -184,19 +184,19 @@ export function SelectBar<T extends string = string>({
   return (
     <nav
       ref={trackRef as React.RefObject<HTMLElement>}
-      className={`relative isolate inline-flex items-center gap-0.5 rounded-full bg-white/60 text-slate-900 shadow-[inset_0_1px_0_rgba(255,255,255,0.9),0_10px_40px_rgba(15,23,42,0.08)] backdrop-blur-md backdrop-saturate-150 select-none ${className}`}
+      className={`relative isolate inline-flex items-center gap-0.5 rounded-full bg-white/60 text-slate-900 shadow-[inset_0_1px_0_rgba(255,255,255,0.9),0_10px_40px_rgba(15,23,42,0.08)] backdrop-blur-md backdrop-saturate-150 select-none dark:border dark:border-white/10 dark:bg-white/[0.08] dark:text-white dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_10px_40px_rgba(0,0,0,0.3)] ${className}`}
       style={{ padding: `${actualHug}px` }}
       aria-label={ariaLabel}
     >
       {/* Prismatic specular lit rim */}
       <span
-        className="pointer-events-none absolute inset-0 z-3 rounded-full border border-transparent [mask-composite:exclude] [-webkit-mask-composite:xor] [-webkit-mask:linear-gradient(#000_0_0)_padding-box,linear-gradient(#000_0_0)] [background:linear-gradient(142deg,rgba(255,255,255,0.7)_0%,rgba(255,255,255,0.15)_26%,rgba(255,255,255,0.05)_62%,rgba(255,255,255,0.4)_100%)_border-box] [mask:linear-gradient(#000_0_0)_padding-box,linear-gradient(#000_0_0)]"
+        className="pointer-events-none absolute inset-0 z-3 rounded-full border border-transparent [mask-composite:exclude] [-webkit-mask-composite:xor] [-webkit-mask:linear-gradient(#000_0_0)_padding-box,linear-gradient(#000_0_0)] [background:linear-gradient(142deg,rgba(255,255,255,0.7)_0%,rgba(255,255,255,0.15)_26%,rgba(255,255,255,0.05)_62%,rgba(255,255,255,0.4)_100%)_border-box] [mask:linear-gradient(#000_0_0)_padding-box,linear-gradient(#000_0_0)] dark:hidden"
         aria-hidden="true"
       />
 
       {/* Two-phase mercury indicator wash */}
       <span
-        className="pointer-events-none absolute left-0 z-1 rounded-full border-0 bg-black/6 shadow-none will-change-[transform,width]"
+        className="pointer-events-none absolute left-0 z-1 rounded-full border-0 bg-black/6 shadow-none will-change-[transform,width] dark:bg-white/15"
         style={indStyle}
         aria-hidden="true"
       />
@@ -235,7 +235,7 @@ export function SelectBar<T extends string = string>({
               refs.current[item.key] = el;
             }}
             type="button"
-            className={`relative z-2 flex cursor-pointer items-center justify-center rounded-full border-0 bg-transparent leading-none text-slate-900 transition-opacity duration-260 ease-[cubic-bezier(0.32,0.72,0.24,1)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-900 ${
+            className={`relative z-2 flex cursor-pointer items-center justify-center rounded-full border-0 bg-transparent leading-none text-slate-900 transition-opacity duration-260 ease-[cubic-bezier(0.32,0.72,0.24,1)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-900 dark:text-white dark:focus-visible:outline-white ${
               isSelected || isSwatch ? "opacity-100" : "opacity-50 hover:opacity-85"
             }`}
             data-active={isSelected}

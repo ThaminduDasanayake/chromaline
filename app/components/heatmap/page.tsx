@@ -4,7 +4,6 @@ import React, { useEffect, useMemo, useState } from "react";
 import {
   Heatmap,
   HeatmapSchemeKey,
-  HeatmapMode,
   HeatmapRange,
   GITHUB_SCHEMES,
   RawContributionDay,
@@ -21,6 +20,7 @@ import {
   PropsTable,
   PropItem,
   ThemeControl,
+  useComponentTheme,
 } from "@/components/docs";
 
 const CODE_EXAMPLE_LINES = [
@@ -149,9 +149,9 @@ const PROPS_DATA: PropItem[] = [
 ];
 
 export default function HeatmapDocumentationPage() {
+  const [mode, setMode] = useComponentTheme<"light" | "dark">();
   const [range, setRange] = useState<HeatmapRange>("year");
   const [scheme, setScheme] = useState<HeatmapSchemeKey>("default");
-  const [mode, setMode] = useState<HeatmapMode>("light");
   const [rawContributions, setRawContributions] = useState<RawContributionDay[] | null>(null);
 
   const activePalette = (GITHUB_SCHEMES[scheme] || GITHUB_SCHEMES.default)[mode];

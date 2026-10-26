@@ -1,8 +1,10 @@
 @import url("https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@1&display=swap");
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
-  color-scheme: light !important;
+  color-scheme: light;
   --font-sans:
     -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --font-serif: "Instrument Serif", Georgia, serif;
@@ -25,18 +27,33 @@
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
 }
 
+html.dark {
+  color-scheme: dark;
+}
+
 html,
 body {
-  background-color: #ffffff !important;
-  color: #0f172a !important;
+  background-color: #ffffff;
+  color: #0f172a;
   font-family: var(--font-sans);
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
 }
 
-/* Force Light Theme Throughout */
+html.dark,
+html.dark body {
+  background-color: #09090b !important;
+  color: #f4f4f5 !important;
+}
+
+/* Light Theme Borders */
 * {
   border-color: rgba(0, 0, 0, 0.08);
+}
+
+/* Dark Theme Borders */
+html.dark * {
+  border-color: rgba(255, 255, 255, 0.12);
 }
 
 button,

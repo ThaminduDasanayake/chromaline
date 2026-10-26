@@ -11,6 +11,7 @@ import {
   UsageSection,
   PropsTable,
   PropItem,
+  useComponentTheme,
 } from "@/components/docs";
 
 const CODE_EXAMPLE_LINES = [
@@ -187,7 +188,7 @@ const PROPS_DATA: PropItem[] = [
 ];
 
 export default function SeekDocumentationPage() {
-  const [theme, setTheme] = useState<"light" | "dark">("light");
+  const [theme, setTheme] = useComponentTheme<"light" | "dark">();
   const [size, setSize] = useState<"sm" | "default" | "lg">("default");
   const [give, setGive] = useState(50);
   const [spring, setSpring] = useState(50);
@@ -203,7 +204,7 @@ export default function SeekDocumentationPage() {
       {/* 1. Preview */}
       <ComponentPreview
         canvasClassName={`min-h-[340px] p-8 transition-colors duration-300 ${
-          theme === "dark" ? "bg-[#18181b]" : "bg-[#f4f4f5]"
+          theme === "dark" ? "bg-[#09090b]" : "bg-[#F9FAFB]"
         }`}
         controls={
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">

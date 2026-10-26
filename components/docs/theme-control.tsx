@@ -29,8 +29,10 @@ export function ThemeControl<T extends string = ThemeMode>({
   if (layout === "vertical") {
     return (
       <div className={className}>
-        <label className="text-xs font-semibold text-slate-900">{label}</label>
-        {description && <p className="mt-0.5 text-xs text-slate-500">{description}</p>}
+        <label className="text-xs font-semibold text-slate-900 dark:text-zinc-100">{label}</label>
+        {description && (
+          <p className="mt-0.5 text-xs text-slate-500 dark:text-zinc-400">{description}</p>
+        )}
         <div className="mt-2">
           <SelectBar<T>
             size="xs"
@@ -50,8 +52,10 @@ export function ThemeControl<T extends string = ThemeMode>({
   return (
     <div className={cn("flex items-center justify-between", className)}>
       <div>
-        <label className="text-xs font-semibold text-slate-900">{label}</label>
-        {description && <p className="mt-0.5 text-xs text-slate-500">{description}</p>}
+        <label className="text-xs font-semibold text-slate-900 dark:text-zinc-100">{label}</label>
+        {description && (
+          <p className="mt-0.5 text-xs text-slate-500 dark:text-zinc-400">{description}</p>
+        )}
       </div>
       <SelectBar<T>
         size="xs"

@@ -11,6 +11,7 @@ import {
   UsageSection,
   PropsTable,
   PropItem,
+  useComponentTheme,
 } from "@/components/docs";
 
 const CODE_EXAMPLE_LINES = [
@@ -205,7 +206,7 @@ const PROPS_DATA: PropItem[] = [
 ];
 
 export default function LabelInputDocumentationPage() {
-  const [theme, setTheme] = useState<"light" | "dark">("light");
+  const [theme, setTheme] = useComponentTheme<"light" | "dark">();
   const [field, setField] = useState<string>("Email");
   const [demoValue, setDemoValue] = useState<string>("");
 
@@ -218,7 +219,7 @@ export default function LabelInputDocumentationPage() {
       {/* 1. Interactive Preview */}
       <ComponentPreview
         canvasClassName={`min-h-[280px] p-8 transition-colors duration-300 ${
-          theme === "dark" ? "bg-[#18181b]" : "bg-[#f4f4f5]"
+          theme === "dark" ? "bg-[#09090b]" : "bg-[#F9FAFB]"
         }`}
         controls={
           <div className="flex flex-wrap items-center justify-between gap-4">

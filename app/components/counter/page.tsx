@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
-import { Counter, CounterTheme } from "@/components/ui/counter";
+import React from "react";
+import { Counter } from "@/components/ui/counter";
 import {
   DocsLayout,
   ComponentPreview,
@@ -10,6 +10,7 @@ import {
   PropsTable,
   PropItem,
   ThemeControl,
+  useComponentTheme,
 } from "@/components/docs";
 
 const CODE_EXAMPLE_LINES = [
@@ -131,7 +132,7 @@ const PROPS_DATA: PropItem[] = [
 ];
 
 export default function CounterDocumentationPage() {
-  const [theme, setTheme] = useState<CounterTheme>("light");
+  const [theme, setTheme] = useComponentTheme<"light" | "dark">();
 
   return (
     <DocsLayout
@@ -145,11 +146,7 @@ export default function CounterDocumentationPage() {
         }`}
         controls={
           <div className="flex flex-col gap-6">
-            <ThemeControl
-              value={theme}
-              onChange={setTheme}
-              ariaLabel="Select counter theme mode"
-            />
+            <ThemeControl value={theme} onChange={setTheme} ariaLabel="Select counter theme mode" />
           </div>
         }
       >

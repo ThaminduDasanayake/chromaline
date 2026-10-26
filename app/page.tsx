@@ -20,7 +20,7 @@ import {
 
 export default function ChromalineHomePage() {
   return (
-    <div className="flex min-h-screen flex-col bg-[#FAFAFA] font-sans text-slate-900 selection:bg-slate-200">
+    <div className="flex min-h-screen flex-col bg-[#FAFAFA] font-sans text-slate-900 transition-colors duration-200 selection:bg-slate-200 dark:bg-[#09090b] dark:text-zinc-100 dark:selection:bg-zinc-800">
       {/* Top Minimal Navbar */}
       <SiteHeader />
 
@@ -28,10 +28,10 @@ export default function ChromalineHomePage() {
       <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-10 sm:px-6 md:px-8 md:py-16">
         {/* Minimal Section Header */}
         <div className="mb-10 text-center sm:text-left">
-          <h1 className="text-2xl font-bold tracking-tight text-slate-950 sm:text-3xl">
+          <h1 className="text-2xl font-bold tracking-tight text-slate-950 sm:text-3xl dark:text-white">
             Components
           </h1>
-          <p className="mt-1 text-xs text-slate-500 sm:text-sm">
+          <p className="mt-1 text-xs text-slate-500 sm:text-sm dark:text-zinc-400">
             Physical line-art components built with vector mathematics, solid colorways, and pointer
             physics.
           </p>

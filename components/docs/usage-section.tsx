@@ -30,26 +30,30 @@ export function UsageSection({
     <section>
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-xl font-bold tracking-tight text-slate-900 sm:text-2xl">{title}</h2>
-          {description && <p className="mt-1 text-xs text-slate-500">{description}</p>}
+          <h2 className="text-xl font-bold tracking-tight text-slate-900 sm:text-2xl dark:text-white">
+            {title}
+          </h2>
+          {description && (
+            <p className="mt-1 text-xs text-slate-500 dark:text-zinc-400">{description}</p>
+          )}
         </div>
 
         <CopyButton value={codeText} title="Copy code" />
       </div>
 
-      <div className="mt-4 overflow-hidden rounded-2xl border border-slate-200/90 bg-[#F9FAFB] shadow-2xs">
-        <div className="overflow-x-auto p-5 font-mono text-xs leading-relaxed text-slate-800">
+      <div className="mt-4 overflow-hidden rounded-2xl border border-slate-200/90 bg-[#F9FAFB] shadow-2xs transition-colors duration-200 dark:border-white/10 dark:bg-[#0c0c0e]">
+        <div className="overflow-x-auto p-5 font-mono text-xs leading-relaxed text-slate-800 dark:text-zinc-200">
           {codeLines ? (
             <pre className="m-0 p-0">
               <code>
                 {codeLines.map((line) => (
                   <div key={line.num} className="table-row">
-                    <span className="table-cell pr-6 text-right text-slate-400 select-none">
+                    <span className="table-cell pr-6 text-right text-slate-400 select-none dark:text-zinc-600">
                       {line.num}
                     </span>
                     <span className="table-cell">
                       {line.parts.map((p, idx) => (
-                        <span key={idx} className={p.cls || "text-slate-800"}>
+                        <span key={idx} className={p.cls || "text-slate-800 dark:text-zinc-200"}>
                           {p.text}
                         </span>
                       ))}

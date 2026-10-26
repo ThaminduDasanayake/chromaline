@@ -364,8 +364,7 @@ export function Counter({
                 )}
                 style={{
                   height: `${CELL}px`,
-                  transition:
-                    "width 320ms cubic-bezier(0.3, 1.2, 0.4, 1), opacity 220ms ease",
+                  transition: "width 320ms cubic-bezier(0.3, 1.2, 0.4, 1), opacity 220ms ease",
                 }}
               >
                 <span
@@ -388,8 +387,7 @@ export function Counter({
                     shown > 3 ? "w-[0.26em] opacity-100" : "w-0 opacity-0"
                   )}
                   style={{
-                    transition:
-                      "width 320ms cubic-bezier(0.3, 1.2, 0.4, 1), opacity 220ms ease",
+                    transition: "width 320ms cubic-bezier(0.3, 1.2, 0.4, 1), opacity 220ms ease",
                   }}
                 >
                   ,

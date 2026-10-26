@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Palette, PaletteTheme } from "@/components/ui/palette";
+import { Palette } from "@/components/ui/palette";
 import { SelectBar } from "@/components/ui/select-bar";
 import { PaletteIcon } from "@phosphor-icons/react";
 import {
@@ -12,6 +12,7 @@ import {
   PropsTable,
   PropItem,
   ThemeControl,
+  useComponentTheme,
 } from "@/components/docs";
 
 const CODE_EXAMPLE_LINES = [
@@ -122,7 +123,7 @@ const PROPS_DATA: PropItem[] = [
 ];
 
 export default function PaletteDocumentationPage() {
-  const [theme, setTheme] = useState<PaletteTheme>("light");
+  const [theme, setTheme] = useComponentTheme<"light" | "dark">();
   const [count, setCount] = useState<number>(4);
   const [corner, setCorner] = useState<number>(14);
   const [morph, setMorph] = useState<number>(50);
@@ -137,7 +138,7 @@ export default function PaletteDocumentationPage() {
       {/* 1. Interactive Preview */}
       <ComponentPreview
         canvasClassName={`min-h-[320px] p-8 transition-colors duration-300 ${
-          theme === "dark" ? "bg-[#18181b]" : "bg-[#f4f4f5]"
+          theme === "dark" ? "bg-[#09090b]" : "bg-[#F9FAFB]"
         }`}
         controls={
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
