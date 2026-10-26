@@ -161,7 +161,7 @@ export default function ButtonDocumentationPage() {
         controls={
           <div className="flex flex-wrap items-center justify-between gap-6">
             <div>
-              <label className="text-xs font-semibold text-slate-900">Variant</label>
+              <label className="text-xs font-semibold text-slate-900 dark:text-zinc-100">Variant</label>
               <div className="mt-2.5">
                 <SelectBar
                   size="xs"
@@ -173,7 +173,7 @@ export default function ButtonDocumentationPage() {
             </div>
 
             <div>
-              <label className="text-xs font-semibold text-slate-900">Size</label>
+              <label className="text-xs font-semibold text-slate-900 dark:text-zinc-100">Size</label>
               <div className="mt-2.5">
                 <SelectBar<ButtonSize>
                   size="xs"

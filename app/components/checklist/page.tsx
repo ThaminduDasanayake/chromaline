@@ -151,8 +151,8 @@ export default function ChecklistPage() {
             {/* Bounce Overshoot */}
             <div className="flex items-center justify-between">
               <div>
-                <label className="text-xs font-semibold text-slate-900">Bounce Overshoot</label>
-                <p className="mt-0.5 text-xs text-slate-500">Checkbox swelling bounce: {bounce}</p>
+                <label className="text-xs font-semibold text-slate-900 dark:text-zinc-100">Bounce Overshoot</label>
+                <p className="mt-0.5 text-xs text-slate-500 dark:text-zinc-400">Checkbox swelling bounce: {bounce}</p>
               </div>
               <input
                 type="range"
@@ -160,15 +160,15 @@ export default function ChecklistPage() {
                 max={100}
                 value={bounce}
                 onChange={(e) => setBounce(Number(e.target.value))}
-                className="w-32 accent-slate-900"
+                className="w-32 accent-slate-900 dark:accent-white"
               />
             </div>
 
             {/* Checkbox Size */}
             <div className="flex items-center justify-between">
               <div>
-                <label className="text-xs font-semibold text-slate-900">Box Size</label>
-                <p className="mt-0.5 text-xs text-slate-500">Checkbox dimensions: {box}px</p>
+                <label className="text-xs font-semibold text-slate-900 dark:text-zinc-100">Box Size</label>
+                <p className="mt-0.5 text-xs text-slate-500 dark:text-zinc-400">Checkbox dimensions: {box}px</p>
               </div>
               <input
                 type="range"
@@ -176,15 +176,15 @@ export default function ChecklistPage() {
                 max={28}
                 value={box}
                 onChange={(e) => setBox(Number(e.target.value))}
-                className="w-32 accent-slate-900"
+                className="w-32 accent-slate-900 dark:accent-white"
               />
             </div>
 
             {/* Corner Radius */}
             <div className="flex items-center justify-between">
               <div>
-                <label className="text-xs font-semibold text-slate-900">Corner Radius</label>
-                <p className="mt-0.5 text-xs text-slate-500">Slab border radius: {corner}px</p>
+                <label className="text-xs font-semibold text-slate-900 dark:text-zinc-100">Corner Radius</label>
+                <p className="mt-0.5 text-xs text-slate-500 dark:text-zinc-400">Slab border radius: {corner}px</p>
               </div>
               <input
                 type="range"
@@ -192,7 +192,7 @@ export default function ChecklistPage() {
                 max={40}
                 value={corner}
                 onChange={(e) => setCorner(Number(e.target.value))}
-                className="w-32 accent-slate-900"
+                className="w-32 accent-slate-900 dark:accent-white"
               />
             </div>
           </div>

@@ -198,7 +198,7 @@ export default function HeatmapDocumentationPage() {
             <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
               {/* Timeline Range SelectBar */}
               <div>
-                <label className="text-xs font-semibold text-slate-900">Timeline</label>
+                <label className="text-xs font-semibold text-slate-900 dark:text-zinc-100">Timeline</label>
                 <div className="mt-2">
                   <SelectBar<HeatmapRange>
                     size="xs"
@@ -214,7 +214,7 @@ export default function HeatmapDocumentationPage() {
 
               {/* Color Scheme SelectBar */}
               <div>
-                <label className="text-xs font-semibold text-slate-900">Color Scheme</label>
+                <label className="text-xs font-semibold text-slate-900 dark:text-zinc-100">Color Scheme</label>
                 <div className="mt-2">
                   <SelectBar<HeatmapSchemeKey>
                     size="xs"

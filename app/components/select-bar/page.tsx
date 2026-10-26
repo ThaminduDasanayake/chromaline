@@ -217,7 +217,7 @@ export default function SelectBarDocumentationPage() {
         controls={
           <div className="flex flex-wrap items-center justify-between gap-6">
             <div>
-              <label className="text-xs font-semibold text-slate-900">Content</label>
+              <label className="text-xs font-semibold text-slate-900 dark:text-zinc-100">Content</label>
               <div className="mt-2.5">
                 <SelectBar<"pills" | "icons" | "swatches">
                   size="xs"
@@ -233,7 +233,7 @@ export default function SelectBarDocumentationPage() {
             </div>
 
             <div>
-              <label className="text-xs font-semibold text-slate-900">Size</label>
+              <label className="text-xs font-semibold text-slate-900 dark:text-zinc-100">Size</label>
               <div className="mt-2.5">
                 <SelectBar<"xs" | "sm" | "default">
                   size="xs"
@@ -279,31 +279,31 @@ export default function SelectBarDocumentationPage() {
 
       {/* Examples */}
       <section>
-        <h2 className="text-xl font-bold tracking-tight text-slate-900 sm:text-2xl">Examples</h2>
+        <h2 className="text-xl font-bold tracking-tight text-slate-900 sm:text-2xl dark:text-white">Examples</h2>
 
         <div className="mt-4 grid grid-cols-1 gap-6 sm:grid-cols-2">
           {/* Example 1: Icon Toolbar */}
-          <div className="overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-2xs">
-            <div className="border-b border-slate-100 p-4">
-              <h3 className="text-sm font-semibold text-slate-900">Icons Only Toolbar</h3>
-              <p className="mt-0.5 text-xs text-slate-500">
+          <div className="overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-2xs dark:border-white/10 dark:bg-[#121214]">
+            <div className="border-b border-slate-100 p-4 dark:border-white/10">
+              <h3 className="text-sm font-semibold text-slate-900 dark:text-zinc-100">Icons Only Toolbar</h3>
+              <p className="mt-0.5 text-xs text-slate-500 dark:text-zinc-400">
                 Compact dock with Phosphor icons and two-phase dilation.
               </p>
             </div>
-            <div className="flex h-36 items-center justify-center bg-[#F9FAFB] p-6">
+            <div className="flex h-36 items-center justify-center bg-[#F9FAFB] p-6 dark:bg-[#0c0c0e]">
               <SelectBar size="sm" items={ICON_ITEMS} value={activeIcon} onChange={setActiveIcon} />
             </div>
           </div>
 
           {/* Example 2: Color Swatches */}
-          <div className="overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-2xs">
-            <div className="border-b border-slate-100 p-4">
-              <h3 className="text-sm font-semibold text-slate-900">Color Swatches</h3>
-              <p className="mt-0.5 text-xs text-slate-500">
+          <div className="overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-2xs dark:border-white/10 dark:bg-[#121214]">
+            <div className="border-b border-slate-100 p-4 dark:border-white/10">
+              <h3 className="text-sm font-semibold text-slate-900 dark:text-zinc-100">Color Swatches</h3>
+              <p className="mt-0.5 text-xs text-slate-500 dark:text-zinc-400">
                 Auto-detected via the <code>color</code> item prop with reversed chromatic order.
               </p>
             </div>
-            <div className="flex h-36 items-center justify-center bg-[#F9FAFB] p-6">
+            <div className="flex h-36 items-center justify-center bg-[#F9FAFB] p-6 dark:bg-[#0c0c0e]">
               <FolderColorSelectBar
                 size="xs"
                 value={activeSwatch}

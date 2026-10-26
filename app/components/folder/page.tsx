@@ -180,7 +180,7 @@ export default function FolderPage() {
         controls={
           <div className="flex flex-wrap items-center justify-between gap-6">
             <div>
-              <label className="text-xs font-semibold text-slate-900">Colorway</label>
+              <label className="text-xs font-semibold text-slate-900 dark:text-zinc-100">Colorway</label>
               <div className="mt-2.5">
                 <FolderColorSelectBar
                   value={selectedColorKey}
@@ -190,7 +190,7 @@ export default function FolderPage() {
             </div>
 
             <div>
-              <label className="text-xs font-semibold text-slate-900">Tab Position</label>
+              <label className="text-xs font-semibold text-slate-900 dark:text-zinc-100">Tab Position</label>
               <div className="mt-2.5">
                 <SelectBar<"left" | "center" | "right">
                   size="xs"

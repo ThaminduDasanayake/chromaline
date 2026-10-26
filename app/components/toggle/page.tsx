@@ -225,13 +225,13 @@ export default function ToggleDocumentationPage() {
             {/* Size control */}
             <div>
               <div className="flex items-center justify-between">
-                <label className="text-xs font-semibold text-slate-900">
+                <label className="text-xs font-semibold text-slate-900 dark:text-zinc-100">
                   {isCustomSize ? `Height (${customPixelHeight}px)` : "Size"}
                 </label>
                 <button
                   type="button"
                   onClick={() => setIsCustomSize(!isCustomSize)}
-                  className="text-[10px] font-medium text-sky-600 underline hover:text-sky-700"
+                  className="text-[10px] font-medium text-sky-600 underline hover:text-sky-700 dark:text-sky-400 dark:hover:text-sky-300"
                 >
                   {isCustomSize ? "Presets" : "Custom"}
                 </button>
@@ -278,8 +278,8 @@ export default function ToggleDocumentationPage() {
             {/* Stretch slider */}
             <div>
               <div className="flex items-center justify-between">
-                <label className="text-xs font-semibold text-slate-900">Stretch</label>
-                <span className="font-mono text-xs text-slate-500">{stretch}%</span>
+                <label className="text-xs font-semibold text-slate-900 dark:text-zinc-100">Stretch</label>
+                <span className="font-mono text-xs text-slate-500 dark:text-zinc-400">{stretch}%</span>
               </div>
               <input
                 type="range"
@@ -294,8 +294,8 @@ export default function ToggleDocumentationPage() {
             {/* Speed slider */}
             <div>
               <div className="flex items-center justify-between">
-                <label className="text-xs font-semibold text-slate-900">Speed</label>
-                <span className="font-mono text-xs text-slate-500">{speed}%</span>
+                <label className="text-xs font-semibold text-slate-900 dark:text-zinc-100">Speed</label>
+                <span className="font-mono text-xs text-slate-500 dark:text-zinc-400">{speed}%</span>
               </div>
               <input
                 type="range"
