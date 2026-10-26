@@ -18,6 +18,8 @@ function buildRegistry() {
   const wakeSliderPath = path.join(__dirname, "../components/ui/wake-slider.tsx");
   const palettePath = path.join(__dirname, "../components/ui/palette.tsx");
   const timeScrubberPath = path.join(__dirname, "../components/ui/time-scrubber.tsx");
+  const checklistPath = path.join(__dirname, "../components/ui/checklist.tsx");
+  const checklistCssPath = path.join(__dirname, "../components/ui/checklist.css");
 
   if (!fs.existsSync(trayPath)) {
     console.error("Component not found:", trayPath);
@@ -48,6 +50,12 @@ function buildRegistry() {
   const paletteContent = fs.existsSync(palettePath) ? fs.readFileSync(palettePath, "utf8") : "";
   const timeScrubberContent = fs.existsSync(timeScrubberPath)
     ? fs.readFileSync(timeScrubberPath, "utf8")
+    : "";
+  const checklistContent = fs.existsSync(checklistPath)
+    ? fs.readFileSync(checklistPath, "utf8")
+    : "";
+  const checklistCssContent = fs.existsSync(checklistCssPath)
+    ? fs.readFileSync(checklistCssPath, "utf8")
     : "";
 
   // 1. Full Folder Tray with Folder Support
@@ -360,6 +368,33 @@ function buildRegistry() {
     ],
   };
 
+  // 15. Checklist
+  const checklistRegistryItem = {
+    $schema: "https://ui.shadcn.com/schema/registry-item.json",
+    name: "checklist",
+    type: "registry:ui",
+    title: "Checklist",
+    description:
+      "Harmonic spring task checklist with drawn checkmarks, strikethrough timing, and physical gravity collapse on completion.",
+    dependencies: ["clsx", "tailwind-merge", "framer-motion@^14.4.0"],
+    devDependencies: [],
+    registryDependencies: [],
+    files: [
+      {
+        path: "components/ui/checklist.tsx",
+        content: checklistContent,
+        type: "registry:ui",
+        target: "components/ui/checklist.tsx",
+      },
+      {
+        path: "components/ui/checklist.css",
+        content: checklistCssContent,
+        type: "registry:ui",
+        target: "components/ui/checklist.css",
+      },
+    ],
+  };
+
   const outDir = path.join(__dirname, "../public/r");
   fs.mkdirSync(outDir, { recursive: true });
 
@@ -402,6 +437,10 @@ function buildRegistry() {
     path.join(outDir, "time-scrubber.json"),
     JSON.stringify(timeScrubberRegistryItem, null, 2)
   );
+  fs.writeFileSync(
+    path.join(outDir, "checklist.json"),
+    JSON.stringify(checklistRegistryItem, null, 2)
+  );
 
   const indexRegistry = {
     $schema: "https://ui.shadcn.com/schema/registry.json",
@@ -422,6 +461,7 @@ function buildRegistry() {
       wakeSliderRegistryItem,
       paletteRegistryItem,
       timeScrubberRegistryItem,
+      checklistRegistryItem,
     ],
   };
   fs.writeFileSync(path.join(outDir, "index.json"), JSON.stringify(indexRegistry, null, 2));
@@ -644,6 +684,26 @@ function buildRegistry() {
             path: "components/ui/time-scrubber.tsx",
             type: "registry:ui",
             target: "components/ui/time-scrubber.tsx",
+          },
+        ],
+      },
+      {
+        name: "checklist",
+        type: "registry:ui",
+        title: "Checklist",
+        description:
+          "Harmonic spring task checklist with drawn checkmarks, strikethrough timing, and physical gravity collapse on completion.",
+        dependencies: ["clsx", "tailwind-merge", "framer-motion@^14.4.0"],
+        files: [
+          {
+            path: "components/ui/checklist.tsx",
+            type: "registry:ui",
+            target: "components/ui/checklist.tsx",
+          },
+          {
+            path: "components/ui/checklist.css",
+            type: "registry:ui",
+            target: "components/ui/checklist.css",
           },
         ],
       },

@@ -20,3 +20,4 @@ export { CounterCardPreview } from "./counter-card-preview";
 export { WakeSliderCardPreview } from "./wake-slider-card-preview";
 export { PaletteCardPreview } from "./palette-card-preview";
 export { TimeScrubberCardPreview } from "./time-scrubber-card-preview";
+export { ChecklistCardPreview } from "./checklist-card-preview";
