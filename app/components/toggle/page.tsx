@@ -12,6 +12,7 @@ import {
   UsageSection,
   PropsTable,
   PropItem,
+  useComponentTheme,
 } from "@/components/docs";
 
 const CODE_EXAMPLE_LINES = [
@@ -182,20 +183,21 @@ const PROPS_DATA: PropItem[] = [
   },
 ];
 
-const THEME_OPTIONS: { key: ToggleVariant; label: string }[] = [
-  { key: "default", label: "Light" },
+const THEME_OPTIONS: { key: "light" | "dark"; label: string }[] = [
+  { key: "light", label: "Light" },
   { key: "dark", label: "Dark" },
 ];
 
 export default function ToggleDocumentationPage() {
+  const [theme, setTheme] = useComponentTheme<"light" | "dark">();
   const [checked, setChecked] = useState(false);
   const [isCustomSize, setIsCustomSize] = useState(false);
   const [presetSize, setPresetSize] = useState<ToggleSizePreset>("default");
   const [customPixelHeight, setCustomPixelHeight] = useState(30);
-  const [variant, setVariant] = useState<ToggleVariant>("default");
   const [stretch, setStretch] = useState(36);
   const [speed, setSpeed] = useState(50);
 
+  const variant: ToggleVariant = theme === "dark" ? "dark" : "default";
   const activeSize: ToggleSize = isCustomSize ? customPixelHeight : presetSize;
 
   const handleReset = () => {
@@ -203,7 +205,6 @@ export default function ToggleDocumentationPage() {
     setIsCustomSize(false);
     setPresetSize("default");
     setCustomPixelHeight(30);
-    setVariant("default");
     setStretch(36);
     setSpeed(50);
   };
@@ -263,13 +264,13 @@ export default function ToggleDocumentationPage() {
 
             {/* Theme: Light / Dark */}
             <div>
-              <label className="text-xs font-semibold text-slate-900">Theme</label>
+              <label className="text-xs font-semibold text-slate-900 dark:text-zinc-100">Theme</label>
               <div className="mt-2.5">
-                <SelectBar<ToggleVariant>
+                <SelectBar<"light" | "dark">
                   size="xs"
                   items={THEME_OPTIONS}
-                  value={variant}
-                  onChange={setVariant}
+                  value={theme}
+                  onChange={setTheme}
                 />
               </div>
             </div>
