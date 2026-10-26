@@ -125,9 +125,10 @@
       "name": "copy-button",
       "type": "registry:ui",
       "title": "Copy Button",
-      "description": "Tactile copy-to-clipboard button component and custom React hook with animated visual feedback.",
+      "description": "Fluid morphing copy button with animated content width measuring and popLayout icon/text transitions.",
       "dependencies": [
-        "@phosphor-icons/react@^2.1.10"
+        "@phosphor-icons/react@^2.1.10",
+        "framer-motion@^14.4.0"
       ],
       "files": [
         {
@@ -209,6 +210,23 @@
           "path": "components/ui/palette.tsx",
           "type": "registry:ui",
           "target": "components/ui/palette.tsx"
+        }
+      ]
+    },
+    {
+      "name": "time-scrubber",
+      "type": "registry:ui",
+      "title": "Time Scrubber",
+      "description": "Tactile time picker over a rolling ruler dial with inertia fling coasting, unified spring settling, and front-dial cylindrical tick projection.",
+      "dependencies": [
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "components/ui/time-scrubber.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/time-scrubber.tsx"
         }
       ]
     }

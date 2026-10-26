@@ -217,7 +217,7 @@ export default function PaletteDocumentationPage() {
           />
 
           {lastCopied && (
-            <p className="mt-4 font-mono text-xs text-slate-500 animate-in fade-in duration-200">
+            <p className="animate-in fade-in mt-4 font-mono text-xs text-slate-500 duration-200">
               Copied <span className="font-semibold text-slate-800">{lastCopied}</span> to clipboard
             </p>
           )}

@@ -248,7 +248,7 @@ export function LabelInput({
           ref={labRef}
           htmlFor={id}
           className={cn(
-            "absolute top-1/2 origin-left cursor-text text-[16px] leading-none tracking-[-0.01em] whitespace-pre transition-[transform,color] duration-420 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:duration-160 select-none",
+            "absolute top-1/2 origin-left cursor-text text-[16px] leading-none tracking-[-0.01em] whitespace-pre transition-[transform,color] duration-420 ease-[cubic-bezier(0.22,1,0.36,1)] select-none motion-reduce:duration-160",
             focus
               ? isDark
                 ? "text-[#ffffff]"

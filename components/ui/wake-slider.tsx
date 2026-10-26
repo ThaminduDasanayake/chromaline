@@ -197,9 +197,9 @@ export function WakeSlider({
   return (
     <div
       className={cn(
-        "relative flex items-center gap-4 select-none transition-colors duration-300",
+        "relative flex items-center gap-4 transition-colors duration-300 select-none",
         isDark ? "text-[#c2c2c2]" : "text-[#0f172a]",
-        disabled && "opacity-40 pointer-events-none",
+        disabled && "pointer-events-none opacity-40",
         className
       )}
       style={style}
@@ -213,7 +213,7 @@ export function WakeSlider({
         aria-valuemax={max}
         aria-valuenow={currentValue}
         className={cn(
-          "relative flex items-center cursor-ew-resize touch-none select-none rounded-md outline-none transition-colors duration-300 focus-visible:ring-2 focus-visible:ring-offset-4 [-webkit-tap-highlight-color:transparent]",
+          "relative flex cursor-ew-resize touch-none items-center rounded-md transition-colors duration-300 outline-none select-none [-webkit-tap-highlight-color:transparent] focus-visible:ring-2 focus-visible:ring-offset-4",
           isDark
             ? "focus-visible:ring-[#ffffff]/40 focus-visible:ring-offset-[#1b1b1b]"
             : "focus-visible:ring-[#0f172a]/30 focus-visible:ring-offset-white"
@@ -283,7 +283,7 @@ export function WakeSlider({
               }}
               data-on={isLit || undefined}
               className={cn(
-                "flex-none rounded-full origin-center transition-colors duration-160 will-change-transform",
+                "flex-none origin-center rounded-full transition-colors duration-160 will-change-transform",
                 isLit
                   ? isDark
                     ? "bg-[#ffffff]"
@@ -304,7 +304,7 @@ export function WakeSlider({
       {showValue && (
         <span
           className={cn(
-            "min-w-[3ch] font-mono text-sm font-medium tabular-nums tracking-tight transition-colors duration-300",
+            "min-w-[3ch] font-mono text-sm font-medium tracking-tight tabular-nums transition-colors duration-300",
             isDark ? "text-[#c2c2c2]" : "text-[#475569]"
           )}
         >

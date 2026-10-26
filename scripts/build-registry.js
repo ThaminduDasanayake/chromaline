@@ -17,6 +17,7 @@ function buildRegistry() {
   const counterPath = path.join(__dirname, "../components/ui/counter.tsx");
   const wakeSliderPath = path.join(__dirname, "../components/ui/wake-slider.tsx");
   const palettePath = path.join(__dirname, "../components/ui/palette.tsx");
+  const timeScrubberPath = path.join(__dirname, "../components/ui/time-scrubber.tsx");
 
   if (!fs.existsSync(trayPath)) {
     console.error("Component not found:", trayPath);
@@ -45,6 +46,9 @@ function buildRegistry() {
     ? fs.readFileSync(wakeSliderPath, "utf8")
     : "";
   const paletteContent = fs.existsSync(palettePath) ? fs.readFileSync(palettePath, "utf8") : "";
+  const timeScrubberContent = fs.existsSync(timeScrubberPath)
+    ? fs.readFileSync(timeScrubberPath, "utf8")
+    : "";
 
   // 1. Full Folder Tray with Folder Support
   const trayRegistryItem = {
@@ -231,8 +235,8 @@ function buildRegistry() {
     type: "registry:ui",
     title: "Copy Button",
     description:
-      "Tactile copy-to-clipboard button component and custom React hook with animated visual feedback.",
-    dependencies: ["@phosphor-icons/react@^2.1.10"],
+      "Fluid morphing copy button with animated content width measuring and popLayout icon/text transitions.",
+    dependencies: ["@phosphor-icons/react@^2.1.10", "framer-motion@^14.4.0"],
     devDependencies: [],
     registryDependencies: [],
     files: [
@@ -335,6 +339,27 @@ function buildRegistry() {
     ],
   };
 
+  // 14. Time Scrubber
+  const timeScrubberRegistryItem = {
+    $schema: "https://ui.shadcn.com/schema/registry-item.json",
+    name: "time-scrubber",
+    type: "registry:ui",
+    title: "Time Scrubber",
+    description:
+      "Tactile time picker over a rolling ruler dial with inertia fling coasting, unified spring settling, and front-dial cylindrical tick projection.",
+    dependencies: ["clsx", "tailwind-merge"],
+    devDependencies: [],
+    registryDependencies: [],
+    files: [
+      {
+        path: "components/ui/time-scrubber.tsx",
+        content: timeScrubberContent,
+        type: "registry:ui",
+        target: "components/ui/time-scrubber.tsx",
+      },
+    ],
+  };
+
   const outDir = path.join(__dirname, "../public/r");
   fs.mkdirSync(outDir, { recursive: true });
 
@@ -372,9 +397,10 @@ function buildRegistry() {
     path.join(outDir, "wake-slider.json"),
     JSON.stringify(wakeSliderRegistryItem, null, 2)
   );
+  fs.writeFileSync(path.join(outDir, "palette.json"), JSON.stringify(paletteRegistryItem, null, 2));
   fs.writeFileSync(
-    path.join(outDir, "palette.json"),
-    JSON.stringify(paletteRegistryItem, null, 2)
+    path.join(outDir, "time-scrubber.json"),
+    JSON.stringify(timeScrubberRegistryItem, null, 2)
   );
 
   const indexRegistry = {
@@ -395,6 +421,7 @@ function buildRegistry() {
       counterRegistryItem,
       wakeSliderRegistryItem,
       paletteRegistryItem,
+      timeScrubberRegistryItem,
     ],
   };
   fs.writeFileSync(path.join(outDir, "index.json"), JSON.stringify(indexRegistry, null, 2));
@@ -530,8 +557,8 @@ function buildRegistry() {
         type: "registry:ui",
         title: "Copy Button",
         description:
-          "Tactile copy-to-clipboard button component and custom React hook with animated visual feedback.",
-        dependencies: ["@phosphor-icons/react@^2.1.10"],
+          "Fluid morphing copy button with animated content width measuring and popLayout icon/text transitions.",
+        dependencies: ["@phosphor-icons/react@^2.1.10", "framer-motion@^14.4.0"],
         files: [
           {
             path: "components/ui/copy-button.tsx",
@@ -602,6 +629,21 @@ function buildRegistry() {
             path: "components/ui/palette.tsx",
             type: "registry:ui",
             target: "components/ui/palette.tsx",
+          },
+        ],
+      },
+      {
+        name: "time-scrubber",
+        type: "registry:ui",
+        title: "Time Scrubber",
+        description:
+          "Tactile time picker over a rolling ruler dial with inertia fling coasting, unified spring settling, and front-dial cylindrical tick projection.",
+        dependencies: ["clsx", "tailwind-merge"],
+        files: [
+          {
+            path: "components/ui/time-scrubber.tsx",
+            type: "registry:ui",
+            target: "components/ui/time-scrubber.tsx",
           },
         ],
       },
