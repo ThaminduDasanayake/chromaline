@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { TimeScrubber, TimeScrubberTheme, TimeScrubberFormat } from "@/components/ui/time-scrubber";
 import { SelectBar } from "@/components/ui/select-bar";
-import { ClockIcon, SunIcon, MoonIcon } from "@phosphor-icons/react";
+import { ClockIcon } from "@phosphor-icons/react";
 import {
   DocsLayout,
   ComponentPreview,
@@ -11,6 +11,7 @@ import {
   UsageSection,
   PropsTable,
   PropItem,
+  ThemeControl,
 } from "@/components/docs";
 
 const CODE_EXAMPLE_LINES = [
@@ -154,22 +155,11 @@ export default function TimeScrubberPage() {
         controls={
           <div className="flex flex-col gap-6">
             {/* Theme Mode */}
-            <div className="flex items-center justify-between">
-              <div>
-                <label className="text-xs font-semibold text-slate-900">Theme Mode</label>
-                <p className="mt-0.5 text-xs text-slate-500">Toggle light and dark color schemes</p>
-              </div>
-              <SelectBar<TimeScrubberTheme>
-                size="xs"
-                items={[
-                  { key: "light", label: "Light", icon: <SunIcon size={12} weight="bold" /> },
-                  { key: "dark", label: "Dark", icon: <MoonIcon size={12} weight="bold" /> },
-                ]}
-                value={theme}
-                onChange={setTheme}
-                ariaLabel="Select time scrubber theme mode"
-              />
-            </div>
+            <ThemeControl
+              value={theme}
+              onChange={setTheme}
+              ariaLabel="Select time scrubber theme mode"
+            />
 
             {/* Time Format */}
             <div className="flex items-center justify-between">

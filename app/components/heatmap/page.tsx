@@ -12,7 +12,7 @@ import {
   generateProceduralMatrix,
 } from "@/components/ui/heatmap";
 import { SelectBar } from "@/components/ui/select-bar";
-import { GitCommitIcon, SunIcon, MoonIcon } from "@phosphor-icons/react";
+import { GitCommitIcon } from "@phosphor-icons/react";
 import {
   DocsLayout,
   ComponentPreview,
@@ -20,6 +20,7 @@ import {
   UsageSection,
   PropsTable,
   PropItem,
+  ThemeControl,
 } from "@/components/docs";
 
 const CODE_EXAMPLE_LINES = [
@@ -229,20 +230,12 @@ export default function HeatmapDocumentationPage() {
               </div>
 
               {/* Theme Mode SelectBar */}
-              <div>
-                <label className="text-xs font-semibold text-slate-900">Theme Mode</label>
-                <div className="mt-2">
-                  <SelectBar<HeatmapMode>
-                    size="xs"
-                    items={[
-                      { key: "light", label: "Light", icon: <SunIcon size={12} weight="bold" /> },
-                      { key: "dark", label: "Dark", icon: <MoonIcon size={12} weight="bold" /> },
-                    ]}
-                    value={mode}
-                    onChange={setMode}
-                  />
-                </div>
-              </div>
+              <ThemeControl
+                layout="vertical"
+                value={mode}
+                onChange={setMode}
+                ariaLabel="Select heatmap theme mode"
+              />
             </div>
 
             {/* Bottom Scale Legend */}

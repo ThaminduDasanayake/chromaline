@@ -11,6 +11,7 @@ import {
   UsageSection,
   PropsTable,
   PropItem,
+  ThemeControl,
 } from "@/components/docs";
 
 const CODE_EXAMPLE_LINES = [
@@ -141,20 +142,13 @@ export default function PaletteDocumentationPage() {
         controls={
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {/* Theme control */}
-            <div>
-              <label className="text-xs font-semibold text-slate-700">Theme</label>
-              <div className="mt-2.5">
-                <SelectBar<PaletteTheme>
-                  size="xs"
-                  items={[
-                    { key: "light", label: "Light" },
-                    { key: "dark", label: "Dark" },
-                  ]}
-                  value={theme}
-                  onChange={setTheme}
-                />
-              </div>
-            </div>
+            <ThemeControl
+              layout="vertical"
+              label="Theme"
+              value={theme}
+              onChange={setTheme}
+              ariaLabel="Select palette theme mode"
+            />
 
             {/* Count control */}
             <div>

@@ -231,7 +231,7 @@ export function Checklist({
   return (
     <div
       className={cn(
-        "relative box-border overflow-hidden font-sans transition-[height,background-color,color,box-shadow] duration-[420ms] [transition-timing-function:cubic-bezier(0.22,1,0.36,1)] select-none",
+        "relative box-border overflow-hidden font-sans transition-[height,background-color,color,box-shadow] duration-420 ease-[cubic-bezier(0.22,1,0.36,1)] select-none",
         isDark
           ? "bg-[#1b1b1b] text-[#ffffff] shadow-[0_0_0_1px_rgba(255,255,255,0.12)]"
           : "bg-[#ffffff] text-[#18181b] shadow-[0_0_0_1px_rgba(0,0,0,0.08)]",
@@ -275,7 +275,7 @@ export function Checklist({
       {spare && (
         <div
           className={cn(
-            "flex w-full items-center gap-3 text-[14px] font-normal tracking-[-0.01em] transition-opacity duration-[220ms] ease-out",
+            "flex w-full items-center gap-3 text-[14px] font-normal tracking-[-0.01em] transition-opacity duration-220 ease-out",
             fell && "pointer-events-none opacity-0"
           )}
           style={{ height: ROW }}
@@ -320,7 +320,7 @@ export function Checklist({
           ) : (
             <button
               type="button"
-              className="font-inherit tracking-inherit cursor-pointer border-0 bg-transparent p-0 text-left text-inherit opacity-[0.38] transition-opacity duration-[160ms] ease-out hover:opacity-[0.72]"
+              className="font-inherit tracking-inherit cursor-pointer border-0 bg-transparent p-0 text-left text-inherit opacity-[0.38] transition-opacity duration-160 ease-out hover:opacity-[0.72]"
               onClick={() => {
                 setAdding(true);
               }}
@@ -472,7 +472,7 @@ function Row({
         </span>
         <span
           aria-hidden="true"
-          className="pointer-events-none absolute inset-x-0 top-[46%] h-[1.5px] origin-left rounded-[2px] bg-current"
+          className="pointer-events-none absolute inset-x-0 top-[46%] h-[1.5px] origin-left rounded-xs bg-current"
           style={{ transform: `scaleX(${cut.toFixed(4)})` }}
         />
       </span>
