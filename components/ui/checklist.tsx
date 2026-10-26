@@ -9,7 +9,6 @@ import React, {
 } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { cn } from "@/lib/utils";
-import "./checklist.css";
 
 const useIsomorphicLayoutEffect =
   typeof window !== "undefined" ? useLayoutEffect : useEffect;
@@ -239,7 +238,7 @@ export function Checklist({
   return (
     <div
       className={cn(
-        "chk font-sans transition-colors duration-300",
+        "box-border overflow-hidden relative select-none font-sans transition-[height,background-color,color,box-shadow] duration-[420ms] [transition-timing-function:cubic-bezier(0.22,1,0.36,1)]",
         isDark
           ? "bg-[#1b1b1b] text-[#ffffff] shadow-[0_0_0_1px_rgba(255,255,255,0.12)]"
           : "bg-[#ffffff] text-[#18181b] shadow-[0_0_0_1px_rgba(0,0,0,0.08)]",
@@ -270,6 +269,7 @@ export function Checklist({
             drift={DRIFT[i] ?? 0}
             tilt={leans[i] ?? 0}
             index={i}
+            isDark={isDark}
             onRun={measure}
             layer={fell ? items.length - i : undefined}
             onToggle={() => {
@@ -283,19 +283,31 @@ export function Checklist({
 
       {spare && (
         <div
-          className="chk-add"
-          data-hide={fell || undefined}
+          className={cn(
+            "flex items-center gap-3 w-full text-[14px] font-normal tracking-[-0.01em] transition-opacity duration-[220ms] ease-out",
+            fell && "opacity-0 pointer-events-none"
+          )}
           style={{ height: ROW }}
           onClick={(e) => e.stopPropagation()}
         >
           <span
-            className="chk-ghost"
             aria-hidden="true"
+            className={cn(
+              "flex-none",
+              isDark
+                ? "shadow-[inset_0_0_0_1.5px_rgba(255,255,255,0.2)]"
+                : "shadow-[inset_0_0_0_1.5px_rgba(24,24,27,0.16)]"
+            )}
             style={{ width: side, height: side, borderRadius: side * 0.32 }}
           />
           {adding ? (
             <input
-              className="chk-field"
+              className={cn(
+                "flex-1 min-w-0 p-0 border-0 bg-transparent text-inherit font-inherit tracking-inherit outline-none",
+                isDark
+                  ? "placeholder:text-[rgba(255,255,255,0.32)]"
+                  : "placeholder:text-[rgba(24,24,27,0.32)]"
+              )}
               autoFocus
               value={draft}
               placeholder="New task"
@@ -317,7 +329,7 @@ export function Checklist({
           ) : (
             <button
               type="button"
-              className="chk-new"
+              className="p-0 border-0 bg-transparent text-inherit font-inherit tracking-inherit text-left cursor-pointer opacity-[0.38] hover:opacity-[0.72] transition-opacity duration-[160ms] ease-out"
               onClick={() => {
                 setAdding(true);
               }}
@@ -345,6 +357,7 @@ function Row({
   tilt,
   layer,
   index,
+  isDark,
   onRun,
   onToggle,
 }: {
@@ -361,6 +374,7 @@ function Row({
   tilt: number;
   layer?: number;
   index: number;
+  isDark: boolean;
   onRun: (i: number, px: number, tall: number) => void;
   onToggle: () => void;
 }) {
@@ -386,18 +400,19 @@ function Row({
   return (
     <motion.button
       type="button"
-      className="chk-row"
+      className={cn(
+        "group flex items-center gap-3 w-full relative p-0 border-0 rounded-[10px] bg-transparent text-inherit font-inherit text-left cursor-pointer [-webkit-tap-highlight-color:transparent] outline-none",
+        isDark
+          ? "focus-visible:shadow-[0_0_0_2px_rgba(255,255,255,0.4)]"
+          : "focus-visible:shadow-[0_0_0_2px_rgba(24,24,27,0.3)]"
+      )}
       role="checkbox"
       aria-checked={on}
-      data-fell={fell || undefined}
       onClick={onToggle}
-      style={
-        {
-          height: ROW,
-          zIndex: layer,
-          "--slip": `${inset}px`,
-        } as React.CSSProperties
-      }
+      style={{
+        height: ROW,
+        zIndex: layer,
+      }}
       initial={false}
       exit={{ opacity: 0, transition: { duration: 0.16 } }}
       animate={
@@ -411,8 +426,24 @@ function Row({
           : { type: "spring", stiffness: 380, damping: 34, mass: 0.9 }
       }
     >
+      {fell && (
+        <span
+          aria-hidden="true"
+          className={cn(
+            "pointer-events-none absolute inset-x-0 -z-10 rounded-[10px]",
+            isDark ? "bg-[#1b1b1b]" : "bg-[#ffffff]"
+          )}
+          style={{ top: inset, bottom: inset }}
+        />
+      )}
+
       <span
-        className="chk-box"
+        className={cn(
+          "relative flex-none grid place-items-center overflow-hidden",
+          isDark
+            ? "shadow-[inset_0_0_0_1.5px_rgba(255,255,255,0.32)]"
+            : "shadow-[inset_0_0_0_1.5px_rgba(24,24,27,0.28)]"
+        )}
         style={{
           width: side,
           height: side,
@@ -420,13 +451,23 @@ function Row({
         }}
       >
         <span
-          className="chk-fill"
+          className={cn(
+            "absolute inset-0 origin-center",
+            isDark ? "bg-[#ffffff]" : "bg-[#18181b]"
+          )}
           style={{
             borderRadius: side * 0.32,
             transform: `scale(${t.toFixed(4)})`,
           }}
         />
-        <svg className="chk-tick" viewBox="0 0 24 24" aria-hidden="true">
+        <svg
+          className={cn(
+            "relative w-[68%] h-[68%] overflow-visible fill-none stroke-[2.6] [stroke-linecap:round] [stroke-linejoin:round]",
+            isDark ? "stroke-[#1b1b1b]" : "stroke-[#ffffff]"
+          )}
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+        >
           <path
             d="M6 12.4 L10.3 16.7 L18 7.6"
             pathLength={1}
@@ -436,13 +477,16 @@ function Row({
         </svg>
       </span>
 
-      <span className="chk-say" ref={say}>
-        <span className="chk-word" style={{ opacity: mix(1, 0.42, held) }}>
+      <span
+        className="relative inline-block text-[14px] font-normal tracking-[-0.01em] leading-[1.2]"
+        ref={say}
+      >
+        <span className="inline-block" style={{ opacity: mix(1, 0.42, held) }}>
           {label}
         </span>
         <span
-          className="chk-rule"
           aria-hidden="true"
+          className="absolute inset-x-0 top-[46%] h-[1.5px] rounded-[2px] bg-current origin-left pointer-events-none"
           style={{ transform: `scaleX(${cut.toFixed(4)})` }}
         />
       </span>

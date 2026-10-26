@@ -245,11 +245,6 @@
           "path": "components/ui/checklist.tsx",
           "type": "registry:ui",
           "target": "components/ui/checklist.tsx"
-        },
-        {
-          "path": "components/ui/checklist.css",
-          "type": "registry:ui",
-          "target": "components/ui/checklist.css"
         }
       ]
     }
