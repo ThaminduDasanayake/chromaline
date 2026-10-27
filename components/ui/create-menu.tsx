@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useRef, useState } from "react";
+import React, { useEffect, useId, useRef, useState } from "react";
 import {
   FileTextIcon,
   FolderIcon,
@@ -8,7 +8,7 @@ import {
   PlusIcon,
   TableIcon,
 } from "@phosphor-icons/react";
-import "./create.css";
+import { cn } from "@/lib/utils";
 
 /* ══ Create ═══════════════════════════════════════════════
    One shape, not two. The pill does not open a panel next to
@@ -35,6 +35,8 @@ export interface CreateProps {
   items?: CreateMenuItem[];
   /** Callback fired when an item is selected */
   onItemSelect?: (label: string) => void;
+  /** Visual theme mode (default: inherits from context) */
+  theme?: "light" | "dark";
   /** Additional CSS class name */
   className?: string;
   /** Additional inline styles */
@@ -45,6 +47,7 @@ export function Create({
   corner = 20,
   items = DEFAULT_ITEMS,
   onItemSelect,
+  theme,
   className = "",
   style,
 }: CreateProps) {
@@ -155,20 +158,24 @@ export function Create({
   return (
     <div
       ref={panel}
-      className={`crt-stage ${className}`.trim()}
+      className={cn(
+        "crt-stage relative w-[305px] h-[305px] flex items-center justify-center isolate select-none",
+        className
+      )}
       data-open={open ? "true" : undefined}
       data-sink={sink ? "true" : undefined}
       style={{
-        "--crt-r": `${corner}px`,
-        "--crt-row-r": `${rowRadius}px`,
+        "--w": open ? "212px" : "132px",
+        "--h": open ? "190px" : "46px",
+        "--r": open ? `${corner}px` : "999px",
+        "--row-r": `${rowRadius}px`,
         ...style,
       } as React.CSSProperties}
     >
       {/* SVG Goo Filter for the liquid highlight layer */}
       <svg
-        className="crt-goo-svg"
         aria-hidden="true"
-        style={{ position: "absolute", width: 0, height: 0, pointerEvents: "none" }}
+        className="absolute w-0 h-0 pointer-events-none opacity-0"
       >
         <defs>
           <filter id={filterId} x="-20%" y="-20%" width="140%" height="140%">
@@ -185,45 +192,102 @@ export function Create({
       </svg>
 
       {/* Outer expanding shell: one shape changes shape */}
-      <div className="crt-body" aria-hidden="true" />
+      <div
+        className={cn(
+          "crt-body absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none",
+          "w-[var(--w)] h-[var(--h)] rounded-[var(--r)]",
+          theme === "dark"
+            ? "bg-[#212429] shadow-[0_0_0_1px_rgba(255,255,255,0.1)]"
+            : theme === "light"
+            ? "bg-white shadow-[0_0_0_1px_rgba(0,0,0,0.08)]"
+            : "bg-white dark:bg-[#212429] shadow-[0_0_0_1px_rgba(0,0,0,0.08)] dark:shadow-[0_0_0_1px_rgba(255,255,255,0.1)]",
+          "transition-[width,height,border-radius,transform,scale]",
+          sink
+            ? "scale-[0.94] duration-110 ease-out"
+            : "scale-100 duration-[480ms] [transition-timing-function:cubic-bezier(0.22,1,0.36,1)]"
+        )}
+        aria-hidden="true"
+      />
 
       {/* Closed pill trigger */}
       <button
         type="button"
-        className="crt-pill"
         onClick={press}
         aria-expanded={open}
+        className={cn(
+          "crt-pill absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20",
+          "w-[var(--w)] h-[var(--h)] rounded-[var(--r)]",
+          "flex items-center justify-center gap-2 border-0 bg-transparent",
+          "text-sm font-medium tracking-tight cursor-pointer",
+          theme === "dark"
+            ? "text-white"
+            : theme === "light"
+            ? "text-slate-900"
+            : "text-slate-900 dark:text-white",
+          "transition-[width,height,opacity,transform,scale]",
+          sink
+            ? "scale-[0.94] opacity-100 duration-110 ease-out"
+            : "scale-100 duration-[480ms] [transition-timing-function:cubic-bezier(0.22,1,0.36,1)]",
+          open ? "opacity-0 pointer-events-none duration-160 ease-out" : "opacity-100"
+        )}
       >
-        <span className="crt-glyph" aria-hidden="true">
+        <span className="grid place-items-center" aria-hidden="true">
           <PlusIcon size={16} weight="bold" />
         </span>
-        <span className="crt-say">Create</span>
+        <span className="inline-block whitespace-nowrap">Create</span>
       </button>
 
       {/* Open window containing liquid highlight and row items */}
-      <div className="crt-panel">
+      <div
+        className={cn(
+          "crt-panel absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2",
+          "w-[212px] h-[190px] px-2.5 py-[18px] box-border z-30",
+          theme === "dark"
+            ? "text-white"
+            : theme === "light"
+            ? "text-slate-900"
+            : "text-slate-900 dark:text-white",
+          open ? "pointer-events-auto" : "pointer-events-none"
+        )}
+      >
         {/* Solid filtered highlight layer for traveling liquid hover */}
         <div
-          className="crt-blobs"
+          className="crt-blobs absolute top-[18px] left-2.5 w-[192px] h-[154px] pointer-events-none z-10"
           aria-hidden="true"
           style={{ filter: `url(#${filterId})` }}
         >
           <div
-            className="crt-hov-pill"
-            data-moving={moving ? "true" : undefined}
+            className={cn(
+              "crt-hov-pill absolute top-0 left-0 w-full h-[34px] rounded-[var(--row-r)] pointer-events-none origin-center",
+              theme === "dark"
+                ? "bg-[#2e343d]"
+                : theme === "light"
+                ? "bg-slate-100"
+                : "bg-slate-100 dark:bg-[#2e343d]",
+              "transition-[transform,opacity,scale] [transition-timing-function:cubic-bezier(0.22,1,0.36,1)]",
+              moving
+                ? "scale-x-[0.96] scale-y-[1.16] duration-110 [transition-timing-function:cubic-bezier(0.3,1,0.4,1)]"
+                : "scale-100 duration-[300ms] [transition-timing-function:cubic-bezier(0.3,0.9,0.4,1)]",
+              over !== null ? "opacity-100" : "opacity-0 duration-180"
+            )}
             style={{
-              opacity: over !== null ? 1 : 0,
               transform: `translateY(${over !== null ? over * 40 : 0}px)`,
             }}
           />
         </div>
 
         {/* Rows ride cleanly on top of the highlight */}
-        <ul className="crt-menu" onMouseLeave={handleMenuLeave}>
+        <ul
+          className="crt-menu relative z-20 m-0 p-0 list-none grid gap-1.5"
+          onMouseLeave={handleMenuLeave}
+        >
           {items.map((it, i) => (
             <li
               key={it.label}
-              className="crt-item"
+              className={cn(
+                "crt-item transition-[opacity,transform] duration-200 [transition-timing-function:cubic-bezier(0.22,1,0.36,1)]",
+                open ? "opacity-100 translate-y-0" : "opacity-0 translate-y-1.5"
+              )}
               style={{
                 transitionDelay: open
                   ? `${70 + i * 38}ms`
@@ -234,6 +298,17 @@ export function Create({
                 type="button"
                 onMouseEnter={() => handleItemEnter(i)}
                 onClick={() => handleItemClick(it.label)}
+                className={cn(
+                  "relative w-full h-[34px] px-4 flex items-center gap-3 border-0 rounded-[var(--row-r)] bg-transparent",
+                  "text-[13px] font-medium text-left cursor-pointer tracking-normal select-none",
+                  "transition-colors duration-200",
+                  theme === "dark"
+                    ? "text-slate-300 hover:text-white focus-visible:outline-white"
+                    : theme === "light"
+                    ? "text-slate-600 hover:text-slate-900 focus-visible:outline-slate-900"
+                    : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white focus-visible:outline-slate-900 dark:focus-visible:outline-white",
+                  "focus-visible:outline-2 -outline-offset-2"
+                )}
               >
                 <it.icon size={16} weight="bold" />
                 <span>{it.label}</span>

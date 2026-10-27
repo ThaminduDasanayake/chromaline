@@ -16,6 +16,7 @@ import {
   PaletteCardPreview,
   TimeScrubberCardPreview,
   ChecklistCardPreview,
+  CreateMenuCardPreview,
 } from "@/components/showcase";
 
 export default function ChromalineHomePage() {
@@ -163,6 +164,15 @@ export default function ChromalineHomePage() {
             href="/components/checklist"
           >
             <ChecklistCardPreview />
+          </ComponentCard>
+
+          {/* Card 15: Create Menu */}
+          <ComponentCard
+            title="Create Menu"
+            description="Fluid morphing create button that expands into a window with continuous kinematic physics, concentric nested row radii, and traveling liquid hover droplet highlights."
+            href="/components/create-menu"
+          >
+            <CreateMenuCardPreview />
           </ComponentCard>
         </div>
       </main>
