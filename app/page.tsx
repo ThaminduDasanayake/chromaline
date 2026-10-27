@@ -15,6 +15,7 @@ import {
   WakeSliderCardPreview,
   PaletteCardPreview,
   TimeScrubberCardPreview,
+  ChecklistCardPreview,
 } from "@/components/showcase";
 
 export default function ChromalineHomePage() {
@@ -153,6 +154,15 @@ export default function ChromalineHomePage() {
             href="/components/time-scrubber"
           >
             <TimeScrubberCardPreview />
+          </ComponentCard>
+
+          {/* Card 14: Checklist */}
+          <ComponentCard
+            title="Checklist"
+            description="Harmonic spring checklist with drawn checkmarks, strikethrough timing, and physical gravity collapse on completion."
+            href="/components/checklist"
+          >
+            <ChecklistCardPreview />
           </ComponentCard>
         </div>
       </main>

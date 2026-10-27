@@ -229,6 +229,24 @@
           "target": "components/ui/time-scrubber.tsx"
         }
       ]
+    },
+    {
+      "name": "checklist",
+      "type": "registry:ui",
+      "title": "Checklist",
+      "description": "Harmonic spring task checklist with drawn checkmarks, strikethrough timing, and physical gravity collapse on completion.",
+      "dependencies": [
+        "clsx",
+        "tailwind-merge",
+        "framer-motion@^14.4.0"
+      ],
+      "files": [
+        {
+          "path": "components/ui/checklist.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/checklist.tsx"
+        }
+      ]
     }
   ]
 }
