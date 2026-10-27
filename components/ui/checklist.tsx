@@ -233,8 +233,8 @@ export function Checklist({
       className={cn(
         "relative box-border overflow-hidden font-sans transition-[height,background-color,color,box-shadow] duration-420 ease-[cubic-bezier(0.22,1,0.36,1)] select-none",
         isDark
-          ? "bg-[#1b1b1b] text-[#ffffff] shadow-[0_0_0_1px_rgba(255,255,255,0.12)]"
-          : "bg-[#ffffff] text-[#18181b] shadow-[0_0_0_1px_rgba(0,0,0,0.08)]",
+          ? "bg-[#1a1a1a] text-[#ffffff] shadow-[0_0_0_1px_rgba(255,255,255,0.12)]"
+          : "bg-[#ffffff] text-[#17181a] shadow-[0_0_0_1px_rgba(23,24,26,0.08)]",
         className
       )}
       data-theme={theme}
@@ -420,7 +420,7 @@ function Row({
           aria-hidden="true"
           className={cn(
             "pointer-events-none absolute inset-x-0 -z-10 rounded-[10px]",
-            isDark ? "bg-[#1b1b1b]" : "bg-[#ffffff]"
+            isDark ? "bg-[#1a1a1a]" : "bg-[#ffffff]"
           )}
           style={{ top: inset, bottom: inset }}
         />
@@ -431,7 +431,7 @@ function Row({
           "relative grid flex-none place-items-center overflow-hidden",
           isDark
             ? "shadow-[inset_0_0_0_1.5px_rgba(255,255,255,0.32)]"
-            : "shadow-[inset_0_0_0_1.5px_rgba(24,24,27,0.28)]"
+            : "shadow-[inset_0_0_0_1.5px_rgba(23,24,26,0.28)]"
         )}
         style={{
           width: side,
@@ -440,7 +440,7 @@ function Row({
         }}
       >
         <span
-          className={cn("absolute inset-0 origin-center", isDark ? "bg-[#ffffff]" : "bg-[#18181b]")}
+          className={cn("absolute inset-0 origin-center", isDark ? "bg-[#ffffff]" : "bg-[#17181a]")}
           style={{
             borderRadius: side * 0.32,
             transform: `scale(${t.toFixed(4)})`,
@@ -449,7 +449,7 @@ function Row({
         <svg
           className={cn(
             "relative h-[68%] w-[68%] overflow-visible fill-none stroke-[2.6] [stroke-linecap:round] [stroke-linejoin:round]",
-            isDark ? "stroke-[#1b1b1b]" : "stroke-[#ffffff]"
+            isDark ? "stroke-[#1a1a1a]" : "stroke-[#ffffff]"
           )}
           viewBox="0 0 24 24"
           aria-hidden="true"

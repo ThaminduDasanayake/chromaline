@@ -4,7 +4,7 @@ import Link from "next/link";
 export function SiteFooter({ className = "" }: { className?: string }) {
   return (
     <footer
-      className={`mt-auto border-t border-slate-200/80 bg-white transition-colors duration-200 dark:border-white/10 dark:bg-[#09090b] ${className}`}
+      className={`mt-auto border-t border-black/[0.08] bg-white transition-colors duration-200 dark:border-white/10 dark:bg-[#000000] ${className}`}
     >
       <div className="mx-auto flex w-full max-w-5xl items-center justify-between px-6 py-6 sm:px-8">
         <Link

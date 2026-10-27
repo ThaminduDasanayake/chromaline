@@ -204,7 +204,7 @@ export default function SeekDocumentationPage() {
       {/* 1. Preview */}
       <ComponentPreview
         canvasClassName={`min-h-[340px] p-8 transition-colors duration-300 ${
-          theme === "dark" ? "bg-[#09090b]" : "bg-[#F9FAFB]"
+          theme === "dark" ? "bg-[#0f0f0f]" : "bg-[#f7f7f6]"
         }`}
         controls={
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -298,15 +298,15 @@ export default function SeekDocumentationPage() {
       {/* Examples */}
       <section>
         <h2 className="text-xl font-bold tracking-tight text-slate-900 sm:text-2xl dark:text-white">Examples</h2>
-        <div className="mt-4 overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-2xs dark:border-white/10 dark:bg-[#121214]">
-          <div className="border-b border-slate-100 px-5 py-4 dark:border-white/10">
+        <div className="mt-4 overflow-hidden rounded-2xl border border-black/[0.08] bg-white shadow-2xs dark:border-white/10 dark:bg-[#181818]">
+          <div className="border-b border-black/[0.06] px-5 py-4 dark:border-white/10">
             <h3 className="text-sm font-semibold text-slate-900 dark:text-zinc-100">Header Toolbar (Compact)</h3>
             <p className="mt-1 text-xs text-slate-500 dark:text-zinc-400">
               Sized at <code>size=&quot;sm&quot;</code> (44px), ideal for fixed topbars and docking
               next to navigation links.
             </p>
           </div>
-          <div className="flex min-h-[160px] items-center justify-center bg-[#F9FAFB] p-6 dark:bg-[#0c0c0e]">
+          <div className="flex min-h-[160px] items-center justify-center bg-[#f7f7f6] p-6 dark:bg-[#0f0f0f]">
             <Seek
               size="sm"
               placeholder="Quick find..."

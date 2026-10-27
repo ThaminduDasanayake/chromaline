@@ -296,8 +296,8 @@ export function TimeScrubber({
       className={cn(
         "relative w-[375px] px-[25px] pt-[25px] pb-[20px] font-sans transition-colors duration-300 select-none",
         isDark
-          ? "bg-[#1b1b1b] text-[#ffffff] shadow-[0_0_0_1px_rgba(255,255,255,0.12)]"
-          : "bg-[#ffffff] text-[#18181b] shadow-[0_0_0_1px_rgba(0,0,0,0.08)]",
+          ? "bg-[#1a1a1a] text-[#ffffff] shadow-[0_0_0_1px_rgba(255,255,255,0.12)]"
+          : "bg-[#ffffff] text-[#17181a] shadow-[0_0_0_1px_rgba(23,24,26,0.08)]",
         disabled && "pointer-events-none opacity-40",
         className
       )}
@@ -370,7 +370,7 @@ export function TimeScrubber({
                 "absolute top-[10px] left-[-1.25px] h-[12px] w-[2.5px] origin-[50%_0] rounded-[1.25px]",
                 t.kind === "quarter" && "h-[21px]",
                 t.kind === "hour" && "h-[31px]",
-                isDark ? "bg-[#ffffff]" : "bg-[#18181b]"
+                isDark ? "bg-[#ffffff]" : "bg-[#17181a]"
               )}
               style={{
                 transform: `translateX(${t.x.toFixed(2)}px) scaleY(${(0.55 + 0.45 * t.f).toFixed(3)})`,

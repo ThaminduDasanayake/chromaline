@@ -127,7 +127,7 @@ export default function AspectRatioPage() {
       {/* 1. Preview */}
       <ComponentPreview
         canvasClassName={`min-h-[380px] p-8 transition-colors duration-300 ${
-          theme === "dark" ? "bg-[#09090b]" : "bg-[#F9FAFB]"
+          theme === "dark" ? "bg-[#0f0f0f]" : "bg-[#f7f7f6]"
         }`}
         controls={
           <div className="flex flex-col gap-6">

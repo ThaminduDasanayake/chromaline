@@ -213,10 +213,10 @@ export function Create({
           className={cn(
             "crt-body absolute inset-0 m-auto pointer-events-none",
             theme === "dark"
-              ? "bg-[#212429] shadow-[0_0_0_1px_rgba(255,255,255,0.1)]"
+              ? "bg-[#1a1a1a] shadow-[0_0_0_1px_rgba(255,255,255,0.12)]"
               : theme === "light"
-              ? "bg-white shadow-[0_0_0_1px_rgba(0,0,0,0.08)]"
-              : "bg-white dark:bg-[#212429] shadow-[0_0_0_1px_rgba(0,0,0,0.08)] dark:shadow-[0_0_0_1px_rgba(255,255,255,0.1)]",
+              ? "bg-[#ffffff] shadow-[0_0_0_1px_rgba(23,24,26,0.08)]"
+              : "bg-[#ffffff] dark:bg-[#1a1a1a] shadow-[0_0_0_1px_rgba(23,24,26,0.08)] dark:shadow-[0_0_0_1px_rgba(255,255,255,0.12)]",
             sink
               ? "scale-[0.94] duration-160 [transition-timing-function:cubic-bezier(0.22,1,0.36,1)]"
               : "scale-100 duration-220 [transition-timing-function:cubic-bezier(0.22,1,0.36,1)]",
@@ -249,10 +249,10 @@ export function Create({
           "flex items-center justify-center gap-2 border-0 bg-transparent",
           "text-[13px] font-normal cursor-pointer tracking-normal",
           theme === "dark"
-            ? "text-white"
+            ? "text-[#ffffff]"
             : theme === "light"
-            ? "text-slate-900"
-            : "text-slate-900 dark:text-white",
+            ? "text-[#17181a]"
+            : "text-[#17181a] dark:text-[#ffffff]",
           sink
             ? "scale-[0.94] opacity-100 duration-160 [transition-timing-function:cubic-bezier(0.22,1,0.36,1)]"
             : "scale-100 duration-[420ms] [transition-timing-function:cubic-bezier(0.22,1,0.36,1)]",
@@ -278,10 +278,10 @@ export function Create({
           "crt-panel absolute inset-0 m-auto",
           "w-[212px] h-[166px] p-3 box-border z-30",
           theme === "dark"
-            ? "text-white"
+            ? "text-[#ffffff]"
             : theme === "light"
-            ? "text-slate-900"
-            : "text-slate-900 dark:text-white",
+            ? "text-[#17181a]"
+            : "text-[#17181a] dark:text-[#ffffff]",
           open ? "pointer-events-auto" : "pointer-events-none"
         )}
       >
@@ -313,16 +313,16 @@ export function Create({
                   "text-[13px] text-left cursor-pointer tracking-normal select-none isolate",
                   "transition-colors duration-220",
                   theme === "dark"
-                    ? "text-white/80 hover:text-white"
+                    ? "text-[#9a9a9a] hover:text-[#ffffff]"
                     : theme === "light"
-                    ? "text-slate-900/80 hover:text-slate-900"
-                    : "text-slate-900/80 hover:text-slate-900 dark:text-white/80 dark:hover:text-white",
+                    ? "text-[#5c5b56] hover:text-[#17181a]"
+                    : "text-[#5c5b56] hover:text-[#17181a] dark:text-[#9a9a9a] dark:hover:text-[#ffffff]",
                   "before:content-[''] before:absolute before:inset-0 before:-z-10 before:rounded-[inherit]",
                   theme === "dark"
-                    ? "before:bg-white/[0.08]"
+                    ? "before:bg-white/[0.09]"
                     : theme === "light"
-                    ? "before:bg-slate-900/[0.08]"
-                    : "before:bg-slate-900/[0.08] dark:before:bg-white/[0.08]",
+                    ? "before:bg-[#17181a]/[0.06]"
+                    : "before:bg-[#17181a]/[0.06] dark:before:bg-white/[0.09]",
                   "before:opacity-0 hover:before:opacity-100 focus-visible:before:opacity-100",
                   "before:transition-opacity before:duration-220 hover:before:duration-160 before:pointer-events-none"
                 )}

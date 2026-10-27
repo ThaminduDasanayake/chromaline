@@ -21,7 +21,7 @@ import {
 
 export default function ChromalineHomePage() {
   return (
-    <div className="flex min-h-screen flex-col bg-[#FAFAFA] font-sans text-slate-900 transition-colors duration-200 selection:bg-slate-200 dark:bg-[#09090b] dark:text-zinc-100 dark:selection:bg-zinc-800">
+    <div className="flex min-h-screen flex-col bg-[#f7f7f6] font-sans text-[#17181a] transition-colors duration-200 selection:bg-slate-200 dark:bg-[#000000] dark:text-zinc-100 dark:selection:bg-zinc-800">
       {/* Top Minimal Navbar */}
       <SiteHeader />
 

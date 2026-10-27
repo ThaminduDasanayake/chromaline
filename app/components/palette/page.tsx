@@ -138,7 +138,7 @@ export default function PaletteDocumentationPage() {
       {/* 1. Interactive Preview */}
       <ComponentPreview
         canvasClassName={`min-h-[320px] p-8 transition-colors duration-300 ${
-          theme === "dark" ? "bg-[#09090b]" : "bg-[#F9FAFB]"
+          theme === "dark" ? "bg-[#0f0f0f]" : "bg-[#f7f7f6]"
         }`}
         controls={
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">

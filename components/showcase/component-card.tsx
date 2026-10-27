@@ -18,12 +18,12 @@ export function ComponentCard({
   description,
   href,
   children,
-  previewClassName = "relative flex h-80 sm:h-88 shrink-0 flex-col items-center justify-center overflow-hidden bg-[#F9FAFB] p-6 transition-colors duration-200 dark:bg-[#0c0c0e]",
+  previewClassName = "relative flex h-80 sm:h-88 shrink-0 flex-col items-center justify-center overflow-hidden bg-[#f7f7f6] p-6 transition-colors duration-200 dark:bg-[#0f0f0f]",
   className = "",
 }: ComponentCardProps) {
   return (
     <div
-      className={`group flex flex-col overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-2xs transition-all hover:border-slate-300 dark:border-white/10 dark:bg-[#121214] dark:hover:border-white/20 ${className}`}
+      className={`group flex flex-col overflow-hidden rounded-2xl border border-black/[0.08] bg-white shadow-2xs transition-all hover:border-black/20 dark:border-white/10 dark:bg-[#181818] dark:hover:border-white/20 ${className}`}
     >
       {/* Interactive Preview Canvas */}
       <div className={previewClassName}>{children}</div>
@@ -31,7 +31,7 @@ export function ComponentCard({
       {/* Bottom Card Footer - Link */}
       <Link
         href={href}
-        className="flex flex-1 cursor-pointer items-center justify-between border-t border-slate-100 bg-white p-5 transition-colors hover:bg-slate-50/60 sm:p-6 dark:border-white/10 dark:bg-[#121214] dark:hover:bg-white/5"
+        className="flex flex-1 cursor-pointer items-center justify-between border-t border-black/[0.06] bg-white p-5 transition-colors hover:bg-slate-50/60 sm:p-6 dark:border-white/10 dark:bg-[#181818] dark:hover:bg-white/5"
       >
         <div>
           <h2 className="text-sm font-semibold text-slate-900 transition-colors group-hover:text-slate-950 sm:text-base dark:text-white dark:group-hover:text-white">

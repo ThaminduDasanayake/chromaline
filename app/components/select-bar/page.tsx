@@ -283,27 +283,27 @@ export default function SelectBarDocumentationPage() {
 
         <div className="mt-4 grid grid-cols-1 gap-6 sm:grid-cols-2">
           {/* Example 1: Icon Toolbar */}
-          <div className="overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-2xs dark:border-white/10 dark:bg-[#121214]">
-            <div className="border-b border-slate-100 p-4 dark:border-white/10">
+          <div className="overflow-hidden rounded-2xl border border-black/[0.08] bg-white shadow-2xs dark:border-white/10 dark:bg-[#181818]">
+            <div className="border-b border-black/[0.06] p-4 dark:border-white/10">
               <h3 className="text-sm font-semibold text-slate-900 dark:text-zinc-100">Icons Only Toolbar</h3>
               <p className="mt-0.5 text-xs text-slate-500 dark:text-zinc-400">
                 Compact dock with Phosphor icons and two-phase dilation.
               </p>
             </div>
-            <div className="flex h-36 items-center justify-center bg-[#F9FAFB] p-6 dark:bg-[#0c0c0e]">
+            <div className="flex h-36 items-center justify-center bg-[#f7f7f6] p-6 dark:bg-[#0f0f0f]">
               <SelectBar size="sm" items={ICON_ITEMS} value={activeIcon} onChange={setActiveIcon} />
             </div>
           </div>
 
           {/* Example 2: Color Swatches */}
-          <div className="overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-2xs dark:border-white/10 dark:bg-[#121214]">
-            <div className="border-b border-slate-100 p-4 dark:border-white/10">
+          <div className="overflow-hidden rounded-2xl border border-black/[0.08] bg-white shadow-2xs dark:border-white/10 dark:bg-[#181818]">
+            <div className="border-b border-black/[0.06] p-4 dark:border-white/10">
               <h3 className="text-sm font-semibold text-slate-900 dark:text-zinc-100">Color Swatches</h3>
               <p className="mt-0.5 text-xs text-slate-500 dark:text-zinc-400">
                 Auto-detected via the <code>color</code> item prop with reversed chromatic order.
               </p>
             </div>
-            <div className="flex h-36 items-center justify-center bg-[#F9FAFB] p-6 dark:bg-[#0c0c0e]">
+            <div className="flex h-36 items-center justify-center bg-[#f7f7f6] p-6 dark:bg-[#0f0f0f]">
               <FolderColorSelectBar
                 size="xs"
                 value={activeSwatch}

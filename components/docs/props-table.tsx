@@ -30,7 +30,7 @@ export function PropsTable({ componentName, props }: PropsTableProps) {
         .
       </p>
 
-      <div className="mt-4 overflow-x-auto rounded-2xl border border-slate-200/90 bg-white shadow-2xs dark:border-white/10 dark:bg-[#121214]">
+      <div className="mt-4 overflow-x-auto rounded-2xl border border-black/[0.08] bg-white shadow-2xs dark:border-white/10 dark:bg-[#181818]">
         <table className="w-full text-left font-sans text-xs">
           <thead>
             <tr className="border-b border-slate-100 bg-slate-50/70 dark:border-white/10 dark:bg-white/5">

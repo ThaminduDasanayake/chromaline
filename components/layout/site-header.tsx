@@ -15,7 +15,7 @@ export interface SiteHeaderProps {
 export function SiteHeader({ breadcrumb, className = "" }: SiteHeaderProps) {
   return (
     <header
-      className={`sticky top-0 z-40 flex h-14 items-center justify-between border-b border-slate-200/80 bg-white/90 px-6 backdrop-blur-md transition-colors duration-200 md:px-12 dark:border-white/10 dark:bg-[#09090b]/90 ${className}`}
+      className={`sticky top-0 z-40 flex h-14 items-center justify-between border-b border-black/[0.08] bg-white/90 px-6 backdrop-blur-md transition-colors duration-200 md:px-12 dark:border-white/10 dark:bg-[#000000]/90 ${className}`}
     >
       <div className="flex items-center gap-2.5">
         <Link

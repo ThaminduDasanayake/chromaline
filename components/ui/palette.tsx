@@ -356,7 +356,7 @@ export function Palette({
         className={cn(
           "flex items-center justify-center transition-colors duration-300",
           isDark
-            ? "bg-[#1b1b1b] shadow-[0_0_0_1px_rgba(255,255,255,0.12)]"
+            ? "bg-[#1a1a1a] shadow-[0_0_0_1px_rgba(255,255,255,0.12)]"
             : "bg-[#ffffff] shadow-[0_0_0_1px_rgba(0,0,0,0.08)]"
         )}
         style={{ padding: PAD, borderRadius: slabR, scale: beat }}
@@ -406,7 +406,7 @@ export function Palette({
         className={cn(
           "flex flex-none items-center justify-center transition-all duration-160 ease-[cubic-bezier(0.22,1,0.36,1)] has-active:scale-[0.96] motion-reduce:duration-160",
           isDark
-            ? "bg-[#1b1b1b] shadow-[0_0_0_1px_rgba(255,255,255,0.12)]"
+            ? "bg-[#1a1a1a] shadow-[0_0_0_1px_rgba(255,255,255,0.12)]"
             : "bg-[#ffffff] shadow-[0_0_0_1px_rgba(0,0,0,0.08)]"
         )}
         style={{ padding: PAD, borderRadius: slabR }}
@@ -416,7 +416,7 @@ export function Palette({
           className={cn(
             "grid flex-none cursor-pointer place-items-center border-0 bg-transparent transition-colors duration-160 outline-none focus-visible:ring-2 focus-visible:ring-offset-2 motion-reduce:duration-160",
             isDark
-              ? "text-[#ffffff] hover:text-[#a1a1aa] focus-visible:ring-[#ffffff]/40 focus-visible:ring-offset-[#1b1b1b]"
+              ? "text-[#ffffff] hover:text-[#9a9a9a] focus-visible:ring-[#ffffff]/40 focus-visible:ring-offset-[#1a1a1a]"
               : "text-[#18181b] hover:text-[#71717a] focus-visible:ring-[#18181b]/30 focus-visible:ring-offset-[#ffffff]"
           )}
           onClick={roll}

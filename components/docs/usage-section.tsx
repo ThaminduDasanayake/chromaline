@@ -41,7 +41,7 @@ export function UsageSection({
         <CopyButton value={codeText} title="Copy code" />
       </div>
 
-      <div className="mt-4 overflow-hidden rounded-2xl border border-slate-200/90 bg-[#F9FAFB] shadow-2xs transition-colors duration-200 dark:border-white/10 dark:bg-[#0c0c0e]">
+      <div className="mt-4 overflow-hidden rounded-2xl border border-black/[0.08] bg-[#f7f7f6] shadow-2xs transition-colors duration-200 dark:border-white/10 dark:bg-[#0f0f0f]">
         <div className="overflow-x-auto p-5 font-mono text-xs leading-relaxed text-slate-800 dark:text-zinc-200">
           {codeLines ? (
             <pre className="m-0 p-0">

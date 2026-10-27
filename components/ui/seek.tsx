@@ -277,8 +277,8 @@ export function Seek({
         className={cn(
           "group/seek relative isolate overflow-hidden transition-colors duration-220",
           isDark
-            ? "bg-[#1b1b1b] shadow-[0_0_0_1px_rgba(255,255,255,0.12)]"
-            : "bg-[#ffffff] shadow-[0_0_0_1px_rgba(0,0,0,0.08)]",
+            ? "bg-[#1a1a1a] shadow-[0_0_0_1px_rgba(255,255,255,0.12)]"
+            : "bg-[#ffffff] shadow-[0_0_0_1px_rgba(23,24,26,0.08)]",
           !open ? "[@media(hover:hover)]:hover:scale-[1.045]" : ""
         )}
         style={{
@@ -296,14 +296,14 @@ export function Seek({
             busy
               ? isDark
                 ? "stroke-[#ffffff]"
-                : "stroke-[#18181b]"
+                : "stroke-[#17181a]"
               : open
                 ? isDark
                   ? "stroke-[#71717a]"
                   : "stroke-[#a1a1aa]"
                 : isDark
                   ? "stroke-[#a1a1aa] group-hover/seek:stroke-[#ffffff]"
-                  : "stroke-[#71717a] group-hover/seek:stroke-[#18181b]"
+                  : "stroke-[#5c5b56] group-hover/seek:stroke-[#17181a]"
           )}
           viewBox="0 0 18 18"
           aria-hidden="true"
@@ -337,7 +337,7 @@ export function Seek({
             "absolute top-0 z-3 h-full border-0 bg-transparent font-sans font-medium tracking-tight transition-colors duration-220 outline-none",
             isDark
               ? "text-[#ffffff] placeholder:text-[#6b6b6b]"
-              : "text-[#18181b] placeholder:text-[#a1a1aa]"
+              : "text-[#17181a] placeholder:text-[#5c5b56]"
           )}
           style={{
             left: `${inset + lens + (size === "sm" ? 8 : 11)}px`,
@@ -357,7 +357,7 @@ export function Seek({
               "absolute top-1/2 z-5 flex -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border-0 transition-all duration-150",
               isDark
                 ? "bg-[#ffffff]/10 text-[#a1a1aa] hover:bg-[#ffffff]/20 hover:text-[#ffffff]"
-                : "bg-[#18181b]/[0.06] text-[#71717a] hover:bg-[#18181b]/[0.12] hover:text-[#18181b]"
+                : "bg-[#17181a]/[0.06] text-[#5c5b56] hover:bg-[#17181a]/[0.12] hover:text-[#17181a]"
             )}
             aria-label="Clear search"
             onClick={handleClear}
@@ -389,8 +389,8 @@ export function Seek({
             className={cn(
               "rounded-inherit absolute inset-0 z-4 cursor-pointer border-0 bg-transparent outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
               isDark
-                ? "focus-visible:ring-[#ffffff]/40 focus-visible:ring-offset-[#1b1b1b]"
-                : "focus-visible:ring-[#18181b]/30 focus-visible:ring-offset-[#ffffff]"
+                ? "focus-visible:ring-[#ffffff]/40 focus-visible:ring-offset-[#1a1a1a]"
+                : "focus-visible:ring-[#17181a]/30 focus-visible:ring-offset-[#ffffff]"
             )}
             aria-label={placeholder}
             onClick={start}

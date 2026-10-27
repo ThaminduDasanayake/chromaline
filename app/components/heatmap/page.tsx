@@ -186,7 +186,7 @@ export default function HeatmapDocumentationPage() {
       {/* 1. Preview */}
       <ComponentPreview
         canvasClassName={`min-h-[460px] flex-col p-6 sm:p-8 transition-colors duration-300 ${
-          isDark ? "bg-[#0d1117]" : "bg-[#F9FAFB]"
+          isDark ? "bg-[#0f0f0f]" : "bg-[#f7f7f6]"
         }`}
         canvasStyle={{
           backgroundColor: isDark ? "#0d1117" : "#F9FAFB",
