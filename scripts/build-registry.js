@@ -223,7 +223,7 @@ function buildRegistry() {
     title: "Label Input",
     description:
       "A field whose label is its placeholder until focused. Outline parts from middle outward with letter-by-letter hopping text.",
-    dependencies: ["@phosphor-icons/react@^2.1.10"],
+    dependencies: ["@phosphor-icons/react@^2.1.10", "framer-motion@^14.4.0"],
     devDependencies: [],
     registryDependencies: [],
     files: [
@@ -397,7 +397,7 @@ function buildRegistry() {
     title: "Create Menu",
     description:
       "Fluid morphing create button that expands into a window with continuous kinematic physics, concentric nested row radii, and traveling liquid hover droplet highlights.",
-    dependencies: ["@phosphor-icons/react@^2.1.10"],
+    dependencies: ["@phosphor-icons/react@^2.1.10", "framer-motion@^14.4.0"],
     devDependencies: [],
     registryDependencies: [],
     files: [
@@ -603,7 +603,7 @@ function buildRegistry() {
         title: "Label Input",
         description:
           "A field whose label is its placeholder until focused. Outline parts from middle outward with letter-by-letter hopping text.",
-        dependencies: ["@phosphor-icons/react@^2.1.10"],
+        dependencies: ["@phosphor-icons/react@^2.1.10", "framer-motion@^14.4.0"],
         files: [
           {
             path: "components/ui/label-input.tsx",
@@ -728,7 +728,7 @@ function buildRegistry() {
         title: "Create Menu",
         description:
           "Fluid morphing create button that expands into a window with continuous kinematic physics, concentric nested row radii, and traveling liquid hover droplet highlights.",
-        dependencies: ["@phosphor-icons/react@^2.1.10"],
+        dependencies: ["@phosphor-icons/react@^2.1.10", "framer-motion@^14.4.0"],
         files: [
           {
             path: "components/ui/create-menu.tsx",

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { motion } from "framer-motion";
 import {
   FileTextIcon,
   FolderIcon,
@@ -10,11 +11,40 @@ import {
 } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
 
-/* ══ 5 · Create ═══════════════════════════════════════════════
-   One shape, not two. The pill does not open a panel next to
-   itself and it does not grow a chin — it IS the panel, seen
-   small. Pressing it makes it spread: the pill goes, and what
-   is left standing in the same spot is the window. */
+/* ══ 3 · Create ═══════════════════════════════════════════════
+   One shape, and no filter on it — the other studies fuse two
+   or more shapes, this has exactly one, so a blur could only
+   damage it. The liquid here is entirely in the timing: the
+   press sinks, and the spread starts while the sink is still
+   running so there is never a still frame.
+
+   The pill's width is measured from its own label and written
+   back as --pill-w, so the label can change without the shape
+   jumping. */
+
+/* the elastic, as specified: ζ = 14 / (2·√(220·0.5)) ≈ 0.67,
+   so it overshoots about 6% before it settles. A deliberate
+   bounce, not a wobble. */
+const LIQUID = {
+  type: "spring" as const,
+  stiffness: 220,
+  damping: 14,
+  mass: 0.5,
+};
+
+/* ── the same liquid, without the overshoot ────────────────
+   For shapes whose corner radius is animating: a spring that
+   passes its target drags the radius past it too, and corners
+   that dip under and come back read as a wobble rather than
+   as a bounce.
+
+   Stiffness comes up with the damping instead, which holds ζ
+   at 1.03 — no overshoot, and it lands in about 180ms. */
+const LIQUID_STILL = { ...LIQUID, stiffness: 420, damping: 30 };
+
+const CRT_CORNER = 20;
+const CRT_MAX = 40;
+const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v));
 
 export interface CreateMenuItem {
   icon: React.ComponentType<{ size?: number; weight?: "bold" | "regular" | "light" | "thin" | "fill" | "duotone" }>;
@@ -43,10 +73,6 @@ export interface CreateProps {
   style?: React.CSSProperties;
 }
 
-const CRT_CORNER = 20;
-const CRT_MAX = 40;
-const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v));
-
 export function Create({
   corner = CRT_CORNER,
   items = DEFAULT_ITEMS,
@@ -66,9 +92,21 @@ export function Create({
   /* ── MEASURE TWICE: ONCE NOW, ONCE THE FONT IS REAL ────────
      .crt-say clips whatever it cannot fit, so this width being
      even slightly short takes the right edge off the last
-     letter — and it was short two different ways. The +1 is
+     letter — and it was short two different ways.
+
+     The rounding: offsetWidth is an integer and the label is
+     not. "Create" measures 42.46 and comes back 42. The +1 is
      the fix; the error is always under a pixel so a pixel
-     always covers it. */
+     always covers it, and the pill is centred on the label so
+     the spare costs nothing.
+
+     The race, which is the one that made it intermittent: a
+     layout effect runs before a webfont has swapped in, so on
+     a cold cache this measured "Create" in the FALLBACK face
+     and then froze that number for good. Warm cache measured
+     Inter and looked fine — same code, different result, which
+     is why it only cut the word sometimes. So measure again
+     when the fonts are actually ready. */
   useLayoutEffect(() => {
     const el = say.current;
     if (!el) return;
@@ -89,23 +127,29 @@ export function Create({
     };
   }, []);
 
-  /* ── Outside click detection ──────────────────────────────
-     No close button and no title bar — anywhere but the menu
+  /* No close button and no title bar — anywhere but the menu
      puts it away. Registered only while it is open, and in an
      effect, so the very press that opened it cannot close it on
-     the same click.
-
-     AND IT ASKS THE VISIBLE BOX, NOT THE ELEMENT. contains() is
-     the obvious test and it was wrong here: the ref is the STAGE,
-     the square this block reserves so opening the menu does not
-     resize what is under it. The stage is 244 square, the menu
-     inside it is 212x166. Hit-tested against the panel's own
-     rectangle instead. */
+     the same click. */
   useEffect(() => {
     if (!open) return;
     const away = (e: PointerEvent) => {
+      /* ── a press by SOMEBODY, not by the page ─────────────
+         This listens on the document, so it hears every press
+         anywhere — including the ones other components'
+         demonstrations dispatch at themselves. */
       if (!e.isTrusted && !e.clientX) return;
-      const box = panel.current?.querySelector(".crt-panel")?.getBoundingClientRect();
+
+      /* ── ASK THE VISIBLE BOX, NOT THE RESERVED ONE ───────
+         This used to be panel.current.contains(target), and
+         `panel` is the STAGE — the square this block reserves
+         so that opening the menu does not resize the card
+         under it. The stage is 244x244; the menu it holds is
+         212x166. Hit-tested against the panel's own rectangle
+         instead. */
+      const box = panel.current
+        ?.querySelector(".crt-panel")
+        ?.getBoundingClientRect();
       const on =
         !!box &&
         e.clientX >= box.left &&
@@ -120,87 +164,88 @@ export function Create({
     return () => document.removeEventListener("pointerdown", away);
   }, [open]);
 
-  /* The press lands first: the pill simply gets smaller. Going
-     straight to the expansion skips the acknowledgement and the
-     panel seems to arrive slightly before it was asked for.
-     The two overlap on purpose. The shrink takes 120ms and the
-     spread starts at 95, so it is still on its way down as it
-     begins to widen. */
   const press = () => {
     setSink(true);
     if (beat.current) window.clearTimeout(beat.current);
+    /* 60ms handoff against a 120ms sink: the spread begins
+       while the press is still running. It was 95, which is
+       most of the sink — long enough to read as a pause before
+       anything opened. */
     beat.current = window.setTimeout(() => {
       setSink(false);
       setOpen(true);
-    }, 95);
+    }, 60);
   };
 
   /* glyph + gap + label + the padding either side */
   const pillW = 18 + 8 + sayW + 34;
 
+  /* the two the animation needs as NUMBERS — Framer writes
+     borderRadius inline, so it cannot read a css variable */
   const panelR = clamp(corner, 0, CRT_MAX);
-  /* the shut pill is 38 tall, so 19 is as round as it goes */
   const shutR = Math.min(19, panelR * (19 / CRT_CORNER));
-  /* concentric: the panel's corner less its 10px inset,
-     and no rounder than the 34px row's own half */
   const rowR = Math.min(17, Math.max(0, panelR - 10));
 
   return (
-    <div
+    <motion.div
       ref={panel}
       className={cn(
         "crt-stage relative w-[244px] h-[244px] isolate select-none",
         className
       )}
-      data-open={open ? "true" : undefined}
-      data-sink={sink ? "true" : undefined}
+      data-open={open || undefined}
+      data-sink={sink || undefined}
       style={{
         "--pill-w": `${pillW}px`,
-        "--pill-h": "38px",
-        "--panel-w": "212px",
-        "--panel-h": "166px",
-        "--w": open ? "var(--panel-w)" : "var(--pill-w)",
-        "--h": open ? "var(--panel-h)" : "var(--pill-h)",
-        "--r": open ? "var(--crt-r)" : "var(--crt-shut-r)",
         "--crt-r": `${panelR}px`,
         "--crt-shut-r": `${shutR.toFixed(2)}px`,
         "--crt-row-r": `${rowR.toFixed(2)}px`,
         ...style,
       } as React.CSSProperties}
     >
-      {/* ── Outer expanding shell: one shape, dead centre ───────
-          Centred by auto margins (inset: 0; margin: auto;), which
-          are self-correcting and use NO transform at all. */}
-      <div
-        className={cn(
-          "crt-body absolute inset-0 m-auto pointer-events-none",
-          "w-[var(--w)] h-[var(--h)] rounded-[var(--r)]",
-          theme === "dark"
-            ? "bg-[#212429] shadow-[0_0_0_1px_rgba(255,255,255,0.1)]"
-            : theme === "light"
-            ? "bg-white shadow-[0_0_0_1px_rgba(0,0,0,0.08)]"
-            : "bg-white dark:bg-[#212429] shadow-[0_0_0_1px_rgba(0,0,0,0.08)] dark:shadow-[0_0_0_1px_rgba(255,255,255,0.1)]",
-          "transition-[width,height,border-radius,scale]",
-          sink
-            ? "scale-[0.94] duration-160 [transition-timing-function:cubic-bezier(0.22,1,0.36,1)]"
-            : open
-            ? "scale-100 duration-[420ms] [transition-timing-function:cubic-bezier(0.22,1,0.36,1)]"
-            : "scale-100 duration-220 [transition-timing-function:cubic-bezier(0.22,1,0.36,1)]",
-          "motion-reduce:duration-160 motion-reduce:scale-100"
-        )}
-        aria-hidden="true"
-      />
+      <div className="crt-blobs absolute inset-0 pointer-events-none" aria-hidden="true">
+        {/* LIQUID_STILL, not LIQUID. A spring past the target
+            takes the corner radius with it — the corners dip
+            under 28 and come back, which is a wobble, not a
+            bounce. This is the one shape here that must not
+            overshoot. */}
+        <motion.div
+          className={cn(
+            "crt-body absolute inset-0 m-auto pointer-events-none",
+            theme === "dark"
+              ? "bg-[#212429] shadow-[0_0_0_1px_rgba(255,255,255,0.1)]"
+              : theme === "light"
+              ? "bg-white shadow-[0_0_0_1px_rgba(0,0,0,0.08)]"
+              : "bg-white dark:bg-[#212429] shadow-[0_0_0_1px_rgba(0,0,0,0.08)] dark:shadow-[0_0_0_1px_rgba(255,255,255,0.1)]",
+            sink
+              ? "scale-[0.94] duration-160 [transition-timing-function:cubic-bezier(0.22,1,0.36,1)]"
+              : "scale-100 duration-220 [transition-timing-function:cubic-bezier(0.22,1,0.36,1)]",
+            "transition-transform motion-reduce:transition-none"
+          )}
+          animate={{
+            width: open ? 212 : pillW,
+            height: open ? 166 : 38,
+            /* ── from the knob, not from two literals ──────
+               Framer writes this inline every frame, so the
+               stylesheet's `var(--r)` on .crt-body never gets
+               a look in — the CSS variables set on the stage
+               reach the ROWS, and this shape has to be told
+               separately. Same two numbers the vars carry:
+               the panel's own corner, and a 38px pill's half
+               when it is shut. */
+            borderRadius: open ? panelR : shutR,
+          }}
+          transition={LIQUID_STILL}
+        />
+      </div>
 
-      {/* ── The shut pill trigger button ────────────────────────
-          Held at full strength through the press: fading it during
-          the squash would hide the beat that the squash is for. */}
       <button
         type="button"
         onClick={press}
         aria-expanded={open}
         className={cn(
           "crt-pill absolute inset-0 m-auto z-20",
-          "w-[var(--pill-w)] h-[var(--pill-h)]",
+          "w-[var(--pill-w)] h-[38px]",
           "flex items-center justify-center gap-2 border-0 bg-transparent",
           "text-[13px] font-normal cursor-pointer tracking-normal",
           theme === "dark"
@@ -208,14 +253,13 @@ export function Create({
             : theme === "light"
             ? "text-slate-900"
             : "text-slate-900 dark:text-white",
-          "transition-[width,opacity,scale]",
           sink
             ? "scale-[0.94] opacity-100 duration-160 [transition-timing-function:cubic-bezier(0.22,1,0.36,1)]"
             : "scale-100 duration-[420ms] [transition-timing-function:cubic-bezier(0.22,1,0.36,1)]",
           open
             ? "opacity-0 pointer-events-none duration-160 ease-out"
             : "opacity-100 duration-160",
-          "motion-reduce:duration-160 motion-reduce:scale-100"
+          "transition-[opacity,transform] motion-reduce:transition-none"
         )}
       >
         <span className="crt-glyph grid place-items-center" aria-hidden="true">
@@ -229,11 +273,10 @@ export function Create({
         </span>
       </button>
 
-      {/* ── The open window panel ─────────────────────────────── */}
       <div
         className={cn(
           "crt-panel absolute inset-0 m-auto",
-          "w-[var(--panel-w,212px)] h-[var(--panel-h,166px)] p-3 box-border z-30",
+          "w-[212px] h-[166px] p-3 box-border z-30",
           theme === "dark"
             ? "text-white"
             : theme === "light"
@@ -242,6 +285,8 @@ export function Create({
           open ? "pointer-events-auto" : "pointer-events-none"
         )}
       >
+        {/* each row lights its own wash — see .crt-item button::before;
+            nothing travels between them */}
         <ul className="crt-menu m-0 p-0 list-none grid content-start gap-0.5">
           {items.map((it, i) => (
             <li
@@ -250,11 +295,11 @@ export function Create({
                 "crt-item transition-[opacity,transform] duration-220 [transition-timing-function:cubic-bezier(0.22,1,0.36,1)] motion-reduce:duration-160",
                 open ? "opacity-100 translate-y-0" : "opacity-0 translate-y-1.5"
               )}
-              style={{
-                transitionDelay: open
-                  ? `${70 + i * 38}ms`
-                  : `${(items.length - 1 - i) * 30}ms`,
-              }}
+              /* tightened with the shell. The last row used to
+                 start at 162ms — after a box that now finishes
+                 in 180 — so the menu kept arriving for half a
+                 second after it had opened. */
+              style={{ transitionDelay: open ? `${30 + i * 22}ms` : "0ms" }}
             >
               <button
                 type="button"
@@ -272,7 +317,6 @@ export function Create({
                     : theme === "light"
                     ? "text-slate-900/80 hover:text-slate-900"
                     : "text-slate-900/80 hover:text-slate-900 dark:text-white/80 dark:hover:text-white",
-                  // Hover wash: before pseudo-element (one per row, no traveling pill)
                   "before:content-[''] before:absolute before:inset-0 before:-z-10 before:rounded-[inherit]",
                   theme === "dark"
                     ? "before:bg-white/[0.08]"
@@ -290,7 +334,7 @@ export function Create({
           ))}
         </ul>
       </div>
-    </div>
+    </motion.div>
   );
 }
 
