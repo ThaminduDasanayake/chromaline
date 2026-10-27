@@ -20,7 +20,6 @@ function buildRegistry() {
   const timeScrubberPath = path.join(__dirname, "../components/ui/time-scrubber.tsx");
   const checklistPath = path.join(__dirname, "../components/ui/checklist.tsx");
   const createMenuPath = path.join(__dirname, "../components/ui/create-menu.tsx");
-  const createCssPath = path.join(__dirname, "../components/ui/create.css");
 
   if (!fs.existsSync(trayPath)) {
     console.error("Component not found:", trayPath);
@@ -57,9 +56,6 @@ function buildRegistry() {
     : "";
   const createMenuContent = fs.existsSync(createMenuPath)
     ? fs.readFileSync(createMenuPath, "utf8")
-    : "";
-  const createCssContent = fs.existsSync(createCssPath)
-    ? fs.readFileSync(createCssPath, "utf8")
     : "";
 
   // 1. Full Folder Tray with Folder Support
@@ -411,16 +407,6 @@ function buildRegistry() {
         type: "registry:ui",
         target: "components/ui/create-menu.tsx",
       },
-      ...(createCssContent
-        ? [
-            {
-              path: "components/ui/create.css",
-              content: createCssContent,
-              type: "registry:ui",
-              target: "components/ui/create.css",
-            },
-          ]
-        : []),
     ],
   };
 
@@ -748,11 +734,6 @@ function buildRegistry() {
             path: "components/ui/create-menu.tsx",
             type: "registry:ui",
             target: "components/ui/create-menu.tsx",
-          },
-          {
-            path: "components/ui/create.css",
-            type: "registry:ui",
-            target: "components/ui/create.css",
           },
         ],
       },

@@ -261,11 +261,6 @@
           "path": "components/ui/create-menu.tsx",
           "type": "registry:ui",
           "target": "components/ui/create-menu.tsx"
-        },
-        {
-          "path": "components/ui/create.css",
-          "type": "registry:ui",
-          "target": "components/ui/create.css"
         }
       ]
     }
