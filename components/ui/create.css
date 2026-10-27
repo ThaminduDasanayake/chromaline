@@ -1,0 +1,289 @@
+/* ══ 5 · Create ═══════════════════════════════════════════════
+   One shape, not two. The pill does not open a panel next to
+   itself and it does not grow a chin — it IS the panel, seen
+   small. Pressing it makes it spread: the pill goes, and what
+   is left standing in the same spot is the window. */
+
+.crt-stage {
+  position: relative;
+  width: 305px;
+  height: 305px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  isolation: isolate;
+
+  /* The two states are two sets of custom properties and one
+     attribute picks between them. Nothing here is measured. */
+  --w: 132px;
+  --h: 46px;
+  --r: 999px;
+
+  /* 28 outside against a 10px inset leaves 18 for the rows to
+     nest in, and a 34px row rounds fully at 17 — so the two
+     curves are concentric rather than merely both round */
+  --crt-r: 26px;
+  --crt-row-r: 16px;
+
+  /* Theming */
+  --slab: var(--fill-slab, #ffffff);
+  --on-slab: var(--fill-on, #0f172a);
+  --on-slab-rgb: var(--fill-on-rgb, 15, 23, 42);
+  --pane-edge: rgba(0, 0, 0, 0.08);
+  --crt-hov-bg: #f1f5f9;
+}
+
+:root[class~="dark"] .crt-stage,
+[data-theme="dark"] .crt-stage,
+.dark .crt-stage {
+  --slab: var(--fill-slab, #212429);
+  --on-slab: var(--fill-on, #ffffff);
+  --on-slab-rgb: var(--fill-on-rgb, 255, 255, 255);
+  --pane-edge: rgba(255, 255, 255, 0.1);
+  --crt-hov-bg: #2e343d;
+}
+
+.crt-stage[data-open],
+.crt-stage[data-open="true"] {
+  --w: 212px;
+  --h: 190px;
+  --r: var(--crt-r, 26px);
+}
+
+/* ── Centred by transform, never by a negative margin. A margin
+   would have to be animated alongside the size, and the two
+   axes run on different clocks — the box drifted 34px above
+   centre halfway through. A percentage translate is always
+   half of whatever the box is right now. */
+.crt-body {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: var(--w);
+  height: var(--h);
+  border-radius: var(--r);
+  background: var(--slab);
+  box-shadow: 0 0 0 1px var(--pane-edge);
+  pointer-events: none;
+
+  /* The spread is ONE move. Width, height and the corner all
+     run the same curve for the same time — staggering the axes
+     read as two animations queued up rather than one thing
+     changing size. Measured through the open, the two stay
+     within 3% of each other's progress.
+
+     And nothing overshoots. A spring past the target drags the
+     corner radius with it: the corners dip under 28 and come
+     back, which is a wobble rather than a bounce, and it is the
+     first thing that makes a panel look cheap. */
+  transition:
+    width         480ms cubic-bezier(0.22, 1, 0.36, 1),
+    height        480ms cubic-bezier(0.22, 1, 0.36, 1),
+    border-radius 480ms cubic-bezier(0.22, 1, 0.36, 1),
+    scale         340ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+[data-stroke="on"] .crt-body {
+  box-shadow: 0 0 0 1px var(--pane-edge);
+}
+
+/* ── a plain uniform shrink — nothing squashes and nothing
+   spreads — and in fast, because a press should be felt at
+   once and not eased into */
+.crt-stage[data-sink] .crt-body,
+.crt-stage[data-sink="true"] .crt-body {
+  scale: 0.94;
+  transition: scale 110ms;
+}
+
+/* the label is held at full strength through the press:
+   fading it during the squash hides the beat it is for */
+.crt-pill {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: var(--w);
+  height: var(--h);
+  border-radius: var(--r);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 0;
+  background: none;
+  color: var(--on-slab);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  z-index: 2;
+  letter-spacing: -0.01em;
+  transition:
+    width 480ms cubic-bezier(0.22, 1, 0.36, 1),
+    height 480ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 160ms ease,
+    scale 340ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.crt-stage[data-sink] .crt-pill,
+.crt-stage[data-sink="true"] .crt-pill {
+  scale: 0.94;
+  opacity: 1;
+  transition: scale 110ms;
+}
+
+.crt-stage[data-open] .crt-pill,
+.crt-stage[data-open="true"] .crt-pill {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 160ms ease;
+}
+
+.crt-glyph {
+  display: grid;
+  place-items: center;
+}
+
+.crt-say {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+/* ── the panel ────────────────────────────────────────────── */
+.crt-panel {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 212px;
+  height: 190px;
+  padding: 18px 10px;
+  box-sizing: border-box;
+  color: var(--on-slab);
+  pointer-events: none;
+  z-index: 3;
+}
+
+.crt-stage[data-open] .crt-panel,
+.crt-stage[data-open="true"] .crt-panel {
+  pointer-events: auto;
+}
+
+/* ── the traveling liquid highlight layer ───────────────────
+   Solid, unlike the other liquid studies. Those fade their
+   layer because the type sits behind it; here the labels are
+   white and ride ON the shape. */
+.crt-blobs {
+  position: absolute;
+  top: 18px;
+  left: 10px;
+  width: 192px;
+  height: 154px;
+  pointer-events: none;
+  filter: url(#liq-goo);
+  z-index: 1;
+}
+
+/* Into the stretch fast and out of it slowly. At equal speeds
+   it straightened while still travelling, which is exactly
+   what made the hover feel wrong. */
+.crt-hov-pill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 34px;
+  border-radius: var(--crt-row-r, 999px);
+  background: var(--crt-hov-bg);
+  pointer-events: none;
+  transform-origin: center center;
+  transition:
+    transform 380ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 180ms ease,
+    scale 300ms cubic-bezier(0.3, 0.9, 0.4, 1);
+}
+
+.crt-hov-pill[data-moving="true"] {
+  scale: 0.96 1.16;
+  transition: scale 110ms cubic-bezier(0.3, 1, 0.4, 1);
+}
+
+/* ── the rows ─────────────────────────────────────────────── */
+.crt-menu {
+  position: relative;
+  z-index: 2;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 6px;
+}
+
+.crt-item {
+  opacity: 0;
+  transform: translateY(6px);
+  transition:
+    opacity 160ms ease,
+    transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.crt-stage[data-open] .crt-item,
+.crt-stage[data-open="true"] .crt-item {
+  opacity: 1;
+  transform: none;
+}
+
+/* The rows are fully round, so each nests inside the card's
+   own corners instead of squaring off against them — and none
+   of them carries a background. The highlight is one shape on
+   its own filtered layer, so it travels between rows as a
+   single body of liquid rather than fading out of one and
+   into the next. */
+.crt-item button {
+  position: relative;
+  width: 100%;
+  height: 34px;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 0;
+  border-radius: var(--crt-row-r, 999px);
+  background: none;
+  color: rgba(var(--on-slab-rgb), 0.76);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  letter-spacing: 0em;
+  transition: color 200ms ease;
+  user-select: none;
+}
+
+.crt-item button:hover {
+  color: var(--on-slab);
+}
+
+.crt-item button:focus-visible {
+  outline: 2px solid var(--on-slab);
+  outline-offset: -2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .crt-body,
+  .crt-pill,
+  .crt-item,
+  .crt-hov-pill {
+    transition-duration: 160ms !important;
+  }
+
+  .crt-stage[data-sink] .crt-body,
+  .crt-stage[data-sink] .crt-pill,
+  .crt-stage[data-sink="true"] .crt-body,
+  .crt-stage[data-sink="true"] .crt-pill {
+    scale: 1 !important;
+  }
+}

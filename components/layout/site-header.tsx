@@ -42,7 +42,7 @@ export function SiteHeader({ breadcrumb, className = "" }: SiteHeaderProps) {
       <div className="flex items-center gap-2.5 sm:gap-3">
         <ThemeToggle />
 
-        <Button href="https://github.com/lucasmarkes/hairline" target="_blank" size="sm">
+        <Button href="https://github.com/ThaminduDasanayake/chromaline" target="_blank" size="sm">
           <Image src="/github.svg" alt="GitHub" width={14} height={14} className="h-3.5 w-3.5" />
           <span>GitHub</span>
         </Button>

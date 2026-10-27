@@ -247,6 +247,27 @@
           "target": "components/ui/checklist.tsx"
         }
       ]
+    },
+    {
+      "name": "create-menu",
+      "type": "registry:ui",
+      "title": "Create Menu",
+      "description": "Fluid morphing create button that expands into a window with continuous kinematic physics, concentric nested row radii, and traveling liquid hover droplet highlights.",
+      "dependencies": [
+        "@phosphor-icons/react@^2.1.10"
+      ],
+      "files": [
+        {
+          "path": "components/ui/create-menu.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/create-menu.tsx"
+        },
+        {
+          "path": "components/ui/create.css",
+          "type": "registry:ui",
+          "target": "components/ui/create.css"
+        }
+      ]
     }
   ]
 }
