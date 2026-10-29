@@ -3,7 +3,6 @@
 import React from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ArrowRightIcon } from "@phosphor-icons/react";
 
 export interface ComponentCardProps {
   title: string;
@@ -41,20 +40,16 @@ export function ComponentCard({
       onClick={handleCardClick}
       className={`group relative flex flex-col overflow-hidden rounded-2xl border border-black/[0.08] bg-[#f7f7f6] shadow-2xs transition-all duration-200 hover:border-black/20 hover:shadow-xs dark:border-white/10 dark:bg-[#0f0f0f] dark:hover:border-white/20 cursor-pointer ${className}`}
     >
-      {/* Name Badge - Appears on hover */}
-      <Link
-        href={href}
-        className="absolute top-3.5 left-3.5 z-20 inline-flex items-center gap-1.5 rounded-full border border-black/[0.08] bg-white/85 px-3 py-1 text-xs font-semibold tracking-tight text-slate-900 shadow-2xs backdrop-blur-md transition-all duration-200 hover:bg-white hover:text-black dark:border-white/10 dark:bg-[#181818]/85 dark:text-zinc-100 dark:hover:bg-[#202020] dark:hover:text-white opacity-0 -translate-y-1 pointer-events-none group-hover:pointer-events-auto group-hover:opacity-100 group-hover:translate-y-0"
-      >
-        <span>{title}</span>
-        <ArrowRightIcon
-          size={12}
-          className="text-slate-400 transition-transform duration-150 group-hover:translate-x-0.5 dark:text-zinc-500"
-        />
-      </Link>
-
       {/* Component Preview Canvas */}
       <div className={previewClassName}>{children}</div>
+
+      {/* Pill on Left Bottom Corner - Appears on hover matching screenshot */}
+      <Link
+        href={href}
+        className="absolute bottom-4 left-4 z-20 inline-flex items-center rounded-full bg-black/[0.08] px-3.5 py-1.5 text-xs font-normal text-slate-800 transition-all duration-200 hover:bg-black/[0.12] dark:bg-[#242426] dark:text-[#f0f0f0] dark:hover:bg-[#2c2c2f] opacity-0 translate-y-1 pointer-events-none group-hover:pointer-events-auto group-hover:opacity-100 group-hover:translate-y-0"
+      >
+        <span>{title}</span>
+      </Link>
     </div>
   );
 }

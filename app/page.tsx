@@ -42,7 +42,7 @@ export default function ChromalineHomePage() {
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
           {/* Card 1: Folder Tray */}
           <ComponentCard title="Folder Tray" href="/components/folder-tray">
-            <FolderTrayPreview />
+            <FolderTrayPreview showControls={false} />
           </ComponentCard>
 
           {/* Card 2: Folder */}
