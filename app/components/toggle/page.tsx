@@ -12,6 +12,7 @@ import {
   UsageSection,
   PropsTable,
   PropItem,
+  useComponentTheme,
 } from "@/components/docs";
 
 const CODE_EXAMPLE_LINES = [
@@ -182,20 +183,21 @@ const PROPS_DATA: PropItem[] = [
   },
 ];
 
-const THEME_OPTIONS: { key: ToggleVariant; label: string }[] = [
-  { key: "default", label: "Light" },
+const THEME_OPTIONS: { key: "light" | "dark"; label: string }[] = [
+  { key: "light", label: "Light" },
   { key: "dark", label: "Dark" },
 ];
 
 export default function ToggleDocumentationPage() {
+  const [theme, setTheme] = useComponentTheme<"light" | "dark">();
   const [checked, setChecked] = useState(false);
   const [isCustomSize, setIsCustomSize] = useState(false);
   const [presetSize, setPresetSize] = useState<ToggleSizePreset>("default");
   const [customPixelHeight, setCustomPixelHeight] = useState(30);
-  const [variant, setVariant] = useState<ToggleVariant>("default");
   const [stretch, setStretch] = useState(36);
   const [speed, setSpeed] = useState(50);
 
+  const variant: ToggleVariant = theme === "dark" ? "dark" : "default";
   const activeSize: ToggleSize = isCustomSize ? customPixelHeight : presetSize;
 
   const handleReset = () => {
@@ -203,7 +205,6 @@ export default function ToggleDocumentationPage() {
     setIsCustomSize(false);
     setPresetSize("default");
     setCustomPixelHeight(30);
-    setVariant("default");
     setStretch(36);
     setSpeed(50);
   };
@@ -217,20 +218,20 @@ export default function ToggleDocumentationPage() {
       {/* 1. Preview Canvas & Playground */}
       <ComponentPreview
         canvasClassName={`min-h-[320px] p-8 transition-colors duration-300 ${
-          variant === "dark" ? "bg-[#18181b]" : "bg-[#f4f4f5]"
+          variant === "dark" ? "bg-[#0f0f0f]" : "bg-[#f7f7f6]"
         }`}
         controls={
           <div className="grid grid-cols-1 items-end gap-6 sm:grid-cols-2 lg:grid-cols-[1fr_0.8fr_1fr_1fr_auto]">
             {/* Size control */}
             <div>
               <div className="flex items-center justify-between">
-                <label className="text-xs font-semibold text-slate-900">
+                <label className="text-xs font-semibold text-slate-900 dark:text-zinc-100">
                   {isCustomSize ? `Height (${customPixelHeight}px)` : "Size"}
                 </label>
                 <button
                   type="button"
                   onClick={() => setIsCustomSize(!isCustomSize)}
-                  className="text-[10px] font-medium text-sky-600 underline hover:text-sky-700"
+                  className="text-[10px] font-medium text-sky-600 underline hover:text-sky-700 dark:text-sky-400 dark:hover:text-sky-300"
                 >
                   {isCustomSize ? "Presets" : "Custom"}
                 </button>
@@ -263,13 +264,15 @@ export default function ToggleDocumentationPage() {
 
             {/* Theme: Light / Dark */}
             <div>
-              <label className="text-xs font-semibold text-slate-900">Theme</label>
+              <label className="text-xs font-semibold text-slate-900 dark:text-zinc-100">
+                Theme
+              </label>
               <div className="mt-2.5">
-                <SelectBar<ToggleVariant>
+                <SelectBar<"light" | "dark">
                   size="xs"
                   items={THEME_OPTIONS}
-                  value={variant}
-                  onChange={setVariant}
+                  value={theme}
+                  onChange={setTheme}
                 />
               </div>
             </div>
@@ -277,8 +280,12 @@ export default function ToggleDocumentationPage() {
             {/* Stretch slider */}
             <div>
               <div className="flex items-center justify-between">
-                <label className="text-xs font-semibold text-slate-900">Stretch</label>
-                <span className="font-mono text-xs text-slate-500">{stretch}%</span>
+                <label className="text-xs font-semibold text-slate-900 dark:text-zinc-100">
+                  Stretch
+                </label>
+                <span className="font-mono text-xs text-slate-500 dark:text-zinc-400">
+                  {stretch}%
+                </span>
               </div>
               <input
                 type="range"
@@ -293,8 +300,12 @@ export default function ToggleDocumentationPage() {
             {/* Speed slider */}
             <div>
               <div className="flex items-center justify-between">
-                <label className="text-xs font-semibold text-slate-900">Speed</label>
-                <span className="font-mono text-xs text-slate-500">{speed}%</span>
+                <label className="text-xs font-semibold text-slate-900 dark:text-zinc-100">
+                  Speed
+                </label>
+                <span className="font-mono text-xs text-slate-500 dark:text-zinc-400">
+                  {speed}%
+                </span>
               </div>
               <input
                 type="range"

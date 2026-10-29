@@ -1,9 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
-import { Checklist, ChecklistTheme } from "@/components/ui/checklist";
-import { SelectBar } from "@/components/ui/select-bar";
-import { ListChecksIcon, SunIcon, MoonIcon } from "@phosphor-icons/react";
+import { Checklist } from "@/components/ui/checklist";
+import { ListChecksIcon } from "@phosphor-icons/react";
 import {
   DocsLayout,
   ComponentPreview,
@@ -11,6 +10,8 @@ import {
   UsageSection,
   PropsTable,
   PropItem,
+  ThemeControl,
+  useComponentTheme,
 } from "@/components/docs";
 
 const CODE_EXAMPLE_LINES = [
@@ -122,7 +123,7 @@ const PROPS_DATA: PropItem[] = [
 ];
 
 export default function ChecklistPage() {
-  const [theme, setTheme] = useState<ChecklistTheme>("light");
+  const [theme, setTheme] = useComponentTheme<"light" | "dark">();
   const [bounce, setBounce] = useState<number>(50);
   const [box, setBox] = useState<number>(18);
   const [corner, setCorner] = useState<number>(20);
@@ -136,33 +137,26 @@ export default function ChecklistPage() {
       {/* 1. Preview */}
       <ComponentPreview
         canvasClassName={`min-h-[380px] p-8 transition-colors duration-300 ${
-          theme === "dark" ? "bg-[#1b1b1b]" : "bg-[#F9FAFB]"
+          theme === "dark" ? "bg-[#0f0f0f]" : "bg-[#f7f7f6]"
         }`}
         controls={
           <div className="flex flex-col gap-6">
             {/* Theme Mode */}
-            <div className="flex items-center justify-between">
-              <div>
-                <label className="text-xs font-semibold text-slate-900">Theme Mode</label>
-                <p className="mt-0.5 text-xs text-slate-500">Toggle light and dark color schemes</p>
-              </div>
-              <SelectBar<ChecklistTheme>
-                size="xs"
-                items={[
-                  { key: "light", label: "Light", icon: <SunIcon size={12} weight="bold" /> },
-                  { key: "dark", label: "Dark", icon: <MoonIcon size={12} weight="bold" /> },
-                ]}
-                value={theme}
-                onChange={setTheme}
-                ariaLabel="Select checklist theme mode"
-              />
-            </div>
+            <ThemeControl
+              value={theme}
+              onChange={setTheme}
+              ariaLabel="Select checklist theme mode"
+            />
 
             {/* Bounce Overshoot */}
             <div className="flex items-center justify-between">
               <div>
-                <label className="text-xs font-semibold text-slate-900">Bounce Overshoot</label>
-                <p className="mt-0.5 text-xs text-slate-500">Checkbox swelling bounce: {bounce}</p>
+                <label className="text-xs font-semibold text-slate-900 dark:text-zinc-100">
+                  Bounce Overshoot
+                </label>
+                <p className="mt-0.5 text-xs text-slate-500 dark:text-zinc-400">
+                  Checkbox swelling bounce: {bounce}
+                </p>
               </div>
               <input
                 type="range"
@@ -170,15 +164,19 @@ export default function ChecklistPage() {
                 max={100}
                 value={bounce}
                 onChange={(e) => setBounce(Number(e.target.value))}
-                className="w-32 accent-slate-900"
+                className="w-32 accent-slate-900 dark:accent-white"
               />
             </div>
 
             {/* Checkbox Size */}
             <div className="flex items-center justify-between">
               <div>
-                <label className="text-xs font-semibold text-slate-900">Box Size</label>
-                <p className="mt-0.5 text-xs text-slate-500">Checkbox dimensions: {box}px</p>
+                <label className="text-xs font-semibold text-slate-900 dark:text-zinc-100">
+                  Box Size
+                </label>
+                <p className="mt-0.5 text-xs text-slate-500 dark:text-zinc-400">
+                  Checkbox dimensions: {box}px
+                </p>
               </div>
               <input
                 type="range"
@@ -186,15 +184,19 @@ export default function ChecklistPage() {
                 max={28}
                 value={box}
                 onChange={(e) => setBox(Number(e.target.value))}
-                className="w-32 accent-slate-900"
+                className="w-32 accent-slate-900 dark:accent-white"
               />
             </div>
 
             {/* Corner Radius */}
             <div className="flex items-center justify-between">
               <div>
-                <label className="text-xs font-semibold text-slate-900">Corner Radius</label>
-                <p className="mt-0.5 text-xs text-slate-500">Slab border radius: {corner}px</p>
+                <label className="text-xs font-semibold text-slate-900 dark:text-zinc-100">
+                  Corner Radius
+                </label>
+                <p className="mt-0.5 text-xs text-slate-500 dark:text-zinc-400">
+                  Slab border radius: {corner}px
+                </p>
               </div>
               <input
                 type="range"
@@ -202,7 +204,7 @@ export default function ChecklistPage() {
                 max={40}
                 value={corner}
                 onChange={(e) => setCorner(Number(e.target.value))}
-                className="w-32 accent-slate-900"
+                className="w-32 accent-slate-900 dark:accent-white"
               />
             </div>
           </div>

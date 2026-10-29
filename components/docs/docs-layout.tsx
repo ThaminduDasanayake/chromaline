@@ -20,7 +20,7 @@ export function DocsLayout({
   children,
 }: DocsLayoutProps) {
   return (
-    <div className="flex min-h-screen flex-col bg-[#FAFAFA] font-sans text-slate-900 selection:bg-slate-200">
+    <div className="flex min-h-screen flex-col bg-[#f7f7f6] font-sans text-[#17181a] transition-colors duration-200 selection:bg-slate-200 dark:bg-[#000000] dark:text-zinc-100 dark:selection:bg-zinc-800">
       <SiteHeader breadcrumb={title} />
 
       <main className="mx-auto w-full max-w-4xl flex-1 px-4 py-8 sm:px-6 md:px-8">
@@ -28,14 +28,14 @@ export function DocsLayout({
 
         {/* Header */}
         <header className="mb-8">
-          <div className="flex items-center gap-2 text-xs font-semibold tracking-wider text-slate-500 uppercase">
+          <div className="flex items-center gap-2 text-xs font-semibold tracking-wider text-slate-500 uppercase dark:text-zinc-400">
             {icon}
             <span>{category}</span>
           </div>
-          <h1 className="mt-2 text-3xl font-extrabold tracking-tight text-slate-950 sm:text-4xl">
+          <h1 className="mt-2 text-3xl font-extrabold tracking-tight text-slate-950 sm:text-4xl dark:text-white">
             {title}
           </h1>
-          <p className="mt-2.5 max-w-2xl text-sm leading-relaxed text-slate-600 sm:text-base">
+          <p className="mt-2.5 max-w-2xl text-sm leading-relaxed text-slate-600 sm:text-base dark:text-zinc-400">
             {description}
           </p>
         </header>

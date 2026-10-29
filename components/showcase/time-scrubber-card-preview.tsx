@@ -2,9 +2,11 @@
 
 import React, { useState } from "react";
 import { TimeScrubber } from "@/components/ui/time-scrubber";
+import { useTheme } from "@/components/providers/theme-provider";
 
 export function TimeScrubberCardPreview() {
   const [time, setTime] = useState(570); // 9:30 AM
+  const { theme } = useTheme();
 
   return (
     <div className="flex h-full w-full items-center justify-center p-6">
@@ -15,7 +17,7 @@ export function TimeScrubberCardPreview() {
         corner={20}
         value={time}
         onChange={setTime}
-        theme="light"
+        theme={theme}
       />
     </div>
   );

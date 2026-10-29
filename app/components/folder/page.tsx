@@ -12,6 +12,8 @@ import {
   UsageSection,
   PropsTable,
   PropItem,
+  ThemeControl,
+  useComponentTheme,
 } from "@/components/docs";
 
 const TAB_POSITIONS = [
@@ -101,21 +103,27 @@ export default function FolderDemo() {
 
 const PROPS_DATA: PropItem[] = [
   {
+    name: "theme",
+    type: '"light" | "dark" | "auto"',
+    default: '"auto"',
+    desc: 'Visual theme mode for cardstock and hairlines. Automatically adapts to dark mode when set to "auto".',
+  },
+  {
     name: "bodyColor",
     type: "string",
-    default: '"#E461F5"',
-    desc: "Hex fill color for the folder card face.",
+    default: '"#E461F5" / "#1a1a1a"',
+    desc: "Hex fill color for the folder card face. In dark mode, falls back to #1a1a1a.",
   },
   {
     name: "darkOutline",
     type: "string",
-    default: '"#232327"',
+    default: '"#232327" / "#d0d6e0"',
     desc: "Stroke color for silhouette outline, header line, and active tab dot.",
   },
   {
     name: "lightOutline",
     type: "string",
-    default: '"#F9D8FD"',
+    default: '"#F9D8FD" / "#3e3e44"',
     desc: "Stroke color for the 4 ruled lines and inactive punch dots.",
   },
   {
@@ -163,12 +171,19 @@ const PROPS_DATA: PropItem[] = [
 ];
 
 export default function FolderPage() {
+  const [theme, setTheme] = useComponentTheme<"light" | "dark">();
   const [selectedColorKey, setSelectedColorKey] = useState("purple");
   const [selectedTabPos, setSelectedTabPos] = useState<"left" | "center" | "right">("center");
 
   const activeColor =
     FOLDER_COLOR_PRESETS.find((p) => p.name.toLowerCase() === selectedColorKey) ||
     FOLDER_COLOR_PRESETS[FOLDER_COLOR_PRESETS.length - 1];
+
+  // If in dark theme and White was selected, adapt to dark monochrome
+  const isWhitePreset = selectedColorKey === "white";
+  const effectiveBody = theme === "dark" && isWhitePreset ? "#1a1a1a" : activeColor.body;
+  const effectiveDark = theme === "dark" && isWhitePreset ? "#d0d6e0" : activeColor.dark;
+  const effectiveLight = theme === "dark" && isWhitePreset ? "#3e3e44" : activeColor.light;
 
   return (
     <DocsLayout
@@ -177,28 +192,45 @@ export default function FolderPage() {
     >
       {/* 1. Preview */}
       <ComponentPreview
+        canvasClassName={`min-h-[360px] p-8 transition-colors duration-300 ${
+          theme === "dark" ? "bg-[#0f0f0f]" : "bg-[#f7f7f6]"
+        }`}
         controls={
-          <div className="flex flex-wrap items-center justify-between gap-6">
-            <div>
-              <label className="text-xs font-semibold text-slate-900">Colorway</label>
-              <div className="mt-2.5">
-                <FolderColorSelectBar
-                  value={selectedColorKey}
-                  onChange={(key) => setSelectedColorKey(key)}
-                />
-              </div>
+          <div className="flex flex-col gap-6">
+            <div className="flex items-center justify-between">
+              <ThemeControl
+                value={theme}
+                onChange={setTheme}
+                ariaLabel="Select folder theme mode"
+              />
             </div>
 
-            <div>
-              <label className="text-xs font-semibold text-slate-900">Tab Position</label>
-              <div className="mt-2.5">
-                <SelectBar<"left" | "center" | "right">
-                  size="xs"
-                  items={TAB_POSITIONS}
-                  value={selectedTabPos}
-                  onChange={setSelectedTabPos}
-                  ariaLabel="Select tab position"
-                />
+            <div className="flex flex-wrap items-center justify-between gap-6">
+              <div>
+                <label className="text-xs font-semibold text-slate-900 dark:text-zinc-100">
+                  Colorway
+                </label>
+                <div className="mt-2.5">
+                  <FolderColorSelectBar
+                    value={selectedColorKey}
+                    onChange={(key) => setSelectedColorKey(key)}
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="text-xs font-semibold text-slate-900 dark:text-zinc-100">
+                  Tab Position
+                </label>
+                <div className="mt-2.5">
+                  <SelectBar<"left" | "center" | "right">
+                    size="xs"
+                    items={TAB_POSITIONS}
+                    value={selectedTabPos}
+                    onChange={setSelectedTabPos}
+                    ariaLabel="Select tab position"
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -206,9 +238,10 @@ export default function FolderPage() {
       >
         <div className="py-8">
           <Folder
-            bodyColor={activeColor.body}
-            darkOutline={activeColor.dark}
-            lightOutline={activeColor.light}
+            theme={theme}
+            bodyColor={effectiveBody}
+            darkOutline={effectiveDark}
+            lightOutline={effectiveLight}
             tabPosition={selectedTabPos}
             className="h-auto w-64 drop-shadow-md transition-all"
           />

@@ -11,6 +11,7 @@ import {
   UsageSection,
   PropsTable,
   PropItem,
+  useComponentTheme,
 } from "@/components/docs";
 
 const CODE_EXAMPLE_LINES = [
@@ -187,7 +188,7 @@ const PROPS_DATA: PropItem[] = [
 ];
 
 export default function SeekDocumentationPage() {
-  const [theme, setTheme] = useState<"light" | "dark">("light");
+  const [theme, setTheme] = useComponentTheme<"light" | "dark">();
   const [size, setSize] = useState<"sm" | "default" | "lg">("default");
   const [give, setGive] = useState(50);
   const [spring, setSpring] = useState(50);
@@ -203,13 +204,15 @@ export default function SeekDocumentationPage() {
       {/* 1. Preview */}
       <ComponentPreview
         canvasClassName={`min-h-[340px] p-8 transition-colors duration-300 ${
-          theme === "dark" ? "bg-[#18181b]" : "bg-[#f4f4f5]"
+          theme === "dark" ? "bg-[#0f0f0f]" : "bg-[#f7f7f6]"
         }`}
         controls={
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {/* Theme control */}
             <div>
-              <label className="text-xs font-semibold text-slate-900">Theme</label>
+              <label className="text-xs font-semibold text-slate-900 dark:text-zinc-100">
+                Theme
+              </label>
               <div className="mt-2.5">
                 <SelectBar<"light" | "dark">
                   size="xs"
@@ -225,7 +228,9 @@ export default function SeekDocumentationPage() {
 
             {/* Size control */}
             <div>
-              <label className="text-xs font-semibold text-slate-900">Size</label>
+              <label className="text-xs font-semibold text-slate-900 dark:text-zinc-100">
+                Size
+              </label>
               <div className="mt-2.5">
                 <SelectBar<"sm" | "default" | "lg">
                   size="xs"
@@ -243,8 +248,10 @@ export default function SeekDocumentationPage() {
             {/* Give (Magnet Pull) */}
             <div>
               <div className="flex items-center justify-between">
-                <label className="text-xs font-semibold text-slate-900">Magnetic Give</label>
-                <span className="font-mono text-xs text-slate-500">{give}%</span>
+                <label className="text-xs font-semibold text-slate-900 dark:text-zinc-100">
+                  Magnetic Give
+                </label>
+                <span className="font-mono text-xs text-slate-500 dark:text-zinc-400">{give}%</span>
               </div>
               <input
                 type="range"
@@ -259,8 +266,12 @@ export default function SeekDocumentationPage() {
             {/* Spring Settling */}
             <div>
               <div className="flex items-center justify-between">
-                <label className="text-xs font-semibold text-slate-900">Spring Kinematics</label>
-                <span className="font-mono text-xs text-slate-500">{spring}%</span>
+                <label className="text-xs font-semibold text-slate-900 dark:text-zinc-100">
+                  Spring Kinematics
+                </label>
+                <span className="font-mono text-xs text-slate-500 dark:text-zinc-400">
+                  {spring}%
+                </span>
               </div>
               <input
                 type="range"
@@ -296,16 +307,20 @@ export default function SeekDocumentationPage() {
 
       {/* Examples */}
       <section>
-        <h2 className="text-xl font-bold tracking-tight text-slate-900 sm:text-2xl">Examples</h2>
-        <div className="mt-4 overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-2xs">
-          <div className="border-b border-slate-100 px-5 py-4">
-            <h3 className="text-sm font-semibold text-slate-900">Header Toolbar (Compact)</h3>
-            <p className="mt-1 text-xs text-slate-500">
+        <h2 className="text-xl font-bold tracking-tight text-slate-900 sm:text-2xl dark:text-white">
+          Examples
+        </h2>
+        <div className="mt-4 overflow-hidden rounded-2xl border border-black/[0.08] bg-white shadow-2xs dark:border-white/10 dark:bg-[#181818]">
+          <div className="border-b border-black/[0.06] px-5 py-4 dark:border-white/10">
+            <h3 className="text-sm font-semibold text-slate-900 dark:text-zinc-100">
+              Header Toolbar (Compact)
+            </h3>
+            <p className="mt-1 text-xs text-slate-500 dark:text-zinc-400">
               Sized at <code>size=&quot;sm&quot;</code> (44px), ideal for fixed topbars and docking
               next to navigation links.
             </p>
           </div>
-          <div className="flex min-h-[160px] items-center justify-center bg-[#F9FAFB] p-6">
+          <div className="flex min-h-[160px] items-center justify-center bg-[#f7f7f6] p-6 dark:bg-[#0f0f0f]">
             <Seek
               size="sm"
               placeholder="Quick find..."

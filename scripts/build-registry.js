@@ -19,6 +19,7 @@ function buildRegistry() {
   const palettePath = path.join(__dirname, "../components/ui/palette.tsx");
   const timeScrubberPath = path.join(__dirname, "../components/ui/time-scrubber.tsx");
   const checklistPath = path.join(__dirname, "../components/ui/checklist.tsx");
+  const createMenuPath = path.join(__dirname, "../components/ui/create-menu.tsx");
 
   if (!fs.existsSync(trayPath)) {
     console.error("Component not found:", trayPath);
@@ -52,6 +53,9 @@ function buildRegistry() {
     : "";
   const checklistContent = fs.existsSync(checklistPath)
     ? fs.readFileSync(checklistPath, "utf8")
+    : "";
+  const createMenuContent = fs.existsSync(createMenuPath)
+    ? fs.readFileSync(createMenuPath, "utf8")
     : "";
 
   // 1. Full Folder Tray with Folder Support
@@ -219,7 +223,7 @@ function buildRegistry() {
     title: "Label Input",
     description:
       "A field whose label is its placeholder until focused. Outline parts from middle outward with letter-by-letter hopping text.",
-    dependencies: ["@phosphor-icons/react@^2.1.10"],
+    dependencies: ["@phosphor-icons/react@^2.1.10", "framer-motion@^14.4.0"],
     devDependencies: [],
     registryDependencies: [],
     files: [
@@ -385,6 +389,27 @@ function buildRegistry() {
     ],
   };
 
+  // 16. Create Menu
+  const createMenuRegistryItem = {
+    $schema: "https://ui.shadcn.com/schema/registry-item.json",
+    name: "create-menu",
+    type: "registry:ui",
+    title: "Create Menu",
+    description:
+      "Fluid morphing create button that expands into a window with continuous kinematic physics, concentric nested row radii, and traveling liquid hover droplet highlights.",
+    dependencies: ["@phosphor-icons/react@^2.1.10", "framer-motion@^14.4.0"],
+    devDependencies: [],
+    registryDependencies: [],
+    files: [
+      {
+        path: "components/ui/create-menu.tsx",
+        content: createMenuContent,
+        type: "registry:ui",
+        target: "components/ui/create-menu.tsx",
+      },
+    ],
+  };
+
   const outDir = path.join(__dirname, "../public/r");
   fs.mkdirSync(outDir, { recursive: true });
 
@@ -431,6 +456,10 @@ function buildRegistry() {
     path.join(outDir, "checklist.json"),
     JSON.stringify(checklistRegistryItem, null, 2)
   );
+  fs.writeFileSync(
+    path.join(outDir, "create-menu.json"),
+    JSON.stringify(createMenuRegistryItem, null, 2)
+  );
 
   const indexRegistry = {
     $schema: "https://ui.shadcn.com/schema/registry.json",
@@ -452,6 +481,7 @@ function buildRegistry() {
       paletteRegistryItem,
       timeScrubberRegistryItem,
       checklistRegistryItem,
+      createMenuRegistryItem,
     ],
   };
   fs.writeFileSync(path.join(outDir, "index.json"), JSON.stringify(indexRegistry, null, 2));
@@ -573,7 +603,7 @@ function buildRegistry() {
         title: "Label Input",
         description:
           "A field whose label is its placeholder until focused. Outline parts from middle outward with letter-by-letter hopping text.",
-        dependencies: ["@phosphor-icons/react@^2.1.10"],
+        dependencies: ["@phosphor-icons/react@^2.1.10", "framer-motion@^14.4.0"],
         files: [
           {
             path: "components/ui/label-input.tsx",
@@ -689,6 +719,21 @@ function buildRegistry() {
             path: "components/ui/checklist.tsx",
             type: "registry:ui",
             target: "components/ui/checklist.tsx",
+          },
+        ],
+      },
+      {
+        name: "create-menu",
+        type: "registry:ui",
+        title: "Create Menu",
+        description:
+          "Fluid morphing create button that expands into a window with continuous kinematic physics, concentric nested row radii, and traveling liquid hover droplet highlights.",
+        dependencies: ["@phosphor-icons/react@^2.1.10", "framer-motion@^14.4.0"],
+        files: [
+          {
+            path: "components/ui/create-menu.tsx",
+            type: "registry:ui",
+            target: "components/ui/create-menu.tsx",
           },
         ],
       },

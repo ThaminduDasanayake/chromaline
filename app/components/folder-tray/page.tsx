@@ -8,6 +8,8 @@ import {
   InstallationSection,
   PropItem,
   PropsTable,
+  ThemeControl,
+  useComponentTheme,
   UsageSection,
 } from "@/components/docs";
 
@@ -184,6 +186,12 @@ const PROPS_DATA: PropItem[] = [
     desc: "Visual theme: vibrant colored folders or monochrome white line-art.",
   },
   {
+    name: "theme",
+    type: '"light" | "dark" | "auto"',
+    default: '"auto"',
+    desc: "Visual color theme for the 3D tray, Riffle reflection engine, and folders.",
+  },
+  {
     name: "defaultSelected",
     type: "number",
     default: "0",
@@ -204,14 +212,29 @@ const PROPS_DATA: PropItem[] = [
 ];
 
 export default function FolderTrayDocumentationPage() {
+  const [theme, setTheme] = useComponentTheme<"light" | "dark">();
+
   return (
     <DocsLayout
       title="Folder Tray"
       description="Interactive 3D isometric tray of folders with custom solid colorways and click-to-open actions. Built with kinematic physics."
     >
       {/* 1. Preview */}
-      <ComponentPreview canvasClassName="p-0">
-        <FolderTrayPreview />
+      <ComponentPreview
+        canvasClassName={`p-0 transition-colors duration-300 ${
+          theme === "dark" ? "bg-[#0f0f0f]" : "bg-[#f7f7f6]"
+        }`}
+        controls={
+          <div className="flex items-center justify-between">
+            <ThemeControl
+              value={theme}
+              onChange={setTheme}
+              ariaLabel="Select folder tray theme mode"
+            />
+          </div>
+        }
+      >
+        <FolderTrayPreview theme={theme} />
       </ComponentPreview>
 
       {/* 2. Installation */}

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Palette, PaletteTheme } from "@/components/ui/palette";
+import { Palette } from "@/components/ui/palette";
 import { SelectBar } from "@/components/ui/select-bar";
 import { PaletteIcon } from "@phosphor-icons/react";
 import {
@@ -11,6 +11,8 @@ import {
   UsageSection,
   PropsTable,
   PropItem,
+  ThemeControl,
+  useComponentTheme,
 } from "@/components/docs";
 
 const CODE_EXAMPLE_LINES = [
@@ -121,7 +123,7 @@ const PROPS_DATA: PropItem[] = [
 ];
 
 export default function PaletteDocumentationPage() {
-  const [theme, setTheme] = useState<PaletteTheme>("light");
+  const [theme, setTheme] = useComponentTheme<"light" | "dark">();
   const [count, setCount] = useState<number>(4);
   const [corner, setCorner] = useState<number>(14);
   const [morph, setMorph] = useState<number>(50);
@@ -136,29 +138,24 @@ export default function PaletteDocumentationPage() {
       {/* 1. Interactive Preview */}
       <ComponentPreview
         canvasClassName={`min-h-[320px] p-8 transition-colors duration-300 ${
-          theme === "dark" ? "bg-[#18181b]" : "bg-[#f4f4f5]"
+          theme === "dark" ? "bg-[#0f0f0f]" : "bg-[#f7f7f6]"
         }`}
         controls={
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {/* Theme control */}
-            <div>
-              <label className="text-xs font-semibold text-slate-700">Theme</label>
-              <div className="mt-2.5">
-                <SelectBar<PaletteTheme>
-                  size="xs"
-                  items={[
-                    { key: "light", label: "Light" },
-                    { key: "dark", label: "Dark" },
-                  ]}
-                  value={theme}
-                  onChange={setTheme}
-                />
-              </div>
-            </div>
+            <ThemeControl
+              layout="vertical"
+              label="Theme"
+              value={theme}
+              onChange={setTheme}
+              ariaLabel="Select palette theme mode"
+            />
 
             {/* Count control */}
             <div>
-              <label className="text-xs font-semibold text-slate-700">Swatches</label>
+              <label className="text-xs font-semibold text-slate-700 dark:text-zinc-100">
+                Swatches
+              </label>
               <div className="mt-2.5">
                 <SelectBar<string>
                   size="xs"
@@ -176,8 +173,12 @@ export default function PaletteDocumentationPage() {
             {/* Corner Radius */}
             <div>
               <div className="flex items-center justify-between">
-                <label className="text-xs font-semibold text-slate-700">Corner Radius</label>
-                <span className="font-mono text-xs text-slate-500">{corner}px</span>
+                <label className="text-xs font-semibold text-slate-700 dark:text-zinc-100">
+                  Corner Radius
+                </label>
+                <span className="font-mono text-xs text-slate-500 dark:text-zinc-400">
+                  {corner}px
+                </span>
               </div>
               <input
                 type="range"
@@ -192,8 +193,12 @@ export default function PaletteDocumentationPage() {
             {/* Morph Speed */}
             <div>
               <div className="flex items-center justify-between">
-                <label className="text-xs font-semibold text-slate-700">Morph Kinematics</label>
-                <span className="font-mono text-xs text-slate-500">{morph}%</span>
+                <label className="text-xs font-semibold text-slate-700 dark:text-zinc-100">
+                  Morph Kinematics
+                </label>
+                <span className="font-mono text-xs text-slate-500 dark:text-zinc-400">
+                  {morph}%
+                </span>
               </div>
               <input
                 type="range"

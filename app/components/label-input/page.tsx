@@ -11,6 +11,7 @@ import {
   UsageSection,
   PropsTable,
   PropItem,
+  useComponentTheme,
 } from "@/components/docs";
 
 const CODE_EXAMPLE_LINES = [
@@ -205,7 +206,7 @@ const PROPS_DATA: PropItem[] = [
 ];
 
 export default function LabelInputDocumentationPage() {
-  const [theme, setTheme] = useState<"light" | "dark">("light");
+  const [theme, setTheme] = useComponentTheme<"light" | "dark">();
   const [field, setField] = useState<string>("Email");
   const [demoValue, setDemoValue] = useState<string>("");
 
@@ -218,13 +219,15 @@ export default function LabelInputDocumentationPage() {
       {/* 1. Interactive Preview */}
       <ComponentPreview
         canvasClassName={`min-h-[280px] p-8 transition-colors duration-300 ${
-          theme === "dark" ? "bg-[#18181b]" : "bg-[#f4f4f5]"
+          theme === "dark" ? "bg-[#0f0f0f]" : "bg-[#f7f7f6]"
         }`}
         controls={
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div className="flex items-center gap-6">
               <div>
-                <label className="text-xs font-semibold text-slate-700">Theme</label>
+                <label className="text-xs font-semibold text-slate-700 dark:text-zinc-100">
+                  Theme
+                </label>
                 <div className="mt-1">
                   <SelectBar<"light" | "dark">
                     items={[
@@ -238,7 +241,9 @@ export default function LabelInputDocumentationPage() {
                 </div>
               </div>
               <div>
-                <label className="text-xs font-semibold text-slate-700">Field Type</label>
+                <label className="text-xs font-semibold text-slate-700 dark:text-zinc-100">
+                  Field Type
+                </label>
                 <div className="mt-1">
                   <SelectBar
                     items={[

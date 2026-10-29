@@ -4,7 +4,6 @@ import React, { useEffect, useMemo, useState } from "react";
 import {
   Heatmap,
   HeatmapSchemeKey,
-  HeatmapMode,
   HeatmapRange,
   GITHUB_SCHEMES,
   RawContributionDay,
@@ -12,7 +11,7 @@ import {
   generateProceduralMatrix,
 } from "@/components/ui/heatmap";
 import { SelectBar } from "@/components/ui/select-bar";
-import { GitCommitIcon, SunIcon, MoonIcon } from "@phosphor-icons/react";
+import { GitCommitIcon } from "@phosphor-icons/react";
 import {
   DocsLayout,
   ComponentPreview,
@@ -20,6 +19,8 @@ import {
   UsageSection,
   PropsTable,
   PropItem,
+  ThemeControl,
+  useComponentTheme,
 } from "@/components/docs";
 
 const CODE_EXAMPLE_LINES = [
@@ -148,9 +149,9 @@ const PROPS_DATA: PropItem[] = [
 ];
 
 export default function HeatmapDocumentationPage() {
+  const [mode, setMode] = useComponentTheme<"light" | "dark">();
   const [range, setRange] = useState<HeatmapRange>("year");
   const [scheme, setScheme] = useState<HeatmapSchemeKey>("default");
-  const [mode, setMode] = useState<HeatmapMode>("light");
   const [rawContributions, setRawContributions] = useState<RawContributionDay[] | null>(null);
 
   const activePalette = (GITHUB_SCHEMES[scheme] || GITHUB_SCHEMES.default)[mode];
@@ -185,7 +186,7 @@ export default function HeatmapDocumentationPage() {
       {/* 1. Preview */}
       <ComponentPreview
         canvasClassName={`min-h-[460px] flex-col p-6 sm:p-8 transition-colors duration-300 ${
-          isDark ? "bg-[#0d1117]" : "bg-[#F9FAFB]"
+          isDark ? "bg-[#0f0f0f]" : "bg-[#f7f7f6]"
         }`}
         canvasStyle={{
           backgroundColor: isDark ? "#0d1117" : "#F9FAFB",
@@ -197,7 +198,9 @@ export default function HeatmapDocumentationPage() {
             <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
               {/* Timeline Range SelectBar */}
               <div>
-                <label className="text-xs font-semibold text-slate-900">Timeline</label>
+                <label className="text-xs font-semibold text-slate-900 dark:text-zinc-100">
+                  Timeline
+                </label>
                 <div className="mt-2">
                   <SelectBar<HeatmapRange>
                     size="xs"
@@ -213,7 +216,9 @@ export default function HeatmapDocumentationPage() {
 
               {/* Color Scheme SelectBar */}
               <div>
-                <label className="text-xs font-semibold text-slate-900">Color Scheme</label>
+                <label className="text-xs font-semibold text-slate-900 dark:text-zinc-100">
+                  Color Scheme
+                </label>
                 <div className="mt-2">
                   <SelectBar<HeatmapSchemeKey>
                     size="xs"
@@ -229,20 +234,12 @@ export default function HeatmapDocumentationPage() {
               </div>
 
               {/* Theme Mode SelectBar */}
-              <div>
-                <label className="text-xs font-semibold text-slate-900">Theme Mode</label>
-                <div className="mt-2">
-                  <SelectBar<HeatmapMode>
-                    size="xs"
-                    items={[
-                      { key: "light", label: "Light", icon: <SunIcon size={12} weight="bold" /> },
-                      { key: "dark", label: "Dark", icon: <MoonIcon size={12} weight="bold" /> },
-                    ]}
-                    value={mode}
-                    onChange={setMode}
-                  />
-                </div>
-              </div>
+              <ThemeControl
+                layout="vertical"
+                value={mode}
+                onChange={setMode}
+                ariaLabel="Select heatmap theme mode"
+              />
             </div>
 
             {/* Bottom Scale Legend */}
