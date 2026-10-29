@@ -38,7 +38,7 @@ export function ComponentCard({
   return (
     <div
       onClick={handleCardClick}
-      className={`group relative flex flex-col overflow-hidden rounded-2xl border border-black/[0.08] bg-[#f7f7f6] shadow-2xs transition-all duration-200 hover:border-black/20 hover:shadow-xs dark:border-white/10 dark:bg-[#0f0f0f] dark:hover:border-white/20 cursor-pointer ${className}`}
+      className={`group relative flex cursor-pointer flex-col overflow-hidden rounded-2xl border border-black/[0.08] bg-[#f7f7f6] shadow-2xs transition-all duration-200 hover:border-black/20 hover:shadow-xs dark:border-white/10 dark:bg-[#0f0f0f] dark:hover:border-white/20 ${className}`}
     >
       {/* Component Preview Canvas */}
       <div className={previewClassName}>{children}</div>
@@ -46,7 +46,7 @@ export function ComponentCard({
       {/* Pill on Left Bottom Corner - Appears on hover matching screenshot */}
       <Link
         href={href}
-        className="absolute bottom-4 left-4 z-20 inline-flex items-center rounded-full bg-black/[0.08] px-3.5 py-1.5 text-xs font-normal text-slate-800 transition-all duration-200 hover:bg-black/[0.12] dark:bg-[#242426] dark:text-[#f0f0f0] dark:hover:bg-[#2c2c2f] opacity-0 translate-y-1 pointer-events-none group-hover:pointer-events-auto group-hover:opacity-100 group-hover:translate-y-0"
+        className="pointer-events-none absolute bottom-4 left-4 z-20 inline-flex translate-y-1 items-center rounded-full bg-black/[0.08] px-3.5 py-1.5 text-xs font-normal text-slate-800 opacity-0 transition-all duration-200 group-hover:pointer-events-auto group-hover:translate-y-0 group-hover:opacity-100 hover:bg-black/[0.12] dark:bg-[#242426] dark:text-[#f0f0f0] dark:hover:bg-[#2c2c2f]"
       >
         <span>{title}</span>
       </Link>
