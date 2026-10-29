@@ -264,7 +264,9 @@ export default function ToggleDocumentationPage() {
 
             {/* Theme: Light / Dark */}
             <div>
-              <label className="text-xs font-semibold text-slate-900 dark:text-zinc-100">Theme</label>
+              <label className="text-xs font-semibold text-slate-900 dark:text-zinc-100">
+                Theme
+              </label>
               <div className="mt-2.5">
                 <SelectBar<"light" | "dark">
                   size="xs"
@@ -278,8 +280,12 @@ export default function ToggleDocumentationPage() {
             {/* Stretch slider */}
             <div>
               <div className="flex items-center justify-between">
-                <label className="text-xs font-semibold text-slate-900 dark:text-zinc-100">Stretch</label>
-                <span className="font-mono text-xs text-slate-500 dark:text-zinc-400">{stretch}%</span>
+                <label className="text-xs font-semibold text-slate-900 dark:text-zinc-100">
+                  Stretch
+                </label>
+                <span className="font-mono text-xs text-slate-500 dark:text-zinc-400">
+                  {stretch}%
+                </span>
               </div>
               <input
                 type="range"
@@ -294,8 +300,12 @@ export default function ToggleDocumentationPage() {
             {/* Speed slider */}
             <div>
               <div className="flex items-center justify-between">
-                <label className="text-xs font-semibold text-slate-900 dark:text-zinc-100">Speed</label>
-                <span className="font-mono text-xs text-slate-500 dark:text-zinc-400">{speed}%</span>
+                <label className="text-xs font-semibold text-slate-900 dark:text-zinc-100">
+                  Speed
+                </label>
+                <span className="font-mono text-xs text-slate-500 dark:text-zinc-400">
+                  {speed}%
+                </span>
               </div>
               <input
                 type="range"

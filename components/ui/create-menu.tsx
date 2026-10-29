@@ -2,13 +2,7 @@
 
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import {
-  FileTextIcon,
-  FolderIcon,
-  GridFourIcon,
-  PlusIcon,
-  TableIcon,
-} from "@phosphor-icons/react";
+import { FileTextIcon, FolderIcon, GridFourIcon, PlusIcon, TableIcon } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
 
 /* ══ 3 · Create ═══════════════════════════════════════════════
@@ -47,7 +41,10 @@ const CRT_MAX = 40;
 const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v));
 
 export interface CreateMenuItem {
-  icon: React.ComponentType<{ size?: number; weight?: "bold" | "regular" | "light" | "thin" | "fill" | "duotone" }>;
+  icon: React.ComponentType<{
+    size?: number;
+    weight?: "bold" | "regular" | "light" | "thin" | "fill" | "duotone";
+  }>;
   label: string;
 }
 
@@ -147,9 +144,7 @@ export function Create({
          under it. The stage is 244x244; the menu it holds is
          212x166. Hit-tested against the panel's own rectangle
          instead. */
-      const box = panel.current
-        ?.querySelector(".crt-panel")
-        ?.getBoundingClientRect();
+      const box = panel.current?.querySelector(".crt-panel")?.getBoundingClientRect();
       const on =
         !!box &&
         e.clientX >= box.left &&
@@ -189,21 +184,20 @@ export function Create({
   return (
     <motion.div
       ref={panel}
-      className={cn(
-        "crt-stage relative w-[244px] h-[244px] isolate select-none",
-        className
-      )}
+      className={cn("crt-stage relative isolate h-[244px] w-[244px] select-none", className)}
       data-open={open || undefined}
       data-sink={sink || undefined}
-      style={{
-        "--pill-w": `${pillW}px`,
-        "--crt-r": `${panelR}px`,
-        "--crt-shut-r": `${shutR.toFixed(2)}px`,
-        "--crt-row-r": `${rowR.toFixed(2)}px`,
-        ...style,
-      } as React.CSSProperties}
+      style={
+        {
+          "--pill-w": `${pillW}px`,
+          "--crt-r": `${panelR}px`,
+          "--crt-shut-r": `${shutR.toFixed(2)}px`,
+          "--crt-row-r": `${rowR.toFixed(2)}px`,
+          ...style,
+        } as React.CSSProperties
+      }
     >
-      <div className="crt-blobs absolute inset-0 pointer-events-none" aria-hidden="true">
+      <div className="crt-blobs pointer-events-none absolute inset-0" aria-hidden="true">
         {/* LIQUID_STILL, not LIQUID. A spring past the target
             takes the corner radius with it — the corners dip
             under 28 and come back, which is a wobble, not a
@@ -211,12 +205,12 @@ export function Create({
             overshoot. */}
         <motion.div
           className={cn(
-            "crt-body absolute inset-0 m-auto pointer-events-none",
+            "crt-body pointer-events-none absolute inset-0 m-auto",
             theme === "dark"
               ? "bg-[#1a1a1a] shadow-[0_0_0_1px_rgba(255,255,255,0.12)]"
               : theme === "light"
-              ? "bg-[#ffffff] shadow-[0_0_0_1px_rgba(23,24,26,0.08)]"
-              : "bg-[#ffffff] dark:bg-[#1a1a1a] shadow-[0_0_0_1px_rgba(23,24,26,0.08)] dark:shadow-[0_0_0_1px_rgba(255,255,255,0.12)]",
+                ? "bg-[#ffffff] shadow-[0_0_0_1px_rgba(23,24,26,0.08)]"
+                : "bg-[#ffffff] shadow-[0_0_0_1px_rgba(23,24,26,0.08)] dark:bg-[#1a1a1a] dark:shadow-[0_0_0_1px_rgba(255,255,255,0.12)]",
             sink
               ? "scale-[0.94] duration-160 [transition-timing-function:cubic-bezier(0.22,1,0.36,1)]"
               : "scale-100 duration-220 [transition-timing-function:cubic-bezier(0.22,1,0.36,1)]",
@@ -244,21 +238,19 @@ export function Create({
         onClick={press}
         aria-expanded={open}
         className={cn(
-          "crt-pill absolute inset-0 m-auto z-20",
-          "w-[var(--pill-w)] h-[38px]",
+          "crt-pill absolute inset-0 z-20 m-auto",
+          "h-[38px] w-[var(--pill-w)]",
           "flex items-center justify-center gap-2 border-0 bg-transparent",
-          "text-[13px] font-normal cursor-pointer tracking-normal",
+          "cursor-pointer text-[13px] font-normal tracking-normal",
           theme === "dark"
             ? "text-[#ffffff]"
             : theme === "light"
-            ? "text-[#17181a]"
-            : "text-[#17181a] dark:text-[#ffffff]",
+              ? "text-[#17181a]"
+              : "text-[#17181a] dark:text-[#ffffff]",
           sink
             ? "scale-[0.94] opacity-100 duration-160 [transition-timing-function:cubic-bezier(0.22,1,0.36,1)]"
             : "scale-100 duration-[420ms] [transition-timing-function:cubic-bezier(0.22,1,0.36,1)]",
-          open
-            ? "opacity-0 pointer-events-none duration-160 ease-out"
-            : "opacity-100 duration-160",
+          open ? "pointer-events-none opacity-0 duration-160 ease-out" : "opacity-100 duration-160",
           "transition-[opacity,transform] motion-reduce:transition-none"
         )}
       >
@@ -266,34 +258,36 @@ export function Create({
           <PlusIcon size={16} weight="regular" />
         </span>
         <span
-          className="crt-say block overflow-hidden whitespace-nowrap text-left transition-[width] duration-[420ms] [transition-timing-function:cubic-bezier(0.22,1,0.36,1)] motion-reduce:duration-160"
+          className="crt-say block overflow-hidden text-left whitespace-nowrap transition-[width] duration-[420ms] [transition-timing-function:cubic-bezier(0.22,1,0.36,1)] motion-reduce:duration-160"
           style={{ width: sayW || undefined }}
         >
-          <span ref={say} className="inline-block">Create</span>
+          <span ref={say} className="inline-block">
+            Create
+          </span>
         </span>
       </button>
 
       <div
         className={cn(
           "crt-panel absolute inset-0 m-auto",
-          "w-[212px] h-[166px] p-3 box-border z-30",
+          "z-30 box-border h-[166px] w-[212px] p-3",
           theme === "dark"
             ? "text-[#ffffff]"
             : theme === "light"
-            ? "text-[#17181a]"
-            : "text-[#17181a] dark:text-[#ffffff]",
+              ? "text-[#17181a]"
+              : "text-[#17181a] dark:text-[#ffffff]",
           open ? "pointer-events-auto" : "pointer-events-none"
         )}
       >
         {/* each row lights its own wash — see .crt-item button::before;
             nothing travels between them */}
-        <ul className="crt-menu m-0 p-0 list-none grid content-start gap-0.5">
+        <ul className="crt-menu m-0 grid list-none content-start gap-0.5 p-0">
           {items.map((it, i) => (
             <li
               key={it.label}
               className={cn(
                 "crt-item transition-[opacity,transform] duration-220 [transition-timing-function:cubic-bezier(0.22,1,0.36,1)] motion-reduce:duration-160",
-                open ? "opacity-100 translate-y-0" : "opacity-0 translate-y-1.5"
+                open ? "translate-y-0 opacity-100" : "translate-y-1.5 opacity-0"
               )}
               /* tightened with the shell. The last row used to
                  start at 162ms — after a box that now finishes
@@ -308,23 +302,23 @@ export function Create({
                   onItemSelect?.(it.label);
                 }}
                 className={cn(
-                  "relative w-full h-[34px] px-4 flex items-center gap-3",
-                  "border-0 rounded-[var(--crt-row-r,999px)] bg-transparent",
-                  "text-[13px] text-left cursor-pointer tracking-normal select-none isolate",
+                  "relative flex h-[34px] w-full items-center gap-3 px-4",
+                  "rounded-[var(--crt-row-r,999px)] border-0 bg-transparent",
+                  "isolate cursor-pointer text-left text-[13px] tracking-normal select-none",
                   "transition-colors duration-220",
                   theme === "dark"
                     ? "text-[#9a9a9a] hover:text-[#ffffff]"
                     : theme === "light"
-                    ? "text-[#5c5b56] hover:text-[#17181a]"
-                    : "text-[#5c5b56] hover:text-[#17181a] dark:text-[#9a9a9a] dark:hover:text-[#ffffff]",
-                  "before:content-[''] before:absolute before:inset-0 before:-z-10 before:rounded-[inherit]",
+                      ? "text-[#5c5b56] hover:text-[#17181a]"
+                      : "text-[#5c5b56] hover:text-[#17181a] dark:text-[#9a9a9a] dark:hover:text-[#ffffff]",
+                  "before:absolute before:inset-0 before:-z-10 before:rounded-[inherit] before:content-['']",
                   theme === "dark"
                     ? "before:bg-white/[0.09]"
                     : theme === "light"
-                    ? "before:bg-[#17181a]/[0.06]"
-                    : "before:bg-[#17181a]/[0.06] dark:before:bg-white/[0.09]",
+                      ? "before:bg-[#17181a]/[0.06]"
+                      : "before:bg-[#17181a]/[0.06] dark:before:bg-white/[0.09]",
                   "before:opacity-0 hover:before:opacity-100 focus-visible:before:opacity-100",
-                  "before:transition-opacity before:duration-220 hover:before:duration-160 before:pointer-events-none"
+                  "before:pointer-events-none before:transition-opacity before:duration-220 hover:before:duration-160"
                 )}
               >
                 <it.icon size={16} weight="regular" />

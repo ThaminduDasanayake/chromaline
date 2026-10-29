@@ -225,7 +225,9 @@ export default function LabelInputDocumentationPage() {
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div className="flex items-center gap-6">
               <div>
-                <label className="text-xs font-semibold text-slate-700 dark:text-zinc-100">Theme</label>
+                <label className="text-xs font-semibold text-slate-700 dark:text-zinc-100">
+                  Theme
+                </label>
                 <div className="mt-1">
                   <SelectBar<"light" | "dark">
                     items={[
@@ -239,7 +241,9 @@ export default function LabelInputDocumentationPage() {
                 </div>
               </div>
               <div>
-                <label className="text-xs font-semibold text-slate-700 dark:text-zinc-100">Field Type</label>
+                <label className="text-xs font-semibold text-slate-700 dark:text-zinc-100">
+                  Field Type
+                </label>
                 <div className="mt-1">
                   <SelectBar
                     items={[

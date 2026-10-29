@@ -242,7 +242,13 @@ function isDarkColor(hex?: string): boolean {
   return yiq < 160;
 }
 
-export function FolderTrayPreview({ showControls = true }: { showControls?: boolean }) {
+export function FolderTrayPreview({
+  showControls = true,
+  theme = "auto",
+}: {
+  showControls?: boolean;
+  theme?: "light" | "dark" | "auto";
+}) {
   const [folders, setFolders] = useState<FolderItem<WorkspaceData>[]>(WORKSPACE_FOLDERS);
   const [variant, setVariant] = useState<"color" | "original">("original");
   const [modalFolder, setModalFolder] = useState<FolderItem<WorkspaceData> | null>(null);
@@ -301,6 +307,7 @@ export function FolderTrayPreview({ showControls = true }: { showControls?: bool
         <FolderTray<WorkspaceData>
           folders={folders}
           variant={variant}
+          theme={theme}
           intensity={0.65}
           defaultSelected={0}
           onOpen={handleOpenFolder}
@@ -345,6 +352,7 @@ export function FolderTrayPreview({ showControls = true }: { showControls?: bool
             onClick={(e) => e.stopPropagation()}
           >
             <Folder
+              theme={theme}
               bodyColor={modalFolder.bodyColor}
               darkOutline={modalFolder.darkOutline}
               lightOutline={modalFolder.lightOutline}

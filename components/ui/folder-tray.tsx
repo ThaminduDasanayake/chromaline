@@ -10,6 +10,7 @@
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Riffle } from "@lucasmarkes/hairline/react";
+import { cn } from "@/lib/utils";
 export { Folder, type FolderProps } from "./folder";
 
 export interface FolderItem<T = unknown> {
@@ -44,13 +45,15 @@ export interface FolderItem<T = unknown> {
 export interface FolderTrayProps<T = unknown> {
   /** Array of folder cards (1 to 8). Each folder defines bodyColor, darkOutline, and lightOutline. */
   folders: FolderItem<T>[];
-  /** Visual theme variant: "color" for vibrant colored folders, "original" for clean monochrome white line-art (default: "color") */
+  /** Visual theme variant: "color" for vibrant colored folders, "original" for clean monochrome line-art (default: "color") */
   variant?: "color" | "original";
-  /** Default body color (default: "#E461F5") */
+  /** Visual theme mode: "light" | "dark" | "auto" (default: "auto") */
+  theme?: "light" | "dark" | "auto";
+  /** Default body color (default: "#E461F5" in light, "#1a1a1a" in dark) */
   defaultBodyColor?: string;
-  /** Default dark outline (default: "#232327") */
+  /** Default dark outline (default: "#232327" in light, "#d0d6e0" in dark) */
   defaultDarkOutline?: string;
-  /** Default light outline (default: "#F9D8FD") */
+  /** Default light outline (default: "#F9D8FD" in light, "#3e3e44" in dark) */
   defaultLightOutline?: string;
   /** Callback triggered when a folder is clicked */
   onOpen?: (folder: FolderItem<T>) => void;
@@ -69,9 +72,10 @@ export interface FolderTrayProps<T = unknown> {
 export function FolderTray<T = unknown>({
   folders,
   variant = "color",
-  defaultBodyColor = "#E461F5",
-  defaultDarkOutline = "#232327",
-  defaultLightOutline = "#F9D8FD",
+  theme = "auto",
+  defaultBodyColor,
+  defaultDarkOutline,
+  defaultLightOutline,
   onOpen,
   onSelect,
   onHover,
@@ -86,7 +90,46 @@ export function FolderTray<T = unknown>({
   const containerRef = useRef<HTMLDivElement>(null);
   const lastReportedCard = useRef<number | null>(null);
 
+  // Auto-detect dark mode from context/ancestor class when theme="auto"
+  const [autoDark, setAutoDark] = useState(false);
+
+  useEffect(() => {
+    if (theme !== "auto") return;
+
+    const checkDark = () => {
+      const el = containerRef.current;
+      const darkActive = Boolean(
+        el?.closest(".dark") ||
+        el?.closest('[data-theme="dark"]') ||
+        document.documentElement.classList.contains("dark") ||
+        document.documentElement.getAttribute("data-theme") === "dark"
+      );
+      setAutoDark(darkActive);
+    };
+
+    checkDark();
+
+    const observer = new MutationObserver(checkDark);
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class", "data-theme"],
+    });
+    if (containerRef.current) {
+      observer.observe(containerRef.current, {
+        attributes: true,
+        attributeFilter: ["class", "data-theme"],
+      });
+    }
+    return () => observer.disconnect();
+  }, [theme]);
+
+  const isDark = theme === "dark" ? true : theme === "light" ? false : autoDark;
+
   const isOriginal = variant === "original";
+
+  const effectiveDefaultBody = defaultBodyColor || (isDark ? "#1a1a1a" : "#E461F5");
+  const effectiveDefaultDark = defaultDarkOutline || (isDark ? "#d0d6e0" : "#232327");
+  const effectiveDefaultLight = defaultLightOutline || (isDark ? "#3e3e44" : "#F9D8FD");
 
   const getFolderItem = useCallback(
     (idx: number): FolderItem<T> | undefined => {
@@ -95,12 +138,12 @@ export function FolderTray<T = unknown>({
       if (!isOriginal) return folder;
       return {
         ...folder,
-        bodyColor: "#FFFFFF",
-        darkOutline: "#232327",
-        lightOutline: "#E0E0E4",
+        bodyColor: isDark ? "#1a1a1a" : "#FFFFFF",
+        darkOutline: isDark ? "#d0d6e0" : "#232327",
+        lightOutline: isDark ? "#3e3e44" : "#E0E0E4",
       };
     },
-    [folders, isOriginal]
+    [folders, isOriginal, isDark]
   );
 
   const activeFolder = getFolderItem(selectedIndex) || getFolderItem(0);
@@ -145,12 +188,20 @@ export function FolderTray<T = unknown>({
       cardGroups.forEach((grp, idx) => {
         const item = folders[idx];
         const body = isOriginal
-          ? "#FFFFFF"
-          : item?.bodyColor || item?.fill || item?.color || defaultBodyColor;
+          ? isDark
+            ? "#1a1a1a"
+            : "#FFFFFF"
+          : item?.bodyColor || item?.fill || item?.color || effectiveDefaultBody;
         const dark = isOriginal
-          ? "#232327"
-          : item?.darkOutline || item?.outline || defaultDarkOutline;
-        const light = isOriginal ? "#E0E0E4" : item?.lightOutline || defaultLightOutline;
+          ? isDark
+            ? "#d0d6e0"
+            : "#232327"
+          : item?.darkOutline || item?.outline || effectiveDefaultDark;
+        const light = isOriginal
+          ? isDark
+            ? "#3e3e44"
+            : "#E0E0E4"
+          : item?.lightOutline || effectiveDefaultLight;
 
         const grpEl = grp as HTMLElement;
         grpEl.setAttribute("data-card-index", String(idx));
@@ -214,9 +265,10 @@ export function FolderTray<T = unknown>({
     selectedIndex,
     triggerCardAction,
     isOriginal,
-    defaultBodyColor,
-    defaultDarkOutline,
-    defaultLightOutline,
+    isDark,
+    effectiveDefaultBody,
+    effectiveDefaultDark,
+    effectiveDefaultLight,
   ]);
 
   // Smooth throttled onRead: only update hover index when crossing between distinct folders
@@ -277,19 +329,37 @@ export function FolderTray<T = unknown>({
   const cssColorVariables: Record<string, string> = {};
   folders.slice(0, 8).forEach((item, idx) => {
     const body = isOriginal
-      ? "#FFFFFF"
-      : item.bodyColor || item.fill || item.color || defaultBodyColor;
-    const dark = isOriginal ? "#232327" : item.darkOutline || item.outline || defaultDarkOutline;
-    const light = isOriginal ? "#E0E0E4" : item.lightOutline || defaultLightOutline;
+      ? isDark
+        ? "#1a1a1a"
+        : "#FFFFFF"
+      : item.bodyColor || item.fill || item.color || effectiveDefaultBody;
+    const dark = isOriginal
+      ? isDark
+        ? "#d0d6e0"
+        : "#232327"
+      : item.darkOutline || item.outline || effectiveDefaultDark;
+    const light = isOriginal
+      ? isDark
+        ? "#3e3e44"
+        : "#E0E0E4"
+      : item.lightOutline || effectiveDefaultLight;
 
     cssColorVariables[`--folder-body-${idx}`] = body;
     cssColorVariables[`--folder-dark-${idx}`] = dark;
     cssColorVariables[`--folder-light-${idx}`] = light;
   });
 
+  const riffleTheme = isDark ? "dark" : "light";
+
   return (
     <div
-      className={`folder-tray relative aspect-[5/4] w-full max-w-[460px] select-none [&_[data-card-index]_circle.dot]:![fill:var(--folder-dark,#232327)] [&_[data-card-index]_circle.dot]:![stroke:none] [&_[data-card-index]_circle.dot.m]:![fill:var(--folder-dark,#232327)] [&_[data-card-index]_circle.dot.off]:![fill:var(--folder-light,#e0e0e4)] [&_[data-card-index]_path.lo:not(.nf)]:![fill:var(--folder-body,#fff)] [&_[data-card-index]_path.lo:not(.nf)]:![stroke:var(--folder-light,#e0e0e4)] [&_[data-card-index]_path.nf.lo]:![fill:none] [&_[data-card-index]_path.nf.lo]:![stroke:var(--folder-light,#e0e0e4)] [&_[data-card-index]_path.nf:not(.lo)]:![fill:none] [&_[data-card-index]_path.nf:not(.lo)]:![stroke:var(--folder-dark,#232327)] [&_[data-card-index]_path.sil]:![fill:var(--folder-body,#fff)] [&_[data-card-index]_path.sil]:![stroke:var(--folder-dark,#232327)] ${className}`}
+      className={cn(
+        "folder-tray relative aspect-[5/4] w-full max-w-[460px] select-none",
+        isDark
+          ? "[&_[data-card-index]_circle.dot]:![fill:var(--folder-dark,#d0d6e0)] [&_[data-card-index]_circle.dot]:![stroke:none] [&_[data-card-index]_circle.dot.m]:![fill:var(--folder-dark,#d0d6e0)] [&_[data-card-index]_circle.dot.off]:![fill:var(--folder-light,#3e3e44)] [&_[data-card-index]_path.lo:not(.nf)]:![fill:var(--folder-body,#1a1a1a)] [&_[data-card-index]_path.lo:not(.nf)]:![stroke:var(--folder-light,#3e3e44)] [&_[data-card-index]_path.nf.lo]:![fill:none] [&_[data-card-index]_path.nf.lo]:![stroke:var(--folder-light,#3e3e44)] [&_[data-card-index]_path.nf:not(.lo)]:![fill:none] [&_[data-card-index]_path.nf:not(.lo)]:![stroke:var(--folder-dark,#d0d6e0)] [&_[data-card-index]_path.sil]:![fill:var(--folder-body,#1a1a1a)] [&_[data-card-index]_path.sil]:![stroke:var(--folder-dark,#d0d6e0)]"
+          : "[&_[data-card-index]_circle.dot]:![fill:var(--folder-dark,#232327)] [&_[data-card-index]_circle.dot]:![stroke:none] [&_[data-card-index]_circle.dot.m]:![fill:var(--folder-dark,#232327)] [&_[data-card-index]_circle.dot.off]:![fill:var(--folder-light,#e0e0e4)] [&_[data-card-index]_path.lo:not(.nf)]:![fill:var(--folder-body,#fff)] [&_[data-card-index]_path.lo:not(.nf)]:![stroke:var(--folder-light,#e0e0e4)] [&_[data-card-index]_path.nf.lo]:![fill:none] [&_[data-card-index]_path.nf.lo]:![stroke:var(--folder-light,#e0e0e4)] [&_[data-card-index]_path.nf:not(.lo)]:![fill:none] [&_[data-card-index]_path.nf:not(.lo)]:![stroke:var(--folder-dark,#232327)] [&_[data-card-index]_path.sil]:![fill:var(--folder-body,#fff)] [&_[data-card-index]_path.sil]:![stroke:var(--folder-dark,#232327)]",
+        className
+      )}
       style={{ ...(style || {}), ...cssColorVariables } as React.CSSProperties}
     >
       {/* 3D Isometric Folder Tray Container */}
@@ -308,7 +378,7 @@ export function FolderTray<T = unknown>({
       >
         <Riffle
           intensity={intensity}
-          theme="light"
+          theme={riffleTheme}
           onRead={handleRead}
           style={{ width: "100%", height: "100%" }}
         />

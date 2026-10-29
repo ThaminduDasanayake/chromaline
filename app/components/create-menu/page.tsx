@@ -129,8 +129,12 @@ export default function CreateMenuPage() {
             {/* Corner Radius */}
             <div className="flex items-center justify-between">
               <div>
-                <label className="text-xs font-semibold text-slate-900 dark:text-zinc-100">Corner Radius</label>
-                <p className="mt-0.5 text-xs text-slate-500 dark:text-zinc-400">Outer radius: {corner}px (inner: {Math.min(17, Math.max(0, corner - 10))}px)</p>
+                <label className="text-xs font-semibold text-slate-900 dark:text-zinc-100">
+                  Corner Radius
+                </label>
+                <p className="mt-0.5 text-xs text-slate-500 dark:text-zinc-400">
+                  Outer radius: {corner}px (inner: {Math.min(17, Math.max(0, corner - 10))}px)
+                </p>
               </div>
               <input
                 type="range"

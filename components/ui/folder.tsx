@@ -8,9 +8,11 @@
  * https://github.com/lucasmarkes/hairline
  */
 
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 export interface FolderProps {
+  /** Visual theme mode: "light", "dark", or "auto" (detects system/ancestor .dark) */
+  theme?: "light" | "dark" | "auto";
   bodyColor?: string;
   darkOutline?: string;
   lightOutline?: string;
@@ -91,9 +93,10 @@ const SILHOUETTES = [
  * using geometric vector paths, tab fillets, ruled lines, and punch dots.
  */
 export function Folder({
-  bodyColor = "#E461F5",
-  darkOutline = "#232327",
-  lightOutline = "#F9D8FD",
+  theme = "auto",
+  bodyColor,
+  darkOutline,
+  lightOutline,
   borderWidth = 1.2,
   depth = true,
   folderIndex = 0,
@@ -102,6 +105,47 @@ export function Folder({
   className = "w-44 h-auto drop-shadow-sm",
   children,
 }: FolderProps) {
+  const containerRef = useRef<SVGSVGElement | HTMLDivElement | null>(null);
+
+  // Auto-detect dark mode from context/ancestor class when theme="auto"
+  const [autoDark, setAutoDark] = useState(false);
+
+  useEffect(() => {
+    if (theme !== "auto") return;
+
+    const checkDark = () => {
+      const el = containerRef.current;
+      const darkActive = Boolean(
+        el?.closest(".dark") ||
+        el?.closest('[data-theme="dark"]') ||
+        document.documentElement.classList.contains("dark") ||
+        document.documentElement.getAttribute("data-theme") === "dark"
+      );
+      setAutoDark(darkActive);
+    };
+
+    checkDark();
+
+    const observer = new MutationObserver(checkDark);
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class", "data-theme"],
+    });
+    if (containerRef.current) {
+      observer.observe(containerRef.current, {
+        attributes: true,
+        attributeFilter: ["class", "data-theme"],
+      });
+    }
+    return () => observer.disconnect();
+  }, [theme]);
+
+  const isDark = theme === "dark" ? true : theme === "light" ? false : autoDark;
+
+  const effectiveBodyColor = bodyColor || (isDark ? "#1a1a1a" : "#E461F5");
+  const effectiveDarkOutline = darkOutline || (isDark ? "#d0d6e0" : "#232327");
+  const effectiveLightOutline = lightOutline || (isDark ? "#3e3e44" : "#F9D8FD");
+
   // Determine tab index: 0 = left, 1 = center, 2 = right
   let tabIdx = 1;
   if (tabPosition === "left") tabIdx = 0;
@@ -127,6 +171,7 @@ export function Folder({
 
   const svgContent = (
     <svg
+      ref={!children ? (containerRef as React.RefObject<SVGSVGElement>) : undefined}
       viewBox={depthValue > 0 ? "-2 -2 89 66" : "-2 -1 88 65"}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
@@ -137,8 +182,8 @@ export function Folder({
         <path
           d={silhouettePath}
           transform={`translate(${depthOffsetX}, ${depthOffsetY})`}
-          fill={bodyColor}
-          stroke={lightOutline}
+          fill={effectiveBodyColor}
+          stroke={effectiveLightOutline}
           strokeWidth={borderWidth}
           vectorEffect="non-scaling-stroke"
           strokeLinejoin="round"
@@ -148,8 +193,8 @@ export function Folder({
       {/* 1. Main Folder Silhouette Face (Front Face with Dark Outline) */}
       <path
         d={silhouettePath}
-        fill={bodyColor}
-        stroke={darkOutline}
+        fill={effectiveBodyColor}
+        stroke={effectiveDarkOutline}
         strokeWidth={borderWidth}
         vectorEffect="non-scaling-stroke"
         strokeLinejoin="round"
@@ -162,7 +207,7 @@ export function Folder({
           y1="19"
           x2="78"
           y2="19"
-          stroke={darkOutline}
+          stroke={effectiveDarkOutline}
           strokeWidth={dividerStrokeWidth}
           vectorEffect="non-scaling-stroke"
           strokeLinecap="round"
@@ -178,7 +223,7 @@ export function Folder({
             y1={y}
             x2="78"
             y2={y}
-            stroke={lightOutline}
+            stroke={effectiveLightOutline}
             strokeWidth={dividerStrokeWidth}
             vectorEffect="non-scaling-stroke"
             strokeLinecap="round"
@@ -197,7 +242,7 @@ export function Folder({
             cx={cx}
             cy={cy}
             r={1.05}
-            fill={isActive ? darkOutline : lightOutline}
+            fill={isActive ? effectiveDarkOutline : effectiveLightOutline}
             stroke="none"
           />
         );
@@ -210,7 +255,7 @@ export function Folder({
   }
 
   return (
-    <div className={`relative ${className}`}>
+    <div ref={containerRef as React.RefObject<HTMLDivElement>} className={`relative ${className}`}>
       {svgContent}
       <div className="absolute inset-0 flex flex-col">{children}</div>
     </div>

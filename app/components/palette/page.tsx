@@ -153,7 +153,9 @@ export default function PaletteDocumentationPage() {
 
             {/* Count control */}
             <div>
-              <label className="text-xs font-semibold text-slate-700 dark:text-zinc-100">Swatches</label>
+              <label className="text-xs font-semibold text-slate-700 dark:text-zinc-100">
+                Swatches
+              </label>
               <div className="mt-2.5">
                 <SelectBar<string>
                   size="xs"
@@ -171,8 +173,12 @@ export default function PaletteDocumentationPage() {
             {/* Corner Radius */}
             <div>
               <div className="flex items-center justify-between">
-                <label className="text-xs font-semibold text-slate-700 dark:text-zinc-100">Corner Radius</label>
-                <span className="font-mono text-xs text-slate-500 dark:text-zinc-400">{corner}px</span>
+                <label className="text-xs font-semibold text-slate-700 dark:text-zinc-100">
+                  Corner Radius
+                </label>
+                <span className="font-mono text-xs text-slate-500 dark:text-zinc-400">
+                  {corner}px
+                </span>
               </div>
               <input
                 type="range"
@@ -187,8 +193,12 @@ export default function PaletteDocumentationPage() {
             {/* Morph Speed */}
             <div>
               <div className="flex items-center justify-between">
-                <label className="text-xs font-semibold text-slate-700 dark:text-zinc-100">Morph Kinematics</label>
-                <span className="font-mono text-xs text-slate-500 dark:text-zinc-400">{morph}%</span>
+                <label className="text-xs font-semibold text-slate-700 dark:text-zinc-100">
+                  Morph Kinematics
+                </label>
+                <span className="font-mono text-xs text-slate-500 dark:text-zinc-400">
+                  {morph}%
+                </span>
               </div>
               <input
                 type="range"

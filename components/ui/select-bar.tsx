@@ -237,7 +237,7 @@ export function SelectBar<T extends string = string>({
             type="button"
             className={`relative z-2 flex cursor-pointer items-center justify-center rounded-full border-0 bg-transparent leading-none text-slate-900 transition-opacity duration-260 ease-[cubic-bezier(0.32,0.72,0.24,1)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-900 dark:focus-visible:outline-white ${
               isSelected || isSwatch
-                ? "opacity-100 font-medium dark:text-white"
+                ? "font-medium opacity-100 dark:text-white"
                 : "opacity-[0.42] hover:opacity-[0.72] dark:text-[#9a9a9a] dark:opacity-100 dark:hover:text-white"
             }`}
             data-active={isSelected}
