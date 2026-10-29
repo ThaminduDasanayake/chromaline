@@ -12,7 +12,7 @@ export const BUTTON_VARIANTS = [
   { key: "emerald" as const, label: "Emerald", color: "#059669", darkOutline: "#047857" },
 ];
 
-export function ButtonCardPreview() {
+export function ButtonCardPreview({ showControls = false }: { showControls?: boolean } = {}) {
   const [buttonVariant, setButtonVariant] = useState<"default" | "dark" | "orange" | "emerald">(
     "default"
   );
@@ -25,16 +25,18 @@ export function ButtonCardPreview() {
       </Button>
 
       {/* Quick Interactive Variant Controls */}
-      <div className="absolute inset-x-0 bottom-4 flex items-center justify-center gap-2">
-        <SelectBar<"default" | "dark" | "orange" | "emerald">
-          variant="swatches"
-          size="xs"
-          items={BUTTON_VARIANTS}
-          value={buttonVariant}
-          onChange={setButtonVariant}
-          ariaLabel="Select button variant"
-        />
-      </div>
+      {showControls && (
+        <div className="absolute inset-x-0 bottom-4 flex items-center justify-center gap-2">
+          <SelectBar<"default" | "dark" | "orange" | "emerald">
+            variant="swatches"
+            size="xs"
+            items={BUTTON_VARIANTS}
+            value={buttonVariant}
+            onChange={setButtonVariant}
+            ariaLabel="Select button variant"
+          />
+        </div>
+      )}
     </>
   );
 }

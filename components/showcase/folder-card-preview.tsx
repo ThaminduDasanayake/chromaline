@@ -26,7 +26,7 @@ export const TAB_POSITIONS = [
   },
 ];
 
-export function FolderCardPreview() {
+export function FolderCardPreview({ showControls = false }: { showControls?: boolean } = {}) {
   const [selectedColorKey, setSelectedColorKey] = useState("purple");
   const [selectedFolderTab, setSelectedFolderTab] = useState<"left" | "center" | "right">("center");
 
@@ -45,22 +45,24 @@ export function FolderCardPreview() {
       />
 
       {/* Quick Interactive Color & Tab Controls */}
-      <div className="absolute inset-x-0 bottom-4 flex flex-wrap items-center justify-center gap-2 px-2">
-        {/* Color Swatches with Elastic Indicator */}
-        <FolderColorSelectBar
-          value={selectedColorKey}
-          onChange={(key) => setSelectedColorKey(key)}
-        />
+      {showControls && (
+        <div className="absolute inset-x-0 bottom-4 flex flex-wrap items-center justify-center gap-2 px-2">
+          {/* Color Swatches with Elastic Indicator */}
+          <FolderColorSelectBar
+            value={selectedColorKey}
+            onChange={(key) => setSelectedColorKey(key)}
+          />
 
-        {/* Tab Position Switcher with Elastic Indicator */}
-        <SelectBar<"left" | "center" | "right">
-          size="xs"
-          items={TAB_POSITIONS}
-          value={selectedFolderTab}
-          onChange={setSelectedFolderTab}
-          ariaLabel="Select tab position"
-        />
-      </div>
+          {/* Tab Position Switcher with Elastic Indicator */}
+          <SelectBar<"left" | "center" | "right">
+            size="xs"
+            items={TAB_POSITIONS}
+            value={selectedFolderTab}
+            onChange={setSelectedFolderTab}
+            ariaLabel="Select tab position"
+          />
+        </div>
+      )}
     </>
   );
 }

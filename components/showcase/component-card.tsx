@@ -2,11 +2,11 @@
 
 import React from "react";
 import Link from "next/link";
-import { ArrowRightIcon } from "@phosphor-icons/react";
+import { useRouter } from "next/navigation";
 
 export interface ComponentCardProps {
   title: string;
-  description: string;
+  description?: string;
   href: string;
   children: React.ReactNode;
   previewClassName?: string;
@@ -15,36 +15,40 @@ export interface ComponentCardProps {
 
 export function ComponentCard({
   title,
-  description,
   href,
   children,
-  previewClassName = "relative flex h-80 sm:h-88 shrink-0 flex-col items-center justify-center overflow-hidden bg-[#f7f7f6] p-6 transition-colors duration-200 dark:bg-[#0f0f0f]",
+  previewClassName = "relative flex h-80 sm:h-88 w-full flex-col items-center justify-center overflow-hidden p-6",
   className = "",
 }: ComponentCardProps) {
+  const router = useRouter();
+
+  const handleCardClick = (e: React.MouseEvent) => {
+    const target = e.target as HTMLElement;
+    // Don't trigger card navigation if clicking interactive controls inside the preview
+    if (
+      target.closest(
+        "button, input, select, textarea, a, [role='button'], [role='slider'], [data-interactive]"
+      )
+    ) {
+      return;
+    }
+    router.push(href);
+  };
+
   return (
     <div
-      className={`group flex flex-col overflow-hidden rounded-2xl border border-black/[0.08] bg-white shadow-2xs transition-all hover:border-black/20 dark:border-white/10 dark:bg-[#181818] dark:hover:border-white/20 ${className}`}
+      onClick={handleCardClick}
+      className={`group relative flex cursor-pointer flex-col overflow-hidden rounded-2xl border border-black/[0.08] bg-[#f7f7f6] shadow-2xs transition-all duration-200 hover:border-black/20 hover:shadow-xs dark:border-white/10 dark:bg-[#0f0f0f] dark:hover:border-white/20 ${className}`}
     >
-      {/* Interactive Preview Canvas */}
+      {/* Component Preview Canvas */}
       <div className={previewClassName}>{children}</div>
 
-      {/* Bottom Card Footer - Link */}
+      {/* Pill on Left Bottom Corner - Appears on hover matching screenshot */}
       <Link
         href={href}
-        className="flex flex-1 cursor-pointer items-center justify-between border-t border-black/[0.06] bg-white p-5 transition-colors hover:bg-slate-50/60 sm:p-6 dark:border-white/10 dark:bg-[#181818] dark:hover:bg-white/5"
+        className="pointer-events-none absolute bottom-4 left-4 z-20 inline-flex translate-y-1 items-center rounded-full bg-black/[0.08] px-3.5 py-1.5 text-xs font-normal text-slate-800 opacity-0 transition-all duration-200 group-hover:pointer-events-auto group-hover:translate-y-0 group-hover:opacity-100 hover:bg-black/[0.12] dark:bg-[#242426] dark:text-[#f0f0f0] dark:hover:bg-[#2c2c2f]"
       >
-        <div>
-          <h2 className="text-sm font-semibold text-slate-900 transition-colors group-hover:text-slate-950 sm:text-base dark:text-white dark:group-hover:text-white">
-            {title}
-          </h2>
-          <p className="mt-1.5 text-xs leading-relaxed text-slate-500 dark:text-zinc-400">
-            {description}
-          </p>
-        </div>
-
-        <span className="ml-4 shrink-0 text-slate-400 transition-all group-hover:translate-x-1 group-hover:text-slate-950 dark:text-zinc-500 dark:group-hover:text-white">
-          <ArrowRightIcon size={16} />
-        </span>
+        <span>{title}</span>
       </Link>
     </div>
   );
