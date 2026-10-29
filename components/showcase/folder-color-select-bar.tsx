@@ -11,10 +11,11 @@ export interface FolderColorPreset {
 }
 
 /**
- * 8 macOS Finder Tag Colorways for Chromaline Folders.
- * Ordered from clean White through Gray, Red, Orange, Yellow, Green, Blue, to Purple.
+ * 9 Colorways for Chromaline Folders.
+ * Ordered from Dark and clean White through Gray, Red, Orange, Yellow, Green, Blue, to Purple.
  */
 export const FOLDER_COLOR_PRESETS: FolderColorPreset[] = [
+  { name: "Dark", body: "#1a1a1a", dark: "#d0d6e0", light: "#3e3e44" },
   { name: "White", body: "#FFFFFF", dark: "#232327", light: "#E0E0E4" },
   { name: "Gray", body: "#ADACB0", dark: "#232327", light: "#E4E3E6" },
   { name: "Red", body: "#FF6C6C", dark: "#232327", light: "#FFD1D2" },

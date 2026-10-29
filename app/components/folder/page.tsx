@@ -179,12 +179,6 @@ export default function FolderPage() {
     FOLDER_COLOR_PRESETS.find((p) => p.name.toLowerCase() === selectedColorKey) ||
     FOLDER_COLOR_PRESETS[FOLDER_COLOR_PRESETS.length - 1];
 
-  // If in dark theme and White was selected, adapt to dark monochrome
-  const isWhitePreset = selectedColorKey === "white";
-  const effectiveBody = theme === "dark" && isWhitePreset ? "#1a1a1a" : activeColor.body;
-  const effectiveDark = theme === "dark" && isWhitePreset ? "#d0d6e0" : activeColor.dark;
-  const effectiveLight = theme === "dark" && isWhitePreset ? "#3e3e44" : activeColor.light;
-
   return (
     <DocsLayout
       title="Folder"
@@ -239,9 +233,9 @@ export default function FolderPage() {
         <div className="py-8">
           <Folder
             theme={theme}
-            bodyColor={effectiveBody}
-            darkOutline={effectiveDark}
-            lightOutline={effectiveLight}
+            bodyColor={activeColor.body}
+            darkOutline={activeColor.dark}
+            lightOutline={activeColor.light}
             tabPosition={selectedTabPos}
             className="h-auto w-64 drop-shadow-md transition-all"
           />

@@ -230,6 +230,7 @@ export const FOLDER_COLOR_OPTIONS = [
   { name: "Red", body: "#FF6C6C", dark: "#232327", light: "#FFD1D2" },
   { name: "Gray", body: "#ADACB0", dark: "#232327", light: "#E4E3E6" },
   { name: "White", body: "#FFFFFF", dark: "#232327", light: "#E0E0E4" },
+  { name: "Dark", body: "#1a1a1a", dark: "#d0d6e0", light: "#3e3e44" },
 ];
 
 function isDarkColor(hex?: string): boolean {
