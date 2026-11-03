@@ -1,23 +1,16 @@
 "use client";
 
-import React, {
-  useCallback,
-  useEffect,
-  useId,
-  useRef,
-  useState,
-} from "react";
+import React, { useCallback, useEffect, useId, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 
 const clamp = (v: number, a: number, b: number) => Math.min(b, Math.max(a, v));
 
 export type LabelTextareaTheme = "light" | "dark";
 
-export interface LabelTextareaProps
-  extends Omit<
-    React.TextareaHTMLAttributes<HTMLTextAreaElement>,
-    "width" | "height"
-  > {
+export interface LabelTextareaProps extends Omit<
+  React.TextareaHTMLAttributes<HTMLTextAreaElement>,
+  "width" | "height"
+> {
   /** Field label text */
   label?: string;
   /** Corner radius in px. Default: 18 */
@@ -89,8 +82,7 @@ export function LabelTextarea({
 
   useEffect(() => {
     if (labelNodeRef.current) {
-      const width =
-        labelNodeRef.current.offsetWidth || labelNodeRef.current.scrollWidth;
+      const width = labelNodeRef.current.offsetWidth || labelNodeRef.current.scrollWidth;
       if (width > 0) {
         setLw(width);
       }
@@ -117,13 +109,24 @@ export function LabelTextarea({
   }, [propWidth]);
 
   const measuredWidth = propWidth || fluidWidth;
+  const W = measuredWidth;
+  const r = clamp(corner, 0, Math.min(W / 2, 80));
+  const S = 0.78; // Lifted label scale factor
+  const IN = 0.75; // Half-stroke inset to prevent SVG clipping
 
-  // Auto-expand textarea height on value change
+  /* ── Horizontal Inset Padding ───────────────────────────────
+     lx = horizontal padding for text and starting X for label.
+     As corner radius grows, text must inset past the curved corner arcs
+     to avoid spilling into the rounded corners.
+  */
+  const lx = Math.max(16, r + 4);
+
+  // Auto-expand textarea height on value, width, or corner change
   const adjustHeight = useCallback(() => {
     const textarea = textareaRef.current;
     if (!textarea) return;
 
-    // Reset height temporarily to accurately measure scrollHeight
+    // Reset height temporarily to accurately measure scrollHeight with current padding
     textarea.style.height = "auto";
     const nextHeight = clamp(textarea.scrollHeight, minHeight, maxHeight);
     setMeasuredHeight(nextHeight);
@@ -132,23 +135,16 @@ export function LabelTextarea({
 
   useEffect(() => {
     adjustHeight();
-  }, [currentValue, adjustHeight, measuredWidth]);
+  }, [currentValue, adjustHeight, measuredWidth, lx]);
 
   const up = focus || currentValue.length > 0;
-
-  const W = measuredWidth;
   const H = measuredHeight;
-  const r = clamp(corner, 0, Math.min(W / 2, H / 2));
-  const S = 0.78; // Lifted label scale factor
-  const IN = 0.75; // Half-stroke inset to prevent SVG clipping
 
   /* ── Notch Geometry ──────────────────────────────────────────
      The notch opens along the straight part of the top edge:
-     lx = starting X position of the label text
      x0 = left notch edge (starts at least after the corner arc)
      x1 = right notch edge (accommodates the scaled label + padding)
   */
-  const lx = Math.max(14, r + 4);
   const x0 = Math.max(r, lx - 4);
   const x1 = Math.min(W - r, lx + lw * S + 6);
   const a = Math.max(0, r - IN);
@@ -213,7 +209,7 @@ export function LabelTextarea({
       style={propWidth ? { width: propWidth } : undefined}
     >
       <div
-        className="relative cursor-text bg-transparent select-none transition-[height] duration-150 ease-out"
+        className="relative cursor-text bg-transparent transition-[height] duration-150 ease-out select-none"
         style={{
           width: propWidth ? W : "100%",
           height: H,
@@ -316,9 +312,7 @@ export function LabelTextarea({
             <span
               key={i}
               className={`inline-block motion-reduce:animate-none ${
-                focus
-                  ? "animate-[lbi-hop_460ms_cubic-bezier(0.3,0.7,0.3,1)_both]"
-                  : ""
+                focus ? "animate-[lbi-hop_460ms_cubic-bezier(0.3,0.7,0.3,1)_both]" : ""
               }`}
               style={{ animationDelay: `${i * 24}ms` }}
             >
@@ -334,7 +328,9 @@ export function LabelTextarea({
           className={cn(
             "absolute inset-0 w-full resize-none rounded-[inherit] border-0 bg-transparent text-[15px] leading-relaxed tracking-[-0.01em] transition-[color] duration-200 outline-none",
             isDark ? "text-[#ffffff]" : "text-[#18181b]",
-            "scrollbar-thin scrollbar-thumb-zinc-400 dark:scrollbar-thumb-zinc-600"
+            measuredHeight < maxHeight
+              ? "overflow-hidden"
+              : "scrollbar-thin scrollbar-thumb-zinc-400 overflow-y-auto dark:scrollbar-thumb-zinc-600"
           )}
           style={{
             paddingLeft: lx,

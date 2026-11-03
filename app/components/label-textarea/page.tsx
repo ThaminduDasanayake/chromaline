@@ -52,17 +52,11 @@ const CODE_EXAMPLE_LINES = [
   },
   {
     num: 8,
-    parts: [
-      { text: "      label", cls: "text-purple-600" },
-      { text: '="Feedback"' },
-    ],
+    parts: [{ text: "      label", cls: "text-purple-600" }, { text: '="Feedback"' }],
   },
   {
     num: 9,
-    parts: [
-      { text: "      value", cls: "text-purple-600" },
-      { text: "={message}" },
-    ],
+    parts: [{ text: "      value", cls: "text-purple-600" }, { text: "={message}" }],
   },
   {
     num: 10,
@@ -73,24 +67,15 @@ const CODE_EXAMPLE_LINES = [
   },
   {
     num: 11,
-    parts: [
-      { text: "      minHeight", cls: "text-purple-600" },
-      { text: "={96}" },
-    ],
+    parts: [{ text: "      minHeight", cls: "text-purple-600" }, { text: "={96}" }],
   },
   {
     num: 12,
-    parts: [
-      { text: "      showCount", cls: "text-purple-600" },
-      { text: "={true}" },
-    ],
+    parts: [{ text: "      showCount", cls: "text-purple-600" }, { text: "={true}" }],
   },
   {
     num: 13,
-    parts: [
-      { text: "      maxLength", cls: "text-purple-600" },
-      { text: "={300}" },
-    ],
+    parts: [{ text: "      maxLength", cls: "text-purple-600" }, { text: "={300}" }],
   },
   { num: 14, parts: [{ text: "    />", cls: "text-slate-500" }] },
   { num: 15, parts: [{ text: "  );" }] },
