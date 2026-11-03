@@ -10,6 +10,7 @@ import {
   HeatmapCardPreview,
   ToggleCardPreview,
   LabelInputCardPreview,
+  LabelTextareaCardPreview,
   AspectRatioCardPreview,
   CounterCardPreview,
   WakeSliderCardPreview,
@@ -78,6 +79,11 @@ export default function ChromalineHomePage() {
           {/* Card 8: Label Input */}
           <ComponentCard title="Label Input" href="/components/label-input">
             <LabelInputCardPreview />
+          </ComponentCard>
+
+          {/* Card 8b: Label Textarea */}
+          <ComponentCard title="Label Textarea" href="/components/label-textarea">
+            <LabelTextareaCardPreview />
           </ComponentCard>
 
           {/* Card 9: Aspect Ratio */}

@@ -184,7 +184,7 @@ export function Create({
   return (
     <motion.div
       ref={panel}
-      className={cn("crt-stage relative isolate h-[244px] w-[244px] select-none", className)}
+      className={cn("crt-stage relative isolate h-61 w-61 select-none", className)}
       data-open={open || undefined}
       data-sink={sink || undefined}
       style={
@@ -212,8 +212,8 @@ export function Create({
                 ? "bg-[#ffffff] shadow-[0_0_0_1px_rgba(23,24,26,0.08)]"
                 : "bg-[#ffffff] shadow-[0_0_0_1px_rgba(23,24,26,0.08)] dark:bg-[#1a1a1a] dark:shadow-[0_0_0_1px_rgba(255,255,255,0.12)]",
             sink
-              ? "scale-[0.94] duration-160 [transition-timing-function:cubic-bezier(0.22,1,0.36,1)]"
-              : "scale-100 duration-220 [transition-timing-function:cubic-bezier(0.22,1,0.36,1)]",
+              ? "scale-[0.94] duration-160 ease-[cubic-bezier(0.22,1,0.36,1)]"
+              : "scale-100 duration-220 ease-[cubic-bezier(0.22,1,0.36,1)]",
             "transition-transform motion-reduce:transition-none"
           )}
           animate={{
