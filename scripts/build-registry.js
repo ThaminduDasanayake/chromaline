@@ -38,6 +38,10 @@ function buildRegistry() {
   const labelInputContent = fs.existsSync(labelInputPath)
     ? fs.readFileSync(labelInputPath, "utf8")
     : "";
+  const labelTextareaPath = path.join(__dirname, "../components/ui/label-textarea.tsx");
+  const labelTextareaContent = fs.existsSync(labelTextareaPath)
+    ? fs.readFileSync(labelTextareaPath, "utf8")
+    : "";
   const copyButtonContent = fs.existsSync(copyButtonPath)
     ? fs.readFileSync(copyButtonPath, "utf8")
     : "";
@@ -232,6 +236,27 @@ function buildRegistry() {
         content: labelInputContent,
         type: "registry:ui",
         target: "components/ui/label-input.tsx",
+      },
+    ],
+  };
+
+  // 8b. Label Textarea Component
+  const labelTextareaRegistryItem = {
+    $schema: "https://ui.shadcn.com/schema/registry-item.json",
+    name: "label-textarea",
+    type: "registry:ui",
+    title: "Label Textarea",
+    description:
+      "An auto-expanding multiline textarea with dynamic SVG border notch physics and letter-by-letter hopping label.",
+    dependencies: ["@phosphor-icons/react@^2.1.10", "framer-motion@^14.4.0"],
+    devDependencies: [],
+    registryDependencies: [],
+    files: [
+      {
+        path: "components/ui/label-textarea.tsx",
+        content: labelTextareaContent,
+        type: "registry:ui",
+        target: "components/ui/label-textarea.tsx",
       },
     ],
   };
@@ -435,6 +460,10 @@ function buildRegistry() {
     JSON.stringify(labelInputRegistryItem, null, 2)
   );
   fs.writeFileSync(
+    path.join(outDir, "label-textarea.json"),
+    JSON.stringify(labelTextareaRegistryItem, null, 2)
+  );
+  fs.writeFileSync(
     path.join(outDir, "copy-button.json"),
     JSON.stringify(copyButtonRegistryItem, null, 2)
   );
@@ -609,6 +638,21 @@ function buildRegistry() {
             path: "components/ui/label-input.tsx",
             type: "registry:ui",
             target: "components/ui/label-input.tsx",
+          },
+        ],
+      },
+      {
+        name: "label-textarea",
+        type: "registry:ui",
+        title: "Label Textarea",
+        description:
+          "An auto-expanding multiline textarea with dynamic SVG border notch physics and letter-by-letter hopping label.",
+        dependencies: ["@phosphor-icons/react@^2.1.10", "framer-motion@^14.4.0"],
+        files: [
+          {
+            path: "components/ui/label-textarea.tsx",
+            type: "registry:ui",
+            target: "components/ui/label-textarea.tsx",
           },
         ],
       },

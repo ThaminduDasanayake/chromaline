@@ -15,6 +15,7 @@ export { SeekCardPreview } from "./seek-card-preview";
 export { HeatmapCardPreview } from "./heatmap-card-preview";
 export { ToggleCardPreview } from "./toggle-card-preview";
 export { LabelInputCardPreview } from "./label-input-card-preview";
+export { LabelTextareaCardPreview } from "./label-textarea-card-preview";
 export { AspectRatioCardPreview } from "./aspect-ratio-card-preview";
 export { CounterCardPreview } from "./counter-card-preview";
 export { WakeSliderCardPreview } from "./wake-slider-card-preview";

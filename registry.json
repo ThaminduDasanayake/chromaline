@@ -123,6 +123,23 @@
       ]
     },
     {
+      "name": "label-textarea",
+      "type": "registry:ui",
+      "title": "Label Textarea",
+      "description": "An auto-expanding multiline textarea with dynamic SVG border notch physics and letter-by-letter hopping label.",
+      "dependencies": [
+        "@phosphor-icons/react@^2.1.10",
+        "framer-motion@^14.4.0"
+      ],
+      "files": [
+        {
+          "path": "components/ui/label-textarea.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/label-textarea.tsx"
+        }
+      ]
+    },
+    {
       "name": "copy-button",
       "type": "registry:ui",
       "title": "Copy Button",

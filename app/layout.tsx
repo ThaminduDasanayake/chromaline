@@ -22,7 +22,10 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="flex min-h-full flex-col bg-white font-sans text-slate-900 antialiased transition-colors duration-200 selection:bg-slate-200 dark:bg-[#09090b] dark:text-zinc-100 dark:selection:bg-zinc-800">
+      <body
+        suppressHydrationWarning
+        className="flex min-h-full flex-col bg-white font-sans text-slate-900 antialiased transition-colors duration-200 selection:bg-slate-200 dark:bg-[#09090b] dark:text-zinc-100 dark:selection:bg-zinc-800"
+      >
         <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>
