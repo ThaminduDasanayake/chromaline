@@ -18,6 +18,7 @@ import {
   TimeScrubberCardPreview,
   ChecklistCardPreview,
   CreateMenuCardPreview,
+  FluidSearchCardPreview,
 } from "@/components/showcase";
 
 export default function ChromalineHomePage() {
@@ -119,6 +120,11 @@ export default function ChromalineHomePage() {
           {/* Card 15: Create Menu */}
           <ComponentCard title="Create Menu" href="/components/create-menu">
             <CreateMenuCardPreview />
+          </ComponentCard>
+
+          {/* Card 16: Fluid Search */}
+          <ComponentCard title="Fluid Search" href="/components/fluid-search">
+            <FluidSearchCardPreview />
           </ComponentCard>
         </div>
       </main>
