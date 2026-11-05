@@ -3,6 +3,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import {
   Heatmap,
+  HeatmapNode,
   HeatmapSchemeKey,
   HeatmapRange,
   GITHUB_SCHEMES,
@@ -12,6 +13,7 @@ import {
 } from "@/components/ui/heatmap";
 import { SelectBar } from "@/components/ui/select-bar";
 import { GitCommitIcon } from "@phosphor-icons/react";
+import { cn } from "@/lib/utils";
 import {
   DocsLayout,
   ComponentPreview,
@@ -153,6 +155,7 @@ export default function HeatmapDocumentationPage() {
   const [range, setRange] = useState<HeatmapRange>("year");
   const [scheme, setScheme] = useState<HeatmapSchemeKey>("default");
   const [rawContributions, setRawContributions] = useState<RawContributionDay[] | null>(null);
+  const [hoveredNode, setHoveredNode] = useState<HeatmapNode | null>(null);
 
   const activePalette = (GITHUB_SCHEMES[scheme] || GITHUB_SCHEMES.default)[mode];
   const isDark = mode === "dark";
@@ -177,6 +180,44 @@ export default function HeatmapDocumentationPage() {
     return generateProceduralMatrix(scheme, mode, range);
   }, [rawContributions, scheme, mode, range]);
 
+  const latestNode = useMemo(() => {
+    if (!matrix || matrix.length === 0) return null;
+    for (let c = matrix.length - 1; c >= 0; c--) {
+      const col = matrix[c];
+      for (let r = col.length - 1; r >= 0; r--) {
+        if (!col[r].isFuture && col[r].date) {
+          return col[r];
+        }
+      }
+    }
+    return matrix[matrix.length - 1]?.[0] || null;
+  }, [matrix]);
+
+  const activeNode = hoveredNode || latestNode;
+
+  const formattedDate = useMemo(() => {
+    if (!activeNode) return "";
+    if (activeNode.isFuture) return "Future";
+    if (activeNode.date) {
+      const d = new Date(activeNode.date + "T00:00:00");
+      if (!isNaN(d.getTime())) {
+        return d.toLocaleDateString("en-US", {
+          month: "short",
+          day: "numeric",
+          year: "numeric",
+        });
+      }
+    }
+    return activeNode.label || "";
+  }, [activeNode]);
+
+  const countText = useMemo(() => {
+    if (!activeNode) return "";
+    if (activeNode.isFuture) return "No activity";
+    if (activeNode.count === 0) return "No contributions";
+    return `${activeNode.count} contribution${activeNode.count === 1 ? "" : "s"}`;
+  }, [activeNode]);
+
   return (
     <DocsLayout
       title="Heatmap"
@@ -185,9 +226,10 @@ export default function HeatmapDocumentationPage() {
     >
       {/* 1. Preview */}
       <ComponentPreview
-        canvasClassName={`min-h-[460px] flex-col p-6 sm:p-8 transition-colors duration-300 ${
+        canvasClassName={cn(
+          "min-h-[460px] flex-col p-6 sm:p-8 transition-colors duration-300",
           isDark ? "bg-[#0f0f0f]" : "bg-[#f7f7f6]"
-        }`}
+        )}
         canvasStyle={{
           backgroundColor: isDark ? "#0d1117" : "#F9FAFB",
           transition: "background-color 300ms ease",
@@ -261,8 +303,41 @@ export default function HeatmapDocumentationPage() {
         }
       >
         <div className="w-full max-w-[840px] px-1 sm:px-2">
-          <Heatmap data={matrix} scheme={scheme} mode={mode} range={range} colorOnHover />
+          <Heatmap
+            data={matrix}
+            scheme={scheme}
+            mode={mode}
+            range={range}
+            colorOnHover
+            onHover={setHoveredNode}
+          />
         </div>
+
+        {/* Live Data Badge - Right hand side bottom corner */}
+        {activeNode && (
+          <div
+            className={cn(
+              "pointer-events-none absolute right-4 bottom-4 z-10 sm:right-6 sm:bottom-6",
+              "flex items-center gap-2 rounded-full border px-3.5 py-1.5 font-mono text-xs shadow-2xs backdrop-blur-md transition-all duration-150",
+              isDark
+                ? "border-white/10 bg-[#161618]/90 text-zinc-300 shadow-black/40"
+                : "border-black/[0.08] bg-white/90 text-slate-700 shadow-slate-900/5"
+            )}
+          >
+            <span
+              className="h-2 w-2 shrink-0 rounded-full ring-1 ring-black/10 transition-colors duration-150 dark:ring-white/20"
+              style={{ backgroundColor: activeNode.color || activePalette.colors[1] }}
+              aria-hidden="true"
+            />
+            <span className={cn("font-medium", isDark ? "text-white" : "text-slate-900")}>
+              {countText}
+            </span>
+            <span className={cn("select-none", isDark ? "text-zinc-600" : "text-slate-300")}>
+              on
+            </span>
+            <span className={cn(isDark ? "text-zinc-400" : "text-slate-500")}>{formattedDate}</span>
+          </div>
+        )}
       </ComponentPreview>
 
       {/* 2. Installation */}

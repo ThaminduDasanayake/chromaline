@@ -390,13 +390,23 @@ export function generateProceduralMatrix(
       const color = palette.colors[tier];
       const height = getCommitHeight(count, maxCount, tier);
 
+      const daysDiff = (numWeeks - 1 - w) * 7 + (currentDayOfWeek - d);
+      const cellDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() - daysDiff);
+      const dateStr = `${cellDate.getFullYear()}-${String(cellDate.getMonth() + 1).padStart(2, "0")}-${String(cellDate.getDate()).padStart(2, "0")}`;
+      const formattedDate = cellDate.toLocaleDateString("en-US", {
+        weekday: "short",
+        month: "short",
+        day: "numeric",
+      });
+
       col.push({
         col: w,
         row: d,
         count,
         color,
         height,
-        label: isFuture ? "Future" : `Day ${d + 1}`,
+        label: isFuture ? "Future" : formattedDate,
+        date: dateStr,
         isFuture,
       });
     }
