@@ -9,6 +9,7 @@ import {
   useTransform,
   useVelocity,
 } from "framer-motion";
+import { cn } from "@/lib/utils";
 
 /* ══ Toggle (Liquid Goo Switch) ═════════════════════════════
    Two blobs, not one, and ONE POSITION between them.
@@ -322,7 +323,7 @@ export function Toggle({
 
   return (
     <div
-      className={`relative inline-flex items-center justify-center select-none ${className}`}
+      className={cn("relative inline-flex items-center justify-center select-none", className)}
       style={style}
     >
       {/* Self-contained SVG Goo Filter Definition */}

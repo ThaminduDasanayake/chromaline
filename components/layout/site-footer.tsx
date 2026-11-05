@@ -1,10 +1,14 @@
 import React from "react";
 import Link from "next/link";
+import { cn } from "@/lib/utils";
 
 export function SiteFooter({ className = "" }: { className?: string }) {
   return (
     <footer
-      className={`mt-auto border-t border-black/[0.08] bg-white transition-colors duration-200 dark:border-white/10 dark:bg-[#000000] ${className}`}
+      className={cn(
+        "mt-auto border-t border-black/[0.08] bg-white transition-colors duration-200 dark:border-white/10 dark:bg-[#000000]",
+        className
+      )}
     >
       <div className="mx-auto flex w-full max-w-5xl items-center justify-between px-6 py-6 sm:px-8">
         <Link

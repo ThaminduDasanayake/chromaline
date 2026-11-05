@@ -311,9 +311,10 @@ export function LabelTextarea({
           {[...displayLabel].map((ch, i) => (
             <span
               key={i}
-              className={`inline-block motion-reduce:animate-none ${
-                focus ? "animate-[lbi-hop_460ms_cubic-bezier(0.3,0.7,0.3,1)_both]" : ""
-              }`}
+              className={cn(
+                "inline-block motion-reduce:animate-none",
+                focus && "animate-[lbi-hop_460ms_cubic-bezier(0.3,0.7,0.3,1)_both]"
+              )}
               style={{ animationDelay: `${i * 24}ms` }}
             >
               {ch}

@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { Folder, FolderItem, FolderTray } from "@/components/ui/folder-tray";
 import { SelectBar } from "@/components/ui/select-bar";
 import { CircleHalfIcon, PaletteIcon, XIcon } from "@phosphor-icons/react";
+import { cn } from "@/lib/utils";
 
 export interface WorkspaceData {
   branch: string;
@@ -366,11 +367,12 @@ export function FolderTrayPreview({
               <button
                 type="button"
                 onClick={() => setModalFolder(null)}
-                className={`absolute top-[17%] right-[7%] z-20 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full transition-all active:scale-95 sm:h-9 sm:w-9 ${
+                className={cn(
+                  "absolute top-[17%] right-[7%] z-20 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full transition-all active:scale-95 sm:h-9 sm:w-9",
                   isDark
                     ? "border border-white/25 bg-black/25 text-white/80 shadow-xs hover:bg-black/45 hover:text-white"
                     : "border border-black/15 bg-black/10 text-slate-900 shadow-xs hover:bg-black/20 hover:text-slate-950"
-                }`}
+                )}
                 title="Close (Esc)"
                 aria-label="Close dialog"
               >
@@ -381,9 +383,10 @@ export function FolderTrayPreview({
               <div className="absolute inset-0 flex flex-col justify-between px-[8%] pt-[14%] pb-[8%]">
                 <div className="max-w-xl pr-10 sm:pr-12">
                   <h3
-                    className={`font-mono text-2xl font-bold tracking-tight sm:text-3xl md:text-4xl ${
+                    className={cn(
+                      "font-mono text-2xl font-bold tracking-tight sm:text-3xl md:text-4xl",
                       isDark ? "text-white" : "text-slate-950"
-                    }`}
+                    )}
                   >
                     {modalFolder.name}
                   </h3>
@@ -401,17 +404,19 @@ export function FolderTrayPreview({
                 >
                   {modalFolder.content ? (
                     <div
-                      className={`font-sans text-sm leading-relaxed sm:text-base md:text-lg ${
+                      className={cn(
+                        "font-sans text-sm leading-relaxed sm:text-base md:text-lg",
                         isDark ? "text-white/85" : "text-slate-700"
-                      }`}
+                      )}
                     >
                       {modalFolder.content}
                     </div>
                   ) : (
                     <p
-                      className={`font-sans text-sm leading-relaxed sm:text-base md:text-lg ${
+                      className={cn(
+                        "font-sans text-sm leading-relaxed sm:text-base md:text-lg",
                         isDark ? "text-white/85" : "text-slate-700"
-                      }`}
+                      )}
                     >
                       {modalFolder.description}
                     </p>

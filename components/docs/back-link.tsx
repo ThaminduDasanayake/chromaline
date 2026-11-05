@@ -3,6 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { ArrowLeftIcon } from "@phosphor-icons/react";
+import { cn } from "@/lib/utils";
 
 export interface BackLinkProps {
   href?: string;
@@ -18,7 +19,10 @@ export function BackLink({
   return (
     <Link
       href={href}
-      className={`group mb-8 inline-flex items-center gap-1.5 font-mono text-xs text-slate-500 transition-colors hover:text-slate-950 dark:text-zinc-400 dark:hover:text-white ${className}`}
+      className={cn(
+        "group mb-8 inline-flex items-center gap-1.5 font-mono text-xs text-slate-500 transition-colors hover:text-slate-950 dark:text-zinc-400 dark:hover:text-white",
+        className
+      )}
     >
       <ArrowLeftIcon
         size={12}

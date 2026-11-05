@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useCallback, useEffect, useMemo, useRef } from "react";
+import { cn } from "@/lib/utils";
 
 export type HeatmapSchemeKey = "default" | "winter" | "halloween";
 export type HeatmapMode = "dark" | "light";
@@ -1065,7 +1066,7 @@ export function Heatmap({
   return (
     <div
       ref={containerRef}
-      className={`relative block w-full cursor-crosshair touch-none select-none ${className}`}
+      className={cn("relative block w-full cursor-crosshair touch-none select-none", className)}
       style={{ aspectRatio: `${VIEW_W} / ${VIEW_H}`, ...style }}
       role="region"
       aria-label={`Interactive 3D GitHub Heatmap with ${numCols} weeks by ${numRows} days`}
@@ -1112,7 +1113,8 @@ export function Heatmap({
                   }}
                   fill={c.color || (mode === "dark" ? "#151b23" : "#ffffff")}
                   strokeLinejoin="round"
-                  className={`stroke-[0.85] transition-[stroke,stroke-width] duration-120 ease-out ${
+                  className={cn(
+                    "stroke-[0.85] transition-[stroke,stroke-width] duration-120 ease-out",
                     c.isDark
                       ? mode === "dark"
                         ? "stroke-[rgba(255,255,255,0.22)] [&.hovered]:stroke-white [&.hovered]:stroke-[1.15]"
@@ -1120,7 +1122,7 @@ export function Heatmap({
                       : mode === "dark"
                         ? "stroke-[rgba(0,0,0,0.50)] [&.hovered]:stroke-black [&.hovered]:stroke-[1.15]"
                         : "stroke-[rgba(15,23,42,0.30)] [&.hovered]:stroke-[#0f172a] [&.hovered]:stroke-[1.15]"
-                  }`}
+                  )}
                 />
                 <path
                   ref={(el) => {
@@ -1132,7 +1134,8 @@ export function Heatmap({
                     node.cr = el;
                   }}
                   fill="none"
-                  className={`stroke-[0.65] transition-[stroke,stroke-width] duration-120 ease-out ${
+                  className={cn(
+                    "stroke-[0.65] transition-[stroke,stroke-width] duration-120 ease-out",
                     c.isDark
                       ? mode === "dark"
                         ? "stroke-[rgba(255,255,255,0.12)] [&.hovered]:stroke-[rgba(255,255,255,0.70)] [&.hovered]:stroke-[0.85]"
@@ -1140,7 +1143,7 @@ export function Heatmap({
                       : mode === "dark"
                         ? "stroke-[rgba(0,0,0,0.28)] [&.hovered]:stroke-[rgba(0,0,0,0.65)] [&.hovered]:stroke-[0.85]"
                         : "stroke-[rgba(15,23,42,0.16)] [&.hovered]:stroke-[rgba(15,23,42,0.60)] [&.hovered]:stroke-[0.85]"
-                  }`}
+                  )}
                 />
                 <g
                   ref={(el) => {
@@ -1173,19 +1176,18 @@ export function Heatmap({
                   }}
                   rx={r2((isCenter ? 0.65 : 0.52) * C.S)}
                   ry={r2((isCenter ? 0.65 : 0.52) * C.S * C.k)}
-                  className={
+                  className={cn(
                     isCenter
-                      ? `fill-white stroke-none ${
-                          mode === "dark"
-                            ? "group-[.for-light-bar]:fill-black"
-                            : "group-[.for-light-bar]:fill-[#0f172a]"
-                        }`
-                      : `fill-[rgba(255,255,255,0.65)] stroke-none ${
-                          mode === "dark"
-                            ? "group-[.for-light-bar]:fill-[rgba(0,0,0,0.45)]"
-                            : "group-[.for-light-bar]:fill-[rgba(15,23,42,0.45)]"
-                        }`
-                  }
+                      ? "fill-white stroke-none"
+                      : "fill-[rgba(255,255,255,0.65)] stroke-none",
+                    isCenter
+                      ? mode === "dark"
+                        ? "group-[.for-light-bar]:fill-black"
+                        : "group-[.for-light-bar]:fill-[#0f172a]"
+                      : mode === "dark"
+                        ? "group-[.for-light-bar]:fill-[rgba(0,0,0,0.45)]"
+                        : "group-[.for-light-bar]:fill-[rgba(15,23,42,0.45)]"
+                  )}
                 />
               );
             })}

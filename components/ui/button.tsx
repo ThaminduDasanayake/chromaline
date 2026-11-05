@@ -1,4 +1,5 @@
 import React from "react";
+import { cn } from "@/lib/utils";
 
 export type ButtonVariant = "default" | "dark" | "orange" | "emerald";
 export type ButtonSize = "sm" | "default" | "lg";
@@ -112,7 +113,10 @@ export const Button = React.forwardRef<HTMLButtonElement & HTMLAnchorElement, Bu
       ...style,
     } as React.CSSProperties;
 
-    const baseClasses = `group/tactile relative inline-grid w-max shrink-0 cursor-pointer select-none border-0 bg-transparent p-0 pb-[var(--tactile-depth)] font-inherit leading-none focus-visible:rounded-[var(--tactile-radius)] focus-visible:outline-2 focus-visible:outline-slate-700 focus-visible:outline-offset-2 disabled:pointer-events-none disabled:opacity-45 aria-disabled:pointer-events-none aria-disabled:opacity-45 ${className}`;
+    const baseClasses = cn(
+      "group/tactile relative inline-grid w-max shrink-0 cursor-pointer select-none border-0 bg-transparent p-0 pb-[var(--tactile-depth)] font-inherit leading-none focus-visible:rounded-[var(--tactile-radius)] focus-visible:outline-2 focus-visible:outline-slate-700 focus-visible:outline-offset-2 disabled:pointer-events-none disabled:opacity-45 aria-disabled:pointer-events-none aria-disabled:opacity-45",
+      className
+    );
 
     const innerContent = (
       <>
@@ -121,7 +125,10 @@ export const Button = React.forwardRef<HTMLButtonElement & HTMLAnchorElement, Bu
 
         {/* 3D Surface Face with mechanical push kinematics */}
         <span
-          className={`relative flex items-center justify-center rounded-(--tactile-radius) bg-(--tactile-face) font-medium text-(--tactile-content) shadow-[inset_0_1px_0_var(--tactile-face-highlight)] transition-transform duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] group-active/tactile:translate-y-(--tactile-depth) motion-reduce:transform-none motion-reduce:transition-none [@media(hover:hover)_and_(pointer:fine)]:group-hover/tactile:translate-y-0.5 ${s.inner}`}
+          className={cn(
+            "relative flex items-center justify-center rounded-(--tactile-radius) bg-(--tactile-face) font-medium text-(--tactile-content) shadow-[inset_0_1px_0_var(--tactile-face-highlight)] transition-transform duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] group-active/tactile:translate-y-(--tactile-depth) motion-reduce:transform-none motion-reduce:transition-none [@media(hover:hover)_and_(pointer:fine)]:group-hover/tactile:translate-y-0.5",
+            s.inner
+          )}
         >
           {children}
         </span>

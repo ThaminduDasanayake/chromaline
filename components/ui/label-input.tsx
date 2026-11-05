@@ -269,9 +269,10 @@ export function LabelInput({
           {[...displayLabel].map((ch, i) => (
             <span
               key={i}
-              className={`inline-block motion-reduce:animate-none ${
-                focus ? "animate-[lbi-hop_460ms_cubic-bezier(0.3,0.7,0.3,1)_both]" : ""
-              }`}
+              className={cn(
+                "inline-block motion-reduce:animate-none",
+                focus && "animate-[lbi-hop_460ms_cubic-bezier(0.3,0.7,0.3,1)_both]"
+              )}
               style={{ animationDelay: `${i * 24}ms` }}
             >
               {ch}
@@ -329,17 +330,19 @@ export function LabelInput({
               size={16}
               strokeWidth={2}
               aria-hidden="true"
-              className={`transition-[opacity,transform,filter] duration-220 ease-[cubic-bezier(0.22,1,0.36,1)] [grid-area:1/1] ${
+              className={cn(
+                "transition-[opacity,transform,filter] duration-220 ease-[cubic-bezier(0.22,1,0.36,1)] [grid-area:1/1]",
                 show ? "scale-70 opacity-0 blur-[2px]" : "blur-0 scale-100 opacity-100"
-              }`}
+              )}
             />
             <EyeClosedIcon
               size={16}
               strokeWidth={2}
               aria-hidden="true"
-              className={`transition-[opacity,transform,filter] duration-220 ease-[cubic-bezier(0.22,1,0.36,1)] [grid-area:1/1] ${
+              className={cn(
+                "transition-[opacity,transform,filter] duration-220 ease-[cubic-bezier(0.22,1,0.36,1)] [grid-area:1/1]",
                 show ? "blur-0 scale-100 opacity-100" : "scale-70 opacity-0 blur-[2px]"
-              }`}
+              )}
             />
           </button>
         )}

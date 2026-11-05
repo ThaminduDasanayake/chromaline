@@ -9,6 +9,7 @@
  */
 
 import React, { useEffect, useRef, useState } from "react";
+import { cn } from "@/lib/utils";
 
 export interface FolderProps {
   /** Visual theme mode: "light", "dark", or "auto" (detects system/ancestor .dark) */
@@ -255,7 +256,10 @@ export function Folder({
   }
 
   return (
-    <div ref={containerRef as React.RefObject<HTMLDivElement>} className={`relative ${className}`}>
+    <div
+      ref={containerRef as React.RefObject<HTMLDivElement>}
+      className={cn("relative", className)}
+    >
       {svgContent}
       <div className="absolute inset-0 flex flex-col">{children}</div>
     </div>

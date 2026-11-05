@@ -3,6 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "./theme-toggle";
 
@@ -15,7 +16,10 @@ export interface SiteHeaderProps {
 export function SiteHeader({ breadcrumb, className = "" }: SiteHeaderProps) {
   return (
     <header
-      className={`sticky top-0 z-40 flex h-14 items-center justify-between border-b border-black/[0.08] bg-white/90 px-6 backdrop-blur-md transition-colors duration-200 md:px-12 dark:border-white/10 dark:bg-[#000000]/90 ${className}`}
+      className={cn(
+        "sticky top-0 z-40 flex h-14 items-center justify-between border-b border-black/[0.08] bg-white/90 px-6 backdrop-blur-md transition-colors duration-200 md:px-12 dark:border-white/10 dark:bg-[#000000]/90",
+        className
+      )}
     >
       <div className="flex items-center gap-2.5">
         <Link
