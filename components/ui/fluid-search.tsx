@@ -90,7 +90,7 @@ export function FluidSearch({
     <div
       ref={host}
       tabIndex={-1}
-      className={`seenry-fluid-search${open ? "is-open" : ""}${className ? ` ${className}` : ""}`}
+      className={`seenry-fluid-search${open ? " is-open" : ""}${className ? ` ${className}` : ""}`}
       data-reduced={reduced}
       data-keyboard={keyboard}
       data-theme={theme || undefined}
