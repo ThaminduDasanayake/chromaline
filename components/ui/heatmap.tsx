@@ -308,7 +308,9 @@ export function transformContributionsToMatrix(
 
       let formattedDate = "";
       let isFuture = false;
-      if (item?.date) {
+      if (!item) {
+        isFuture = true;
+      } else if (item.date) {
         const dObj = new Date(item.date + "T00:00:00");
         isFuture = dObj.getTime() > today.getTime();
         formattedDate = dObj.toLocaleDateString("en-US", {
@@ -356,7 +358,7 @@ export function generateProceduralMatrix(
   let totalContributions = 0;
 
   const now = new Date();
-  const currentDayOfWeek = (now.getDay() + 6) % 7; // 0 = Mon, 6 = Sun
+  const currentDayOfWeek = now.getDay(); // 0 = Sun, 1 = Mon, ..., 6 = Sat
 
   for (let w = 0; w < numWeeks; w++) {
     const col: HeatmapNode[] = [];
@@ -368,7 +370,7 @@ export function generateProceduralMatrix(
       if (!isFuture) {
         const seed = Math.sin((w + 1) * 12.9898 + (d + 1) * 78.233) * 43758.5453;
         const rnd = seed - Math.floor(seed);
-        const isWeekend = d >= 5;
+        const isWeekend = d === 0 || d === 6;
 
         if (isWeekend) {
           count = rnd > 0.72 ? Math.floor(rnd * 6) : 0;

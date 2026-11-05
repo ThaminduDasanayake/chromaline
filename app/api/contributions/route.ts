@@ -8,7 +8,7 @@ export async function GET(request: NextRequest) {
     const res = await fetch(
       `https://github-contributions-api.jogruber.de/v4/${encodeURIComponent(username)}?y=last`,
       {
-        next: { revalidate: 86400 }, // Cache on server for 24 hours
+        next: { revalidate: 300 }, // 5-minute cache so recent commits appear promptly
       }
     );
 
@@ -22,7 +22,7 @@ export async function GET(request: NextRequest) {
     const data = await res.json();
     return NextResponse.json(data, {
       headers: {
-        "Cache-Control": "public, s-maxage=86400, stale-while-revalidate=43200",
+        "Cache-Control": "public, s-maxage=300, stale-while-revalidate=600",
       },
     });
   } catch (error) {

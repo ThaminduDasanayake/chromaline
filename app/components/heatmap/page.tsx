@@ -161,16 +161,56 @@ export default function HeatmapDocumentationPage() {
   const isDark = mode === "dark";
 
   useEffect(() => {
-    fetch("/api/contributions?username=ThaminduDasanayake")
-      .then((res) => (res.ok ? res.json() : null))
-      .then((data) => {
-        if (data?.contributions && Array.isArray(data.contributions)) {
-          setRawContributions(data.contributions);
+    let cancelled = false;
+
+    async function loadContributions() {
+      try {
+        // Try local Next.js API route first
+        const res = await fetch("/api/contributions?username=ThaminduDasanayake", {
+          cache: "no-store",
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (
+            !cancelled &&
+            data?.contributions &&
+            Array.isArray(data.contributions) &&
+            data.contributions.length > 0
+          ) {
+            setRawContributions(data.contributions);
+            return;
+          }
         }
-      })
-      .catch(() => {
+      } catch {
+        // Internal route unavailable, fall through to direct public API
+      }
+
+      // Fallback: direct CORS-enabled fetch to ensure latest live contributions
+      try {
+        const directRes = await fetch(
+          "https://github-contributions-api.jogruber.de/v4/ThaminduDasanayake?y=last"
+        );
+        if (directRes.ok) {
+          const data = await directRes.json();
+          if (
+            !cancelled &&
+            data?.contributions &&
+            Array.isArray(data.contributions) &&
+            data.contributions.length > 0
+          ) {
+            setRawContributions(data.contributions);
+          }
+        }
+      } catch {
         // Fall back gracefully to procedural matrix
-      });
+      }
+    }
+
+    loadContributions();
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   const { matrix } = useMemo(() => {
@@ -180,26 +220,11 @@ export default function HeatmapDocumentationPage() {
     return generateProceduralMatrix(scheme, mode, range);
   }, [rawContributions, scheme, mode, range]);
 
-  const latestNode = useMemo(() => {
-    if (!matrix || matrix.length === 0) return null;
-    for (let c = matrix.length - 1; c >= 0; c--) {
-      const col = matrix[c];
-      for (let r = col.length - 1; r >= 0; r--) {
-        if (!col[r].isFuture && col[r].date) {
-          return col[r];
-        }
-      }
-    }
-    return matrix[matrix.length - 1]?.[0] || null;
-  }, [matrix]);
-
-  const activeNode = hoveredNode || latestNode;
-
   const formattedDate = useMemo(() => {
-    if (!activeNode) return "";
-    if (activeNode.isFuture) return "Future";
-    if (activeNode.date) {
-      const d = new Date(activeNode.date + "T00:00:00");
+    if (!hoveredNode) return "";
+    if (hoveredNode.isFuture) return "Future";
+    if (hoveredNode.date) {
+      const d = new Date(hoveredNode.date + "T00:00:00");
       if (!isNaN(d.getTime())) {
         return d.toLocaleDateString("en-US", {
           month: "short",
@@ -208,15 +233,15 @@ export default function HeatmapDocumentationPage() {
         });
       }
     }
-    return activeNode.label || "";
-  }, [activeNode]);
+    return hoveredNode.label || "";
+  }, [hoveredNode]);
 
   const countText = useMemo(() => {
-    if (!activeNode) return "";
-    if (activeNode.isFuture) return "No activity";
-    if (activeNode.count === 0) return "No contributions";
-    return `${activeNode.count} contribution${activeNode.count === 1 ? "" : "s"}`;
-  }, [activeNode]);
+    if (!hoveredNode) return "";
+    if (hoveredNode.isFuture) return "No activity";
+    if (hoveredNode.count === 0) return "No contributions";
+    return `${hoveredNode.count} contribution${hoveredNode.count === 1 ? "" : "s"}`;
+  }, [hoveredNode]);
 
   return (
     <DocsLayout
@@ -313,31 +338,20 @@ export default function HeatmapDocumentationPage() {
           />
         </div>
 
-        {/* Live Data Badge - Right hand side bottom corner */}
-        {activeNode && (
-          <div
-            className={cn(
-              "pointer-events-none absolute right-4 bottom-4 z-10 sm:right-6 sm:bottom-6",
-              "flex items-center gap-2 rounded-full border px-3.5 py-1.5 font-mono text-xs shadow-2xs backdrop-blur-md transition-all duration-150",
-              isDark
-                ? "border-white/10 bg-[#161618]/90 text-zinc-300 shadow-black/40"
-                : "border-black/[0.08] bg-white/90 text-slate-700 shadow-slate-900/5"
-            )}
-          >
-            <span
-              className="h-2 w-2 shrink-0 rounded-full ring-1 ring-black/10 transition-colors duration-150 dark:ring-white/20"
-              style={{ backgroundColor: activeNode.color || activePalette.colors[1] }}
-              aria-hidden="true"
-            />
-            <span className={cn("font-medium", isDark ? "text-white" : "text-slate-900")}>
-              {countText}
-            </span>
-            <span className={cn("select-none", isDark ? "text-zinc-600" : "text-slate-300")}>
-              on
-            </span>
-            <span className={cn(isDark ? "text-zinc-400" : "text-slate-500")}>{formattedDate}</span>
-          </div>
-        )}
+        {/* Live Hover Info - Right hand side bottom corner (text only, hover only) */}
+        <div
+          className={cn(
+            "pointer-events-none absolute right-4 bottom-4 z-10 font-mono text-xs transition-opacity duration-150 sm:right-6 sm:bottom-6",
+            hoveredNode ? "opacity-100" : "opacity-0"
+          )}
+          aria-live="polite"
+        >
+          <span className={cn("font-medium", isDark ? "text-white" : "text-slate-900")}>
+            {countText}
+          </span>{" "}
+          <span className={cn(isDark ? "text-zinc-500" : "text-slate-400")}>on</span>{" "}
+          <span className={cn(isDark ? "text-zinc-400" : "text-slate-600")}>{formattedDate}</span>
+        </div>
       </ComponentPreview>
 
       {/* 2. Installation */}
