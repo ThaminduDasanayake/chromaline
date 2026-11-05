@@ -10,6 +10,8 @@ import {
   UsageSection,
   PropsTable,
   PropItem,
+  ThemeControl,
+  useComponentTheme,
 } from "@/components/docs";
 
 const CODE_EXAMPLE_LINES = [
@@ -130,6 +132,7 @@ const PROPS_DATA: PropItem[] = [
 ];
 
 export default function FluidSearchDocumentationPage() {
+  const [theme, setTheme] = useComponentTheme();
   const [query, setQuery] = useState("");
 
   return (
@@ -139,9 +142,23 @@ export default function FluidSearchDocumentationPage() {
       icon={<MagnifyingGlassIcon size={14} weight="bold" />}
     >
       {/* 1. Preview */}
-      <ComponentPreview>
+      <ComponentPreview
+        canvasClassName={`min-h-[340px] p-8 transition-colors duration-300 ${
+          theme === "dark" ? "bg-[#0f0f0f]" : "bg-[#f7f7f6]"
+        }`}
+        controls={
+          <div className="flex flex-col gap-6">
+            <ThemeControl
+              value={theme}
+              onChange={setTheme}
+              ariaLabel="Select fluid search theme mode"
+            />
+          </div>
+        }
+      >
         <div className="flex w-full max-w-[340px] items-center justify-center py-8">
           <FluidSearch
+            theme={theme}
             value={query}
             onChange={setQuery}
             placeholder="Search files or commands…"

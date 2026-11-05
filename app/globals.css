@@ -256,8 +256,13 @@ input[type="reset"] {
   --search-ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-:is(.dark, [data-theme="dark"]) .seenry-fluid-search {
+:is(.dark, [data-theme="dark"]) .seenry-fluid-search,
+.seenry-fluid-search[data-theme="dark"] {
   --search-fill: #222224;
+}
+
+.seenry-fluid-search[data-theme="light"] {
+  --search-fill: #e9e9e9;
 }
 
 .sfs-defs {
@@ -329,8 +334,13 @@ input[type="reset"] {
   color: #666;
 }
 
-:is(.dark, [data-theme="dark"]) .sfs-field > svg {
+:is(.dark, [data-theme="dark"]) .sfs-field > svg,
+.seenry-fluid-search[data-theme="dark"] .sfs-field > svg {
   color: #888;
+}
+
+.seenry-fluid-search[data-theme="light"] .sfs-field > svg {
+  color: #666;
 }
 
 .sfs-field input {
@@ -346,8 +356,13 @@ input[type="reset"] {
   color: #222;
 }
 
-:is(.dark, [data-theme="dark"]) .sfs-field input {
+:is(.dark, [data-theme="dark"]) .sfs-field input,
+.seenry-fluid-search[data-theme="dark"] .sfs-field input {
   color: #eee;
+}
+
+.seenry-fluid-search[data-theme="light"] .sfs-field input {
+  color: #222;
 }
 
 .sfs-close {
@@ -373,8 +388,13 @@ input[type="reset"] {
     opacity 140ms ease;
 }
 
-:is(.dark, [data-theme="dark"]) .sfs-close {
+:is(.dark, [data-theme="dark"]) .sfs-close,
+.seenry-fluid-search[data-theme="dark"] .sfs-close {
   color: #eee;
+}
+
+.seenry-fluid-search[data-theme="light"] .sfs-close {
+  color: #222;
 }
 
 .is-open > .sfs-close {

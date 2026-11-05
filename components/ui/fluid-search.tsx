@@ -27,7 +27,9 @@ export interface FluidSearchProps {
   label?: string;
   /** Placeholder text. Default: 'Search…' */
   placeholder?: string;
-  /** Optional theme or custom fill color for the fluid pill & circle */
+  /** Optional theme override: 'light' | 'dark' */
+  theme?: "light" | "dark";
+  /** Optional custom fill color override for the fluid pill & circle */
   fill?: string;
   className?: string;
   style?: React.CSSProperties;
@@ -45,6 +47,7 @@ export function FluidSearch({
   onChange,
   label = "Search",
   placeholder = "Search…",
+  theme,
   fill,
   className = "",
   style,
@@ -89,6 +92,7 @@ export function FluidSearch({
       className={`seenry-fluid-search${open ? " is-open" : ""}${className ? ` ${className}` : ""}`}
       data-reduced={reduced}
       data-keyboard={keyboard}
+      data-theme={theme || undefined}
       style={{
         ...(fill ? ({ "--search-fill": fill } as React.CSSProperties) : {}),
         ...style,
