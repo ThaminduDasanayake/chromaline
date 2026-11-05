@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { Heatmap, HeatmapNode } from "@/components/ui/heatmap";
 import { useTheme } from "@/components/providers/theme-provider";
+import { cn } from "@/lib/utils";
 
 export function HeatmapCardPreview() {
   const [hoveredNode, setHoveredNode] = useState<HeatmapNode | null>(null);
@@ -16,9 +17,10 @@ export function HeatmapCardPreview() {
 
       {/* Tactile Coordinate Badge */}
       <div
-        className={`mt-2 flex h-4 items-center gap-2 font-mono text-[11px] text-slate-500 transition-opacity duration-150 dark:text-zinc-400 ${
+        className={cn(
+          "mt-2 flex h-4 items-center gap-2 font-mono text-[11px] text-slate-500 transition-opacity duration-150 dark:text-zinc-400",
           hoveredNode ? "opacity-100" : "opacity-0"
-        }`}
+        )}
       >
         <span
           className="inline-block h-1.5 w-1.5 rounded-full"

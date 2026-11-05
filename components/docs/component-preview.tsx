@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { cn } from "@/lib/utils";
 
 export interface ComponentPreviewProps {
   children: React.ReactNode;
@@ -21,13 +22,18 @@ export function ComponentPreview({
 
   return (
     <section
-      className={`overflow-hidden rounded-2xl border border-black/[0.08] bg-white shadow-2xs transition-colors duration-200 dark:border-white/10 dark:bg-[#181818] ${className}`}
+      className={cn(
+        "overflow-hidden rounded-2xl border border-black/[0.08] bg-white shadow-2xs transition-colors duration-200 dark:border-white/10 dark:bg-[#181818]",
+        className
+      )}
     >
       {/* Canvas */}
       <div
-        className={`relative flex flex-col items-center justify-center overflow-hidden transition-colors duration-300 ${
-          hasCustomBg ? "" : "bg-[#f7f7f6] dark:bg-[#0f0f0f]"
-        } ${canvasClassName}`}
+        className={cn(
+          "relative flex flex-col items-center justify-center overflow-hidden transition-colors duration-300",
+          !hasCustomBg && "bg-[#f7f7f6] dark:bg-[#0f0f0f]",
+          canvasClassName
+        )}
         style={canvasStyle}
       >
         {children}

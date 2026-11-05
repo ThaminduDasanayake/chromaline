@@ -264,7 +264,7 @@ export function Seek({
   return (
     <div
       ref={frameRef}
-      className={`relative inline-grid place-items-center select-none ${className}`}
+      className={cn("relative inline-grid place-items-center select-none", className)}
       style={{
         width: `${Math.max(shut, span) + 24}px`,
         height: `${shut + 24}px`,

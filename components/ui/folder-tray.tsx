@@ -367,7 +367,7 @@ export function FolderTray<T = unknown>({
         ref={containerRef}
         onClick={handleContainerClick}
         onMouseLeave={handleContainerLeave}
-        className={`h-full w-full ${hoverIndex !== null ? "cursor-pointer" : "cursor-default"}`}
+        className={cn("h-full w-full", hoverIndex !== null ? "cursor-pointer" : "cursor-default")}
         title={
           hoverIndex !== null && displayedFolder
             ? displayedFolder.href

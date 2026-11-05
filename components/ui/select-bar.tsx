@@ -8,6 +8,7 @@
  */
 
 import React, { useEffect, useLayoutEffect, useRef, useState, useCallback } from "react";
+import { cn } from "@/lib/utils";
 
 const useIsomorphicLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
@@ -184,7 +185,10 @@ export function SelectBar<T extends string = string>({
   return (
     <nav
       ref={trackRef as React.RefObject<HTMLElement>}
-      className={`relative isolate inline-flex items-center gap-0.5 rounded-full bg-white/60 text-slate-900 shadow-[inset_0_1px_0_rgba(255,255,255,0.9),0_10px_40px_rgba(15,23,42,0.08)] backdrop-blur-[2px] backdrop-saturate-150 select-none dark:bg-[#252525] dark:text-white dark:shadow-none dark:backdrop-blur-none ${className}`}
+      className={cn(
+        "relative isolate inline-flex items-center gap-0.5 rounded-full bg-white/60 text-slate-900 shadow-[inset_0_1px_0_rgba(255,255,255,0.9),0_10px_40px_rgba(15,23,42,0.08)] backdrop-blur-[2px] backdrop-saturate-150 select-none dark:bg-[#252525] dark:text-white dark:shadow-none dark:backdrop-blur-none",
+        className
+      )}
       style={{ padding: `${actualHug}px` }}
       aria-label={ariaLabel}
     >
@@ -235,11 +239,12 @@ export function SelectBar<T extends string = string>({
               refs.current[item.key] = el;
             }}
             type="button"
-            className={`relative z-2 flex cursor-pointer items-center justify-center rounded-full border-0 bg-transparent leading-none text-slate-900 transition-opacity duration-260 ease-[cubic-bezier(0.32,0.72,0.24,1)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-900 dark:focus-visible:outline-white ${
+            className={cn(
+              "relative z-2 flex cursor-pointer items-center justify-center rounded-full border-0 bg-transparent leading-none text-slate-900 transition-opacity duration-260 ease-[cubic-bezier(0.32,0.72,0.24,1)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-900 dark:focus-visible:outline-white",
               isSelected || isSwatch
                 ? "font-medium opacity-100 dark:text-white"
                 : "opacity-[0.42] hover:opacity-[0.72] dark:text-[#9a9a9a] dark:opacity-100 dark:hover:text-white"
-            }`}
+            )}
             data-active={isSelected}
             data-swatch={isSwatch}
             aria-label={slotTitle}
@@ -255,9 +260,10 @@ export function SelectBar<T extends string = string>({
           >
             {item.color ? (
               <span
-                className={`block rounded-full border transition-transform duration-150 ${
+                className={cn(
+                  "block rounded-full border transition-transform duration-150",
                   isSelected ? "scale-110" : "hover:scale-105"
-                }`}
+                )}
                 style={{
                   backgroundColor: item.color,
                   borderColor: item.darkOutline || item.color,
@@ -269,13 +275,14 @@ export function SelectBar<T extends string = string>({
               <span className="flex items-center justify-center text-current">{item.icon}</span>
             ) : (
               <span
-                className={`inline-flex items-center justify-center gap-1.5 font-sans ${
+                className={cn(
+                  "inline-flex items-center justify-center gap-1.5 font-sans",
                   size === "xs"
                     ? "text-[11.5px] font-medium"
                     : size === "default"
                       ? "text-[13px] font-medium"
                       : "text-xs font-medium"
-                }`}
+                )}
                 style={{ whiteSpace: "nowrap" }}
               >
                 {item.icon && (

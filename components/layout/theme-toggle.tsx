@@ -2,6 +2,7 @@
 
 import React, { useSyncExternalStore } from "react";
 import { SunIcon, MoonIcon } from "@phosphor-icons/react";
+import { cn } from "@/lib/utils";
 import { SelectBar, SelectBarItem } from "@/components/ui/select-bar";
 import { Theme, useTheme } from "@/components/providers/theme-provider";
 
@@ -23,7 +24,10 @@ export function ThemeToggle({ className = "" }: { className?: string }) {
   if (!mounted) {
     return (
       <div
-        className={`h-[28px] w-[58px] animate-pulse rounded-full bg-slate-100/80 dark:bg-white/10 ${className}`}
+        className={cn(
+          "h-[28px] w-[58px] animate-pulse rounded-full bg-slate-100/80 dark:bg-white/10",
+          className
+        )}
       />
     );
   }

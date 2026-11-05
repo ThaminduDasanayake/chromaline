@@ -3,6 +3,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import {
   Heatmap,
+  HeatmapNode,
   HeatmapSchemeKey,
   HeatmapRange,
   GITHUB_SCHEMES,
@@ -12,6 +13,7 @@ import {
 } from "@/components/ui/heatmap";
 import { SelectBar } from "@/components/ui/select-bar";
 import { GitCommitIcon } from "@phosphor-icons/react";
+import { cn } from "@/lib/utils";
 import {
   DocsLayout,
   ComponentPreview,
@@ -153,21 +155,62 @@ export default function HeatmapDocumentationPage() {
   const [range, setRange] = useState<HeatmapRange>("year");
   const [scheme, setScheme] = useState<HeatmapSchemeKey>("default");
   const [rawContributions, setRawContributions] = useState<RawContributionDay[] | null>(null);
+  const [hoveredNode, setHoveredNode] = useState<HeatmapNode | null>(null);
 
   const activePalette = (GITHUB_SCHEMES[scheme] || GITHUB_SCHEMES.default)[mode];
   const isDark = mode === "dark";
 
   useEffect(() => {
-    fetch("/api/contributions?username=ThaminduDasanayake")
-      .then((res) => (res.ok ? res.json() : null))
-      .then((data) => {
-        if (data?.contributions && Array.isArray(data.contributions)) {
-          setRawContributions(data.contributions);
+    let cancelled = false;
+
+    async function loadContributions() {
+      try {
+        // Try local Next.js API route first
+        const res = await fetch("/api/contributions?username=ThaminduDasanayake", {
+          cache: "no-store",
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (
+            !cancelled &&
+            data?.contributions &&
+            Array.isArray(data.contributions) &&
+            data.contributions.length > 0
+          ) {
+            setRawContributions(data.contributions);
+            return;
+          }
         }
-      })
-      .catch(() => {
+      } catch {
+        // Internal route unavailable, fall through to direct public API
+      }
+
+      // Fallback: direct CORS-enabled fetch to ensure latest live contributions
+      try {
+        const directRes = await fetch(
+          "https://github-contributions-api.jogruber.de/v4/ThaminduDasanayake?y=last"
+        );
+        if (directRes.ok) {
+          const data = await directRes.json();
+          if (
+            !cancelled &&
+            data?.contributions &&
+            Array.isArray(data.contributions) &&
+            data.contributions.length > 0
+          ) {
+            setRawContributions(data.contributions);
+          }
+        }
+      } catch {
         // Fall back gracefully to procedural matrix
-      });
+      }
+    }
+
+    loadContributions();
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   const { matrix } = useMemo(() => {
@@ -177,6 +220,29 @@ export default function HeatmapDocumentationPage() {
     return generateProceduralMatrix(scheme, mode, range);
   }, [rawContributions, scheme, mode, range]);
 
+  const formattedDate = useMemo(() => {
+    if (!hoveredNode) return "";
+    if (hoveredNode.isFuture) return "Future";
+    if (hoveredNode.date) {
+      const d = new Date(hoveredNode.date + "T00:00:00");
+      if (!isNaN(d.getTime())) {
+        return d.toLocaleDateString("en-US", {
+          month: "short",
+          day: "numeric",
+          year: "numeric",
+        });
+      }
+    }
+    return hoveredNode.label || "";
+  }, [hoveredNode]);
+
+  const countText = useMemo(() => {
+    if (!hoveredNode) return "";
+    if (hoveredNode.isFuture) return "No activity";
+    if (hoveredNode.count === 0) return "No contributions";
+    return `${hoveredNode.count} contribution${hoveredNode.count === 1 ? "" : "s"}`;
+  }, [hoveredNode]);
+
   return (
     <DocsLayout
       title="Heatmap"
@@ -185,9 +251,10 @@ export default function HeatmapDocumentationPage() {
     >
       {/* 1. Preview */}
       <ComponentPreview
-        canvasClassName={`min-h-[460px] flex-col p-6 sm:p-8 transition-colors duration-300 ${
+        canvasClassName={cn(
+          "min-h-[460px] flex-col p-6 sm:p-8 transition-colors duration-300",
           isDark ? "bg-[#0f0f0f]" : "bg-[#f7f7f6]"
-        }`}
+        )}
         canvasStyle={{
           backgroundColor: isDark ? "#0d1117" : "#F9FAFB",
           transition: "background-color 300ms ease",
@@ -261,7 +328,29 @@ export default function HeatmapDocumentationPage() {
         }
       >
         <div className="w-full max-w-[840px] px-1 sm:px-2">
-          <Heatmap data={matrix} scheme={scheme} mode={mode} range={range} colorOnHover />
+          <Heatmap
+            data={matrix}
+            scheme={scheme}
+            mode={mode}
+            range={range}
+            colorOnHover
+            onHover={setHoveredNode}
+          />
+        </div>
+
+        {/* Live Hover Info - Right hand side bottom corner (text only, hover only) */}
+        <div
+          className={cn(
+            "pointer-events-none absolute right-4 bottom-4 z-10 font-mono text-xs transition-opacity duration-150 sm:right-6 sm:bottom-6",
+            hoveredNode ? "opacity-100" : "opacity-0"
+          )}
+          aria-live="polite"
+        >
+          <span className={cn("font-medium", isDark ? "text-white" : "text-slate-900")}>
+            {countText}
+          </span>{" "}
+          <span className={cn(isDark ? "text-zinc-500" : "text-slate-400")}>on</span>{" "}
+          <span className={cn(isDark ? "text-zinc-400" : "text-slate-600")}>{formattedDate}</span>
         </div>
       </ComponentPreview>
 

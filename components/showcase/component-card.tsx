@@ -3,6 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 export interface ComponentCardProps {
   title: string;
@@ -38,7 +39,10 @@ export function ComponentCard({
   return (
     <div
       onClick={handleCardClick}
-      className={`group relative flex cursor-pointer flex-col overflow-hidden rounded-2xl border border-black/[0.08] bg-[#f7f7f6] shadow-2xs transition-all duration-200 hover:border-black/20 hover:shadow-xs dark:border-white/10 dark:bg-[#0f0f0f] dark:hover:border-white/20 ${className}`}
+      className={cn(
+        "group relative flex cursor-pointer flex-col overflow-hidden rounded-2xl border border-black/[0.08] bg-[#f7f7f6] shadow-2xs transition-all duration-200 hover:border-black/20 hover:shadow-xs dark:border-white/10 dark:bg-[#0f0f0f] dark:hover:border-white/20",
+        className
+      )}
     >
       {/* Component Preview Canvas */}
       <div className={previewClassName}>{children}</div>

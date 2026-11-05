@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useId, useRef, useState, useEffect } from "react";
+import { cn } from "@/lib/utils";
 
 export function useFluidReducedMotion() {
   const [reduced, setReduced] = useState(
@@ -90,7 +91,7 @@ export function FluidSearch({
     <div
       ref={host}
       tabIndex={-1}
-      className={`seenry-fluid-search${open ? "is-open" : ""}${className ? ` ${className}` : ""}`}
+      className={cn("seenry-fluid-search", open && "is-open", className)}
       data-reduced={reduced}
       data-keyboard={keyboard}
       data-theme={theme || undefined}

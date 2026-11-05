@@ -67,64 +67,64 @@ export default function ChromalineHomePage() {
             <SeekCardPreview />
           </ComponentCard>
 
-          {/* Card 6: Heatmap */}
+          {/* Card 6: Fluid Search */}
+          <ComponentCard title="Fluid Search" href="/components/fluid-search">
+            <FluidSearchCardPreview />
+          </ComponentCard>
+
+          {/* Card 7: Heatmap */}
           <ComponentCard title="Heatmap" href="/components/heatmap">
             <HeatmapCardPreview />
           </ComponentCard>
 
-          {/* Card 7: Toggle */}
+          {/* Card 8: Toggle */}
           <ComponentCard title="Toggle" href="/components/toggle">
             <ToggleCardPreview />
           </ComponentCard>
 
-          {/* Card 8: Label Input */}
+          {/* Card 9: Label Input */}
           <ComponentCard title="Label Input" href="/components/label-input">
             <LabelInputCardPreview />
           </ComponentCard>
 
-          {/* Card 8b: Label Textarea */}
+          {/* Card 10: Label Textarea */}
           <ComponentCard title="Label Textarea" href="/components/label-textarea">
             <LabelTextareaCardPreview />
           </ComponentCard>
 
-          {/* Card 9: Aspect Ratio */}
+          {/* Card 11: Aspect Ratio */}
           <ComponentCard title="Aspect Ratio" href="/components/aspect-ratio">
             <AspectRatioCardPreview />
           </ComponentCard>
 
-          {/* Card 10: Counter */}
+          {/* Card 12: Counter */}
           <ComponentCard title="Counter" href="/components/counter">
             <CounterCardPreview />
           </ComponentCard>
 
-          {/* Card 11: Wake Slider */}
+          {/* Card 13: Wake Slider */}
           <ComponentCard title="Wake Slider" href="/components/wake-slider">
             <WakeSliderCardPreview />
           </ComponentCard>
 
-          {/* Card 12: Palette */}
+          {/* Card 14: Palette */}
           <ComponentCard title="Palette" href="/components/palette">
             <PaletteCardPreview />
           </ComponentCard>
 
-          {/* Card 13: Time Scrubber */}
+          {/* Card 15: Time Scrubber */}
           <ComponentCard title="Time Scrubber" href="/components/time-scrubber">
             <TimeScrubberCardPreview />
           </ComponentCard>
 
-          {/* Card 14: Checklist */}
+          {/* Card 16: Checklist */}
           <ComponentCard title="Checklist" href="/components/checklist">
             <ChecklistCardPreview />
           </ComponentCard>
 
-          {/* Card 15: Create Menu */}
+          {/* Card 17: Create Menu */}
           <ComponentCard title="Create Menu" href="/components/create-menu">
             <CreateMenuCardPreview />
-          </ComponentCard>
-
-          {/* Card 16: Fluid Search */}
-          <ComponentCard title="Fluid Search" href="/components/fluid-search">
-            <FluidSearchCardPreview />
           </ComponentCard>
         </div>
       </main>
