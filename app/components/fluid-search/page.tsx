@@ -53,24 +53,15 @@ const CODE_EXAMPLE_LINES = [
   },
   {
     num: 8,
-    parts: [
-      { text: "      value", cls: "text-purple-600" },
-      { text: "={query}" },
-    ],
+    parts: [{ text: "      value", cls: "text-purple-600" }, { text: "={query}" }],
   },
   {
     num: 9,
-    parts: [
-      { text: "      onChange", cls: "text-purple-600" },
-      { text: "={setQuery}" },
-    ],
+    parts: [{ text: "      onChange", cls: "text-purple-600" }, { text: "={setQuery}" }],
   },
   {
     num: 10,
-    parts: [
-      { text: "      placeholder", cls: "text-purple-600" },
-      { text: '="Search…"' },
-    ],
+    parts: [{ text: "      placeholder", cls: "text-purple-600" }, { text: '="Search…"' }],
   },
   { num: 11, parts: [{ text: "    />", cls: "text-slate-500" }] },
   { num: 12, parts: [{ text: "  );" }] },

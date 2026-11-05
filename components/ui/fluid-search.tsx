@@ -4,7 +4,8 @@ import React, { useId, useRef, useState, useEffect } from "react";
 
 export function useFluidReducedMotion() {
   const [reduced, setReduced] = useState(
-    () => typeof matchMedia !== "undefined" && matchMedia("(prefers-reduced-motion: reduce)").matches
+    () =>
+      typeof matchMedia !== "undefined" && matchMedia("(prefers-reduced-motion: reduce)").matches
   );
 
   useEffect(() => {
@@ -89,7 +90,7 @@ export function FluidSearch({
     <div
       ref={host}
       tabIndex={-1}
-      className={`seenry-fluid-search${open ? " is-open" : ""}${className ? ` ${className}` : ""}`}
+      className={`seenry-fluid-search${open ? "is-open" : ""}${className ? ` ${className}` : ""}`}
       data-reduced={reduced}
       data-keyboard={keyboard}
       data-theme={theme || undefined}
@@ -123,10 +124,7 @@ export function FluidSearch({
             colorInterpolationFilters="sRGB"
           >
             <feGaussianBlur stdDeviation="5" />
-            <feColorMatrix
-              type="matrix"
-              values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 18 -8.5"
-            />
+            <feColorMatrix type="matrix" values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 18 -8.5" />
           </filter>
         </defs>
       </svg>
