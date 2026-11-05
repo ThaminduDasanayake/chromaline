@@ -20,6 +20,7 @@ function buildRegistry() {
   const timeScrubberPath = path.join(__dirname, "../components/ui/time-scrubber.tsx");
   const checklistPath = path.join(__dirname, "../components/ui/checklist.tsx");
   const createMenuPath = path.join(__dirname, "../components/ui/create-menu.tsx");
+  const fluidSearchPath = path.join(__dirname, "../components/ui/fluid-search.tsx");
 
   if (!fs.existsSync(trayPath)) {
     console.error("Component not found:", trayPath);
@@ -60,6 +61,9 @@ function buildRegistry() {
     : "";
   const createMenuContent = fs.existsSync(createMenuPath)
     ? fs.readFileSync(createMenuPath, "utf8")
+    : "";
+  const fluidSearchContent = fs.existsSync(fluidSearchPath)
+    ? fs.readFileSync(fluidSearchPath, "utf8")
     : "";
 
   // 1. Full Folder Tray with Folder Support
@@ -435,6 +439,27 @@ function buildRegistry() {
     ],
   };
 
+  // 17. Fluid Search Component
+  const fluidSearchRegistryItem = {
+    $schema: "https://ui.shadcn.com/schema/registry-item.json",
+    name: "fluid-search",
+    type: "registry:ui",
+    title: "Fluid Search",
+    description:
+      "Metaball search disclosure where the pill field and close circle fluidly separate on focus and seamlessly fuse back when closed.",
+    dependencies: [],
+    devDependencies: [],
+    registryDependencies: [],
+    files: [
+      {
+        path: "components/ui/fluid-search.tsx",
+        content: fluidSearchContent,
+        type: "registry:ui",
+        target: "components/ui/fluid-search.tsx",
+      },
+    ],
+  };
+
   const outDir = path.join(__dirname, "../public/r");
   fs.mkdirSync(outDir, { recursive: true });
 
@@ -489,6 +514,10 @@ function buildRegistry() {
     path.join(outDir, "create-menu.json"),
     JSON.stringify(createMenuRegistryItem, null, 2)
   );
+  fs.writeFileSync(
+    path.join(outDir, "fluid-search.json"),
+    JSON.stringify(fluidSearchRegistryItem, null, 2)
+  );
 
   const indexRegistry = {
     $schema: "https://ui.shadcn.com/schema/registry.json",
@@ -511,6 +540,7 @@ function buildRegistry() {
       timeScrubberRegistryItem,
       checklistRegistryItem,
       createMenuRegistryItem,
+      fluidSearchRegistryItem,
     ],
   };
   fs.writeFileSync(path.join(outDir, "index.json"), JSON.stringify(indexRegistry, null, 2));
