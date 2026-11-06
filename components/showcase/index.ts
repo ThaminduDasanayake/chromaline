@@ -24,3 +24,4 @@ export { TimeScrubberCardPreview } from "./time-scrubber-card-preview";
 export { ChecklistCardPreview } from "./checklist-card-preview";
 export { CreateMenuCardPreview } from "./create-menu-card-preview";
 export { FluidSearchCardPreview } from "./fluid-search-card-preview";
+export { StackCardPreview } from "./stack-card-preview";
