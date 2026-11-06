@@ -19,6 +19,7 @@ import {
   ChecklistCardPreview,
   CreateMenuCardPreview,
   FluidSearchCardPreview,
+  StackCardPreview,
 } from "@/components/showcase";
 
 export default function ChromalineHomePage() {
@@ -125,6 +126,11 @@ export default function ChromalineHomePage() {
           {/* Card 17: Create Menu */}
           <ComponentCard title="Create Menu" href="/components/create-menu">
             <CreateMenuCardPreview />
+          </ComponentCard>
+
+          {/* Card 18: Stack */}
+          <ComponentCard title="Stack" href="/components/stack">
+            <StackCardPreview />
           </ComponentCard>
         </div>
       </main>

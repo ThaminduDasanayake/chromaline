@@ -21,6 +21,7 @@ function buildRegistry() {
   const checklistPath = path.join(__dirname, "../components/ui/checklist.tsx");
   const createMenuPath = path.join(__dirname, "../components/ui/create-menu.tsx");
   const fluidSearchPath = path.join(__dirname, "../components/ui/fluid-search.tsx");
+  const stackPath = path.join(__dirname, "../components/ui/stack.tsx");
 
   if (!fs.existsSync(trayPath)) {
     console.error("Component not found:", trayPath);
@@ -65,6 +66,7 @@ function buildRegistry() {
   const fluidSearchContent = fs.existsSync(fluidSearchPath)
     ? fs.readFileSync(fluidSearchPath, "utf8")
     : "";
+  const stackContent = fs.existsSync(stackPath) ? fs.readFileSync(stackPath, "utf8") : "";
 
   // 1. Full Folder Tray with Folder Support
   const trayRegistryItem = {
@@ -460,6 +462,27 @@ function buildRegistry() {
     ],
   };
 
+  // 18. Stack Component
+  const stackRegistryItem = {
+    $schema: "https://ui.shadcn.com/schema/registry-item.json",
+    name: "stack",
+    type: "registry:ui",
+    title: "Stack",
+    description:
+      "A tactile card pile that fans out radially along an eccentric virtual pivot on hover and fluidly draws cards into full-frame 3D view on press.",
+    dependencies: ["clsx", "tailwind-merge"],
+    devDependencies: [],
+    registryDependencies: [],
+    files: [
+      {
+        path: "components/ui/stack.tsx",
+        content: stackContent,
+        type: "registry:ui",
+        target: "components/ui/stack.tsx",
+      },
+    ],
+  };
+
   const outDir = path.join(__dirname, "../public/r");
   fs.mkdirSync(outDir, { recursive: true });
 
@@ -518,6 +541,7 @@ function buildRegistry() {
     path.join(outDir, "fluid-search.json"),
     JSON.stringify(fluidSearchRegistryItem, null, 2)
   );
+  fs.writeFileSync(path.join(outDir, "stack.json"), JSON.stringify(stackRegistryItem, null, 2));
 
   const indexRegistry = {
     $schema: "https://ui.shadcn.com/schema/registry.json",
@@ -541,6 +565,7 @@ function buildRegistry() {
       checklistRegistryItem,
       createMenuRegistryItem,
       fluidSearchRegistryItem,
+      stackRegistryItem,
     ],
   };
   fs.writeFileSync(path.join(outDir, "index.json"), JSON.stringify(indexRegistry, null, 2));
@@ -808,6 +833,36 @@ function buildRegistry() {
             path: "components/ui/create-menu.tsx",
             type: "registry:ui",
             target: "components/ui/create-menu.tsx",
+          },
+        ],
+      },
+      {
+        name: "fluid-search",
+        type: "registry:ui",
+        title: "Fluid Search",
+        description:
+          "Metaball search disclosure where the pill field and close circle fluidly separate on focus and seamlessly fuse back when closed.",
+        dependencies: [],
+        files: [
+          {
+            path: "components/ui/fluid-search.tsx",
+            type: "registry:ui",
+            target: "components/ui/fluid-search.tsx",
+          },
+        ],
+      },
+      {
+        name: "stack",
+        type: "registry:ui",
+        title: "Stack",
+        description:
+          "A tactile card pile that fans out radially along an eccentric virtual pivot on hover and fluidly draws cards into full-frame 3D view on press.",
+        dependencies: ["clsx", "tailwind-merge"],
+        files: [
+          {
+            path: "components/ui/stack.tsx",
+            type: "registry:ui",
+            target: "components/ui/stack.tsx",
           },
         ],
       },

@@ -282,6 +282,37 @@
           "target": "components/ui/create-menu.tsx"
         }
       ]
+    },
+    {
+      "name": "fluid-search",
+      "type": "registry:ui",
+      "title": "Fluid Search",
+      "description": "Metaball search disclosure where the pill field and close circle fluidly separate on focus and seamlessly fuse back when closed.",
+      "dependencies": [],
+      "files": [
+        {
+          "path": "components/ui/fluid-search.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/fluid-search.tsx"
+        }
+      ]
+    },
+    {
+      "name": "stack",
+      "type": "registry:ui",
+      "title": "Stack",
+      "description": "A tactile card pile that fans out radially along an eccentric virtual pivot on hover and fluidly draws cards into full-frame 3D view on press.",
+      "dependencies": [
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "components/ui/stack.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/stack.tsx"
+        }
+      ]
     }
   ]
 }
