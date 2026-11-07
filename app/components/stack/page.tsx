@@ -22,7 +22,7 @@ const CODE_EXAMPLE_LINES = [
     parts: [
       { text: "import", cls: "text-[#f43f5e]" },
       { text: " { " },
-      { text: "Stack", cls: "text-slate-900 font-semibold dark:text-white" },
+      { text: "Stack", cls: "text-slate-900 font-semibold" },
       { text: " } " },
       { text: "from", cls: "text-[#f43f5e]" },
       { text: ' "@/components/ui/stack"', cls: "text-[#0284c7]" },

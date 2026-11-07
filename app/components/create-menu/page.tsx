@@ -20,7 +20,7 @@ const CODE_EXAMPLE_LINES = [
     parts: [
       { text: "import", cls: "text-[#f43f5e]" },
       { text: " { " },
-      { text: "Create", cls: "text-slate-900 dark:text-zinc-100 font-semibold" },
+      { text: "Create", cls: "text-slate-900 font-semibold" },
       { text: " } " },
       { text: "from", cls: "text-[#f43f5e]" },
       { text: ' "@/components/ui/create-menu"', cls: "text-[#0284c7]" },
