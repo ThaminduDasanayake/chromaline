@@ -20,6 +20,48 @@ export interface UsageSectionProps {
   codeLines?: CodeLine[];
 }
 
+function getCodeTokenClass(cls?: string): string {
+  if (!cls) return "text-slate-800 dark:text-zinc-200";
+
+  // If a dark text color is already explicitly specified, preserve it
+  if (cls.includes("dark:text-")) {
+    return cls;
+  }
+
+  const additions: string[] = [];
+
+  // Identifiers / main keywords (e.g. `LabelInput`, `Folder`, `Continue`)
+  if (cls.includes("text-slate-900")) {
+    additions.push("dark:text-zinc-100");
+  }
+  // String literals / booleans (e.g. ` "@/components/ui/..." `, `""`, `"#232327"`)
+  if (cls.includes("text-[#0284c7]")) {
+    additions.push("dark:text-sky-300");
+  }
+  // JSX Props (e.g. `field`, `corner`, `onChange`, `className`)
+  if (cls.includes("text-purple-600")) {
+    additions.push("dark:text-purple-300");
+  }
+  // Component names / JSX tags (e.g. `<LabelInput`, `<SelectBar`)
+  if (cls.includes("text-[#16a34a]")) {
+    additions.push("dark:text-emerald-400");
+  }
+  // Flow keywords (e.g. `import`, `export default function`, `from`, `const`)
+  if (cls.includes("text-[#f43f5e]")) {
+    additions.push("dark:text-rose-400");
+  }
+  // Brackets / JSX symbols (e.g. `<`, `/>`, `</`, `>`)
+  if (cls.includes("text-slate-500")) {
+    additions.push("dark:text-zinc-400");
+  }
+  // Comments (e.g. `// "default" | "winter"`)
+  if (cls.includes("text-slate-400")) {
+    additions.push("dark:text-zinc-500");
+  }
+
+  return additions.length > 0 ? `${cls} ${additions.join(" ")}` : cls;
+}
+
 export function UsageSection({
   title = "Usage",
   description = "Import and use the component in your React application.",
@@ -53,7 +95,7 @@ export function UsageSection({
                     </span>
                     <span className="table-cell">
                       {line.parts.map((p, idx) => (
-                        <span key={idx} className={p.cls || "text-slate-800 dark:text-zinc-200"}>
+                        <span key={idx} className={getCodeTokenClass(p.cls)}>
                           {p.text}
                         </span>
                       ))}
