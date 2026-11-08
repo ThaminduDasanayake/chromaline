@@ -217,6 +217,7 @@ export default function ToggleDocumentationPage() {
     >
       {/* 1. Preview Canvas & Playground */}
       <ComponentPreview
+        theme={theme}
         canvasClassName={`min-h-[320px] p-8 transition-colors duration-300 ${
           variant === "dark" ? "bg-[#0f0f0f]" : "bg-[#f7f7f6]"
         }`}

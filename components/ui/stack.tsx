@@ -144,6 +144,8 @@ export interface StackProps {
   corner?: number;
   /** Custom image URLs */
   images?: string[];
+  /** Visual theme mode (default: inherits from context) */
+  theme?: "light" | "dark";
   className?: string;
   style?: React.CSSProperties;
 }
@@ -155,6 +157,7 @@ export function Stack({
   count = 5,
   corner = 14,
   images = DEFAULT_PHOTOS,
+  theme,
   className,
   style,
 }: StackProps) {
@@ -312,6 +315,7 @@ export function Stack({
   return (
     <div
       ref={root}
+      data-theme={theme || undefined}
       className={cn("pointer-events-none relative select-none", className)}
       data-viewing={view ? "" : undefined}
       data-shuffle={shuffle ? "" : undefined}

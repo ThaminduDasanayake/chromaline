@@ -196,6 +196,7 @@ export function WakeSlider({
 
   return (
     <div
+      data-theme={theme || undefined}
       className={cn(
         "text-chroma-text-primary relative flex items-center gap-4 transition-colors duration-300 select-none",
         disabled && "pointer-events-none opacity-40",

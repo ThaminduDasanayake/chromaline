@@ -323,6 +323,7 @@ export function Toggle({
 
   return (
     <div
+      data-theme={variant !== "default" ? variant : undefined}
       className={cn("relative inline-flex items-center justify-center select-none", className)}
       style={style}
     >

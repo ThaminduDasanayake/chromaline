@@ -282,6 +282,7 @@ export function Counter({
 
   return (
     <div
+      data-theme={theme || undefined}
       className={cn(
         "bg-chroma-surface-elevated text-chroma-text-primary relative flex items-center gap-0 p-[5px] font-sans shadow-[0_0_0_1px_var(--chroma-border),0_2px_8px_-2px_rgba(15,23,42,0.06)] transition-colors duration-300 select-none dark:shadow-[0_0_0_1px_var(--chroma-border),0_4px_20px_-4px_rgba(0,0,0,0.6)]",
         className

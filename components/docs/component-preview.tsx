@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 export interface ComponentPreviewProps {
   children: React.ReactNode;
   controls?: React.ReactNode;
+  theme?: "light" | "dark";
   className?: string;
   canvasClassName?: string;
   canvasStyle?: React.CSSProperties;
@@ -14,6 +15,7 @@ export interface ComponentPreviewProps {
 export function ComponentPreview({
   children,
   controls,
+  theme,
   className = "",
   canvasClassName = "min-h-[320px] p-8",
   canvasStyle,
@@ -29,9 +31,15 @@ export function ComponentPreview({
     >
       {/* Canvas */}
       <div
+        data-theme={theme || undefined}
         className={cn(
           "relative flex flex-col items-center justify-center overflow-hidden transition-colors duration-300",
-          !hasCustomBg && "bg-[#f7f7f6] dark:bg-[#0f0f0f]",
+          !hasCustomBg &&
+            (theme === "dark"
+              ? "bg-[#0f0f0f]"
+              : theme === "light"
+                ? "bg-[#f7f7f6]"
+                : "bg-[#f7f7f6] dark:bg-[#0f0f0f]"),
           canvasClassName
         )}
         style={canvasStyle}

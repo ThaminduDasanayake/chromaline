@@ -50,6 +50,7 @@ export interface SelectBarProps<T extends string = string> {
   hug?: number;
   className?: string;
   ariaLabel?: string;
+  theme?: "light" | "dark";
   // Backward compatibility props
   variant?: "glass" | "swatches" | "pill";
   axis?: "row" | "column";
@@ -68,6 +69,7 @@ export function SelectBar<T extends string = string>({
   hug,
   className = "",
   ariaLabel = "Navigation",
+  theme,
 }: SelectBarProps<T>) {
   const initialKey = value ?? defaultValue ?? items[0]?.key;
   const [active, setActive] = useState<T>(initialKey);
@@ -223,6 +225,7 @@ export function SelectBar<T extends string = string>({
       ref={trackRef as React.RefObject<HTMLElement>}
       role="tablist"
       aria-orientation="horizontal"
+      data-theme={theme || undefined}
       className={cn(
         "bg-chroma-glass-nav text-chroma-text-primary relative isolate inline-flex items-center gap-0.5 rounded-full shadow-[inset_0_1px_0_rgba(255,255,255,0.9),0_10px_40px_rgba(15,23,42,0.08)] backdrop-blur-[2px] backdrop-saturate-150 select-none dark:shadow-none dark:backdrop-blur-none",
         className
@@ -282,10 +285,10 @@ export function SelectBar<T extends string = string>({
             tabIndex={isSelected ? 0 : -1}
             onKeyDown={(e) => handleKeyDown(e, idx)}
             className={cn(
-              "relative z-2 flex cursor-pointer items-center justify-center rounded-full border-0 bg-transparent leading-none text-slate-900 transition-opacity duration-260 ease-[cubic-bezier(0.32,0.72,0.24,1)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-900 dark:focus-visible:outline-white",
+              "relative z-2 flex cursor-pointer items-center justify-center rounded-full border-0 bg-transparent leading-none transition-colors duration-200 ease-[cubic-bezier(0.32,0.72,0.24,1)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-900 dark:focus-visible:outline-white",
               isSelected || isSwatch
-                ? "dark:text-chroma-text-primary font-medium opacity-100"
-                : "dark:text-chroma-text-secondary dark:hover:text-chroma-text-primary opacity-[0.42] hover:opacity-[0.72] dark:opacity-100"
+                ? "dark:text-chroma-text-primary font-medium text-slate-900"
+                : "dark:text-chroma-text-secondary dark:hover:text-chroma-text-primary text-slate-900/40 hover:text-slate-900/75"
             )}
             data-active={isSelected}
             data-swatch={isSwatch}
