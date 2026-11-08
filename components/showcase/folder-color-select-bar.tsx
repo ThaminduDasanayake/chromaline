@@ -32,7 +32,6 @@ export const FOLDER_COLOR_PRESETS: FolderColorPreset[] = [
 export const FOLDER_COLOR_SWATCHES: SelectBarItem[] = FOLDER_COLOR_PRESETS.map((preset) => ({
   key: preset.name.toLowerCase(),
   color: preset.body,
-  darkOutline: preset.dark,
   label: preset.name,
 }));
 

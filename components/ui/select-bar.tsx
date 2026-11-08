@@ -306,14 +306,14 @@ export function SelectBar<T extends string = string>({
             {item.color ? (
               <span
                 className={cn(
-                  "block rounded-full border transition-transform duration-150",
+                  "block rounded-full shadow-[inset_0_0_0_1px_rgba(0,0,0,0.12)] transition-transform duration-150 dark:shadow-[inset_0_0_0_1px_rgba(255,255,255,0.18)]",
                   isSelected ? "scale-110" : "hover:scale-105"
                 )}
                 style={{
                   backgroundColor: item.color,
-                  borderColor: item.darkOutline || item.color,
-                  width: size === "xs" ? "12px" : size === "default" ? "16px" : "14px",
-                  height: size === "xs" ? "12px" : size === "default" ? "16px" : "14px",
+                  ...(item.darkOutline ? { boxShadow: `inset 0 0 0 1px ${item.darkOutline}` } : {}),
+                  width: size === "xs" ? "16px" : size === "default" ? "22px" : "18px",
+                  height: size === "xs" ? "16px" : size === "default" ? "22px" : "18px",
                 }}
               />
             ) : isIconOnly ? (
