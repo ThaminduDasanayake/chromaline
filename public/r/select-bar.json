@@ -14,5 +14,35 @@
       "type": "registry:ui",
       "target": "components/ui/select-bar.tsx"
     }
-  ]
+  ],
+  "cssVars": {
+    "light": {
+      "chroma-surface": "#f7f7f6",
+      "chroma-surface-elevated": "#ffffff",
+      "chroma-border": "rgba(0, 0, 0, 0.08)",
+      "chroma-border-subtle": "rgba(0, 0, 0, 0.04)",
+      "chroma-text-primary": "#18181b",
+      "chroma-text-secondary": "#71717a",
+      "chroma-text-muted": "#a1a1aa",
+      "chroma-glass-nav": "rgba(255, 255, 255, 0.6)",
+      "chroma-glass-wash": "rgba(0, 0, 0, 0.06)",
+      "chroma-search-fill": "#e9e9e9",
+      "chroma-stack-face": "#ffffff",
+      "chroma-toggle-thumb": "#d3d3d4"
+    },
+    "dark": {
+      "chroma-surface": "#0f0f0f",
+      "chroma-surface-elevated": "#181818",
+      "chroma-border": "rgba(255, 255, 255, 0.1)",
+      "chroma-border-subtle": "rgba(255, 255, 255, 0.05)",
+      "chroma-text-primary": "#ffffff",
+      "chroma-text-secondary": "#a1a1aa",
+      "chroma-text-muted": "#71717a",
+      "chroma-glass-nav": "#252525",
+      "chroma-glass-wash": "#3d3d3d",
+      "chroma-search-fill": "#222224",
+      "chroma-stack-face": "#14161a",
+      "chroma-toggle-thumb": "#464646"
+    }
+  }
 }
