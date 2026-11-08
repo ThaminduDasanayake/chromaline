@@ -18,6 +18,8 @@ export interface UsageSectionProps {
   description?: string;
   codeText: string;
   codeLines?: CodeLine[];
+  cssText?: string;
+  cssLines?: CodeLine[];
 }
 
 function getCodeTokenClass(cls?: string): string {
@@ -67,10 +69,16 @@ export function UsageSection({
   description = "Import and use the component in your React application.",
   codeText,
   codeLines,
+  cssText,
+  cssLines,
 }: UsageSectionProps) {
+  const [tab, setTab] = React.useState<"tsx" | "css">("tsx");
+  const activeCodeText = tab === "tsx" ? codeText : cssText || "";
+  const activeLines = tab === "tsx" ? codeLines : cssLines;
+
   return (
     <section>
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h2 className="text-xl font-bold tracking-tight text-slate-900 sm:text-2xl dark:text-white">
             {title}
@@ -80,15 +88,44 @@ export function UsageSection({
           )}
         </div>
 
-        <CopyButton value={codeText} title="Copy code" />
+        <div className="flex items-center gap-2.5">
+          {cssText && (
+            <div className="flex items-center gap-1 rounded-xl border border-black/[0.08] bg-[#f0f0ef] p-1 dark:border-white/10 dark:bg-[#181818]">
+              <button
+                type="button"
+                onClick={() => setTab("tsx")}
+                className={`cursor-pointer rounded-lg px-2.5 py-1 text-xs font-medium transition-colors ${
+                  tab === "tsx"
+                    ? "bg-white text-slate-900 shadow-2xs dark:bg-[#252525] dark:text-white"
+                    : "text-slate-500 hover:text-slate-900 dark:text-zinc-400 dark:hover:text-white"
+                }`}
+              >
+                Component.tsx
+              </button>
+              <button
+                type="button"
+                onClick={() => setTab("css")}
+                className={`cursor-pointer rounded-lg px-2.5 py-1 text-xs font-medium transition-colors ${
+                  tab === "css"
+                    ? "bg-white text-slate-900 shadow-2xs dark:bg-[#252525] dark:text-white"
+                    : "text-slate-500 hover:text-slate-900 dark:text-zinc-400 dark:hover:text-white"
+                }`}
+              >
+                globals.css
+              </button>
+            </div>
+          )}
+
+          <CopyButton value={activeCodeText} title={`Copy ${tab === "tsx" ? "code" : "CSS"}`} />
+        </div>
       </div>
 
       <div className="mt-4 overflow-hidden rounded-2xl border border-black/[0.08] bg-[#f7f7f6] shadow-2xs transition-colors duration-200 dark:border-white/10 dark:bg-[#0f0f0f]">
         <div className="overflow-x-auto p-5 font-mono text-xs leading-relaxed text-slate-800 dark:text-zinc-200">
-          {codeLines ? (
+          {activeLines ? (
             <pre className="m-0 p-0">
               <code>
-                {codeLines.map((line) => (
+                {activeLines.map((line) => (
                   <div key={line.num} className="table-row">
                     <span className="table-cell pr-6 text-right text-slate-400 select-none dark:text-zinc-600">
                       {line.num}
@@ -106,7 +143,7 @@ export function UsageSection({
             </pre>
           ) : (
             <pre className="m-0 p-0">
-              <code>{codeText}</code>
+              <code>{activeCodeText}</code>
             </pre>
           )}
         </div>

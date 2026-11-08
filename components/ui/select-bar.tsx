@@ -224,7 +224,7 @@ export function SelectBar<T extends string = string>({
       role="tablist"
       aria-orientation="horizontal"
       className={cn(
-        "relative isolate inline-flex items-center gap-0.5 rounded-full bg-white/60 text-slate-900 shadow-[inset_0_1px_0_rgba(255,255,255,0.9),0_10px_40px_rgba(15,23,42,0.08)] backdrop-blur-[2px] backdrop-saturate-150 select-none dark:bg-[#252525] dark:text-white dark:shadow-none dark:backdrop-blur-none",
+        "bg-chroma-glass-nav text-chroma-text-primary relative isolate inline-flex items-center gap-0.5 rounded-full shadow-[inset_0_1px_0_rgba(255,255,255,0.9),0_10px_40px_rgba(15,23,42,0.08)] backdrop-blur-[2px] backdrop-saturate-150 select-none dark:shadow-none dark:backdrop-blur-none",
         className
       )}
       style={{ padding: `${actualHug}px` }}
@@ -238,7 +238,7 @@ export function SelectBar<T extends string = string>({
 
       {/* Two-phase mercury indicator wash */}
       <span
-        className="pointer-events-none absolute left-0 z-1 rounded-full border-0 bg-black/6 shadow-none will-change-[transform,width] dark:bg-[#3d3d3d] dark:shadow-none"
+        className="bg-chroma-glass-wash pointer-events-none absolute left-0 z-1 rounded-full border-0 shadow-none will-change-[transform,width]"
         style={indStyle}
         aria-hidden="true"
       />

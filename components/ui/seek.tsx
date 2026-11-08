@@ -302,10 +302,7 @@ export const Seek = React.forwardRef<HTMLInputElement, SeekProps>(function Seek(
     >
       <div
         className={cn(
-          "group/seek relative isolate overflow-hidden transition-colors duration-220",
-          isDark
-            ? "bg-[#1a1a1a] shadow-[0_0_0_1px_rgba(255,255,255,0.12)]"
-            : "bg-[#ffffff] shadow-[0_0_0_1px_rgba(23,24,26,0.08)]",
+          "group/seek bg-chroma-surface-elevated relative isolate overflow-hidden shadow-[0_0_0_1px_var(--chroma-border)] transition-colors duration-220",
           !open ? "[@media(hover:hover)]:hover:scale-[1.045]" : ""
         )}
         style={{
@@ -321,16 +318,10 @@ export const Seek = React.forwardRef<HTMLInputElement, SeekProps>(function Seek(
           className={cn(
             "pointer-events-none absolute top-1/2 z-3 fill-none transition-[stroke,stroke-width] duration-220 ease-out",
             busy
-              ? isDark
-                ? "stroke-[#ffffff]"
-                : "stroke-[#17181a]"
+              ? "stroke-chroma-text-primary"
               : open
-                ? isDark
-                  ? "stroke-[#71717a]"
-                  : "stroke-[#a1a1aa]"
-                : isDark
-                  ? "stroke-[#a1a1aa] group-hover/seek:stroke-[#ffffff]"
-                  : "stroke-[#5c5b56] group-hover/seek:stroke-[#17181a]"
+                ? "stroke-chroma-text-muted"
+                : "stroke-chroma-text-secondary group-hover/seek:stroke-chroma-text-primary"
           )}
           viewBox="0 0 18 18"
           aria-hidden="true"
@@ -361,10 +352,7 @@ export const Seek = React.forwardRef<HTMLInputElement, SeekProps>(function Seek(
           onBlur={handleBlur}
           onKeyDown={handleKeyDown}
           className={cn(
-            "absolute top-0 z-3 h-full border-0 bg-transparent font-sans font-medium tracking-tight transition-colors duration-220 outline-none",
-            isDark
-              ? "text-[#ffffff] placeholder:text-[#6b6b6b]"
-              : "text-[#17181a] placeholder:text-[#5c5b56]"
+            "text-chroma-text-primary placeholder:text-chroma-text-muted absolute top-0 z-3 h-full border-0 bg-transparent font-sans font-medium tracking-tight transition-colors duration-220 outline-none"
           )}
           style={{
             left: `${inset + lens + (size === "sm" ? 8 : 11)}px`,
@@ -381,10 +369,7 @@ export const Seek = React.forwardRef<HTMLInputElement, SeekProps>(function Seek(
           <button
             type="button"
             className={cn(
-              "absolute top-1/2 z-5 flex -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border-0 transition-all duration-150",
-              isDark
-                ? "bg-[#ffffff]/10 text-[#a1a1aa] hover:bg-[#ffffff]/20 hover:text-[#ffffff]"
-                : "bg-[#17181a]/[0.06] text-[#5c5b56] hover:bg-[#17181a]/[0.12] hover:text-[#17181a]"
+              "text-chroma-text-secondary hover:text-chroma-text-primary dark:text-chroma-text-muted dark:hover:text-chroma-text-primary absolute top-1/2 z-5 flex -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border-0 bg-black/[0.06] transition-all duration-150 hover:bg-black/[0.12] dark:bg-white/10 dark:hover:bg-white/20"
             )}
             aria-label="Clear search"
             onClick={handleClear}

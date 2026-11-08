@@ -305,16 +305,10 @@ export const LabelTextarea = React.forwardRef<HTMLTextAreaElement, LabelTextarea
             className={cn(
               "pointer-events-none absolute origin-left text-[15px] leading-none tracking-[-0.01em] whitespace-pre transition-[transform,color] duration-420 ease-[cubic-bezier(0.22,1,0.36,1)] select-none motion-reduce:duration-160",
               focus
-                ? isDark
-                  ? "text-[#ffffff]"
-                  : "text-[#18181b]"
+                ? "text-chroma-text-primary"
                 : up
-                  ? isDark
-                    ? "text-[#a1a1aa]"
-                    : "text-[#71717a]"
-                  : isDark
-                    ? "text-[#71717a]"
-                    : "text-[#a1a1aa]"
+                  ? "text-chroma-text-secondary"
+                  : "text-chroma-text-muted"
             )}
             style={{
               left: lx,
@@ -343,8 +337,7 @@ export const LabelTextarea = React.forwardRef<HTMLTextAreaElement, LabelTextarea
             ref={handleTextareaRef}
             id={id}
             className={cn(
-              "absolute inset-0 w-full resize-none rounded-[inherit] border-0 bg-transparent text-[15px] leading-relaxed tracking-[-0.01em] transition-[color] duration-200 outline-none",
-              isDark ? "text-[#ffffff]" : "text-[#18181b]",
+              "text-chroma-text-primary absolute inset-0 w-full resize-none rounded-[inherit] border-0 bg-transparent text-[15px] leading-relaxed tracking-[-0.01em] transition-[color] duration-200 outline-none",
               measuredHeight < maxHeight
                 ? "overflow-hidden"
                 : "scrollbar-thin scrollbar-thumb-zinc-400 overflow-y-auto dark:scrollbar-thumb-zinc-600"

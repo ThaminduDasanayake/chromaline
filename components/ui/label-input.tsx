@@ -265,16 +265,10 @@ export const LabelInput = React.forwardRef<HTMLInputElement, LabelInputProps>(fu
           className={cn(
             "absolute top-1/2 origin-left cursor-text text-[16px] leading-none tracking-[-0.01em] whitespace-pre transition-[transform,color] duration-420 ease-[cubic-bezier(0.22,1,0.36,1)] select-none motion-reduce:duration-160",
             focus
-              ? isDark
-                ? "text-[#ffffff]"
-                : "text-[#18181b]"
+              ? "text-chroma-text-primary"
               : up
-                ? isDark
-                  ? "text-[#a1a1aa]"
-                  : "text-[#71717a]"
-                : isDark
-                  ? "text-[#71717a]"
-                  : "text-[#a1a1aa]"
+                ? "text-chroma-text-secondary"
+                : "text-chroma-text-muted"
           )}
           style={{
             left: lx,
@@ -301,7 +295,7 @@ export const LabelInput = React.forwardRef<HTMLInputElement, LabelInputProps>(fu
           id={id}
           className={cn(
             "absolute inset-0 h-full w-full rounded-[inherit] border-0 bg-transparent text-[16px] tracking-[-0.01em] transition-[filter,opacity] duration-260 outline-none",
-            isDark ? "text-[#ffffff]" : "text-[#18181b]",
+            "text-chroma-text-primary",
             flip > 0 ? "animate-[lbi-flip_260ms_ease-out]" : ""
           )}
           style={{
@@ -334,8 +328,7 @@ export const LabelInput = React.forwardRef<HTMLInputElement, LabelInputProps>(fu
           <button
             type="button"
             className={cn(
-              "group absolute top-1/2 right-2.5 grid h-7 w-7 -translate-y-1/2 place-items-center rounded-full bg-transparent p-0 transition-[color,transform] duration-160 active:scale-95",
-              isDark ? "text-[#71717a] hover:text-[#ffffff]" : "text-[#a1a1aa] hover:text-[#18181b]"
+              "group text-chroma-text-muted hover:text-chroma-text-primary absolute top-1/2 right-2.5 grid h-7 w-7 -translate-y-1/2 place-items-center rounded-full bg-transparent p-0 transition-[color,transform] duration-160 active:scale-95"
             )}
             onPointerDown={(e) => e.preventDefault()}
             onClick={reveal}

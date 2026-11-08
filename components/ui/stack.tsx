@@ -306,23 +306,20 @@ export function Stack({
 
   const photoList = images.length > 0 ? images : DEFAULT_PHOTOS;
 
+  const cardRadius = `${clamp(corner, 0, CARD_W / 2)}px`;
+  const viewRadius = `${((clamp(corner, 0, CARD_W / 2) * VIEW_W) / CARD_W).toFixed(2)}px`;
+
   return (
     <div
       ref={root}
-      className={cn("stk", className)}
+      className={cn("pointer-events-none relative select-none", className)}
       data-viewing={view ? "" : undefined}
       data-shuffle={shuffle ? "" : undefined}
-      style={
-        {
-          width: STAGE_W,
-          height: STAGE_H,
-          "--stk-lift": `${LIFT}px`,
-          "--stk-r": `${clamp(corner, 0, CARD_W / 2)}px`,
-          "--stk-vr": `${((clamp(corner, 0, CARD_W / 2) * VIEW_W) / CARD_W).toFixed(2)}px`,
-          "--stk-ease": still ? "linear" : "cubic-bezier(0.4, 0, 0.2, 1)",
-          ...style,
-        } as React.CSSProperties
-      }
+      style={{
+        width: STAGE_W,
+        height: STAGE_H,
+        ...style,
+      }}
       onPointerOver={() => {
         if (!hover) setHover(true);
       }}
@@ -339,7 +336,7 @@ export function Stack({
     >
       {/* Hit detection pad */}
       <span
-        className="stk-hit"
+        className="pointer-events-auto absolute"
         aria-hidden="true"
         onPointerOver={() => setNear(null)}
         style={
@@ -372,7 +369,7 @@ export function Stack({
         return (
           <span
             key={id}
-            className="stk-card"
+            className="pointer-events-auto absolute cursor-pointer transition-opacity duration-360 ease-[cubic-bezier(0.22,1,0.36,1)]"
             style={{
               left: (STAGE_W - CARD_W) / 2,
               top: ABOVE - CARD_H / 2,
@@ -397,15 +394,20 @@ export function Stack({
               ref={(el) => {
                 faces.current[i] = el;
               }}
-              className="stk-face"
-              data-lift={lift || undefined}
+              className={cn(
+                "bg-chroma-stack-face absolute inset-0 overflow-hidden transition-[translate,box-shadow]",
+                lift
+                  ? "-translate-y-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.08),inset_0_0_0_1px_rgba(255,255,255,0.045),0_2px_5px_rgba(15,23,42,0.12),0_18px_32px_-10px_rgba(15,23,42,0.28)] duration-300 ease-[cubic-bezier(0.2,0.7,0.3,1)] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.18),inset_0_0_0_1px_rgba(255,255,255,0.08),0_12px_28px_-6px_rgba(0,0,0,0.6)]"
+                  : "translate-y-0 shadow-[inset_0_1px_0_rgba(255,255,255,0.07),inset_0_0_0_1px_rgba(255,255,255,0.035),0_1px_2px_rgba(15,23,42,0.1),0_8px_18px_-6px_rgba(15,23,42,0.16)] duration-480 ease-[cubic-bezier(0.4,0,0.2,1)] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.12),inset_0_0_0_1px_rgba(255,255,255,0.05),0_4px_12px_rgba(0,0,0,0.4)]"
+              )}
               style={{
+                borderRadius: cardRadius,
                 scale: recede,
               }}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                className="stk-img"
+                className="pointer-events-none block h-full w-full object-cover select-none"
                 src={photoList[id % photoList.length]}
                 alt=""
                 draggable={false}
@@ -418,7 +420,7 @@ export function Stack({
       {view && (
         <span
           ref={flyer}
-          className="stk-view"
+          className="pointer-events-auto absolute z-20 origin-center cursor-default will-change-transform [transform-style:preserve-3d]"
           role="img"
           aria-label="Card in view; click outside or press Escape to put it back"
           style={{
@@ -440,20 +442,29 @@ export function Stack({
             if (tilt.current) tilt.current.style.transform = "";
           }}
         >
-          <span ref={tilt} className="stk-view-tilt">
-            <span className="stk-view-face">
+          <span
+            ref={tilt}
+            className="absolute inset-0 transition-transform duration-420 ease-[cubic-bezier(0.22,1,0.36,1)] [transform-style:preserve-3d] motion-reduce:transition-none"
+          >
+            <span
+              className="bg-chroma-stack-face absolute inset-0 overflow-hidden shadow-[inset_0_1px_0_rgba(255,255,255,0.08),inset_0_0_0_1px_rgba(255,255,255,0.045),0_4px_10px_rgba(15,23,42,0.12),0_28px_48px_-16px_rgba(15,23,42,0.32)] [backface-visibility:hidden] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.16),inset_0_0_0_1px_rgba(255,255,255,0.07),0_16px_36px_-10px_rgba(0,0,0,0.7)]"
+              style={{ borderRadius: viewRadius }}
+            >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                className="stk-img"
+                className="pointer-events-none block h-full w-full object-cover select-none"
                 src={photoList[view.id % photoList.length]}
                 alt=""
                 draggable={false}
               />
             </span>
-            <span className="stk-view-face" data-back="">
+            <span
+              className="bg-chroma-stack-face absolute inset-0 [transform:rotateY(180deg)] overflow-hidden shadow-[inset_0_1px_0_rgba(255,255,255,0.08),inset_0_0_0_1px_rgba(255,255,255,0.045),0_4px_10px_rgba(15,23,42,0.12),0_28px_48px_-16px_rgba(15,23,42,0.32)] [backface-visibility:hidden] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.16),inset_0_0_0_1px_rgba(255,255,255,0.07),0_16px_36px_-10px_rgba(0,0,0,0.7)]"
+              style={{ borderRadius: viewRadius }}
+            >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                className="stk-img"
+                className="pointer-events-none block h-full w-full object-cover select-none"
                 src={photoList[view.id % photoList.length]}
                 alt=""
                 draggable={false}
