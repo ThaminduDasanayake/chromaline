@@ -76,6 +76,14 @@ export function UsageSection({
   const activeCodeText = tab === "tsx" ? codeText : cssText || "";
   const activeLines = tab === "tsx" ? codeLines : cssLines;
 
+  const computedLines = React.useMemo<CodeLine[]>(() => {
+    if (activeLines && activeLines.length > 0) return activeLines;
+    return activeCodeText.split("\n").map((text, idx) => ({
+      num: idx + 1,
+      parts: [{ text }] as CodeLinePart[],
+    }));
+  }, [activeLines, activeCodeText]);
+
   return (
     <section>
       <div className="flex flex-wrap items-center justify-between gap-3">
@@ -122,30 +130,24 @@ export function UsageSection({
 
       <div className="mt-4 overflow-hidden rounded-2xl border border-black/[0.08] bg-[#f7f7f6] shadow-2xs transition-colors duration-200 dark:border-white/10 dark:bg-[#0f0f0f]">
         <div className="overflow-x-auto p-5 font-mono text-xs leading-relaxed text-slate-800 dark:text-zinc-200">
-          {activeLines ? (
-            <pre className="m-0 p-0">
-              <code>
-                {activeLines.map((line) => (
-                  <div key={line.num} className="table-row">
-                    <span className="table-cell pr-6 text-right text-slate-400 select-none dark:text-zinc-600">
-                      {line.num}
-                    </span>
-                    <span className="table-cell">
-                      {line.parts.map((p, idx) => (
-                        <span key={idx} className={getCodeTokenClass(p.cls)}>
-                          {p.text}
-                        </span>
-                      ))}
-                    </span>
-                  </div>
-                ))}
-              </code>
-            </pre>
-          ) : (
-            <pre className="m-0 p-0">
-              <code>{activeCodeText}</code>
-            </pre>
-          )}
+          <pre key={tab} className="m-0 p-0">
+            <code className="table min-w-full">
+              {computedLines.map((line) => (
+                <div key={line.num} className="table-row">
+                  <span className="table-cell pr-6 text-right text-slate-400 select-none dark:text-zinc-600">
+                    {line.num}
+                  </span>
+                  <span className="table-cell whitespace-pre">
+                    {line.parts.map((p, idx) => (
+                      <span key={idx} className={getCodeTokenClass(p.cls)}>
+                        {p.text}
+                      </span>
+                    ))}
+                  </span>
+                </div>
+              ))}
+            </code>
+          </pre>
         </div>
       </div>
     </section>
