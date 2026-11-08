@@ -6,11 +6,11 @@ import { SelectBar } from "@/components/ui/select-bar";
 import { ArrowRightIcon } from "@phosphor-icons/react";
 
 export const BUTTON_VARIANTS = [
-  { key: "accent" as const, label: "Accent", color: "#e54f10" },
+  { key: "default" as const, label: "Default", color: "#1e2024" },
   { key: "secondary" as const, label: "Secondary", color: "#4a4a46" },
   { key: "destructive" as const, label: "Destructive", color: "#dc2626" },
   { key: "success" as const, label: "Success", color: "#059669" },
-  { key: "default" as const, label: "Default", color: "#1e2024" },
+  { key: "accent" as const, label: "Accent", color: "#e54f10" },
 ];
 
 export function ButtonCardPreview({ showControls = false }: { showControls?: boolean } = {}) {

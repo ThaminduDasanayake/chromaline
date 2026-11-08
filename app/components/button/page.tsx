@@ -141,11 +141,11 @@ const PROPS_DATA: PropItem[] = [
 ];
 
 const VARIANT_SWATCHES = [
-  { key: "accent", label: "Accent", color: "#e54f10" },
+  { key: "default", label: "Default", color: "#1e2024" },
   { key: "secondary", label: "Secondary", color: "#4a4a46" },
   { key: "destructive", label: "Destructive", color: "#dc2626" },
   { key: "success", label: "Success", color: "#059669" },
-  { key: "default", label: "Default", color: "#1e2024" },
+  { key: "accent", label: "Accent", color: "#e54f10" },
 ];
 
 export default function ButtonDocumentationPage() {

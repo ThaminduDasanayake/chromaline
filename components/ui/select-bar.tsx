@@ -235,7 +235,7 @@ export function SelectBar<T extends string = string>({
     >
       {/* Prismatic specular lit rim (light mode only) */}
       <span
-        className="pointer-events-none absolute inset-0 z-3 rounded-full border border-transparent [mask-composite:exclude] [-webkit-mask-composite:xor] [-webkit-mask:linear-gradient(#000_0_0)_padding-box,linear-gradient(#000_0_0)] [background:linear-gradient(142deg,rgba(255,255,255,0.7)_0%,rgba(255,255,255,0.15)_26%,rgba(255,255,255,0.05)_62%,rgba(255,255,255,0.4)_100%)_border-box] [mask:linear-gradient(#000_0_0)_padding-box,linear-gradient(#000_0_0)] dark:hidden"
+        className="pointer-events-none absolute inset-0 z-0 rounded-full border border-transparent [mask-composite:exclude] [-webkit-mask-composite:xor] [-webkit-mask:linear-gradient(#000_0_0)_padding-box,linear-gradient(#000_0_0)] [background:linear-gradient(142deg,rgba(255,255,255,0.7)_0%,rgba(255,255,255,0.15)_26%,rgba(255,255,255,0.05)_62%,rgba(255,255,255,0.4)_100%)_border-box] [mask:linear-gradient(#000_0_0)_padding-box,linear-gradient(#000_0_0)] dark:hidden"
         aria-hidden="true"
       />
 
@@ -306,12 +306,12 @@ export function SelectBar<T extends string = string>({
             {item.color ? (
               <span
                 className={cn(
-                  "block rounded-full shadow-[inset_0_0_0_1px_rgba(0,0,0,0.12)] transition-transform duration-150 dark:shadow-[inset_0_0_0_1px_rgba(255,255,255,0.18)]",
+                  "block rounded-full shadow-[0_0_0_1px_rgba(0,0,0,0.08)] transition-transform duration-150 dark:shadow-[0_0_0_1px_rgba(255,255,255,0.16)]",
                   isSelected ? "scale-110" : "hover:scale-105"
                 )}
                 style={{
                   backgroundColor: item.color,
-                  ...(item.darkOutline ? { boxShadow: `inset 0 0 0 1px ${item.darkOutline}` } : {}),
+                  ...(item.darkOutline ? { boxShadow: `0 0 0 1px ${item.darkOutline}` } : {}),
                   width: size === "xs" ? "16px" : size === "default" ? "22px" : "18px",
                   height: size === "xs" ? "16px" : size === "default" ? "22px" : "18px",
                 }}
