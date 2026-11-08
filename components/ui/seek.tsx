@@ -107,7 +107,6 @@ export const Seek = React.forwardRef<HTMLInputElement, SeekProps>(function Seek(
   },
   forwardedRef
 ) {
-  const isDark = theme === "dark";
   const cfg = SIZE_CONFIGS[size] || SIZE_CONFIGS.default;
   const shut = cfg.shut;
   const lens = cfg.lens;
@@ -296,6 +295,7 @@ export const Seek = React.forwardRef<HTMLInputElement, SeekProps>(function Seek(
         width: `${Math.max(shut, span) + 24}px`,
         height: `${shut + 24}px`,
       }}
+      data-theme={theme || undefined}
       data-open={open}
       data-press={press}
       data-busy={busy}
@@ -398,12 +398,7 @@ export const Seek = React.forwardRef<HTMLInputElement, SeekProps>(function Seek(
         {!open && (
           <button
             type="button"
-            className={cn(
-              "rounded-inherit absolute inset-0 z-4 cursor-pointer border-0 bg-transparent outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
-              isDark
-                ? "focus-visible:ring-[#ffffff]/40 focus-visible:ring-offset-[#1a1a1a]"
-                : "focus-visible:ring-[#17181a]/30 focus-visible:ring-offset-[#ffffff]"
-            )}
+            className="rounded-inherit focus-visible:ring-offset-chroma-surface-elevated focus-visible:ring-chroma-text-primary/30 absolute inset-0 z-4 cursor-pointer border-0 bg-transparent outline-none focus-visible:ring-2 focus-visible:ring-offset-2 dark:focus-visible:ring-white/40"
             aria-label={placeholder}
             onClick={start}
             disabled={disabled}

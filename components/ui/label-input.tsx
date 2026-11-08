@@ -51,7 +51,6 @@ export const LabelInput = React.forwardRef<HTMLInputElement, LabelInputProps>(fu
   },
   forwardedRef
 ) {
-  const isDark = theme === "dark";
   const secret = field === "Password" || propType === "password";
   const displayLabel = customLabel || field;
   const generatedId = useId().replace(/:/g, "");
@@ -177,19 +176,16 @@ export const LabelInput = React.forwardRef<HTMLInputElement, LabelInputProps>(fu
   };
 
   const ringStroke = focus
-    ? isDark
-      ? "stroke-[#ffffff]"
-      : "stroke-[#18181b]"
+    ? "stroke-chroma-text-primary"
     : currentValue.length > 0
-      ? isDark
-        ? "stroke-[#646464]"
-        : "stroke-[#b5b5b6]"
-      : isDark
-        ? "stroke-[#ffffff]/20"
-        : "stroke-[#18181b]/20";
+      ? "stroke-chroma-text-muted"
+      : "stroke-chroma-text-primary/20";
 
   return (
-    <div className={cn("relative grid place-items-center pt-3 select-none", className)}>
+    <div
+      className={cn("relative grid place-items-center pt-3 select-none", className)}
+      data-theme={theme || undefined}
+    >
       <div
         className="relative cursor-text bg-transparent select-none"
         style={{ width: W, height: H, borderRadius: r, ...style }}

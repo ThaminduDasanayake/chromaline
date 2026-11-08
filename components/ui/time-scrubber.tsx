@@ -123,7 +123,6 @@ export function TimeScrubber({
   const [pos, setPos] = useState(initialTime);
 
   const parsedStep = Math.max(1, Number(step) || 15);
-  const isDark = theme === "dark";
   const h24 = format === "24h";
 
   const p = useRef({ x: initialTime, v: 0, to: initialTime });
@@ -294,13 +293,11 @@ export function TimeScrubber({
   return (
     <div
       className={cn(
-        "relative w-[375px] px-[25px] pt-[25px] pb-[20px] font-sans transition-colors duration-300 select-none",
-        isDark
-          ? "bg-[#1a1a1a] text-[#ffffff] shadow-[0_0_0_1px_rgba(255,255,255,0.12)]"
-          : "bg-[#ffffff] text-[#17181a] shadow-[0_0_0_1px_rgba(23,24,26,0.08)]",
+        "bg-chroma-surface-elevated text-chroma-text-primary relative w-[375px] px-[25px] pt-[25px] pb-[20px] font-sans shadow-[0_0_0_1px_var(--chroma-border)] transition-colors duration-300 select-none",
         disabled && "pointer-events-none opacity-40",
         className
       )}
+      data-theme={theme || undefined}
       style={{
         borderRadius: `${Math.max(0, corner)}px`,
         ...style,
@@ -328,12 +325,7 @@ export function TimeScrubber({
           )}
         </span>
         {mer && (
-          <span
-            className={cn(
-              "text-[17px] font-medium tracking-[-0.01em]",
-              isDark ? "text-[#a1a1aa]" : "text-[#71717a]"
-            )}
-          >
+          <span className="text-chroma-text-secondary text-[17px] font-medium tracking-[-0.01em]">
             {mer}
           </span>
         )}
@@ -367,10 +359,9 @@ export function TimeScrubber({
               key={t.m}
               data-kind={t.kind}
               className={cn(
-                "absolute top-[10px] left-[-1.25px] h-[12px] w-[2.5px] origin-[50%_0] rounded-[1.25px]",
+                "bg-chroma-text-primary absolute top-[10px] left-[-1.25px] h-[12px] w-[2.5px] origin-[50%_0] rounded-[1.25px]",
                 t.kind === "quarter" && "h-[21px]",
-                t.kind === "hour" && "h-[31px]",
-                isDark ? "bg-[#ffffff]" : "bg-[#17181a]"
+                t.kind === "hour" && "h-[31px]"
               )}
               style={{
                 transform: `translateX(${t.x.toFixed(2)}px) scaleY(${(0.55 + 0.45 * t.f).toFixed(3)})`,
@@ -385,10 +376,7 @@ export function TimeScrubber({
               return (
                 <span
                   key={`l${t.m}`}
-                  className={cn(
-                    "absolute top-[48px] left-0 text-[13px] font-normal tracking-normal whitespace-nowrap",
-                    isDark ? "text-[#a1a1aa]" : "text-[#71717a]"
-                  )}
+                  className="text-chroma-text-secondary absolute top-[48px] left-0 text-[13px] font-normal tracking-normal whitespace-nowrap"
                   style={{
                     transform: `translateX(${t.x.toFixed(2)}px) translateX(-50%)`,
                     opacity: 0.15 + 0.85 * t.f,

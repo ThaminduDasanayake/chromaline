@@ -104,25 +104,19 @@ export const FluidSearch = React.forwardRef<HTMLInputElement, FluidSearchProps>(
       host.current?.focus();
     }
 
-    // Determine fill color style if explicit override or theme is passed
-    const shapeStyle: React.CSSProperties = fill
-      ? { backgroundColor: fill }
-      : theme === "dark"
-        ? { backgroundColor: "#222224" }
-        : theme === "light"
-          ? { backgroundColor: "#e9e9e9" }
-          : {};
-
-    const shapeBgClass = !fill && !theme ? "bg-chroma-search-fill" : "";
+    // Determine fill color style if explicit override is passed
+    const shapeStyle: React.CSSProperties = fill ? { backgroundColor: fill } : {};
+    const shapeBgClass = !fill ? "bg-chroma-search-fill" : "";
 
     return (
       <div
         ref={host}
         tabIndex={-1}
+        data-theme={theme || undefined}
         className={cn(
           "relative isolate h-[52px] w-full outline-none select-none",
           keyboard &&
-            "[&_:focus-visible]:outline-2 [&_:focus-visible]:outline-offset-3 [&_:focus-visible]:outline-[#888]",
+            "[&_:focus-visible]:outline-chroma-border [&_:focus-visible]:outline-2 [&_:focus-visible]:outline-offset-3",
           className
         )}
         style={style}
@@ -197,14 +191,7 @@ export const FluidSearch = React.forwardRef<HTMLInputElement, FluidSearchProps>(
             stroke="currentColor"
             strokeWidth="1.8"
             aria-hidden="true"
-            className={cn(
-              "shrink-0",
-              theme === "dark"
-                ? "text-[#888888]"
-                : theme === "light"
-                  ? "text-[#666666]"
-                  : "text-[#666666] dark:text-[#888888]"
-            )}
+            className="text-chroma-text-secondary shrink-0"
           >
             <circle cx="10.5" cy="10.5" r="6.5" />
             <path d="m16 16 4 4" />
@@ -215,28 +202,16 @@ export const FluidSearch = React.forwardRef<HTMLInputElement, FluidSearchProps>(
             placeholder={placeholder}
             value={value}
             onChange={(e) => handleValueChange(e.target.value)}
-            className={cn(
-              "font-inherit w-full min-w-0 border-0 bg-transparent p-0 text-[14px] shadow-none outline-none",
-              theme === "dark"
-                ? "text-[#eeeeee]"
-                : theme === "light"
-                  ? "text-[#222222]"
-                  : "text-[#222222] dark:text-[#eeeeee]"
-            )}
+            className="text-chroma-text-primary font-inherit w-full min-w-0 border-0 bg-transparent p-0 text-[14px] shadow-none outline-none"
           />
         </label>
 
         <button
           className={cn(
-            "absolute top-0 right-0 z-2 grid h-[52px] w-[52px] cursor-pointer place-items-center rounded-full border-0 bg-transparent p-0 shadow-none transition-[transform,opacity] duration-460 ease-[cubic-bezier(0.22,1,0.36,1)] outline-none",
+            "text-chroma-text-primary absolute top-0 right-0 z-2 grid h-[52px] w-[52px] cursor-pointer place-items-center rounded-full border-0 bg-transparent p-0 shadow-none transition-[transform,opacity] duration-460 ease-[cubic-bezier(0.22,1,0.36,1)] outline-none",
             open
               ? "pointer-events-auto translate-x-0 scale-100 opacity-100"
               : "pointer-events-none -translate-x-[28px] scale-80 opacity-0 duration-140",
-            theme === "dark"
-              ? "text-[#eeeeee]"
-              : theme === "light"
-                ? "text-[#222222]"
-                : "text-[#222222] dark:text-[#eeeeee]",
             reduced && "transition-none"
           )}
           type="button"

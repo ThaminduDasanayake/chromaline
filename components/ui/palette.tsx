@@ -251,7 +251,6 @@ export function Palette({
   className = "",
   style,
 }: PaletteProps) {
-  const isDark = theme === "dark";
   const n = clamp(Math.round(count), 3, 5);
 
   const [pal, setPal] = useState<Swatch[]>(() => {
@@ -349,16 +348,12 @@ export function Palette({
   return (
     <div
       className={cn("relative flex items-stretch font-sans select-none", className)}
+      data-theme={theme || undefined}
       style={{ width: W, gap: GAP, ...style }}
     >
       {/* Pill 1: Swatches Container */}
       <div
-        className={cn(
-          "flex items-center justify-center transition-colors duration-300",
-          isDark
-            ? "bg-[#1a1a1a] shadow-[0_0_0_1px_rgba(255,255,255,0.12)]"
-            : "bg-[#ffffff] shadow-[0_0_0_1px_rgba(0,0,0,0.08)]"
-        )}
+        className="bg-chroma-surface-elevated flex items-center justify-center shadow-[0_0_0_1px_var(--chroma-border)] transition-colors duration-300"
         style={{ padding: PAD, borderRadius: slabR, scale: beat }}
       >
         <div className="relative flex-none" style={{ height: BAR_H, width: barW }}>
@@ -403,22 +398,12 @@ export function Palette({
 
       {/* Pill 2: Refresh Tool Button */}
       <div
-        className={cn(
-          "flex flex-none items-center justify-center transition-all duration-160 ease-[cubic-bezier(0.22,1,0.36,1)] has-active:scale-[0.96] motion-reduce:duration-160",
-          isDark
-            ? "bg-[#1a1a1a] shadow-[0_0_0_1px_rgba(255,255,255,0.12)]"
-            : "bg-[#ffffff] shadow-[0_0_0_1px_rgba(0,0,0,0.08)]"
-        )}
+        className="bg-chroma-surface-elevated flex flex-none items-center justify-center shadow-[0_0_0_1px_var(--chroma-border)] transition-all duration-160 ease-[cubic-bezier(0.22,1,0.36,1)] has-active:scale-[0.96] motion-reduce:duration-160"
         style={{ padding: PAD, borderRadius: slabR }}
       >
         <button
           type="button"
-          className={cn(
-            "grid flex-none cursor-pointer place-items-center border-0 bg-transparent transition-colors duration-160 outline-none focus-visible:ring-2 focus-visible:ring-offset-2 motion-reduce:duration-160",
-            isDark
-              ? "text-[#ffffff] hover:text-[#9a9a9a] focus-visible:ring-[#ffffff]/40 focus-visible:ring-offset-[#1a1a1a]"
-              : "text-[#18181b] hover:text-[#71717a] focus-visible:ring-[#18181b]/30 focus-visible:ring-offset-[#ffffff]"
-          )}
+          className="text-chroma-text-primary hover:text-chroma-text-secondary focus-visible:ring-offset-chroma-surface-elevated grid flex-none cursor-pointer place-items-center border-0 bg-transparent transition-colors duration-160 outline-none focus-visible:ring-2 focus-visible:ring-current/30 focus-visible:ring-offset-2 motion-reduce:duration-160"
           onClick={roll}
           aria-label="Generate a new palette"
           style={{ width: TOOL, height: BAR_H, borderRadius: r }}

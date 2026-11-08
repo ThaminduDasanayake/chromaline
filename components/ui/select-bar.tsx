@@ -284,8 +284,8 @@ export function SelectBar<T extends string = string>({
             className={cn(
               "relative z-2 flex cursor-pointer items-center justify-center rounded-full border-0 bg-transparent leading-none text-slate-900 transition-opacity duration-260 ease-[cubic-bezier(0.32,0.72,0.24,1)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-900 dark:focus-visible:outline-white",
               isSelected || isSwatch
-                ? "font-medium opacity-100 dark:text-white"
-                : "opacity-[0.42] hover:opacity-[0.72] dark:text-[#9a9a9a] dark:opacity-100 dark:hover:text-white"
+                ? "dark:text-chroma-text-primary font-medium opacity-100"
+                : "dark:text-chroma-text-secondary dark:hover:text-chroma-text-primary opacity-[0.42] hover:opacity-[0.72] dark:opacity-100"
             )}
             data-active={isSelected}
             data-swatch={isSwatch}

@@ -51,7 +51,6 @@ export const LabelTextarea = React.forwardRef<HTMLTextAreaElement, LabelTextarea
     },
     forwardedRef
   ) {
-    const isDark = theme === "dark";
     const displayLabel = label;
     const generatedId = useId().replace(/:/g, "");
     const id = propId || `lta-${generatedId}`;
@@ -203,20 +202,15 @@ export const LabelTextarea = React.forwardRef<HTMLTextAreaElement, LabelTextarea
     };
 
     const ringStroke = focus
-      ? isDark
-        ? "stroke-[#ffffff]"
-        : "stroke-[#18181b]"
+      ? "stroke-chroma-text-primary"
       : currentValue.length > 0
-        ? isDark
-          ? "stroke-[#646464]"
-          : "stroke-[#b5b5b6]"
-        : isDark
-          ? "stroke-[#ffffff]/20"
-          : "stroke-[#18181b]/20";
+        ? "stroke-chroma-text-muted"
+        : "stroke-chroma-text-primary/20";
 
     return (
       <div
         ref={containerRef}
+        data-theme={theme || undefined}
         className={cn(
           "relative grid place-items-center pt-3 select-none",
           propWidth ? "" : "w-full",
@@ -362,8 +356,7 @@ export const LabelTextarea = React.forwardRef<HTMLTextAreaElement, LabelTextarea
           {showCount && (
             <div
               className={cn(
-                "pointer-events-none absolute right-3.5 bottom-2.5 font-mono text-[11px] tracking-wider transition-opacity duration-200",
-                isDark ? "text-zinc-500" : "text-slate-400",
+                "text-chroma-text-muted pointer-events-none absolute right-3.5 bottom-2.5 font-mono text-[11px] tracking-wider transition-opacity duration-200",
                 up ? "opacity-100" : "opacity-0"
               )}
             >

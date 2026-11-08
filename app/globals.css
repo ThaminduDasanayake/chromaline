@@ -64,6 +64,7 @@
   --chroma-glass-wash: rgba(0, 0, 0, 0.06);
   --chroma-search-fill: #e9e9e9;
   --chroma-stack-face: #ffffff;
+  --chroma-toggle-thumb: #d3d3d4;
 
   --topbar: 54px;
   --gutter: clamp(18px, 5vw, 28px);
@@ -128,6 +129,7 @@ html.dark,
   --chroma-glass-wash: #3d3d3d;
   --chroma-search-fill: #222224;
   --chroma-stack-face: #14161a;
+  --chroma-toggle-thumb: #464646;
 }
 
 @theme inline {
@@ -142,6 +144,7 @@ html.dark,
   --color-chroma-glass-wash: var(--chroma-glass-wash);
   --color-chroma-search-fill: var(--chroma-search-fill);
   --color-chroma-stack-face: var(--chroma-stack-face);
+  --color-chroma-toggle-thumb: var(--chroma-toggle-thumb);
 }
 
 html,

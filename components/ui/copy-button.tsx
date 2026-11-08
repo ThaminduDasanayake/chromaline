@@ -88,8 +88,8 @@ export const CopyButton = forwardRef<HTMLButtonElement, CopyButtonProps>(functio
         "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-900",
         "disabled:pointer-events-none disabled:opacity-40",
         copied
-          ? "border-[#a7f3d0] bg-[#ecfdf5] text-[#047857] shadow-[0_1px_2px_rgba(16,185,129,0.06)]"
-          : "border-slate-200/80 bg-white text-slate-600 hover:border-slate-300 hover:bg-slate-50 hover:text-slate-900",
+          ? "border-emerald-200 bg-emerald-50 text-emerald-700 shadow-[0_1px_2px_rgba(16,185,129,0.06)] dark:border-emerald-900/60 dark:bg-emerald-950/40 dark:text-emerald-400"
+          : "dark:border-chroma-border dark:bg-chroma-surface-elevated dark:text-chroma-text-secondary dark:hover:text-chroma-text-primary border-slate-200/80 bg-white text-slate-600 hover:border-slate-300 hover:bg-slate-50 hover:text-slate-900",
         className
       )}
       {...props}
@@ -110,7 +110,7 @@ export const CopyButton = forwardRef<HTMLButtonElement, CopyButtonProps>(functio
                 aria-hidden="true"
                 size={14}
                 weight="fill"
-                className="text-[#16a34a]"
+                className="text-emerald-600 dark:text-emerald-400"
               />
             ) : (
               <CopyIcon
