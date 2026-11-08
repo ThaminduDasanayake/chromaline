@@ -87,23 +87,26 @@ const SIZE_CONFIGS = {
   lg: { shut: 64, lens: 28, font: 16, clearSize: 18 },
 };
 
-export function Seek({
-  value: controlledValue,
-  defaultValue = "",
-  onChange,
-  onSearch,
-  onOpenChange,
-  placeholder = "Search",
-  width,
-  size = "default",
-  give = 50,
-  spring = 50,
-  corner,
-  theme = "light",
-  className = "",
-  disabled = false,
-  autoFocus = false,
-}: SeekProps) {
+export const Seek = React.forwardRef<HTMLInputElement, SeekProps>(function Seek(
+  {
+    value: controlledValue,
+    defaultValue = "",
+    onChange,
+    onSearch,
+    onOpenChange,
+    placeholder = "Search",
+    width,
+    size = "default",
+    give = 50,
+    spring = 50,
+    corner,
+    theme = "light",
+    className = "",
+    disabled = false,
+    autoFocus = false,
+  },
+  forwardedRef
+) {
   const isDark = theme === "dark";
   const cfg = SIZE_CONFIGS[size] || SIZE_CONFIGS.default;
   const shut = cfg.shut;
@@ -141,6 +144,18 @@ export function Seek({
   const beatTimer = useRef(0);
   const busyTimer = useRef(0);
 
+  const handleInputRef = React.useCallback(
+    (node: HTMLInputElement | null) => {
+      inputRef.current = node;
+      if (typeof forwardedRef === "function") {
+        forwardedRef(node);
+      } else if (forwardedRef) {
+        forwardedRef.current = node;
+      }
+    },
+    [forwardedRef]
+  );
+
   const [open, setOpenState] = useState(autoFocus);
   const [press, setPress] = useState(false);
   const [uncontrolledValue, setUncontrolledValue] = useState(defaultValue);
@@ -167,44 +182,56 @@ export function Seek({
   const w = useSpring(target, clamp(spring, 0, 100), still);
   const p = clamp((w - shut) / Math.max(1, Math.max(shut, span) - shut), 0, 1);
 
-  // Magnetic cursor lean when hovering nearby while closed
+  // Magnetic cursor lean when hovering nearby while closed (rAF-throttled to avoid layout thrashing)
   useEffect(() => {
     const el = frameRef.current;
     if (!el || open || still || disabled) return;
     let raf = 0;
     let at = { x: 0, y: 0 };
-    const publish = () => {
+    let lastEvent: PointerEvent | null = null;
+
+    const processPointer = () => {
       raf = 0;
-      setLean(at);
-    };
-    const read = (e: PointerEvent) => {
+      if (!lastEvent || !el) return;
       const b = el.getBoundingClientRect();
       const k = b.width / (el.offsetWidth || b.width) || 1;
-      const dx = (e.clientX - (b.left + b.width / 2)) / k;
-      const dy = (e.clientY - (b.top + b.height / 2)) / k;
+      const dx = (lastEvent.clientX - (b.left + b.width / 2)) / k;
+      const dy = (lastEvent.clientY - (b.top + b.height / 2)) / k;
       const d = Math.hypot(dx, dy);
       const R = 110;
       if (d > R) {
         if (at.x || at.y) {
           at = { x: 0, y: 0 };
-          if (!raf) raf = requestAnimationFrame(publish);
+          setLean(at);
         }
         return;
       }
       const pull = (1 - d / R) ** 1.4 * (2 + (give / 100) * 5);
       at = { x: (dx / (d || 1)) * pull, y: (dy / (d || 1)) * pull };
-      if (!raf) raf = requestAnimationFrame(publish);
+      setLean(at);
     };
+
+    const read = (e: PointerEvent) => {
+      lastEvent = e;
+      if (!raf) raf = requestAnimationFrame(processPointer);
+    };
+
     const gone = () => {
+      lastEvent = null;
+      if (raf) {
+        cancelAnimationFrame(raf);
+        raf = 0;
+      }
       at = { x: 0, y: 0 };
-      if (!raf) raf = requestAnimationFrame(publish);
+      setLean(at);
     };
+
     document.addEventListener("pointermove", read, { passive: true });
     document.addEventListener("pointerleave", gone);
     return () => {
       document.removeEventListener("pointermove", read);
       document.removeEventListener("pointerleave", gone);
-      cancelAnimationFrame(raf);
+      if (raf) cancelAnimationFrame(raf);
     };
   }, [open, give, still, disabled]);
 
@@ -322,7 +349,7 @@ export function Seek({
 
         {/* Expandable Search Input */}
         <input
-          ref={inputRef}
+          ref={handleInputRef}
           type="text"
           value={currentValue}
           placeholder={placeholder}
@@ -400,4 +427,6 @@ export function Seek({
       </div>
     </div>
   );
-}
+});
+
+Seek.displayName = "Seek";

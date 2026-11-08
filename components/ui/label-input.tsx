@@ -29,25 +29,28 @@ export interface LabelInputProps extends Omit<
   className?: string;
 }
 
-export function LabelInput({
-  field = "Email",
-  label: customLabel,
-  corner = 20,
-  width: W = 280,
-  height: H = 52,
-  showcase = false,
-  theme = "light",
-  className = "",
-  value: controlledValue,
-  defaultValue,
-  onChange,
-  onFocus,
-  onBlur,
-  type: propType,
-  id: propId,
-  style,
-  ...restProps
-}: LabelInputProps) {
+export const LabelInput = React.forwardRef<HTMLInputElement, LabelInputProps>(function LabelInput(
+  {
+    field = "Email",
+    label: customLabel,
+    corner = 20,
+    width: W = 280,
+    height: H = 52,
+    showcase = false,
+    theme = "light",
+    className = "",
+    value: controlledValue,
+    defaultValue,
+    onChange,
+    onFocus,
+    onBlur,
+    type: propType,
+    id: propId,
+    style,
+    ...restProps
+  },
+  forwardedRef
+) {
   const isDark = theme === "dark";
   const secret = field === "Password" || propType === "password";
   const displayLabel = customLabel || field;
@@ -72,6 +75,18 @@ export function LabelInput({
   const [show, setShow] = useState(false);
   const [flip, setFlip] = useState(0);
   const inputRef = useRef<HTMLInputElement | null>(null);
+
+  const handleInputRef = useCallback(
+    (node: HTMLInputElement | null) => {
+      inputRef.current = node;
+      if (typeof forwardedRef === "function") {
+        forwardedRef(node);
+      } else if (forwardedRef) {
+        forwardedRef.current = node;
+      }
+    },
+    [forwardedRef]
+  );
 
   // Measure the rendered label width to calculate the exact top border notch
   const [lw, setLw] = useState(() => Math.max(36, displayLabel.length * 10));
@@ -282,7 +297,7 @@ export function LabelInput({
 
         {/* Real Input Element */}
         <input
-          ref={inputRef}
+          ref={handleInputRef}
           id={id}
           className={cn(
             "absolute inset-0 h-full w-full rounded-[inherit] border-0 bg-transparent text-[16px] tracking-[-0.01em] transition-[filter,opacity] duration-260 outline-none",
@@ -349,4 +364,6 @@ export function LabelInput({
       </div>
     </div>
   );
-}
+});
+
+LabelInput.displayName = "LabelInput";
