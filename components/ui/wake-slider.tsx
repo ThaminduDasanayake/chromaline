@@ -196,9 +196,9 @@ export function WakeSlider({
 
   return (
     <div
+      data-theme={theme || undefined}
       className={cn(
-        "relative flex items-center gap-4 transition-colors duration-300 select-none",
-        isDark ? "text-[#c2c2c2]" : "text-[#0f172a]",
+        "text-chroma-text-primary relative flex items-center gap-4 transition-colors duration-300 select-none",
         disabled && "pointer-events-none opacity-40",
         className
       )}
@@ -213,10 +213,8 @@ export function WakeSlider({
         aria-valuemax={max}
         aria-valuenow={currentValue}
         className={cn(
-          "relative flex cursor-ew-resize touch-none items-center rounded-md transition-colors duration-300 outline-none select-none [-webkit-tap-highlight-color:transparent] focus-visible:ring-2 focus-visible:ring-offset-4",
-          isDark
-            ? "focus-visible:ring-[#ffffff]/40 focus-visible:ring-offset-[#1b1b1b]"
-            : "focus-visible:ring-[#0f172a]/30 focus-visible:ring-offset-white"
+          "focus-visible:ring-offset-chroma-surface-elevated relative flex cursor-ew-resize touch-none items-center rounded-md transition-colors duration-300 outline-none select-none [-webkit-tap-highlight-color:transparent] focus-visible:ring-2 focus-visible:ring-offset-4",
+          isDark ? "focus-visible:ring-white/40" : "focus-visible:ring-slate-900/30"
         )}
         style={{
           width: n * (BAR + GAP) - GAP,
@@ -284,13 +282,7 @@ export function WakeSlider({
               data-on={isLit || undefined}
               className={cn(
                 "flex-none origin-center rounded-full transition-colors duration-160 will-change-transform",
-                isLit
-                  ? isDark
-                    ? "bg-[#ffffff]"
-                    : "bg-[#0f172a]"
-                  : isDark
-                    ? "bg-[#6b6b6b]"
-                    : "bg-[#0f172a]/25"
+                isLit ? "bg-chroma-text-primary" : isDark ? "bg-white/25" : "bg-slate-900/25"
               )}
               style={{
                 width: `${BAR}px`,
@@ -302,12 +294,7 @@ export function WakeSlider({
       </div>
 
       {showValue && (
-        <span
-          className={cn(
-            "min-w-[3ch] font-mono text-sm font-medium tracking-tight tabular-nums transition-colors duration-300",
-            isDark ? "text-[#c2c2c2]" : "text-[#475569]"
-          )}
-        >
+        <span className="text-chroma-text-secondary min-w-[3ch] font-mono text-sm font-medium tracking-tight tabular-nums transition-colors duration-300">
           {currentValue}
         </span>
       )}

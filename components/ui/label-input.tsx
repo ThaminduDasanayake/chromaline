@@ -29,26 +29,28 @@ export interface LabelInputProps extends Omit<
   className?: string;
 }
 
-export function LabelInput({
-  field = "Email",
-  label: customLabel,
-  corner = 20,
-  width: W = 280,
-  height: H = 52,
-  showcase = false,
-  theme = "light",
-  className = "",
-  value: controlledValue,
-  defaultValue,
-  onChange,
-  onFocus,
-  onBlur,
-  type: propType,
-  id: propId,
-  style,
-  ...restProps
-}: LabelInputProps) {
-  const isDark = theme === "dark";
+export const LabelInput = React.forwardRef<HTMLInputElement, LabelInputProps>(function LabelInput(
+  {
+    field = "Email",
+    label: customLabel,
+    corner = 20,
+    width: W = 280,
+    height: H = 52,
+    showcase = false,
+    theme = "light",
+    className = "",
+    value: controlledValue,
+    defaultValue,
+    onChange,
+    onFocus,
+    onBlur,
+    type: propType,
+    id: propId,
+    style,
+    ...restProps
+  },
+  forwardedRef
+) {
   const secret = field === "Password" || propType === "password";
   const displayLabel = customLabel || field;
   const generatedId = useId().replace(/:/g, "");
@@ -72,6 +74,18 @@ export function LabelInput({
   const [show, setShow] = useState(false);
   const [flip, setFlip] = useState(0);
   const inputRef = useRef<HTMLInputElement | null>(null);
+
+  const handleInputRef = useCallback(
+    (node: HTMLInputElement | null) => {
+      inputRef.current = node;
+      if (typeof forwardedRef === "function") {
+        forwardedRef(node);
+      } else if (forwardedRef) {
+        forwardedRef.current = node;
+      }
+    },
+    [forwardedRef]
+  );
 
   // Measure the rendered label width to calculate the exact top border notch
   const [lw, setLw] = useState(() => Math.max(36, displayLabel.length * 10));
@@ -162,19 +176,16 @@ export function LabelInput({
   };
 
   const ringStroke = focus
-    ? isDark
-      ? "stroke-[#ffffff]"
-      : "stroke-[#18181b]"
+    ? "stroke-chroma-text-primary"
     : currentValue.length > 0
-      ? isDark
-        ? "stroke-[#646464]"
-        : "stroke-[#b5b5b6]"
-      : isDark
-        ? "stroke-[#ffffff]/20"
-        : "stroke-[#18181b]/20";
+      ? "stroke-chroma-text-muted"
+      : "stroke-chroma-text-primary/20";
 
   return (
-    <div className={cn("relative grid place-items-center pt-3 select-none", className)}>
+    <div
+      className={cn("relative grid place-items-center pt-3 select-none", className)}
+      data-theme={theme || undefined}
+    >
       <div
         className="relative cursor-text bg-transparent select-none"
         style={{ width: W, height: H, borderRadius: r, ...style }}
@@ -250,16 +261,10 @@ export function LabelInput({
           className={cn(
             "absolute top-1/2 origin-left cursor-text text-[16px] leading-none tracking-[-0.01em] whitespace-pre transition-[transform,color] duration-420 ease-[cubic-bezier(0.22,1,0.36,1)] select-none motion-reduce:duration-160",
             focus
-              ? isDark
-                ? "text-[#ffffff]"
-                : "text-[#18181b]"
+              ? "text-chroma-text-primary"
               : up
-                ? isDark
-                  ? "text-[#a1a1aa]"
-                  : "text-[#71717a]"
-                : isDark
-                  ? "text-[#71717a]"
-                  : "text-[#a1a1aa]"
+                ? "text-chroma-text-secondary"
+                : "text-chroma-text-muted"
           )}
           style={{
             left: lx,
@@ -282,11 +287,11 @@ export function LabelInput({
 
         {/* Real Input Element */}
         <input
-          ref={inputRef}
+          ref={handleInputRef}
           id={id}
           className={cn(
             "absolute inset-0 h-full w-full rounded-[inherit] border-0 bg-transparent text-[16px] tracking-[-0.01em] transition-[filter,opacity] duration-260 outline-none",
-            isDark ? "text-[#ffffff]" : "text-[#18181b]",
+            "text-chroma-text-primary",
             flip > 0 ? "animate-[lbi-flip_260ms_ease-out]" : ""
           )}
           style={{
@@ -319,8 +324,7 @@ export function LabelInput({
           <button
             type="button"
             className={cn(
-              "group absolute top-1/2 right-2.5 grid h-7 w-7 -translate-y-1/2 place-items-center rounded-full bg-transparent p-0 transition-[color,transform] duration-160 active:scale-95",
-              isDark ? "text-[#71717a] hover:text-[#ffffff]" : "text-[#a1a1aa] hover:text-[#18181b]"
+              "group text-chroma-text-muted hover:text-chroma-text-primary absolute top-1/2 right-2.5 grid h-7 w-7 -translate-y-1/2 place-items-center rounded-full bg-transparent p-0 transition-[color,transform] duration-160 active:scale-95"
             )}
             onPointerDown={(e) => e.preventDefault()}
             onClick={reveal}
@@ -349,4 +353,6 @@ export function LabelInput({
       </div>
     </div>
   );
-}
+});
+
+LabelInput.displayName = "LabelInput";

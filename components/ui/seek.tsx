@@ -87,24 +87,26 @@ const SIZE_CONFIGS = {
   lg: { shut: 64, lens: 28, font: 16, clearSize: 18 },
 };
 
-export function Seek({
-  value: controlledValue,
-  defaultValue = "",
-  onChange,
-  onSearch,
-  onOpenChange,
-  placeholder = "Search",
-  width,
-  size = "default",
-  give = 50,
-  spring = 50,
-  corner,
-  theme = "light",
-  className = "",
-  disabled = false,
-  autoFocus = false,
-}: SeekProps) {
-  const isDark = theme === "dark";
+export const Seek = React.forwardRef<HTMLInputElement, SeekProps>(function Seek(
+  {
+    value: controlledValue,
+    defaultValue = "",
+    onChange,
+    onSearch,
+    onOpenChange,
+    placeholder = "Search",
+    width,
+    size = "default",
+    give = 50,
+    spring = 50,
+    corner,
+    theme = "light",
+    className = "",
+    disabled = false,
+    autoFocus = false,
+  },
+  forwardedRef
+) {
   const cfg = SIZE_CONFIGS[size] || SIZE_CONFIGS.default;
   const shut = cfg.shut;
   const lens = cfg.lens;
@@ -141,6 +143,18 @@ export function Seek({
   const beatTimer = useRef(0);
   const busyTimer = useRef(0);
 
+  const handleInputRef = React.useCallback(
+    (node: HTMLInputElement | null) => {
+      inputRef.current = node;
+      if (typeof forwardedRef === "function") {
+        forwardedRef(node);
+      } else if (forwardedRef) {
+        forwardedRef.current = node;
+      }
+    },
+    [forwardedRef]
+  );
+
   const [open, setOpenState] = useState(autoFocus);
   const [press, setPress] = useState(false);
   const [uncontrolledValue, setUncontrolledValue] = useState(defaultValue);
@@ -167,44 +181,56 @@ export function Seek({
   const w = useSpring(target, clamp(spring, 0, 100), still);
   const p = clamp((w - shut) / Math.max(1, Math.max(shut, span) - shut), 0, 1);
 
-  // Magnetic cursor lean when hovering nearby while closed
+  // Magnetic cursor lean when hovering nearby while closed (rAF-throttled to avoid layout thrashing)
   useEffect(() => {
     const el = frameRef.current;
     if (!el || open || still || disabled) return;
     let raf = 0;
     let at = { x: 0, y: 0 };
-    const publish = () => {
+    let lastEvent: PointerEvent | null = null;
+
+    const processPointer = () => {
       raf = 0;
-      setLean(at);
-    };
-    const read = (e: PointerEvent) => {
+      if (!lastEvent || !el) return;
       const b = el.getBoundingClientRect();
       const k = b.width / (el.offsetWidth || b.width) || 1;
-      const dx = (e.clientX - (b.left + b.width / 2)) / k;
-      const dy = (e.clientY - (b.top + b.height / 2)) / k;
+      const dx = (lastEvent.clientX - (b.left + b.width / 2)) / k;
+      const dy = (lastEvent.clientY - (b.top + b.height / 2)) / k;
       const d = Math.hypot(dx, dy);
       const R = 110;
       if (d > R) {
         if (at.x || at.y) {
           at = { x: 0, y: 0 };
-          if (!raf) raf = requestAnimationFrame(publish);
+          setLean(at);
         }
         return;
       }
       const pull = (1 - d / R) ** 1.4 * (2 + (give / 100) * 5);
       at = { x: (dx / (d || 1)) * pull, y: (dy / (d || 1)) * pull };
-      if (!raf) raf = requestAnimationFrame(publish);
+      setLean(at);
     };
+
+    const read = (e: PointerEvent) => {
+      lastEvent = e;
+      if (!raf) raf = requestAnimationFrame(processPointer);
+    };
+
     const gone = () => {
+      lastEvent = null;
+      if (raf) {
+        cancelAnimationFrame(raf);
+        raf = 0;
+      }
       at = { x: 0, y: 0 };
-      if (!raf) raf = requestAnimationFrame(publish);
+      setLean(at);
     };
+
     document.addEventListener("pointermove", read, { passive: true });
     document.addEventListener("pointerleave", gone);
     return () => {
       document.removeEventListener("pointermove", read);
       document.removeEventListener("pointerleave", gone);
-      cancelAnimationFrame(raf);
+      if (raf) cancelAnimationFrame(raf);
     };
   }, [open, give, still, disabled]);
 
@@ -269,16 +295,14 @@ export function Seek({
         width: `${Math.max(shut, span) + 24}px`,
         height: `${shut + 24}px`,
       }}
+      data-theme={theme || undefined}
       data-open={open}
       data-press={press}
       data-busy={busy}
     >
       <div
         className={cn(
-          "group/seek relative isolate overflow-hidden transition-colors duration-220",
-          isDark
-            ? "bg-[#1a1a1a] shadow-[0_0_0_1px_rgba(255,255,255,0.12)]"
-            : "bg-[#ffffff] shadow-[0_0_0_1px_rgba(23,24,26,0.08)]",
+          "group/seek bg-chroma-surface-elevated relative isolate overflow-hidden shadow-[0_0_0_1px_var(--chroma-border)] transition-colors duration-220",
           !open ? "[@media(hover:hover)]:hover:scale-[1.045]" : ""
         )}
         style={{
@@ -294,16 +318,10 @@ export function Seek({
           className={cn(
             "pointer-events-none absolute top-1/2 z-3 fill-none transition-[stroke,stroke-width] duration-220 ease-out",
             busy
-              ? isDark
-                ? "stroke-[#ffffff]"
-                : "stroke-[#17181a]"
+              ? "stroke-chroma-text-primary"
               : open
-                ? isDark
-                  ? "stroke-[#71717a]"
-                  : "stroke-[#a1a1aa]"
-                : isDark
-                  ? "stroke-[#a1a1aa] group-hover/seek:stroke-[#ffffff]"
-                  : "stroke-[#5c5b56] group-hover/seek:stroke-[#17181a]"
+                ? "stroke-chroma-text-muted"
+                : "stroke-chroma-text-secondary group-hover/seek:stroke-chroma-text-primary"
           )}
           viewBox="0 0 18 18"
           aria-hidden="true"
@@ -322,7 +340,7 @@ export function Seek({
 
         {/* Expandable Search Input */}
         <input
-          ref={inputRef}
+          ref={handleInputRef}
           type="text"
           value={currentValue}
           placeholder={placeholder}
@@ -334,10 +352,7 @@ export function Seek({
           onBlur={handleBlur}
           onKeyDown={handleKeyDown}
           className={cn(
-            "absolute top-0 z-3 h-full border-0 bg-transparent font-sans font-medium tracking-tight transition-colors duration-220 outline-none",
-            isDark
-              ? "text-[#ffffff] placeholder:text-[#6b6b6b]"
-              : "text-[#17181a] placeholder:text-[#5c5b56]"
+            "text-chroma-text-primary placeholder:text-chroma-text-muted absolute top-0 z-3 h-full border-0 bg-transparent font-sans font-medium tracking-tight transition-colors duration-220 outline-none"
           )}
           style={{
             left: `${inset + lens + (size === "sm" ? 8 : 11)}px`,
@@ -354,10 +369,7 @@ export function Seek({
           <button
             type="button"
             className={cn(
-              "absolute top-1/2 z-5 flex -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border-0 transition-all duration-150",
-              isDark
-                ? "bg-[#ffffff]/10 text-[#a1a1aa] hover:bg-[#ffffff]/20 hover:text-[#ffffff]"
-                : "bg-[#17181a]/[0.06] text-[#5c5b56] hover:bg-[#17181a]/[0.12] hover:text-[#17181a]"
+              "text-chroma-text-secondary hover:text-chroma-text-primary dark:text-chroma-text-muted dark:hover:text-chroma-text-primary absolute top-1/2 z-5 flex -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border-0 bg-black/[0.06] transition-all duration-150 hover:bg-black/[0.12] dark:bg-white/10 dark:hover:bg-white/20"
             )}
             aria-label="Clear search"
             onClick={handleClear}
@@ -386,12 +398,7 @@ export function Seek({
         {!open && (
           <button
             type="button"
-            className={cn(
-              "rounded-inherit absolute inset-0 z-4 cursor-pointer border-0 bg-transparent outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
-              isDark
-                ? "focus-visible:ring-[#ffffff]/40 focus-visible:ring-offset-[#1a1a1a]"
-                : "focus-visible:ring-[#17181a]/30 focus-visible:ring-offset-[#ffffff]"
-            )}
+            className="rounded-inherit focus-visible:ring-offset-chroma-surface-elevated focus-visible:ring-chroma-text-primary/30 absolute inset-0 z-4 cursor-pointer border-0 bg-transparent outline-none focus-visible:ring-2 focus-visible:ring-offset-2 dark:focus-visible:ring-white/40"
             aria-label={placeholder}
             onClick={start}
             disabled={disabled}
@@ -400,4 +407,6 @@ export function Seek({
       </div>
     </div>
   );
-}
+});
+
+Seek.displayName = "Seek";

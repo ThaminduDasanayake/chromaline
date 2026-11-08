@@ -134,6 +134,7 @@ export default function FluidSearchDocumentationPage() {
     >
       {/* 1. Preview */}
       <ComponentPreview
+        theme={theme}
         canvasClassName={`min-h-[340px] p-8 transition-colors duration-300 ${
           theme === "dark" ? "bg-[#0f0f0f]" : "bg-[#f7f7f6]"
         }`}

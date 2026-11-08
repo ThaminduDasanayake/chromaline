@@ -159,6 +159,7 @@ export default function StackDocumentationPage() {
     >
       {/* 1. Preview */}
       <ComponentPreview
+        theme={theme}
         canvasClassName={cn(
           "min-h-[460px] p-6 sm:p-10 transition-colors duration-300",
           theme === "dark" ? "bg-[#0f0f0f]" : "bg-[#f7f7f6]"
@@ -239,7 +240,14 @@ export default function StackDocumentationPage() {
         }
       >
         <div className="flex w-full items-center justify-center py-6">
-          <Stack count={count} spread={spread} scatter={scatter} bounce={5} corner={14} />
+          <Stack
+            count={count}
+            spread={spread}
+            scatter={scatter}
+            bounce={5}
+            corner={14}
+            theme={theme}
+          />
         </div>
       </ComponentPreview>
 

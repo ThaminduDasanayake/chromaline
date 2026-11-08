@@ -173,6 +173,7 @@ export function Folder({
   const svgContent = (
     <svg
       ref={!children ? (containerRef as React.RefObject<SVGSVGElement>) : undefined}
+      data-theme={theme !== "auto" ? theme : undefined}
       viewBox={depthValue > 0 ? "-2 -2 89 66" : "-2 -1 88 65"}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
@@ -258,6 +259,7 @@ export function Folder({
   return (
     <div
       ref={containerRef as React.RefObject<HTMLDivElement>}
+      data-theme={theme !== "auto" ? theme : undefined}
       className={cn("relative", className)}
     >
       {svgContent}

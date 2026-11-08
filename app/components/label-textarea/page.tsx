@@ -101,6 +101,16 @@ export default function FeedbackForm() {
   );
 }`;
 
+const LABEL_TEXTAREA_CSS = `/* Add keyframes to your globals.css */
+@keyframes lbi-hop {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  38% {
+    transform: translateY(-3px);
+  }
+}`;
+
 const PROPS_DATA: PropItem[] = [
   {
     name: "label",
@@ -168,6 +178,7 @@ export default function LabelTextareaDocumentationPage() {
     >
       {/* 1. Preview */}
       <ComponentPreview
+        theme={theme}
         canvasClassName={`min-h-[380px] p-8 transition-colors duration-300 ${
           theme === "dark" ? "bg-[#0f0f0f]" : "bg-[#f7f7f6]"
         }`}
@@ -237,7 +248,12 @@ export default function LabelTextareaDocumentationPage() {
       <InstallationSection componentName="label-textarea" />
 
       {/* 3. Usage */}
-      <UsageSection codeText={CODE_EXAMPLE_TEXT} codeLines={CODE_EXAMPLE_LINES} />
+      <UsageSection
+        componentName="label-textarea"
+        codeText={CODE_EXAMPLE_TEXT}
+        codeLines={CODE_EXAMPLE_LINES}
+        cssText={LABEL_TEXTAREA_CSS}
+      />
 
       {/* 4. Props */}
       <PropsTable componentName="LabelTextarea" props={PROPS_DATA} />

@@ -187,6 +187,7 @@ export function Create({
       className={cn("crt-stage relative isolate h-61 w-61 select-none", className)}
       data-open={open || undefined}
       data-sink={sink || undefined}
+      data-theme={theme || undefined}
       style={
         {
           "--pill-w": `${pillW}px`,
@@ -205,12 +206,7 @@ export function Create({
             overshoot. */}
         <motion.div
           className={cn(
-            "crt-body pointer-events-none absolute inset-0 m-auto",
-            theme === "dark"
-              ? "bg-[#1a1a1a] shadow-[0_0_0_1px_rgba(255,255,255,0.12)]"
-              : theme === "light"
-                ? "bg-[#ffffff] shadow-[0_0_0_1px_rgba(23,24,26,0.08)]"
-                : "bg-[#ffffff] shadow-[0_0_0_1px_rgba(23,24,26,0.08)] dark:bg-[#1a1a1a] dark:shadow-[0_0_0_1px_rgba(255,255,255,0.12)]",
+            "crt-body bg-chroma-surface-elevated pointer-events-none absolute inset-0 m-auto shadow-[0_0_0_1px_var(--chroma-border)]",
             sink
               ? "scale-[0.94] duration-160 ease-[cubic-bezier(0.22,1,0.36,1)]"
               : "scale-100 duration-220 ease-[cubic-bezier(0.22,1,0.36,1)]",
@@ -241,12 +237,7 @@ export function Create({
           "crt-pill absolute inset-0 z-20 m-auto",
           "h-[38px] w-[var(--pill-w)]",
           "flex items-center justify-center gap-2 border-0 bg-transparent",
-          "cursor-pointer text-[13px] font-normal tracking-normal",
-          theme === "dark"
-            ? "text-[#ffffff]"
-            : theme === "light"
-              ? "text-[#17181a]"
-              : "text-[#17181a] dark:text-[#ffffff]",
+          "text-chroma-text-primary cursor-pointer text-[13px] font-normal tracking-normal",
           sink
             ? "scale-[0.94] opacity-100 duration-160 [transition-timing-function:cubic-bezier(0.22,1,0.36,1)]"
             : "scale-100 duration-[420ms] [transition-timing-function:cubic-bezier(0.22,1,0.36,1)]",
@@ -270,12 +261,7 @@ export function Create({
       <div
         className={cn(
           "crt-panel absolute inset-0 m-auto",
-          "z-30 box-border h-[166px] w-[212px] p-3",
-          theme === "dark"
-            ? "text-[#ffffff]"
-            : theme === "light"
-              ? "text-[#17181a]"
-              : "text-[#17181a] dark:text-[#ffffff]",
+          "text-chroma-text-primary z-30 box-border h-[166px] w-[212px] p-3",
           open ? "pointer-events-auto" : "pointer-events-none"
         )}
       >
@@ -305,18 +291,9 @@ export function Create({
                   "relative flex h-[34px] w-full items-center gap-3 px-4",
                   "rounded-[var(--crt-row-r,999px)] border-0 bg-transparent",
                   "isolate cursor-pointer text-left text-[13px] tracking-normal select-none",
-                  "transition-colors duration-220",
-                  theme === "dark"
-                    ? "text-[#9a9a9a] hover:text-[#ffffff]"
-                    : theme === "light"
-                      ? "text-[#5c5b56] hover:text-[#17181a]"
-                      : "text-[#5c5b56] hover:text-[#17181a] dark:text-[#9a9a9a] dark:hover:text-[#ffffff]",
+                  "text-chroma-text-secondary hover:text-chroma-text-primary transition-colors duration-220",
                   "before:absolute before:inset-0 before:-z-10 before:rounded-[inherit] before:content-['']",
-                  theme === "dark"
-                    ? "before:bg-white/[0.09]"
-                    : theme === "light"
-                      ? "before:bg-[#17181a]/[0.06]"
-                      : "before:bg-[#17181a]/[0.06] dark:before:bg-white/[0.09]",
+                  "before:bg-black/[0.06] dark:before:bg-white/[0.09]",
                   "before:opacity-0 hover:before:opacity-100 focus-visible:before:opacity-100",
                   "before:pointer-events-none before:transition-opacity before:duration-220 hover:before:duration-160"
                 )}

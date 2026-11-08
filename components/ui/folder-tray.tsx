@@ -353,6 +353,7 @@ export function FolderTray<T = unknown>({
 
   return (
     <div
+      data-theme={theme !== "auto" ? theme : undefined}
       className={cn(
         "folder-tray relative aspect-[5/4] w-full max-w-[460px] select-none",
         isDark

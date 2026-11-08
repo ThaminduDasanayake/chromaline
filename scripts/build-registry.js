@@ -68,6 +68,38 @@ function buildRegistry() {
     : "";
   const stackContent = fs.existsSync(stackPath) ? fs.readFileSync(stackPath, "utf8") : "";
 
+  // Chromaline centralized semantic tokens for shadcn CLI auto-injection
+  const chromaCssVars = {
+    light: {
+      "chroma-surface": "#f7f7f6",
+      "chroma-surface-elevated": "#ffffff",
+      "chroma-border": "rgba(0, 0, 0, 0.08)",
+      "chroma-border-subtle": "rgba(0, 0, 0, 0.04)",
+      "chroma-text-primary": "#18181b",
+      "chroma-text-secondary": "#71717a",
+      "chroma-text-muted": "#a1a1aa",
+      "chroma-glass-nav": "rgba(255, 255, 255, 0.6)",
+      "chroma-glass-wash": "rgba(0, 0, 0, 0.06)",
+      "chroma-search-fill": "#e9e9e9",
+      "chroma-stack-face": "#ffffff",
+      "chroma-toggle-thumb": "#d3d3d4",
+    },
+    dark: {
+      "chroma-surface": "#0f0f0f",
+      "chroma-surface-elevated": "#181818",
+      "chroma-border": "rgba(255, 255, 255, 0.1)",
+      "chroma-border-subtle": "rgba(255, 255, 255, 0.05)",
+      "chroma-text-primary": "#ffffff",
+      "chroma-text-secondary": "#a1a1aa",
+      "chroma-text-muted": "#71717a",
+      "chroma-glass-nav": "#252525",
+      "chroma-glass-wash": "#3d3d3d",
+      "chroma-search-fill": "#222224",
+      "chroma-stack-face": "#14161a",
+      "chroma-toggle-thumb": "#464646",
+    },
+  };
+
   // 1. Full Folder Tray with Folder Support
   const trayRegistryItem = {
     $schema: "https://ui.shadcn.com/schema/registry-item.json",
@@ -244,6 +276,19 @@ function buildRegistry() {
         target: "components/ui/label-input.tsx",
       },
     ],
+    css: {
+      "@keyframes lbi-hop": {
+        "0%": { transform: "translateY(0)" },
+        "35%": { transform: "translateY(-3.5px)" },
+        "65%": { transform: "translateY(1px)" },
+        "100%": { transform: "translateY(0)" },
+      },
+      "@keyframes lbi-flip": {
+        "0%": { transform: "rotateX(0deg)" },
+        "50%": { transform: "rotateX(-90deg)" },
+        "100%": { transform: "rotateX(0deg)" },
+      },
+    },
   };
 
   // 8b. Label Textarea Component
@@ -265,6 +310,14 @@ function buildRegistry() {
         target: "components/ui/label-textarea.tsx",
       },
     ],
+    css: {
+      "@keyframes lta-hop": {
+        "0%": { transform: "translateY(0)" },
+        "35%": { transform: "translateY(-3.5px)" },
+        "65%": { transform: "translateY(1px)" },
+        "100%": { transform: "translateY(0)" },
+      },
+    },
   };
 
   // 9. Copy Button with Hook
@@ -486,6 +539,32 @@ function buildRegistry() {
   const outDir = path.join(__dirname, "../public/r");
   fs.mkdirSync(outDir, { recursive: true });
 
+  const allRegistryItems = [
+    trayRegistryItem,
+    singleFolderRegistryItem,
+    buttonRegistryItem,
+    selectBarRegistryItem,
+    seekRegistryItem,
+    heatmapRegistryItem,
+    toggleRegistryItem,
+    labelInputRegistryItem,
+    labelTextareaRegistryItem,
+    copyButtonRegistryItem,
+    aspectRatioRegistryItem,
+    counterRegistryItem,
+    wakeSliderRegistryItem,
+    paletteRegistryItem,
+    timeScrubberRegistryItem,
+    checklistRegistryItem,
+    createMenuRegistryItem,
+    fluidSearchRegistryItem,
+    stackRegistryItem,
+  ];
+
+  for (const item of allRegistryItems) {
+    item.cssVars = chromaCssVars;
+  }
+
   // Clean simple names
   fs.writeFileSync(
     path.join(outDir, "folder-tray.json"),
@@ -547,26 +626,7 @@ function buildRegistry() {
     $schema: "https://ui.shadcn.com/schema/registry.json",
     name: "chromaline",
     homepage: "https://github.com/lucasmarkes/hairline",
-    items: [
-      trayRegistryItem,
-      singleFolderRegistryItem,
-      buttonRegistryItem,
-      selectBarRegistryItem,
-      seekRegistryItem,
-      heatmapRegistryItem,
-      toggleRegistryItem,
-      labelInputRegistryItem,
-      copyButtonRegistryItem,
-      aspectRatioRegistryItem,
-      counterRegistryItem,
-      wakeSliderRegistryItem,
-      paletteRegistryItem,
-      timeScrubberRegistryItem,
-      checklistRegistryItem,
-      createMenuRegistryItem,
-      fluidSearchRegistryItem,
-      stackRegistryItem,
-    ],
+    items: allRegistryItems,
   };
   fs.writeFileSync(path.join(outDir, "index.json"), JSON.stringify(indexRegistry, null, 2));
 
@@ -868,10 +928,21 @@ function buildRegistry() {
       },
     ],
   };
+
+  for (const item of rootRegistry.items) {
+    item.cssVars = chromaCssVars;
+    if (item.name === "label-input") {
+      item.css = labelInputRegistryItem.css;
+    }
+    if (item.name === "label-textarea") {
+      item.css = labelTextareaRegistryItem.css;
+    }
+  }
+
   fs.writeFileSync(path.join(__dirname, "../registry.json"), JSON.stringify(rootRegistry, null, 2));
 
   console.log(
-    "✓ Chromaline registry generated at public/r/folder-tray.json, public/r/folder.json, public/r/button.json, public/r/select-bar.json, public/r/seek.json, public/r/heatmap.json, public/r/toggle.json, public/r/label-input.json, and public/r/copy-button.json"
+    `✓ Chromaline registry generated (${allRegistryItems.length} components with CSS variables and keyframes)`
   );
 }
 

@@ -142,6 +142,23 @@ export default function LoginDemo() {
   );
 }`;
 
+const LABEL_INPUT_CSS = `/* Add keyframes to your globals.css */
+@keyframes lbi-hop {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  38% {
+    transform: translateY(-3px);
+  }
+}
+
+@keyframes lbi-flip {
+  from {
+    filter: blur(3px);
+    opacity: 0.5;
+  }
+}`;
+
 const PROPS_DATA: PropItem[] = [
   {
     name: "field",
@@ -218,6 +235,7 @@ export default function LabelInputDocumentationPage() {
     >
       {/* 1. Interactive Preview */}
       <ComponentPreview
+        theme={theme}
         canvasClassName={`min-h-[280px] p-8 transition-colors duration-300 ${
           theme === "dark" ? "bg-[#0f0f0f]" : "bg-[#f7f7f6]"
         }`}
@@ -278,7 +296,12 @@ export default function LabelInputDocumentationPage() {
       <InstallationSection componentName="label-input" />
 
       {/* 3. Usage */}
-      <UsageSection codeText={CODE_EXAMPLE_TEXT} codeLines={CODE_EXAMPLE_LINES} />
+      <UsageSection
+        componentName="label-input"
+        codeText={CODE_EXAMPLE_TEXT}
+        codeLines={CODE_EXAMPLE_LINES}
+        cssText={LABEL_INPUT_CSS}
+      />
 
       {/* 4. Props */}
       <PropsTable componentName="LabelInput" props={PROPS_DATA} />

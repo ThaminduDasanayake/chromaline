@@ -282,11 +282,9 @@ export function Counter({
 
   return (
     <div
+      data-theme={theme || undefined}
       className={cn(
-        "relative flex items-center gap-0 p-[5px] font-sans transition-colors duration-300 select-none",
-        isDark
-          ? "bg-[#1a1a1a] text-zinc-100 shadow-[0_0_0_1px_rgba(255,255,255,0.12),0_4px_20px_-4px_rgba(0,0,0,0.6)]"
-          : "bg-white text-slate-900 shadow-[0_0_0_1px_rgba(0,0,0,0.08),0_2px_8px_-2px_rgba(15,23,42,0.06)]",
+        "bg-chroma-surface-elevated text-chroma-text-primary relative flex items-center gap-0 p-[5px] font-sans shadow-[0_0_0_1px_var(--chroma-border),0_2px_8px_-2px_rgba(15,23,42,0.06)] transition-colors duration-300 select-none dark:shadow-[0_0_0_1px_var(--chroma-border),0_4px_20px_-4px_rgba(0,0,0,0.6)]",
         className
       )}
       style={{
@@ -297,10 +295,10 @@ export function Counter({
       <button
         type="button"
         className={cn(
-          "grid w-10 shrink-0 cursor-pointer place-items-center border-0 p-0 text-inherit transition-[transform,background-color] duration-[200ms] ease-[cubic-bezier(0.3,0.9,0.4,1)] [-webkit-tap-highlight-color:transparent] focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none active:scale-90 active:duration-[110ms]",
+          "focus-visible:ring-offset-chroma-surface-elevated grid w-10 shrink-0 cursor-pointer place-items-center border-0 p-0 text-inherit transition-[transform,background-color] duration-[200ms] ease-[cubic-bezier(0.3,0.9,0.4,1)] [-webkit-tap-highlight-color:transparent] focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none active:scale-90 active:duration-[110ms]",
           isDark
-            ? "bg-white/[0.06] hover:bg-white/[0.10] focus-visible:ring-white/30 focus-visible:ring-offset-[#1a1a1a]"
-            : "bg-slate-900/[0.06] hover:bg-slate-900/[0.1] focus-visible:ring-slate-900/25 focus-visible:ring-offset-white"
+            ? "bg-white/[0.06] hover:bg-white/[0.10] focus-visible:ring-white/30"
+            : "bg-slate-900/[0.06] hover:bg-slate-900/[0.1] focus-visible:ring-slate-900/25"
         )}
         style={{
           height: `${CELL}px`,
@@ -323,10 +321,8 @@ export function Counter({
 
       <div
         className={cn(
-          "flex cursor-ns-resize touch-none justify-center rounded-lg [mask-image:linear-gradient(transparent,#000_20%,#000_80%,transparent)] px-3.5 text-[30px] font-medium tracking-[-0.02em] tabular-nums select-none [-webkit-mask-image:linear-gradient(transparent,#000_20%,#000_80%,transparent)] focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none",
-          isDark
-            ? "focus-visible:ring-white/30 focus-visible:ring-offset-[#1a1a1a]"
-            : "focus-visible:ring-slate-900/25 focus-visible:ring-offset-white"
+          "focus-visible:ring-offset-chroma-surface-elevated flex cursor-ns-resize touch-none justify-center rounded-lg [mask-image:linear-gradient(transparent,#000_20%,#000_80%,transparent)] px-3.5 text-[30px] font-medium tracking-[-0.02em] tabular-nums select-none [-webkit-mask-image:linear-gradient(transparent,#000_20%,#000_80%,transparent)] focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none",
+          isDark ? "focus-visible:ring-white/30" : "focus-visible:ring-slate-900/25"
         )}
         style={{
           height: `${CELL}px`,
@@ -401,10 +397,10 @@ export function Counter({
       <button
         type="button"
         className={cn(
-          "grid w-10 shrink-0 cursor-pointer place-items-center border-0 p-0 text-inherit transition-[transform,background-color] duration-[200ms] ease-[cubic-bezier(0.3,0.9,0.4,1)] [-webkit-tap-highlight-color:transparent] focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none active:scale-90 active:duration-[110ms]",
+          "focus-visible:ring-offset-chroma-surface-elevated grid w-10 shrink-0 cursor-pointer place-items-center border-0 p-0 text-inherit transition-[transform,background-color] duration-[200ms] ease-[cubic-bezier(0.3,0.9,0.4,1)] [-webkit-tap-highlight-color:transparent] focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none active:scale-90 active:duration-[110ms]",
           isDark
-            ? "bg-white/[0.06] hover:bg-white/[0.10] focus-visible:ring-white/30 focus-visible:ring-offset-[#1a1a1a]"
-            : "bg-slate-900/[0.06] hover:bg-slate-900/[0.1] focus-visible:ring-slate-900/25 focus-visible:ring-offset-white"
+            ? "bg-white/[0.06] hover:bg-white/[0.10] focus-visible:ring-white/30"
+            : "bg-slate-900/[0.06] hover:bg-slate-900/[0.1] focus-visible:ring-slate-900/25"
         )}
         style={{
           height: `${CELL}px`,

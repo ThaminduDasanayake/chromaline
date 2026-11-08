@@ -1078,6 +1078,7 @@ export function Heatmap({
   return (
     <div
       ref={containerRef}
+      data-theme={mode}
       className={cn("relative block w-full cursor-crosshair touch-none select-none", className)}
       style={{ aspectRatio: `${VIEW_W} / ${VIEW_H}`, ...style }}
       role="region"

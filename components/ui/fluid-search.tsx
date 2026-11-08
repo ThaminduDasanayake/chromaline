@@ -44,140 +44,198 @@ export interface FluidSearchProps {
  * fluidly separate on focus/input and seamlessly merge back on close/Escape.
  * Filter only the silhouette, never content.
  */
-export function FluidSearch({
-  value: controlledValue,
-  onChange,
-  label = "Search",
-  placeholder = "Search…",
-  theme,
-  fill,
-  className = "",
-  style,
-}: FluidSearchProps) {
-  const [internalValue, setInternalValue] = useState("");
-  const isControlled = controlledValue !== undefined;
-  const value = isControlled ? controlledValue : internalValue;
+export const FluidSearch = React.forwardRef<HTMLInputElement, FluidSearchProps>(
+  function FluidSearch(
+    {
+      value: controlledValue,
+      onChange,
+      label = "Search",
+      placeholder = "Search…",
+      theme,
+      fill,
+      className = "",
+      style,
+    },
+    forwardedRef
+  ) {
+    const [internalValue, setInternalValue] = useState("");
+    const isControlled = controlledValue !== undefined;
+    const value = isControlled ? controlledValue : internalValue;
 
-  const handleValueChange = (next: string) => {
-    if (!isControlled) {
-      setInternalValue(next);
-    }
-    onChange?.(next);
-  };
-
-  const [focused, setFocused] = useState(false);
-  const host = useRef<HTMLDivElement | null>(null);
-  const reduced = useFluidReducedMotion();
-  const id = "search-" + useId().replace(/:/g, "");
-  const [keyboard, setKeyboard] = useState(false);
-
-  useEffect(() => {
-    const key = (e: KeyboardEvent) => {
-      if (e.key === "Tab") setKeyboard(true);
+    const handleValueChange = (next: string) => {
+      if (!isControlled) {
+        setInternalValue(next);
+      }
+      onChange?.(next);
     };
-    document.addEventListener("keydown", key);
-    return () => document.removeEventListener("keydown", key);
-  }, []);
 
-  const open = focused || Boolean(value);
+    const [focused, setFocused] = useState(false);
+    const host = useRef<HTMLDivElement | null>(null);
+    const inputRef = useRef<HTMLInputElement | null>(null);
+    const reduced = useFluidReducedMotion();
+    const id = "search-" + useId().replace(/:/g, "");
+    const [keyboard, setKeyboard] = useState(false);
 
-  function close() {
-    handleValueChange("");
-    setFocused(false);
-    host.current?.focus();
-  }
-
-  return (
-    <div
-      ref={host}
-      tabIndex={-1}
-      className={cn("seenry-fluid-search", open && "is-open", className)}
-      data-reduced={reduced}
-      data-keyboard={keyboard}
-      data-theme={theme || undefined}
-      style={{
-        ...(fill ? ({ "--search-fill": fill } as React.CSSProperties) : {}),
-        ...style,
-      }}
-      onPointerDownCapture={() => setKeyboard(false)}
-      onFocusCapture={(e) => {
-        if (e.target !== host.current) setFocused(true);
-      }}
-      onBlurCapture={(e) => {
-        if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setFocused(false);
-      }}
-      onKeyDown={(e) => {
-        if (e.key === "Escape") {
-          e.stopPropagation();
-          e.preventDefault();
-          close();
+    const handleInputRef = React.useCallback(
+      (node: HTMLInputElement | null) => {
+        inputRef.current = node;
+        if (typeof forwardedRef === "function") {
+          forwardedRef(node);
+        } else if (forwardedRef) {
+          forwardedRef.current = node;
         }
-      }}
-    >
-      <svg aria-hidden="true" className="sfs-defs">
-        <defs>
-          <filter
-            id={id}
-            x="-20%"
-            y="-100%"
-            width="140%"
-            height="300%"
-            colorInterpolationFilters="sRGB"
-          >
-            <feGaussianBlur stdDeviation="5" />
-            <feColorMatrix type="matrix" values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 18 -8.5" />
-          </filter>
-        </defs>
-      </svg>
+      },
+      [forwardedRef]
+    );
+
+    useEffect(() => {
+      const key = (e: KeyboardEvent) => {
+        if (e.key === "Tab") setKeyboard(true);
+      };
+      document.addEventListener("keydown", key);
+      return () => document.removeEventListener("keydown", key);
+    }, []);
+
+    const open = focused || Boolean(value);
+
+    function close() {
+      handleValueChange("");
+      setFocused(false);
+      host.current?.focus();
+    }
+
+    // Determine fill color style if explicit override is passed
+    const shapeStyle: React.CSSProperties = fill ? { backgroundColor: fill } : {};
+    const shapeBgClass = !fill ? "bg-chroma-search-fill" : "";
+
+    return (
       <div
-        className="sfs-shapes"
-        aria-hidden="true"
-        style={{ filter: reduced ? "none" : `url(#${id})` }}
+        ref={host}
+        tabIndex={-1}
+        data-theme={theme || undefined}
+        className={cn(
+          "relative isolate h-[52px] w-full outline-none select-none",
+          keyboard &&
+            "[&_:focus-visible]:outline-chroma-border [&_:focus-visible]:outline-2 [&_:focus-visible]:outline-offset-3",
+          className
+        )}
+        style={style}
+        onPointerDownCapture={() => setKeyboard(false)}
+        onFocusCapture={(e) => {
+          if (e.target !== host.current) setFocused(true);
+        }}
+        onBlurCapture={(e) => {
+          if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setFocused(false);
+        }}
+        onKeyDown={(e) => {
+          if (e.key === "Escape") {
+            e.stopPropagation();
+            e.preventDefault();
+            close();
+          }
+        }}
       >
-        <div className="sfs-pill" />
-        <div className="sfs-circle" />
+        <svg aria-hidden="true" className="pointer-events-none absolute h-0 w-0">
+          <defs>
+            <filter
+              id={id}
+              x="-20%"
+              y="-100%"
+              width="140%"
+              height="300%"
+              colorInterpolationFilters="sRGB"
+            >
+              <feGaussianBlur stdDeviation="5" />
+              <feColorMatrix type="matrix" values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 18 -8.5" />
+            </filter>
+          </defs>
+        </svg>
+
+        <div
+          className="pointer-events-none absolute inset-0 z-0"
+          aria-hidden="true"
+          style={{ filter: reduced ? "none" : `url(#${id})` }}
+        >
+          <div
+            className={cn(
+              "absolute top-0 left-0 h-[52px] rounded-full transition-[width] duration-460 ease-[cubic-bezier(0.22,1,0.36,1)]",
+              shapeBgClass,
+              open ? "w-[calc(100%-64px)]" : "w-full",
+              reduced && "transition-none"
+            )}
+            style={shapeStyle}
+          />
+          <div
+            className={cn(
+              "absolute top-0 right-0 h-[52px] w-[52px] rounded-full transition-transform duration-460 ease-[cubic-bezier(0.22,1,0.36,1)]",
+              shapeBgClass,
+              open ? "translate-x-0 scale-100" : "-translate-x-[28px] scale-80",
+              reduced && "transition-none"
+            )}
+            style={shapeStyle}
+          />
+        </div>
+
+        <label
+          className={cn(
+            "relative z-1 box-border flex h-[52px] items-center gap-3 rounded-full px-[18px] transition-[width] duration-460 ease-[cubic-bezier(0.22,1,0.36,1)]",
+            open ? "w-[calc(100%-64px)]" : "w-full",
+            reduced && "transition-none"
+          )}
+        >
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.8"
+            aria-hidden="true"
+            className="text-chroma-text-secondary shrink-0"
+          >
+            <circle cx="10.5" cy="10.5" r="6.5" />
+            <path d="m16 16 4 4" />
+          </svg>
+          <input
+            ref={handleInputRef}
+            aria-label={label}
+            placeholder={placeholder}
+            value={value}
+            onChange={(e) => handleValueChange(e.target.value)}
+            className="text-chroma-text-primary font-inherit w-full min-w-0 border-0 bg-transparent p-0 text-[14px] shadow-none outline-none"
+          />
+        </label>
+
+        <button
+          className={cn(
+            "text-chroma-text-primary absolute top-0 right-0 z-2 grid h-[52px] w-[52px] cursor-pointer place-items-center rounded-full border-0 bg-transparent p-0 shadow-none transition-[transform,opacity] duration-460 ease-[cubic-bezier(0.22,1,0.36,1)] outline-none",
+            open
+              ? "pointer-events-auto translate-x-0 scale-100 opacity-100"
+              : "pointer-events-none -translate-x-[28px] scale-80 opacity-0 duration-140",
+            reduced && "transition-none"
+          )}
+          type="button"
+          aria-label="Close search"
+          aria-hidden={!open}
+          tabIndex={open ? 0 : -1}
+          onClick={close}
+        >
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.8"
+            aria-hidden="true"
+          >
+            <path d="m6 6 12 12M18 6 6 18" />
+          </svg>
+        </button>
       </div>
-      <label className="sfs-field">
-        <svg
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.8"
-          aria-hidden="true"
-        >
-          <circle cx="10.5" cy="10.5" r="6.5" />
-          <path d="m16 16 4 4" />
-        </svg>
-        <input
-          aria-label={label}
-          placeholder={placeholder}
-          value={value}
-          onChange={(e) => handleValueChange(e.target.value)}
-        />
-      </label>
-      <button
-        className="sfs-close"
-        type="button"
-        aria-label="Close search"
-        aria-hidden={!open}
-        tabIndex={open ? 0 : -1}
-        onClick={close}
-      >
-        <svg
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.8"
-          aria-hidden="true"
-        >
-          <path d="m6 6 12 12M18 6 6 18" />
-        </svg>
-      </button>
-    </div>
-  );
-}
+    );
+  }
+);
+
+FluidSearch.displayName = "FluidSearch";
 export default FluidSearch;

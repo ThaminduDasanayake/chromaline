@@ -108,11 +108,11 @@ const VARIANTS: Record<
   }
 > = {
   default: {
-    trackOff: "#ffffff",
-    trackOn: "#18181b",
-    thumbOff: "#d3d3d4",
-    thumbOn: "#ffffff",
-    borderOff: "rgba(0, 0, 0, 0.08)",
+    trackOff: "var(--chroma-surface-elevated, #ffffff)",
+    trackOn: "var(--chroma-text-primary, #18181b)",
+    thumbOff: "var(--chroma-toggle-thumb, #d3d3d4)",
+    thumbOn: "var(--chroma-surface-elevated, #ffffff)",
+    borderOff: "var(--chroma-border, rgba(0, 0, 0, 0.08))",
     borderOn: "rgba(0, 0, 0, 0.15)",
   },
   light: {
@@ -323,6 +323,7 @@ export function Toggle({
 
   return (
     <div
+      data-theme={variant !== "default" ? variant : undefined}
       className={cn("relative inline-flex items-center justify-center select-none", className)}
       style={style}
     >
@@ -372,7 +373,7 @@ export function Toggle({
             setToggle(!on);
           }
         }}
-        className="relative block cursor-pointer touch-none rounded-full border-0 p-0 transition-colors duration-[420ms] ease-out outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 motion-reduce:duration-[160ms]"
+        className="focus-visible:ring-offset-chroma-surface-elevated relative block cursor-pointer touch-none rounded-full border-0 p-0 transition-colors duration-[420ms] ease-out outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 motion-reduce:duration-[160ms]"
         style={{
           width: `${cfg.trackWidth}px`,
           height: `${cfg.trackHeight}px`,

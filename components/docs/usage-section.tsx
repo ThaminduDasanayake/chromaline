@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { SelectBar, SelectBarItem } from "@/components/ui/select-bar";
 import { CopyButton } from "@/components/ui/copy-button";
 
 export interface CodeLinePart {
@@ -16,8 +17,12 @@ export interface CodeLine {
 export interface UsageSectionProps {
   title?: string;
   description?: string;
+  componentName?: string;
+  fileName?: string;
   codeText: string;
   codeLines?: CodeLine[];
+  cssText?: string;
+  cssLines?: CodeLine[];
 }
 
 function getCodeTokenClass(cls?: string): string {
@@ -65,50 +70,95 @@ function getCodeTokenClass(cls?: string): string {
 export function UsageSection({
   title = "Usage",
   description = "Import and use the component in your React application.",
+  componentName,
+  fileName,
   codeText,
   codeLines,
+  cssText,
+  cssLines,
 }: UsageSectionProps) {
+  const [tab, setTab] = React.useState<"tsx" | "css">("tsx");
+  const activeCodeText = tab === "tsx" ? codeText : cssText || "";
+  const activeLines = tab === "tsx" ? codeLines : cssLines;
+
+  const displayFileName = React.useMemo(() => {
+    if (fileName) return fileName;
+    if (componentName) {
+      return componentName.endsWith(".tsx") || componentName.endsWith(".ts")
+        ? componentName
+        : `${componentName}.tsx`;
+    }
+    const match = codeText.match(/@\/components\/ui\/([a-z0-9-]+)/);
+    if (match && match[1]) {
+      return `${match[1]}.tsx`;
+    }
+    return "component.tsx";
+  }, [fileName, componentName, codeText]);
+
+  const tabs: SelectBarItem<"tsx" | "css">[] = React.useMemo(
+    () => [
+      { key: "tsx", label: displayFileName },
+      ...(cssText ? [{ key: "css" as const, label: "globals.css" }] : []),
+    ],
+    [displayFileName, cssText]
+  );
+
+  const computedLines = React.useMemo<CodeLine[]>(() => {
+    if (activeLines && activeLines.length > 0) return activeLines;
+    return activeCodeText.split("\n").map((text, idx) => ({
+      num: idx + 1,
+      parts: [{ text }] as CodeLinePart[],
+    }));
+  }, [activeLines, activeCodeText]);
+
   return (
     <section>
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-xl font-bold tracking-tight text-slate-900 sm:text-2xl dark:text-white">
-            {title}
-          </h2>
-          {description && (
-            <p className="mt-1 text-xs text-slate-500 dark:text-zinc-400">{description}</p>
-          )}
-        </div>
-
-        <CopyButton value={codeText} title="Copy code" />
+      <div>
+        <h2 className="text-xl font-bold tracking-tight text-slate-900 sm:text-2xl dark:text-white">
+          {title}
+        </h2>
+        {description && (
+          <p className="mt-1 text-xs text-slate-500 dark:text-zinc-400">{description}</p>
+        )}
       </div>
 
       <div className="mt-4 overflow-hidden rounded-2xl border border-black/[0.08] bg-[#f7f7f6] shadow-2xs transition-colors duration-200 dark:border-white/10 dark:bg-[#0f0f0f]">
-        <div className="overflow-x-auto p-5 font-mono text-xs leading-relaxed text-slate-800 dark:text-zinc-200">
-          {codeLines ? (
-            <pre className="m-0 p-0">
-              <code>
-                {codeLines.map((line) => (
-                  <div key={line.num} className="table-row">
-                    <span className="table-cell pr-6 text-right text-slate-400 select-none dark:text-zinc-600">
-                      {line.num}
-                    </span>
-                    <span className="table-cell">
-                      {line.parts.map((p, idx) => (
-                        <span key={idx} className={getCodeTokenClass(p.cls)}>
-                          {p.text}
-                        </span>
-                      ))}
-                    </span>
-                  </div>
-                ))}
-              </code>
-            </pre>
+        {/* Top Header inside code container */}
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-black/[0.06] bg-white/70 px-4 py-2.5 backdrop-blur-xs dark:border-white/10 dark:bg-[#181818]/70">
+          {cssText ? (
+            <SelectBar<"tsx" | "css"> size="xs" items={tabs} value={tab} onChange={setTab} />
           ) : (
-            <pre className="m-0 p-0">
-              <code>{codeText}</code>
-            </pre>
+            <span className="rounded-lg border border-black/[0.06] bg-black/[0.03] px-2.5 py-1 font-mono text-xs font-medium text-slate-700 dark:border-white/10 dark:bg-white/[0.05] dark:text-zinc-300">
+              {displayFileName}
+            </span>
           )}
+
+          <CopyButton
+            value={activeCodeText}
+            title={`Copy ${tab === "tsx" ? displayFileName : "globals.css"}`}
+          />
+        </div>
+
+        {/* Code Content */}
+        <div className="overflow-x-auto p-5 font-mono text-xs leading-relaxed text-slate-800 dark:text-zinc-200">
+          <pre key={tab} className="m-0 p-0">
+            <code className="table min-w-full">
+              {computedLines.map((line) => (
+                <div key={line.num} className="table-row">
+                  <span className="table-cell pr-6 text-right text-slate-400 select-none dark:text-zinc-600">
+                    {line.num}
+                  </span>
+                  <span className="table-cell whitespace-pre">
+                    {line.parts.map((p, idx) => (
+                      <span key={idx} className={getCodeTokenClass(p.cls)}>
+                        {p.text}
+                      </span>
+                    ))}
+                  </span>
+                </div>
+              ))}
+            </code>
+          </pre>
         </div>
       </div>
     </section>

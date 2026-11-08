@@ -231,10 +231,7 @@ export function Checklist({
   return (
     <div
       className={cn(
-        "relative box-border overflow-hidden font-sans transition-[height,background-color,color,box-shadow] duration-420 ease-[cubic-bezier(0.22,1,0.36,1)] select-none",
-        isDark
-          ? "bg-[#1a1a1a] text-[#ffffff] shadow-[0_0_0_1px_rgba(255,255,255,0.12)]"
-          : "bg-[#ffffff] text-[#17181a] shadow-[0_0_0_1px_rgba(23,24,26,0.08)]",
+        "bg-chroma-surface-elevated text-chroma-text-primary relative box-border overflow-hidden font-sans shadow-[0_0_0_1px_var(--chroma-border)] transition-[height,background-color,color,box-shadow] duration-420 ease-[cubic-bezier(0.22,1,0.36,1)] select-none",
         className
       )}
       data-theme={theme}
@@ -418,10 +415,7 @@ function Row({
       {fell && (
         <span
           aria-hidden="true"
-          className={cn(
-            "pointer-events-none absolute inset-x-0 -z-10 rounded-[10px]",
-            isDark ? "bg-[#1a1a1a]" : "bg-[#ffffff]"
-          )}
+          className="bg-chroma-surface-elevated pointer-events-none absolute inset-x-0 -z-10 rounded-[10px]"
           style={{ top: inset, bottom: inset }}
         />
       )}
@@ -440,17 +434,14 @@ function Row({
         }}
       >
         <span
-          className={cn("absolute inset-0 origin-center", isDark ? "bg-[#ffffff]" : "bg-[#17181a]")}
+          className="bg-chroma-text-primary absolute inset-0 origin-center"
           style={{
             borderRadius: side * 0.32,
             transform: `scale(${t.toFixed(4)})`,
           }}
         />
         <svg
-          className={cn(
-            "relative h-[68%] w-[68%] overflow-visible fill-none stroke-[2.6] [stroke-linecap:round] [stroke-linejoin:round]",
-            isDark ? "stroke-[#1a1a1a]" : "stroke-[#ffffff]"
-          )}
+          className="stroke-chroma-surface-elevated relative h-[68%] w-[68%] overflow-visible fill-none stroke-[2.6] [stroke-linecap:round] [stroke-linejoin:round]"
           viewBox="0 0 24 24"
           aria-hidden="true"
         >

@@ -131,6 +131,7 @@ export function Aspect({
   return (
     <div
       className={cn("relative flex flex-col items-center gap-4 font-sans select-none", className)}
+      data-theme={theme || undefined}
       style={{
         width: W,
         height: W + GAP + BAR,
@@ -173,7 +174,7 @@ export function Aspect({
           className={cn(
             "pointer-events-none absolute top-[2px] left-[2px] h-[calc(100%-4px)] w-[calc((100%-4px)/3)] rounded-full transition-colors duration-300 motion-reduce:transition-none",
             isDark
-              ? "bg-[#27272a] shadow-[0_1px_3px_rgba(0,0,0,0.5),0_0_0_1px_rgba(255,255,255,0.08)]"
+              ? "bg-zinc-800 shadow-[0_1px_3px_rgba(0,0,0,0.5),0_0_0_1px_rgba(255,255,255,0.08)]"
               : "bg-white shadow-[0_1px_3px_rgba(15,23,42,0.1),0_1px_2px_rgba(15,23,42,0.06)]"
           )}
           aria-hidden="true"
