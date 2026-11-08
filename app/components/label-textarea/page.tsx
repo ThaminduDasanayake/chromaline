@@ -248,6 +248,7 @@ export default function LabelTextareaDocumentationPage() {
 
       {/* 3. Usage */}
       <UsageSection
+        componentName="label-textarea"
         codeText={CODE_EXAMPLE_TEXT}
         codeLines={CODE_EXAMPLE_LINES}
         cssText={LABEL_TEXTAREA_CSS}

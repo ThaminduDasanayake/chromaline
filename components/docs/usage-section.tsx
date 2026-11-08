@@ -17,6 +17,7 @@ export interface CodeLine {
 export interface UsageSectionProps {
   title?: string;
   description?: string;
+  componentName?: string;
   fileName?: string;
   codeText: string;
   codeLines?: CodeLine[];
@@ -69,7 +70,8 @@ function getCodeTokenClass(cls?: string): string {
 export function UsageSection({
   title = "Usage",
   description = "Import and use the component in your React application.",
-  fileName = "App.tsx",
+  componentName,
+  fileName,
   codeText,
   codeLines,
   cssText,
@@ -79,12 +81,26 @@ export function UsageSection({
   const activeCodeText = tab === "tsx" ? codeText : cssText || "";
   const activeLines = tab === "tsx" ? codeLines : cssLines;
 
+  const displayFileName = React.useMemo(() => {
+    if (fileName) return fileName;
+    if (componentName) {
+      return componentName.endsWith(".tsx") || componentName.endsWith(".ts")
+        ? componentName
+        : `${componentName}.tsx`;
+    }
+    const match = codeText.match(/@\/components\/ui\/([a-z0-9-]+)/);
+    if (match && match[1]) {
+      return `${match[1]}.tsx`;
+    }
+    return "component.tsx";
+  }, [fileName, componentName, codeText]);
+
   const tabs: SelectBarItem<"tsx" | "css">[] = React.useMemo(
     () => [
-      { key: "tsx", label: fileName },
+      { key: "tsx", label: displayFileName },
       ...(cssText ? [{ key: "css" as const, label: "globals.css" }] : []),
     ],
-    [fileName, cssText]
+    [displayFileName, cssText]
   );
 
   const computedLines = React.useMemo<CodeLine[]>(() => {
@@ -113,13 +129,13 @@ export function UsageSection({
             <SelectBar<"tsx" | "css"> size="xs" items={tabs} value={tab} onChange={setTab} />
           ) : (
             <span className="rounded-lg border border-black/[0.06] bg-black/[0.03] px-2.5 py-1 font-mono text-xs font-medium text-slate-700 dark:border-white/10 dark:bg-white/[0.05] dark:text-zinc-300">
-              {fileName}
+              {displayFileName}
             </span>
           )}
 
           <CopyButton
             value={activeCodeText}
-            title={`Copy ${tab === "tsx" ? fileName : "globals.css"}`}
+            title={`Copy ${tab === "tsx" ? displayFileName : "globals.css"}`}
           />
         </div>
 

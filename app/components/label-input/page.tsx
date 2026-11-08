@@ -296,6 +296,7 @@ export default function LabelInputDocumentationPage() {
 
       {/* 3. Usage */}
       <UsageSection
+        componentName="label-input"
         codeText={CODE_EXAMPLE_TEXT}
         codeLines={CODE_EXAMPLE_LINES}
         cssText={LABEL_INPUT_CSS}
