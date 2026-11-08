@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { SelectBar, SelectBarItem } from "@/components/ui/select-bar";
 import { CopyButton } from "@/components/ui/copy-button";
 
 export interface CodeLinePart {
@@ -16,6 +17,7 @@ export interface CodeLine {
 export interface UsageSectionProps {
   title?: string;
   description?: string;
+  fileName?: string;
   codeText: string;
   codeLines?: CodeLine[];
   cssText?: string;
@@ -67,6 +69,7 @@ function getCodeTokenClass(cls?: string): string {
 export function UsageSection({
   title = "Usage",
   description = "Import and use the component in your React application.",
+  fileName = "App.tsx",
   codeText,
   codeLines,
   cssText,
@@ -75,6 +78,14 @@ export function UsageSection({
   const [tab, setTab] = React.useState<"tsx" | "css">("tsx");
   const activeCodeText = tab === "tsx" ? codeText : cssText || "";
   const activeLines = tab === "tsx" ? codeLines : cssLines;
+
+  const tabs: SelectBarItem<"tsx" | "css">[] = React.useMemo(
+    () => [
+      { key: "tsx", label: fileName },
+      ...(cssText ? [{ key: "css" as const, label: "globals.css" }] : []),
+    ],
+    [fileName, cssText]
+  );
 
   const computedLines = React.useMemo<CodeLine[]>(() => {
     if (activeLines && activeLines.length > 0) return activeLines;
@@ -86,49 +97,33 @@ export function UsageSection({
 
   return (
     <section>
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <h2 className="text-xl font-bold tracking-tight text-slate-900 sm:text-2xl dark:text-white">
-            {title}
-          </h2>
-          {description && (
-            <p className="mt-1 text-xs text-slate-500 dark:text-zinc-400">{description}</p>
-          )}
-        </div>
-
-        <div className="flex items-center gap-2.5">
-          {cssText && (
-            <div className="flex items-center gap-1 rounded-xl border border-black/[0.08] bg-[#f0f0ef] p-1 dark:border-white/10 dark:bg-[#181818]">
-              <button
-                type="button"
-                onClick={() => setTab("tsx")}
-                className={`cursor-pointer rounded-lg px-2.5 py-1 text-xs font-medium transition-colors ${
-                  tab === "tsx"
-                    ? "bg-white text-slate-900 shadow-2xs dark:bg-[#252525] dark:text-white"
-                    : "text-slate-500 hover:text-slate-900 dark:text-zinc-400 dark:hover:text-white"
-                }`}
-              >
-                Component.tsx
-              </button>
-              <button
-                type="button"
-                onClick={() => setTab("css")}
-                className={`cursor-pointer rounded-lg px-2.5 py-1 text-xs font-medium transition-colors ${
-                  tab === "css"
-                    ? "bg-white text-slate-900 shadow-2xs dark:bg-[#252525] dark:text-white"
-                    : "text-slate-500 hover:text-slate-900 dark:text-zinc-400 dark:hover:text-white"
-                }`}
-              >
-                globals.css
-              </button>
-            </div>
-          )}
-
-          <CopyButton value={activeCodeText} title={`Copy ${tab === "tsx" ? "code" : "CSS"}`} />
-        </div>
+      <div>
+        <h2 className="text-xl font-bold tracking-tight text-slate-900 sm:text-2xl dark:text-white">
+          {title}
+        </h2>
+        {description && (
+          <p className="mt-1 text-xs text-slate-500 dark:text-zinc-400">{description}</p>
+        )}
       </div>
 
       <div className="mt-4 overflow-hidden rounded-2xl border border-black/[0.08] bg-[#f7f7f6] shadow-2xs transition-colors duration-200 dark:border-white/10 dark:bg-[#0f0f0f]">
+        {/* Top Header inside code container */}
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-black/[0.06] bg-white/70 px-4 py-2.5 backdrop-blur-xs dark:border-white/10 dark:bg-[#181818]/70">
+          {cssText ? (
+            <SelectBar<"tsx" | "css"> size="xs" items={tabs} value={tab} onChange={setTab} />
+          ) : (
+            <span className="rounded-lg border border-black/[0.06] bg-black/[0.03] px-2.5 py-1 font-mono text-xs font-medium text-slate-700 dark:border-white/10 dark:bg-white/[0.05] dark:text-zinc-300">
+              {fileName}
+            </span>
+          )}
+
+          <CopyButton
+            value={activeCodeText}
+            title={`Copy ${tab === "tsx" ? fileName : "globals.css"}`}
+          />
+        </div>
+
+        {/* Code Content */}
         <div className="overflow-x-auto p-5 font-mono text-xs leading-relaxed text-slate-800 dark:text-zinc-200">
           <pre key={tab} className="m-0 p-0">
             <code className="table min-w-full">
