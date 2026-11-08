@@ -1,21 +1,20 @@
 "use client";
 
 import React, { useState } from "react";
-import { Button } from "@/components/ui/button";
+import { Button, ButtonVariant } from "@/components/ui/button";
 import { SelectBar } from "@/components/ui/select-bar";
 import { ArrowRightIcon } from "@phosphor-icons/react";
 
 export const BUTTON_VARIANTS = [
-  { key: "default" as const, label: "Default", color: "#4a4a46", darkOutline: "#292926" },
-  { key: "dark" as const, label: "Dark", color: "#1e2024", darkOutline: "#111215" },
-  { key: "orange" as const, label: "Orange", color: "#e54f10", darkOutline: "#9a3412" },
-  { key: "emerald" as const, label: "Emerald", color: "#059669", darkOutline: "#047857" },
+  { key: "default" as const, label: "Default", color: "#1e2024", darkOutline: "#111215" },
+  { key: "secondary" as const, label: "Secondary", color: "#4a4a46", darkOutline: "#292926" },
+  { key: "destructive" as const, label: "Destructive", color: "#dc2626", darkOutline: "#991b1b" },
+  { key: "success" as const, label: "Success", color: "#059669", darkOutline: "#047857" },
+  { key: "accent" as const, label: "Accent", color: "#e54f10", darkOutline: "#9a3412" },
 ];
 
 export function ButtonCardPreview({ showControls = false }: { showControls?: boolean } = {}) {
-  const [buttonVariant, setButtonVariant] = useState<"default" | "dark" | "orange" | "emerald">(
-    "default"
-  );
+  const [buttonVariant, setButtonVariant] = useState<ButtonVariant>("default");
 
   return (
     <>
@@ -27,7 +26,7 @@ export function ButtonCardPreview({ showControls = false }: { showControls?: boo
       {/* Quick Interactive Variant Controls */}
       {showControls && (
         <div className="absolute inset-x-0 bottom-4 flex items-center justify-center gap-2">
-          <SelectBar<"default" | "dark" | "orange" | "emerald">
+          <SelectBar<ButtonVariant>
             variant="swatches"
             size="xs"
             items={BUTTON_VARIANTS}

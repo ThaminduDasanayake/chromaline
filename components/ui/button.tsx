@@ -1,7 +1,16 @@
 import React from "react";
 import { cn } from "@/lib/utils";
 
-export type ButtonVariant = "default" | "dark" | "orange" | "emerald";
+export type ButtonVariant =
+  | "default"
+  | "secondary"
+  | "destructive"
+  | "success"
+  | "accent"
+  // Backward compatibility aliases
+  | "dark"
+  | "orange"
+  | "emerald";
 export type ButtonSize = "sm" | "default" | "lg";
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -20,36 +29,57 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
   children: React.ReactNode;
 }
 
-const VARIANTS = {
+const VARIANTS: Record<
+  string,
+  {
+    face: string;
+    highlight: string;
+    content: string;
+    base: string;
+    shadow: string;
+  }
+> = {
   default: {
-    face: "#4a4a46",
-    highlight: "#64645e",
-    content: "#eeeeec",
-    base: "#292926",
-    shadow: "#141412",
-  },
-  dark: {
     face: "#1e2024",
     highlight: "#353840",
     content: "#ffffff",
     base: "#111215",
     shadow: "#09090b",
   },
-  orange: {
-    face: "#e54f10",
-    highlight: "#fb713b",
-    content: "#ffffff",
-    base: "#9a3412",
-    shadow: "#7c2d12",
+  secondary: {
+    face: "#4a4a46",
+    highlight: "#64645e",
+    content: "#eeeeec",
+    base: "#292926",
+    shadow: "#141412",
   },
-  emerald: {
+  destructive: {
+    face: "#dc2626",
+    highlight: "#ef4444",
+    content: "#ffffff",
+    base: "#991b1b",
+    shadow: "#7f1d1d",
+  },
+  success: {
     face: "#059669",
     highlight: "#10b981",
     content: "#ffffff",
     base: "#047857",
     shadow: "#064e3b",
   },
+  accent: {
+    face: "#e54f10",
+    highlight: "#fb713b",
+    content: "#ffffff",
+    base: "#9a3412",
+    shadow: "#7c2d12",
+  },
 };
+
+// Aliases for backward compatibility
+VARIANTS.dark = VARIANTS.default;
+VARIANTS.orange = VARIANTS.accent;
+VARIANTS.emerald = VARIANTS.success;
 
 const SIZES = {
   sm: {

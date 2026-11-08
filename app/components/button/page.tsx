@@ -104,9 +104,9 @@ export default function Demo() {
 const PROPS_DATA: PropItem[] = [
   {
     name: "variant",
-    type: '"default" | "dark" | "orange" | "emerald"',
+    type: '"default" | "secondary" | "destructive" | "success" | "accent"',
     default: '"default"',
-    desc: "Color theme and extrusion aesthetic of the button.",
+    desc: "Semantic intent and extrusion aesthetic of the button.",
   },
   {
     name: "size",
@@ -141,10 +141,11 @@ const PROPS_DATA: PropItem[] = [
 ];
 
 const VARIANT_SWATCHES = [
-  { key: "default", label: "Default", color: "#4a4a46", darkOutline: "#292926" },
-  { key: "dark", label: "Dark", color: "#1e2024", darkOutline: "#111215" },
-  { key: "orange", label: "Orange", color: "#e54f10", darkOutline: "#9a3412" },
-  { key: "emerald", label: "Emerald", color: "#059669", darkOutline: "#047857" },
+  { key: "default", label: "Default", color: "#1e2024", darkOutline: "#111215" },
+  { key: "secondary", label: "Secondary", color: "#4a4a46", darkOutline: "#292926" },
+  { key: "destructive", label: "Destructive", color: "#dc2626", darkOutline: "#991b1b" },
+  { key: "success", label: "Success", color: "#059669", darkOutline: "#047857" },
+  { key: "accent", label: "Accent", color: "#e54f10", darkOutline: "#9a3412" },
 ];
 
 export default function ButtonDocumentationPage() {
