@@ -10,6 +10,8 @@ export interface ComponentPreviewProps {
   className?: string;
   canvasClassName?: string;
   canvasStyle?: React.CSSProperties;
+  controlsClassName?: string;
+  noBorder?: boolean;
 }
 
 export function ComponentPreview({
@@ -19,13 +21,18 @@ export function ComponentPreview({
   className = "",
   canvasClassName = "min-h-[320px] p-8",
   canvasStyle,
+  controlsClassName = "",
+  noBorder = false,
 }: ComponentPreviewProps) {
   const hasCustomBg = canvasClassName.includes("bg-") || Boolean(canvasStyle?.backgroundColor);
 
   return (
     <section
       className={cn(
-        "overflow-hidden rounded-2xl border border-black/[0.08] bg-white shadow-2xs transition-colors duration-200 dark:border-white/10 dark:bg-[#181818]",
+        "overflow-hidden rounded-2xl transition-colors duration-200",
+        noBorder
+          ? "border-0 shadow-none"
+          : "border border-black/[0.08] bg-white shadow-2xs dark:border-white/10 dark:bg-[#181818]",
         className
       )}
     >
@@ -49,7 +56,15 @@ export function ComponentPreview({
 
       {/* Controls Footer */}
       {controls && (
-        <div className="border-t border-black/[0.06] bg-white p-5 transition-colors duration-200 sm:p-6 dark:border-white/10 dark:bg-[#181818]">
+        <div
+          className={cn(
+            "p-5 transition-colors duration-200 sm:p-6",
+            noBorder
+              ? "border-0"
+              : "border-t border-black/[0.06] bg-white dark:border-white/10 dark:bg-[#181818]",
+            controlsClassName
+          )}
+        >
           {controls}
         </div>
       )}

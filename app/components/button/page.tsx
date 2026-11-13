@@ -146,13 +146,13 @@ const PROPS_DATA: PropItem[] = [
   },
 ];
 
-const VARIANT_SWATCHES = [
-  { key: "default", label: "Default", color: "var(--chroma-btn-default-face)" },
-  { key: "destructive", label: "Destructive", color: "var(--chroma-btn-destructive-face)" },
-  { key: "outline", label: "Outline", color: "var(--chroma-btn-outline-face)" },
-  { key: "secondary", label: "Secondary", color: "var(--chroma-btn-secondary-face)" },
-  { key: "ghost", label: "Ghost", color: "var(--chroma-btn-ghost-face)" },
-  { key: "link", label: "Link", color: "var(--chroma-btn-link-face)" },
+const VARIANT_OPTIONS: { key: ButtonVariant; label: string }[] = [
+  { key: "default", label: "Default" },
+  { key: "destructive", label: "Destructive" },
+  { key: "outline", label: "Outline" },
+  { key: "secondary", label: "Secondary" },
+  { key: "ghost", label: "Ghost" },
+  { key: "link", label: "Link" },
 ];
 
 export default function ButtonDocumentationPage() {
@@ -167,7 +167,10 @@ export default function ButtonDocumentationPage() {
     >
       {/* 1. Preview */}
       <ComponentPreview
-        canvasClassName="min-h-[320px] p-8 bg-[var(--canvas-bg,#f7f7f6)] dark:bg-[var(--canvas-bg,#0a0a0a)] transition-colors duration-200"
+        noBorder
+        className="rounded-[28px] bg-[#f7f7f6] transition-colors duration-200 dark:bg-[#171717]"
+        canvasClassName="min-h-[380px] p-8 bg-[#f7f7f6] transition-colors duration-200 dark:bg-[#171717]"
+        controlsClassName="bg-[#f7f7f6] dark:bg-[#171717]"
         controls={
           <div className="flex flex-wrap items-center justify-between gap-6">
             <div>
@@ -175,11 +178,11 @@ export default function ButtonDocumentationPage() {
                 Variant
               </label>
               <div className="mt-2.5">
-                <SelectBar
+                <SelectBar<ButtonVariant>
                   size="xs"
-                  items={VARIANT_SWATCHES}
+                  items={VARIANT_OPTIONS}
                   value={variant}
-                  onChange={(v) => setVariant(v as ButtonVariant)}
+                  onChange={setVariant}
                 />
               </div>
             </div>
