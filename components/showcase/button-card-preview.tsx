@@ -7,10 +7,11 @@ import { ArrowRightIcon } from "@phosphor-icons/react";
 
 export const BUTTON_VARIANTS = [
   { key: "default" as const, label: "Default", color: "#1e2024" },
-  { key: "secondary" as const, label: "Secondary", color: "#4a4a46" },
   { key: "destructive" as const, label: "Destructive", color: "#dc2626" },
-  { key: "success" as const, label: "Success", color: "#059669" },
-  { key: "accent" as const, label: "Accent", color: "#e54f10" },
+  { key: "outline" as const, label: "Outline", color: "#e4e4e7" },
+  { key: "secondary" as const, label: "Secondary", color: "#4a4a46" },
+  { key: "ghost" as const, label: "Ghost", color: "#94a3b8" },
+  { key: "link" as const, label: "Link", color: "#3b82f6" },
 ];
 
 export function ButtonCardPreview({ showControls = false }: { showControls?: boolean } = {}) {

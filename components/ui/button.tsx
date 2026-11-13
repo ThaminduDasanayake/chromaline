@@ -3,11 +3,14 @@ import { cn } from "@/lib/utils";
 
 export type ButtonVariant =
   | "default"
-  | "secondary"
   | "destructive"
+  | "outline"
+  | "secondary"
+  | "ghost"
+  | "link"
+  // Backward compatibility aliases
   | "success"
   | "accent"
-  // Backward compatibility aliases
   | "dark"
   | "orange"
   | "emerald";
@@ -46,13 +49,6 @@ const VARIANTS: Record<
     base: "#111215",
     shadow: "#09090b",
   },
-  secondary: {
-    face: "#4a4a46",
-    highlight: "#64645e",
-    content: "#eeeeec",
-    base: "#292926",
-    shadow: "#141412",
-  },
   destructive: {
     face: "#dc2626",
     highlight: "#ef4444",
@@ -60,6 +56,35 @@ const VARIANTS: Record<
     base: "#991b1b",
     shadow: "#7f1d1d",
   },
+  outline: {
+    face: "#ffffff",
+    highlight: "#f4f4f5",
+    content: "#18181b",
+    base: "#e4e4e7",
+    shadow: "#cbd5e1",
+  },
+  secondary: {
+    face: "#4a4a46",
+    highlight: "#64645e",
+    content: "#eeeeec",
+    base: "#292926",
+    shadow: "#141412",
+  },
+  ghost: {
+    face: "transparent",
+    highlight: "transparent",
+    content: "currentColor",
+    base: "transparent",
+    shadow: "transparent",
+  },
+  link: {
+    face: "transparent",
+    highlight: "transparent",
+    content: "currentColor",
+    base: "transparent",
+    shadow: "transparent",
+  },
+  // Backward compatibility aliases
   success: {
     face: "#059669",
     highlight: "#10b981",
@@ -125,8 +150,10 @@ export const Button = React.forwardRef<HTMLButtonElement & HTMLAnchorElement, Bu
     const v = VARIANTS[variant] || VARIANTS.default;
     const s = SIZES[size] || SIZES.default;
 
-    const actualDepth = depth || s.depth;
+    const isFlat = variant === "ghost" || variant === "link";
+    const actualDepth = depth ?? (isFlat ? "0px" : s.depth);
     const actualRadius = radius || s.radius;
+    const hasDepth = actualDepth !== "0px" && actualDepth !== "0";
 
     const customStyles: Record<string, string> = {
       "--tactile-depth": actualDepth,
@@ -151,12 +178,21 @@ export const Button = React.forwardRef<HTMLButtonElement & HTMLAnchorElement, Bu
     const innerContent = (
       <>
         {/* 3D Base extrusion shadow */}
-        <span className="absolute inset-x-0 top-(--tactile-depth) bottom-0 rounded-(--tactile-radius) bg-(--tactile-base) shadow-[inset_0_-1px_0_var(--tactile-base-shadow)]" />
+        {hasDepth && (
+          <span className="absolute inset-x-0 top-(--tactile-depth) bottom-0 rounded-(--tactile-radius) bg-(--tactile-base) shadow-[inset_0_-1px_0_var(--tactile-base-shadow)]" />
+        )}
 
         {/* 3D Surface Face with mechanical push kinematics */}
         <span
           className={cn(
-            "relative flex items-center justify-center rounded-(--tactile-radius) bg-(--tactile-face) font-medium text-(--tactile-content) shadow-[inset_0_1px_0_var(--tactile-face-highlight)] transition-transform duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] group-active/tactile:translate-y-(--tactile-depth) motion-reduce:transform-none motion-reduce:transition-none [@media(hover:hover)_and_(pointer:fine)]:group-hover/tactile:translate-y-0.5",
+            "relative flex items-center justify-center rounded-(--tactile-radius) bg-(--tactile-face) font-medium text-(--tactile-content) shadow-[inset_0_1px_0_var(--tactile-face-highlight)] transition-transform duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transform-none motion-reduce:transition-none",
+            hasDepth &&
+              "[@media(hover:hover)_and_(pointer:fine)]:group-hover/tactile:translate-y-0.5 group-active/tactile:translate-y-(--tactile-depth)",
+            variant === "outline" &&
+              "shadow-[inset_0_0_0_1px_rgba(0,0,0,0.1),inset_0_1px_0_var(--tactile-face-highlight)] dark:shadow-[inset_0_0_0_1px_rgba(255,255,255,0.15)]",
+            variant === "ghost" &&
+              "shadow-none hover:bg-zinc-100 hover:text-zinc-900 active:bg-zinc-200/70 dark:hover:bg-zinc-800 dark:hover:text-zinc-100 dark:active:bg-zinc-700/70",
+            variant === "link" && "shadow-none hover:underline underline-offset-4",
             s.inner
           )}
         >
