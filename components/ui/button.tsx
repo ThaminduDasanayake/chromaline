@@ -43,61 +43,61 @@ const VARIANTS: Record<
   }
 > = {
   default: {
-    face: "var(--chroma-btn-default-face, #1e2024)",
-    highlight: "var(--chroma-btn-default-highlight, #353840)",
-    content: "var(--chroma-btn-default-content, #ffffff)",
-    base: "var(--chroma-btn-default-base, #111215)",
-    shadow: "var(--chroma-btn-default-shadow, #09090b)",
+    face: "var(--chroma-btn-default-face)",
+    highlight: "var(--chroma-btn-default-highlight)",
+    content: "var(--chroma-btn-default-content)",
+    base: "var(--chroma-btn-default-base)",
+    shadow: "var(--chroma-btn-default-shadow)",
   },
   destructive: {
-    face: "var(--chroma-btn-destructive-face, #dc2626)",
-    highlight: "var(--chroma-btn-destructive-highlight, #ef4444)",
-    content: "var(--chroma-btn-destructive-content, #ffffff)",
-    base: "var(--chroma-btn-destructive-base, #991b1b)",
-    shadow: "var(--chroma-btn-destructive-shadow, #7f1d1d)",
+    face: "var(--chroma-btn-destructive-face)",
+    highlight: "var(--chroma-btn-destructive-highlight)",
+    content: "var(--chroma-btn-destructive-content)",
+    base: "var(--chroma-btn-destructive-base)",
+    shadow: "var(--chroma-btn-destructive-shadow)",
   },
   outline: {
-    face: "var(--chroma-btn-outline-face, #ffffff)",
-    highlight: "var(--chroma-btn-outline-highlight, #f4f4f5)",
-    content: "var(--chroma-btn-outline-content, #18181b)",
-    base: "var(--chroma-btn-outline-base, #e4e4e7)",
-    shadow: "var(--chroma-btn-outline-shadow, #cbd5e1)",
+    face: "var(--chroma-btn-outline-face)",
+    highlight: "var(--chroma-btn-outline-highlight)",
+    content: "var(--chroma-btn-outline-content)",
+    base: "var(--chroma-btn-outline-base)",
+    shadow: "var(--chroma-btn-outline-shadow)",
   },
   secondary: {
-    face: "var(--chroma-btn-secondary-face, #4a4a46)",
-    highlight: "var(--chroma-btn-secondary-highlight, #64645e)",
-    content: "var(--chroma-btn-secondary-content, #eeeeec)",
-    base: "var(--chroma-btn-secondary-base, #292926)",
-    shadow: "var(--chroma-btn-secondary-shadow, #141412)",
+    face: "var(--chroma-btn-secondary-face)",
+    highlight: "var(--chroma-btn-secondary-highlight)",
+    content: "var(--chroma-btn-secondary-content)",
+    base: "var(--chroma-btn-secondary-base)",
+    shadow: "var(--chroma-btn-secondary-shadow)",
   },
   ghost: {
-    face: "var(--chroma-btn-ghost-face, transparent)",
-    highlight: "var(--chroma-btn-ghost-highlight, transparent)",
-    content: "var(--chroma-btn-ghost-content, currentColor)",
-    base: "var(--chroma-btn-ghost-base, transparent)",
-    shadow: "var(--chroma-btn-ghost-shadow, transparent)",
+    face: "var(--chroma-btn-ghost-face)",
+    highlight: "var(--chroma-btn-ghost-highlight)",
+    content: "var(--chroma-btn-ghost-content)",
+    base: "var(--chroma-btn-ghost-base)",
+    shadow: "var(--chroma-btn-ghost-shadow)",
   },
   link: {
-    face: "var(--chroma-btn-link-face, transparent)",
-    highlight: "var(--chroma-btn-link-highlight, transparent)",
-    content: "var(--chroma-btn-link-content, currentColor)",
-    base: "var(--chroma-btn-link-base, transparent)",
-    shadow: "var(--chroma-btn-link-shadow, transparent)",
+    face: "var(--chroma-btn-link-face)",
+    highlight: "var(--chroma-btn-link-highlight)",
+    content: "var(--chroma-btn-link-content)",
+    base: "var(--chroma-btn-link-base)",
+    shadow: "var(--chroma-btn-link-shadow)",
   },
   // Backward compatibility aliases
   success: {
-    face: "var(--chroma-btn-success-face, #059669)",
-    highlight: "var(--chroma-btn-success-highlight, #10b981)",
-    content: "var(--chroma-btn-success-content, #ffffff)",
-    base: "var(--chroma-btn-success-base, #047857)",
-    shadow: "var(--chroma-btn-success-shadow, #064e3b)",
+    face: "var(--chroma-btn-success-face)",
+    highlight: "var(--chroma-btn-success-highlight)",
+    content: "var(--chroma-btn-success-content)",
+    base: "var(--chroma-btn-success-base)",
+    shadow: "var(--chroma-btn-success-shadow)",
   },
   accent: {
-    face: "var(--chroma-btn-accent-face, #e54f10)",
-    highlight: "var(--chroma-btn-accent-highlight, #fb713b)",
-    content: "var(--chroma-btn-accent-content, #ffffff)",
-    base: "var(--chroma-btn-accent-base, #9a3412)",
-    shadow: "var(--chroma-btn-accent-shadow, #7c2d12)",
+    face: "var(--chroma-btn-accent-face)",
+    highlight: "var(--chroma-btn-accent-highlight)",
+    content: "var(--chroma-btn-accent-content)",
+    base: "var(--chroma-btn-accent-base)",
+    shadow: "var(--chroma-btn-accent-shadow)",
   },
 };
 
@@ -150,10 +150,8 @@ export const Button = React.forwardRef<HTMLButtonElement & HTMLAnchorElement, Bu
     const v = VARIANTS[variant] || VARIANTS.default;
     const s = SIZES[size] || SIZES.default;
 
-    const isFlat = variant === "ghost" || variant === "link";
-    const actualDepth = depth ?? (isFlat ? "0px" : s.depth);
+    const actualDepth = depth || s.depth;
     const actualRadius = radius || s.radius;
-    const hasDepth = actualDepth !== "0px" && actualDepth !== "0";
 
     const customStyles: Record<string, string> = {
       "--tactile-depth": actualDepth,
@@ -178,21 +176,14 @@ export const Button = React.forwardRef<HTMLButtonElement & HTMLAnchorElement, Bu
     const innerContent = (
       <>
         {/* 3D Base extrusion shadow */}
-        {hasDepth && (
-          <span className="absolute inset-x-0 top-(--tactile-depth) bottom-0 rounded-(--tactile-radius) bg-(--tactile-base) shadow-[inset_0_-1px_0_var(--tactile-base-shadow)]" />
-        )}
+        <span className="absolute inset-x-0 top-(--tactile-depth) bottom-0 rounded-(--tactile-radius) bg-(--tactile-base) shadow-[inset_0_-1px_0_var(--tactile-base-shadow)]" />
 
         {/* 3D Surface Face with mechanical push kinematics */}
         <span
           className={cn(
-            "relative flex items-center justify-center rounded-(--tactile-radius) bg-(--tactile-face) font-medium text-(--tactile-content) shadow-[inset_0_1px_0_var(--tactile-face-highlight)] transition-transform duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transform-none motion-reduce:transition-none",
-            hasDepth &&
-              "[@media(hover:hover)_and_(pointer:fine)]:group-hover/tactile:translate-y-0.5 group-active/tactile:translate-y-(--tactile-depth)",
+            "relative flex items-center justify-center rounded-(--tactile-radius) bg-(--tactile-face) font-medium text-(--tactile-content) shadow-[inset_0_1px_0_var(--tactile-face-highlight)] transition-transform duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] group-active/tactile:translate-y-(--tactile-depth) motion-reduce:transform-none motion-reduce:transition-none [@media(hover:hover)_and_(pointer:fine)]:group-hover/tactile:translate-y-0.5",
             variant === "outline" &&
               "shadow-[inset_0_0_0_1px_rgba(0,0,0,0.1),inset_0_1px_0_var(--tactile-face-highlight)] dark:shadow-[inset_0_0_0_1px_rgba(255,255,255,0.15)]",
-            variant === "ghost" &&
-              "shadow-none hover:bg-zinc-100 hover:text-zinc-900 active:bg-zinc-200/70 dark:hover:bg-zinc-800 dark:hover:text-zinc-100 dark:active:bg-zinc-700/70",
-            variant === "link" && "shadow-none hover:underline underline-offset-4",
             s.inner
           )}
         >

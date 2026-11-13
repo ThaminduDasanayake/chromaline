@@ -6,12 +6,12 @@ import { SelectBar } from "@/components/ui/select-bar";
 import { ArrowRightIcon } from "@phosphor-icons/react";
 
 export const BUTTON_VARIANTS = [
-  { key: "default" as const, label: "Default", color: "var(--chroma-btn-default-face, #1e2024)" },
-  { key: "destructive" as const, label: "Destructive", color: "var(--chroma-btn-destructive-face, #dc2626)" },
-  { key: "outline" as const, label: "Outline", color: "var(--chroma-btn-outline-base, #e4e4e7)" },
-  { key: "secondary" as const, label: "Secondary", color: "var(--chroma-btn-secondary-face, #4a4a46)" },
-  { key: "ghost" as const, label: "Ghost", color: "#94a3b8" },
-  { key: "link" as const, label: "Link", color: "#3b82f6" },
+  { key: "default" as const, label: "Default", color: "var(--chroma-btn-default-face)" },
+  { key: "destructive" as const, label: "Destructive", color: "var(--chroma-btn-destructive-face)" },
+  { key: "outline" as const, label: "Outline", color: "var(--chroma-btn-outline-face)" },
+  { key: "secondary" as const, label: "Secondary", color: "var(--chroma-btn-secondary-face)" },
+  { key: "ghost" as const, label: "Ghost", color: "var(--chroma-btn-ghost-face)" },
+  { key: "link" as const, label: "Link", color: "var(--chroma-btn-link-face)" },
 ];
 
 export function ButtonCardPreview({ showControls = false }: { showControls?: boolean } = {}) {
