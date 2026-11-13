@@ -20,10 +20,10 @@ export function DocsLayout({
   children,
 }: DocsLayoutProps) {
   return (
-    <div className="flex min-h-screen flex-col bg-[#f7f7f6] font-sans text-[#17181a] transition-colors duration-200 selection:bg-slate-200 dark:bg-[#000000] dark:text-zinc-100 dark:selection:bg-zinc-800">
+    <div className="flex min-h-screen flex-col bg-white font-sans text-[#17181a] transition-colors duration-200 selection:bg-slate-200 dark:bg-[#0a0a0a] dark:text-zinc-100 dark:selection:bg-zinc-800">
       <SiteHeader breadcrumb={title} />
 
-      <main className="mx-auto w-full max-w-4xl flex-1 px-4 py-8 sm:px-6 md:px-8">
+      <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-8 sm:px-6 md:px-8">
         <BackLink />
 
         {/* Header */}

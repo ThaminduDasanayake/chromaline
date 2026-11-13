@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { Button, ButtonVariant, ButtonSize } from "@/components/ui/button";
 import { SelectBar } from "@/components/ui/select-bar";
-import { ArrowRightIcon } from "@phosphor-icons/react";
+import { ArrowRightIcon, SunIcon, MoonIcon } from "@phosphor-icons/react";
 import {
   DocsLayout,
   ComponentPreview,
@@ -104,7 +104,7 @@ export default function Demo() {
 const PROPS_DATA: PropItem[] = [
   {
     name: "variant",
-    type: '"default" | "secondary" | "destructive" | "success" | "accent"',
+    type: '"default" | "destructive" | "outline" | "secondary" | "ghost" | "link"',
     default: '"default"',
     desc: "Semantic intent and extrusion aesthetic of the button.",
   },
@@ -113,6 +113,12 @@ const PROPS_DATA: PropItem[] = [
     type: '"sm" | "default" | "lg"',
     default: '"default"',
     desc: "Button dimensions, font scale, and padding proportions.",
+  },
+  {
+    name: "theme",
+    type: '"light" | "dark"',
+    default: "undefined",
+    desc: "Visual theme mode: light or dark surface styling with corresponding extrusion tokens.",
   },
   {
     name: "href",
@@ -140,17 +146,19 @@ const PROPS_DATA: PropItem[] = [
   },
 ];
 
-const VARIANT_SWATCHES = [
-  { key: "default", label: "Default", color: "#1e2024" },
-  { key: "secondary", label: "Secondary", color: "#4a4a46" },
-  { key: "destructive", label: "Destructive", color: "#dc2626" },
-  { key: "success", label: "Success", color: "#059669" },
-  { key: "accent", label: "Accent", color: "#e54f10" },
+const VARIANT_OPTIONS: { key: ButtonVariant; label: string }[] = [
+  { key: "default", label: "Default" },
+  { key: "destructive", label: "Destructive" },
+  { key: "outline", label: "Outline" },
+  { key: "secondary", label: "Secondary" },
+  { key: "ghost", label: "Ghost" },
+  { key: "link", label: "Link" },
 ];
 
 export default function ButtonDocumentationPage() {
   const [variant, setVariant] = useState<ButtonVariant>("default");
   const [size, setSize] = useState<ButtonSize>("default");
+  const [fill, setFill] = useState<"light" | "dark">("light");
 
   return (
     <DocsLayout
@@ -159,6 +167,11 @@ export default function ButtonDocumentationPage() {
     >
       {/* 1. Preview */}
       <ComponentPreview
+        separated
+        noBorder
+        className="mb-8"
+        canvasClassName="min-h-[380px] sm:min-h-[420px] p-8 bg-[#f2f2f4] dark:bg-[#171717]"
+        controlsClassName="bg-[#f2f2f4] dark:bg-[#171717]"
         controls={
           <div className="flex flex-wrap items-center justify-between gap-6">
             <div>
@@ -166,11 +179,11 @@ export default function ButtonDocumentationPage() {
                 Variant
               </label>
               <div className="mt-2.5">
-                <SelectBar
+                <SelectBar<ButtonVariant>
                   size="xs"
-                  items={VARIANT_SWATCHES}
+                  items={VARIANT_OPTIONS}
                   value={variant}
-                  onChange={(v) => setVariant(v as ButtonVariant)}
+                  onChange={setVariant}
                 />
               </div>
             </div>
@@ -192,11 +205,30 @@ export default function ButtonDocumentationPage() {
                 />
               </div>
             </div>
+
+            <div>
+              <label className="text-xs font-semibold text-slate-900 dark:text-zinc-100">
+                Fill
+              </label>
+              <div className="mt-2.5">
+                <SelectBar<"light" | "dark">
+                  size="xs"
+                  items={[
+                    { key: "light", label: "Light", icon: <SunIcon size={12} weight="bold" /> },
+                    { key: "dark", label: "Dark", icon: <MoonIcon size={12} weight="bold" /> },
+                  ]}
+                  value={fill}
+                  onChange={setFill}
+                  ariaLabel="Select button fill mode"
+                />
+              </div>
+            </div>
           </div>
         }
       >
-        <div className="py-8">
-          <Button variant={variant} size={size}>
+        {/* Component with Fill theme applied */}
+        <div data-theme={fill} className="py-8">
+          <Button variant={variant} size={size} theme={fill}>
             <span>Continue</span>
             <ArrowRightIcon size={14} weight="bold" />
           </Button>

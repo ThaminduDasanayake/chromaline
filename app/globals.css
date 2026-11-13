@@ -6,6 +6,7 @@
 :root,
 html.light,
 [data-theme="light"],
+html.dark [data-theme="light"],
 .light {
   color-scheme: light;
   --font-sans:
@@ -28,6 +29,7 @@ html.light,
   --surface-3: #ecebe7;
   --board: #fff;
   --canvas-bg: #f7f7f6;
+  --chroma-stage: #f2f2f4;
   --pick: #0d99ff;
   --pick-rgb: 13, 153, 255;
   --guide: #ff3b6b;
@@ -69,6 +71,55 @@ html.light,
   --chroma-stack-face: #ffffff;
   --chroma-toggle-thumb: #d3d3d4;
 
+  /* Button Tactile Tokens */
+  --chroma-btn-default-face: #ffffff;
+  --chroma-btn-default-highlight: #f4f4f5;
+  --chroma-btn-default-content: #18181b;
+  --chroma-btn-default-base: #e4e4e7;
+  --chroma-btn-default-shadow: #cbd5e1;
+
+  --chroma-btn-destructive-face: #ef4444;
+  --chroma-btn-destructive-highlight: #f87171;
+  --chroma-btn-destructive-content: #ffffff;
+  --chroma-btn-destructive-base: #dc2626;
+  --chroma-btn-destructive-shadow: #b91c1c;
+
+  --chroma-btn-outline-face: #ffffff;
+  --chroma-btn-outline-highlight: #f4f4f5;
+  --chroma-btn-outline-content: #18181b;
+  --chroma-btn-outline-base: #e4e4e7;
+  --chroma-btn-outline-shadow: #cbd5e1;
+
+  --chroma-btn-secondary-face: #f1f1f0;
+  --chroma-btn-secondary-highlight: #ffffff;
+  --chroma-btn-secondary-content: #18181b;
+  --chroma-btn-secondary-base: #e4e4e7;
+  --chroma-btn-secondary-shadow: #d4d4d8;
+
+  --chroma-btn-ghost-face: #e2e8f0;
+  --chroma-btn-ghost-highlight: #f1f5f9;
+  --chroma-btn-ghost-content: #334155;
+  --chroma-btn-ghost-base: #cbd5e1;
+  --chroma-btn-ghost-shadow: #94a3b8;
+
+  --chroma-btn-link-face: #3b82f6;
+  --chroma-btn-link-highlight: #60a5fa;
+  --chroma-btn-link-content: #ffffff;
+  --chroma-btn-link-base: #2563eb;
+  --chroma-btn-link-shadow: #1d4ed8;
+
+  --chroma-btn-success-face: #059669;
+  --chroma-btn-success-highlight: #10b981;
+  --chroma-btn-success-content: #ffffff;
+  --chroma-btn-success-base: #047857;
+  --chroma-btn-success-shadow: #064e3b;
+
+  --chroma-btn-accent-face: #e54f10;
+  --chroma-btn-accent-highlight: #fb713b;
+  --chroma-btn-accent-content: #ffffff;
+  --chroma-btn-accent-base: #9a3412;
+  --chroma-btn-accent-shadow: #7c2d12;
+
   --topbar: 54px;
   --gutter: clamp(18px, 5vw, 28px);
   --card-shadow:
@@ -79,6 +130,8 @@ html.light,
 
 html.dark,
 [data-theme="dark"],
+html.light [data-theme="dark"],
+:root [data-theme="dark"],
 .dark {
   color-scheme: dark;
   --wash: 0.09;
@@ -87,12 +140,13 @@ html.dark,
   --elev-rgb: 32, 32, 32;
   --glass-rgb: 255, 255, 255;
   --shadow-rgb: 0, 0, 0;
-  --bg: #000;
+  --bg: #0a0a0a;
   --surface: #0f0f0f;
   --surface-2: #181818;
   --surface-3: #202020;
   --board: #1a1a1a;
-  --canvas-bg: #000;
+  --canvas-bg: #0a0a0a;
+  --chroma-stage: #171717;
   --pick: #3aa9ff;
   --pick-rgb: 58, 169, 255;
   --guide: #ff5c84;
@@ -133,6 +187,55 @@ html.dark,
   --chroma-search-fill: #222224;
   --chroma-stack-face: #14161a;
   --chroma-toggle-thumb: #464646;
+
+  /* Button Tactile Tokens */
+  --chroma-btn-default-face: #1e2024;
+  --chroma-btn-default-highlight: #353840;
+  --chroma-btn-default-content: #ffffff;
+  --chroma-btn-default-base: #111215;
+  --chroma-btn-default-shadow: #09090b;
+
+  --chroma-btn-destructive-face: #dc2626;
+  --chroma-btn-destructive-highlight: #ef4444;
+  --chroma-btn-destructive-content: #ffffff;
+  --chroma-btn-destructive-base: #991b1b;
+  --chroma-btn-destructive-shadow: #7f1d1d;
+
+  --chroma-btn-outline-face: #18181b;
+  --chroma-btn-outline-highlight: #27272a;
+  --chroma-btn-outline-content: #ffffff;
+  --chroma-btn-outline-base: #09090b;
+  --chroma-btn-outline-shadow: #000000;
+
+  --chroma-btn-secondary-face: #27272a;
+  --chroma-btn-secondary-highlight: #3f3f46;
+  --chroma-btn-secondary-content: #f4f4f5;
+  --chroma-btn-secondary-base: #18181b;
+  --chroma-btn-secondary-shadow: #09090b;
+
+  --chroma-btn-ghost-face: #475569;
+  --chroma-btn-ghost-highlight: #64748b;
+  --chroma-btn-ghost-content: #ffffff;
+  --chroma-btn-ghost-base: #334155;
+  --chroma-btn-ghost-shadow: #1e293b;
+
+  --chroma-btn-link-face: #2563eb;
+  --chroma-btn-link-highlight: #3b82f6;
+  --chroma-btn-link-content: #ffffff;
+  --chroma-btn-link-base: #1d4ed8;
+  --chroma-btn-link-shadow: #172554;
+
+  --chroma-btn-success-face: #059669;
+  --chroma-btn-success-highlight: #10b981;
+  --chroma-btn-success-content: #ffffff;
+  --chroma-btn-success-base: #047857;
+  --chroma-btn-success-shadow: #064e3b;
+
+  --chroma-btn-accent-face: #e54f10;
+  --chroma-btn-accent-highlight: #fb713b;
+  --chroma-btn-accent-content: #ffffff;
+  --chroma-btn-accent-base: #9a3412;
+  --chroma-btn-accent-shadow: #7c2d12;
 }
 
 @theme inline {
@@ -148,6 +251,42 @@ html.dark,
   --color-chroma-search-fill: var(--chroma-search-fill);
   --color-chroma-stack-face: var(--chroma-stack-face);
   --color-chroma-toggle-thumb: var(--chroma-toggle-thumb);
+
+  --color-chroma-btn-default-face: var(--chroma-btn-default-face);
+  --color-chroma-btn-default-highlight: var(--chroma-btn-default-highlight);
+  --color-chroma-btn-default-content: var(--chroma-btn-default-content);
+  --color-chroma-btn-default-base: var(--chroma-btn-default-base);
+  --color-chroma-btn-default-shadow: var(--chroma-btn-default-shadow);
+
+  --color-chroma-btn-destructive-face: var(--chroma-btn-destructive-face);
+  --color-chroma-btn-destructive-highlight: var(--chroma-btn-destructive-highlight);
+  --color-chroma-btn-destructive-content: var(--chroma-btn-destructive-content);
+  --color-chroma-btn-destructive-base: var(--chroma-btn-destructive-base);
+  --color-chroma-btn-destructive-shadow: var(--chroma-btn-destructive-shadow);
+
+  --color-chroma-btn-outline-face: var(--chroma-btn-outline-face);
+  --color-chroma-btn-outline-highlight: var(--chroma-btn-outline-highlight);
+  --color-chroma-btn-outline-content: var(--chroma-btn-outline-content);
+  --color-chroma-btn-outline-base: var(--chroma-btn-outline-base);
+  --color-chroma-btn-outline-shadow: var(--chroma-btn-outline-shadow);
+
+  --color-chroma-btn-secondary-face: var(--chroma-btn-secondary-face);
+  --color-chroma-btn-secondary-highlight: var(--chroma-btn-secondary-highlight);
+  --color-chroma-btn-secondary-content: var(--chroma-btn-secondary-content);
+  --color-chroma-btn-secondary-base: var(--chroma-btn-secondary-base);
+  --color-chroma-btn-secondary-shadow: var(--chroma-btn-secondary-shadow);
+
+  --color-chroma-btn-success-face: var(--chroma-btn-success-face);
+  --color-chroma-btn-success-highlight: var(--chroma-btn-success-highlight);
+  --color-chroma-btn-success-content: var(--chroma-btn-success-content);
+  --color-chroma-btn-success-base: var(--chroma-btn-success-base);
+  --color-chroma-btn-success-shadow: var(--chroma-btn-success-shadow);
+
+  --color-chroma-btn-accent-face: var(--chroma-btn-accent-face);
+  --color-chroma-btn-accent-highlight: var(--chroma-btn-accent-highlight);
+  --color-chroma-btn-accent-content: var(--chroma-btn-accent-content);
+  --color-chroma-btn-accent-base: var(--chroma-btn-accent-base);
+  --color-chroma-btn-accent-shadow: var(--chroma-btn-accent-shadow);
 }
 
 html,
