@@ -141,10 +141,10 @@ const PROPS_DATA: PropItem[] = [
 ];
 
 const VARIANT_SWATCHES = [
-  { key: "default", label: "Default", color: "#1e2024" },
-  { key: "destructive", label: "Destructive", color: "#dc2626" },
-  { key: "outline", label: "Outline", color: "#e4e4e7" },
-  { key: "secondary", label: "Secondary", color: "#4a4a46" },
+  { key: "default", label: "Default", color: "var(--chroma-btn-default-face, #1e2024)" },
+  { key: "destructive", label: "Destructive", color: "var(--chroma-btn-destructive-face, #dc2626)" },
+  { key: "outline", label: "Outline", color: "var(--chroma-btn-outline-base, #e4e4e7)" },
+  { key: "secondary", label: "Secondary", color: "var(--chroma-btn-secondary-face, #4a4a46)" },
   { key: "ghost", label: "Ghost", color: "#94a3b8" },
   { key: "link", label: "Link", color: "#3b82f6" },
 ];
