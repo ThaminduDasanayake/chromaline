@@ -218,9 +218,7 @@ export default function ToggleDocumentationPage() {
       {/* 1. Preview Canvas & Playground */}
       <ComponentPreview
         theme={theme}
-        canvasClassName={`min-h-[320px] p-8 transition-colors duration-300 ${
-          variant === "dark" ? "bg-[#0f0f0f]" : "bg-[#f7f7f6]"
-        }`}
+        canvasClassName="min-h-[320px] p-8"
         controls={
           <div className="grid grid-cols-1 items-end gap-6 sm:grid-cols-2 lg:grid-cols-[1fr_0.8fr_1fr_1fr_auto]">
             {/* Size control */}

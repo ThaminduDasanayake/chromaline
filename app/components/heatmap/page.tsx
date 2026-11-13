@@ -252,14 +252,7 @@ export default function HeatmapDocumentationPage() {
       {/* 1. Preview */}
       <ComponentPreview
         theme={mode}
-        canvasClassName={cn(
-          "min-h-[460px] flex-col p-6 sm:p-8 transition-colors duration-300",
-          isDark ? "bg-[#0f0f0f]" : "bg-[#f7f7f6]"
-        )}
-        canvasStyle={{
-          backgroundColor: isDark ? "#0d1117" : "#F9FAFB",
-          transition: "background-color 300ms ease",
-        }}
+        canvasClassName="min-h-[460px] flex-col p-6 sm:p-8"
         controls={
           <div className="flex flex-col gap-6">
             {/* SelectBar Controls Grid */}

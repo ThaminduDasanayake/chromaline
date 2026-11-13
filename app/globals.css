@@ -6,6 +6,7 @@
 :root,
 html.light,
 [data-theme="light"],
+html.dark [data-theme="light"],
 .light {
   color-scheme: light;
   --font-sans:
@@ -28,6 +29,7 @@ html.light,
   --surface-3: #ecebe7;
   --board: #fff;
   --canvas-bg: #f7f7f6;
+  --chroma-stage: #f2f2f4;
   --pick: #0d99ff;
   --pick-rgb: 13, 153, 255;
   --guide: #ff3b6b;
@@ -128,6 +130,8 @@ html.light,
 
 html.dark,
 [data-theme="dark"],
+html.light [data-theme="dark"],
+:root [data-theme="dark"],
 .dark {
   color-scheme: dark;
   --wash: 0.09;
@@ -142,6 +146,7 @@ html.dark,
   --surface-3: #202020;
   --board: #1a1a1a;
   --canvas-bg: #0a0a0a;
+  --chroma-stage: #171717;
   --pick: #3aa9ff;
   --pick-rgb: 58, 169, 255;
   --guide: #ff5c84;

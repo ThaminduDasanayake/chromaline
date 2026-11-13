@@ -12,6 +12,8 @@ export interface ComponentPreviewProps {
   canvasStyle?: React.CSSProperties;
   controlsClassName?: string;
   noBorder?: boolean;
+  separated?: boolean;
+  showBadge?: boolean;
 }
 
 export function ComponentPreview({
@@ -19,12 +21,61 @@ export function ComponentPreview({
   controls,
   theme,
   className = "",
-  canvasClassName = "min-h-[320px] p-8",
+  canvasClassName = "min-h-[360px] p-8",
   canvasStyle,
   controlsClassName = "",
-  noBorder = false,
+  noBorder = true,
+  separated = true,
+  showBadge = true,
 }: ComponentPreviewProps) {
-  const hasCustomBg = canvasClassName.includes("bg-") || Boolean(canvasStyle?.backgroundColor);
+  // Strip out legacy stage background colors so the new stage background token applies cleanly
+  const cleanCanvasClassName = canvasClassName
+    .replace(/\bbg-\[#f7f7f6\]\b/g, "")
+    .replace(/\bbg-\[#0f0f0f\]\b/g, "")
+    .replace(/\bdark:bg-\[#0f0f0f\]\b/g, "")
+    .trim();
+
+  const hasCustomBg =
+    (cleanCanvasClassName.includes("bg-") &&
+      !cleanCanvasClassName.includes("bg-[#f2f2f4]") &&
+      !cleanCanvasClassName.includes("dark:bg-[#171717]")) ||
+    Boolean(canvasStyle?.backgroundColor);
+
+  if (separated) {
+    return (
+      <div className={cn("mb-8 flex flex-col gap-4", className)}>
+        {/* Canvas / Stage Card */}
+        <div
+          data-theme={theme || undefined}
+          className={cn(
+            "relative flex min-h-[380px] sm:min-h-[420px] flex-col items-center justify-center overflow-hidden rounded-[28px] transition-colors duration-200",
+            !hasCustomBg && "bg-[#f2f2f4] dark:bg-[#171717]",
+            cleanCanvasClassName
+          )}
+          style={canvasStyle}
+        >
+          {showBadge && (
+            <div className="absolute top-4 left-5 z-10 flex items-center gap-1.5 rounded-full bg-white/70 px-3 py-1 text-[11px] font-medium tracking-tight text-slate-600 backdrop-blur-xs transition-colors dark:bg-white/10 dark:text-zinc-300">
+              <span>Preview</span>
+            </div>
+          )}
+          {children}
+        </div>
+
+        {/* Controls Card */}
+        {controls && (
+          <div
+            className={cn(
+              "rounded-[24px] bg-[#f2f2f4] p-5 transition-colors duration-200 sm:p-6 dark:bg-[#171717]",
+              controlsClassName
+            )}
+          >
+            {controls}
+          </div>
+        )}
+      </div>
+    );
+  }
 
   return (
     <section
@@ -41,16 +92,16 @@ export function ComponentPreview({
         data-theme={theme || undefined}
         className={cn(
           "relative flex flex-col items-center justify-center overflow-hidden transition-colors duration-300",
-          !hasCustomBg &&
-            (theme === "dark"
-              ? "bg-[#0f0f0f]"
-              : theme === "light"
-                ? "bg-[#f7f7f6]"
-                : "bg-[#f7f7f6] dark:bg-[#0f0f0f]"),
-          canvasClassName
+          !hasCustomBg && "bg-[#f2f2f4] dark:bg-[#171717]",
+          cleanCanvasClassName
         )}
         style={canvasStyle}
       >
+        {showBadge && (
+          <div className="absolute top-4 left-5 z-10 flex items-center gap-1.5 rounded-full bg-white/70 px-3 py-1 text-[11px] font-medium tracking-tight text-slate-600 backdrop-blur-xs transition-colors dark:bg-white/10 dark:text-zinc-300">
+            <span>Preview</span>
+          </div>
+        )}
         {children}
       </div>
 

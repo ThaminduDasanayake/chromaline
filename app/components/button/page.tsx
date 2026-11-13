@@ -167,10 +167,11 @@ export default function ButtonDocumentationPage() {
     >
       {/* 1. Preview */}
       <ComponentPreview
+        separated
         noBorder
-        className="rounded-[28px] bg-[#f7f7f6] transition-colors duration-200 dark:bg-[#171717]"
-        canvasClassName="min-h-[380px] p-8 bg-[#f7f7f6] transition-colors duration-200 dark:bg-[#171717]"
-        controlsClassName="bg-[#f7f7f6] dark:bg-[#171717]"
+        className="mb-8"
+        canvasClassName="min-h-[380px] sm:min-h-[420px] p-8 bg-[#f2f2f4] dark:bg-[#171717]"
+        controlsClassName="bg-[#f2f2f4] dark:bg-[#171717]"
         controls={
           <div className="flex flex-wrap items-center justify-between gap-6">
             <div>
@@ -225,6 +226,7 @@ export default function ButtonDocumentationPage() {
           </div>
         }
       >
+        {/* Component with Fill theme applied */}
         <div data-theme={fill} className="py-8">
           <Button variant={variant} size={size} theme={fill}>
             <span>Continue</span>

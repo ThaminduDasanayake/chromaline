@@ -160,10 +160,7 @@ export default function StackDocumentationPage() {
       {/* 1. Preview */}
       <ComponentPreview
         theme={theme}
-        canvasClassName={cn(
-          "min-h-[460px] p-6 sm:p-10 transition-colors duration-300",
-          theme === "dark" ? "bg-[#0f0f0f]" : "bg-[#f7f7f6]"
-        )}
+        canvasClassName="min-h-[460px] p-6 sm:p-10"
         controls={
           <div className="flex flex-col gap-6">
             <div className="grid grid-cols-1 gap-5 sm:grid-cols-4">
