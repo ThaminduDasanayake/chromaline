@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { Button, ButtonVariant, ButtonSize } from "@/components/ui/button";
 import { SelectBar } from "@/components/ui/select-bar";
-import { ArrowRightIcon } from "@phosphor-icons/react";
+import { ArrowRightIcon, SunIcon, MoonIcon } from "@phosphor-icons/react";
 import {
   DocsLayout,
   ComponentPreview,
@@ -11,8 +11,6 @@ import {
   UsageSection,
   PropsTable,
   PropItem,
-  ThemeControl,
-  useComponentTheme,
 } from "@/components/docs";
 
 const CODE_EXAMPLE_LINES = [
@@ -160,7 +158,7 @@ const VARIANT_SWATCHES = [
 export default function ButtonDocumentationPage() {
   const [variant, setVariant] = useState<ButtonVariant>("default");
   const [size, setSize] = useState<ButtonSize>("default");
-  const [theme, setTheme] = useComponentTheme<"light" | "dark">();
+  const [fill, setFill] = useState<"light" | "dark">("light");
 
   return (
     <DocsLayout
@@ -169,10 +167,7 @@ export default function ButtonDocumentationPage() {
     >
       {/* 1. Preview */}
       <ComponentPreview
-        theme={theme}
-        canvasClassName={`min-h-[320px] p-8 transition-colors duration-300 ${
-          theme === "dark" ? "bg-[#0f0f0f]" : "bg-[#f7f7f6]"
-        }`}
+        canvasClassName="min-h-[320px] p-8 bg-[var(--canvas-bg,#f7f7f6)] dark:bg-[var(--canvas-bg,#0a0a0a)] transition-colors duration-200"
         controls={
           <div className="flex flex-wrap items-center justify-between gap-6">
             <div>
@@ -208,19 +203,27 @@ export default function ButtonDocumentationPage() {
             </div>
 
             <div>
-              <ThemeControl
-                layout="vertical"
-                label="Theme"
-                value={theme}
-                onChange={setTheme}
-                ariaLabel="Select button theme mode"
-              />
+              <label className="text-xs font-semibold text-slate-900 dark:text-zinc-100">
+                Fill
+              </label>
+              <div className="mt-2.5">
+                <SelectBar<"light" | "dark">
+                  size="xs"
+                  items={[
+                    { key: "light", label: "Light", icon: <SunIcon size={12} weight="bold" /> },
+                    { key: "dark", label: "Dark", icon: <MoonIcon size={12} weight="bold" /> },
+                  ]}
+                  value={fill}
+                  onChange={setFill}
+                  ariaLabel="Select button fill mode"
+                />
+              </div>
             </div>
           </div>
         }
       >
-        <div className="py-8">
-          <Button variant={variant} size={size} theme={theme}>
+        <div data-theme={fill} className="py-8">
+          <Button variant={variant} size={size} theme={fill}>
             <span>Continue</span>
             <ArrowRightIcon size={14} weight="bold" />
           </Button>
