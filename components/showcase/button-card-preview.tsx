@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { Button, ButtonVariant } from "@/components/ui/button";
 import { SelectBar } from "@/components/ui/select-bar";
+import { useTheme } from "@/components/providers/theme-provider";
 import { ArrowRightIcon } from "@phosphor-icons/react";
 
 export const BUTTON_VARIANTS = [
@@ -14,12 +15,20 @@ export const BUTTON_VARIANTS = [
   { key: "link" as const, label: "Link", color: "var(--chroma-btn-link-face)" },
 ];
 
-export function ButtonCardPreview({ showControls = false }: { showControls?: boolean } = {}) {
+export function ButtonCardPreview({
+  showControls = false,
+  theme: themeProp,
+}: {
+  showControls?: boolean;
+  theme?: "light" | "dark";
+} = {}) {
+  const { theme: appTheme } = useTheme();
+  const theme = themeProp || appTheme;
   const [buttonVariant, setButtonVariant] = useState<ButtonVariant>("default");
 
   return (
     <>
-      <Button variant={buttonVariant}>
+      <Button variant={buttonVariant} theme={theme}>
         <span>Continue</span>
         <ArrowRightIcon size={14} weight="bold" />
       </Button>

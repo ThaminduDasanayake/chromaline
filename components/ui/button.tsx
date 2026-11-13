@@ -19,6 +19,7 @@ export type ButtonSize = "sm" | "default" | "lg";
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant;
   size?: ButtonSize;
+  theme?: "light" | "dark";
   depth?: string;
   radius?: string;
   faceColor?: string;
@@ -129,6 +130,7 @@ export const Button = React.forwardRef<HTMLButtonElement & HTMLAnchorElement, Bu
     {
       variant = "default",
       size = "default",
+      theme,
       depth,
       radius,
       faceColor,
@@ -202,6 +204,7 @@ export const Button = React.forwardRef<HTMLButtonElement & HTMLAnchorElement, Bu
           style={combinedStyle}
           className={baseClasses}
           aria-disabled={disabled}
+          data-theme={theme || undefined}
         >
           {innerContent}
         </a>
@@ -215,6 +218,7 @@ export const Button = React.forwardRef<HTMLButtonElement & HTMLAnchorElement, Bu
         style={combinedStyle}
         className={baseClasses}
         disabled={disabled}
+        data-theme={theme || undefined}
         {...props}
       >
         {innerContent}

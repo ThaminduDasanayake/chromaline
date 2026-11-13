@@ -11,6 +11,8 @@ import {
   UsageSection,
   PropsTable,
   PropItem,
+  ThemeControl,
+  useComponentTheme,
 } from "@/components/docs";
 
 const CODE_EXAMPLE_LINES = [
@@ -115,6 +117,12 @@ const PROPS_DATA: PropItem[] = [
     desc: "Button dimensions, font scale, and padding proportions.",
   },
   {
+    name: "theme",
+    type: '"light" | "dark"',
+    default: "undefined",
+    desc: "Visual theme mode: light or dark surface styling with corresponding extrusion tokens.",
+  },
+  {
     name: "href",
     type: "string",
     default: "undefined",
@@ -152,6 +160,7 @@ const VARIANT_SWATCHES = [
 export default function ButtonDocumentationPage() {
   const [variant, setVariant] = useState<ButtonVariant>("default");
   const [size, setSize] = useState<ButtonSize>("default");
+  const [theme, setTheme] = useComponentTheme<"light" | "dark">();
 
   return (
     <DocsLayout
@@ -160,6 +169,10 @@ export default function ButtonDocumentationPage() {
     >
       {/* 1. Preview */}
       <ComponentPreview
+        theme={theme}
+        canvasClassName={`min-h-[320px] p-8 transition-colors duration-300 ${
+          theme === "dark" ? "bg-[#0f0f0f]" : "bg-[#f7f7f6]"
+        }`}
         controls={
           <div className="flex flex-wrap items-center justify-between gap-6">
             <div>
@@ -193,11 +206,21 @@ export default function ButtonDocumentationPage() {
                 />
               </div>
             </div>
+
+            <div>
+              <ThemeControl
+                layout="vertical"
+                label="Theme"
+                value={theme}
+                onChange={setTheme}
+                ariaLabel="Select button theme mode"
+              />
+            </div>
           </div>
         }
       >
         <div className="py-8">
-          <Button variant={variant} size={size}>
+          <Button variant={variant} size={size} theme={theme}>
             <span>Continue</span>
             <ArrowRightIcon size={14} weight="bold" />
           </Button>
