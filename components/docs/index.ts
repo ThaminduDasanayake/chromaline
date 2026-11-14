@@ -14,6 +14,12 @@ export {
   type CodeLinePart,
 } from "./usage-section";
 export { PropsTable, type PropsTableProps, type PropItem } from "./props-table";
-export { ThemeControl, type ThemeControlProps, type ThemeMode } from "./theme-control";
+export {
+  ThemeControl,
+  FillControl,
+  type ThemeControlProps,
+  type FillControlProps,
+  type ThemeMode,
+} from "./theme-control";
 export { useComponentTheme } from "@/components/providers/theme-provider";
 export { CopyButton, type CopyButtonProps } from "@/components/ui/copy-button";

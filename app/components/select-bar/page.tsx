@@ -13,6 +13,8 @@ import {
   TextTIcon,
   SquareIcon,
   HandPalmIcon,
+  SunIcon,
+  MoonIcon,
 } from "@phosphor-icons/react";
 import {
   DocsLayout,
@@ -190,6 +192,7 @@ const SWATCH_ITEMS = FOLDER_COLOR_SWATCHES;
 export default function SelectBarDocumentationPage() {
   const [contentType, setContentType] = useState<"pills" | "icons" | "swatches">("pills");
   const [size, setSize] = useState<"xs" | "sm" | "default">("sm");
+  const [fill, setFill] = useState<"light" | "dark">("light");
 
   const [activePill, setActivePill] = useState("design");
   const [activeIcon, setActiveIcon] = useState("cursor");
@@ -214,6 +217,7 @@ export default function SelectBarDocumentationPage() {
     >
       {/* 1. Preview */}
       <ComponentPreview
+        theme={fill}
         controls={
           <div className="flex flex-wrap items-center justify-between gap-6">
             <div>
@@ -251,6 +255,24 @@ export default function SelectBarDocumentationPage() {
                 />
               </div>
             </div>
+
+            <div>
+              <label className="text-xs font-semibold text-slate-900 dark:text-zinc-100">
+                Fill
+              </label>
+              <div className="mt-2.5">
+                <SelectBar<"light" | "dark">
+                  size="xs"
+                  items={[
+                    { key: "light", label: "Light", icon: <SunIcon size={12} weight="bold" /> },
+                    { key: "dark", label: "Dark", icon: <MoonIcon size={12} weight="bold" /> },
+                  ]}
+                  value={fill}
+                  onChange={setFill}
+                  ariaLabel="Select fill mode"
+                />
+              </div>
+            </div>
           </div>
         }
       >
@@ -267,6 +289,7 @@ export default function SelectBarDocumentationPage() {
               value={currentValue}
               onChange={handleValueChange}
               size={size}
+              theme={fill}
             />
           )}
         </div>

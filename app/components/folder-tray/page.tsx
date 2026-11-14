@@ -228,7 +228,7 @@ export default function FolderTrayDocumentationPage() {
             <ThemeControl
               value={theme}
               onChange={setTheme}
-              ariaLabel="Select folder tray theme mode"
+              ariaLabel="Select folder tray fill mode"
             />
           </div>
         }

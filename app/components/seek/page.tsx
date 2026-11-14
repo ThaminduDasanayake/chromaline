@@ -207,10 +207,10 @@ export default function SeekDocumentationPage() {
         canvasClassName="min-h-[340px] p-8"
         controls={
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {/* Theme control */}
+            {/* Fill Mode */}
             <div>
               <label className="text-xs font-semibold text-slate-900 dark:text-zinc-100">
-                Theme
+                Fill
               </label>
               <div className="mt-2.5">
                 <SelectBar<"light" | "dark">

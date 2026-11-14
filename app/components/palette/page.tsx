@@ -141,13 +141,13 @@ export default function PaletteDocumentationPage() {
         canvasClassName="min-h-[320px] p-8"
         controls={
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {/* Theme control */}
+            {/* Fill Mode */}
             <ThemeControl
               layout="vertical"
-              label="Theme"
+              label="Fill"
               value={theme}
               onChange={setTheme}
-              ariaLabel="Select palette theme mode"
+              ariaLabel="Select palette fill mode"
             />
 
             {/* Count control */}

@@ -140,11 +140,11 @@ export default function ChecklistPage() {
         canvasClassName="min-h-[380px] p-8"
         controls={
           <div className="flex flex-col gap-6">
-            {/* Theme Mode */}
+            {/* Fill Mode */}
             <ThemeControl
               value={theme}
               onChange={setTheme}
-              ariaLabel="Select checklist theme mode"
+              ariaLabel="Select checklist fill mode"
             />
 
             {/* Bounce Overshoot */}

@@ -194,7 +194,7 @@ export default function FolderPage() {
               <ThemeControl
                 value={theme}
                 onChange={setTheme}
-                ariaLabel="Select folder theme mode"
+                ariaLabel="Select folder fill mode"
               />
             </div>
 

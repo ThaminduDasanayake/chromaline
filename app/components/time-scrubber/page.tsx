@@ -154,11 +154,11 @@ export default function TimeScrubberPage() {
         canvasClassName="min-h-[380px] p-8"
         controls={
           <div className="flex flex-col gap-6">
-            {/* Theme Mode */}
+            {/* Fill Mode */}
             <ThemeControl
               value={theme}
               onChange={setTheme}
-              ariaLabel="Select time scrubber theme mode"
+              ariaLabel="Select time scrubber fill mode"
             />
 
             {/* Time Format */}

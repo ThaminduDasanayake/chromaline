@@ -264,7 +264,7 @@ export default function ToggleDocumentationPage() {
             {/* Theme: Light / Dark */}
             <div>
               <label className="text-xs font-semibold text-slate-900 dark:text-zinc-100">
-                Theme
+                Fill
               </label>
               <div className="mt-2.5">
                 <SelectBar<"light" | "dark">

@@ -242,7 +242,7 @@ export default function LabelInputDocumentationPage() {
             <div className="flex items-center gap-6">
               <div>
                 <label className="text-xs font-semibold text-slate-700 dark:text-zinc-100">
-                  Theme
+                  Fill
                 </label>
                 <div className="mt-1">
                   <SelectBar<"light" | "dark">

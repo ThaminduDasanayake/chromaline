@@ -145,7 +145,7 @@ export default function CounterDocumentationPage() {
         canvasClassName="min-h-[320px] p-8"
         controls={
           <div className="flex flex-col gap-6">
-            <ThemeControl value={theme} onChange={setTheme} ariaLabel="Select counter theme mode" />
+            <ThemeControl value={theme} onChange={setTheme} ariaLabel="Select counter fill mode" />
           </div>
         }
       >

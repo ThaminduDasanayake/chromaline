@@ -141,7 +141,7 @@ export default function FluidSearchDocumentationPage() {
             <ThemeControl
               value={theme}
               onChange={setTheme}
-              ariaLabel="Select fluid search theme mode"
+              ariaLabel="Select fluid search fill mode"
             />
           </div>
         }

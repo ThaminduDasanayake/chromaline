@@ -133,7 +133,7 @@ export default function AspectRatioPage() {
             <ThemeControl
               value={theme}
               onChange={setTheme}
-              ariaLabel="Select aspect ratio theme mode"
+              ariaLabel="Select aspect ratio fill mode"
             />
           </div>
         }

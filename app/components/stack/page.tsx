@@ -225,12 +225,12 @@ export default function StackDocumentationPage() {
                 </div>
               </div>
 
-              {/* Theme Mode */}
+              {/* Fill Mode */}
               <ThemeControl
                 layout="vertical"
                 value={theme}
                 onChange={setTheme}
-                ariaLabel="Select stack theme mode"
+                ariaLabel="Select stack fill mode"
               />
             </div>
           </div>

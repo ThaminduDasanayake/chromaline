@@ -159,7 +159,7 @@ export default function WakeSliderPage() {
             <ThemeControl
               value={theme}
               onChange={setTheme}
-              ariaLabel="Select wake slider theme mode"
+              ariaLabel="Select wake slider fill mode"
             />
           </div>
         }

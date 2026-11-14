@@ -46,7 +46,6 @@ export function ComponentPreview({
       <div className={cn("mb-8 flex flex-col gap-4", className)}>
         {/* Canvas / Stage Card */}
         <div
-          data-theme={theme || undefined}
           className={cn(
             "relative flex min-h-[380px] sm:min-h-[420px] flex-col items-center justify-center overflow-hidden rounded-[28px] transition-colors duration-200",
             !hasCustomBg && "bg-[#f2f2f4] dark:bg-[#171717]",
@@ -59,7 +58,9 @@ export function ComponentPreview({
               <span>Preview</span>
             </div>
           )}
-          {children}
+          <div data-theme={theme || undefined} className="flex w-full items-center justify-center">
+            {children}
+          </div>
         </div>
 
         {/* Controls Card */}
@@ -89,7 +90,6 @@ export function ComponentPreview({
     >
       {/* Canvas */}
       <div
-        data-theme={theme || undefined}
         className={cn(
           "relative flex flex-col items-center justify-center overflow-hidden transition-colors duration-300",
           !hasCustomBg && "bg-[#f2f2f4] dark:bg-[#171717]",
@@ -102,7 +102,9 @@ export function ComponentPreview({
             <span>Preview</span>
           </div>
         )}
-        {children}
+        <div data-theme={theme || undefined} className="flex w-full items-center justify-center">
+          {children}
+        </div>
       </div>
 
       {/* Controls Footer */}

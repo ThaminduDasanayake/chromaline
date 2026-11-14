@@ -299,7 +299,7 @@ export default function HeatmapDocumentationPage() {
                 layout="vertical"
                 value={mode}
                 onChange={setMode}
-                ariaLabel="Select heatmap theme mode"
+                ariaLabel="Select heatmap fill mode"
               />
             </div>
 
