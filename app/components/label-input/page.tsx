@@ -236,15 +236,13 @@ export default function LabelInputDocumentationPage() {
       {/* 1. Interactive Preview */}
       <ComponentPreview
         theme={theme}
-        canvasClassName={`min-h-[280px] p-8 transition-colors duration-300 ${
-          theme === "dark" ? "bg-[#0f0f0f]" : "bg-[#f7f7f6]"
-        }`}
+        canvasClassName="min-h-[280px] p-8"
         controls={
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div className="flex items-center gap-6">
               <div>
                 <label className="text-xs font-semibold text-slate-700 dark:text-zinc-100">
-                  Theme
+                  Fill
                 </label>
                 <div className="mt-1">
                   <SelectBar<"light" | "dark">

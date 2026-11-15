@@ -3,22 +3,32 @@
 import React, { useState } from "react";
 import { Button, ButtonVariant } from "@/components/ui/button";
 import { SelectBar } from "@/components/ui/select-bar";
+import { useTheme } from "@/components/providers/theme-provider";
 import { ArrowRightIcon } from "@phosphor-icons/react";
 
-export const BUTTON_VARIANTS = [
-  { key: "default" as const, label: "Default", color: "#1e2024" },
-  { key: "secondary" as const, label: "Secondary", color: "#4a4a46" },
-  { key: "destructive" as const, label: "Destructive", color: "#dc2626" },
-  { key: "success" as const, label: "Success", color: "#059669" },
-  { key: "accent" as const, label: "Accent", color: "#e54f10" },
+export const BUTTON_VARIANTS: { key: ButtonVariant; label: string }[] = [
+  { key: "default", label: "Default" },
+  { key: "destructive", label: "Destructive" },
+  { key: "outline", label: "Outline" },
+  { key: "secondary", label: "Secondary" },
+  { key: "ghost", label: "Ghost" },
+  { key: "link", label: "Link" },
 ];
 
-export function ButtonCardPreview({ showControls = false }: { showControls?: boolean } = {}) {
+export function ButtonCardPreview({
+  showControls = false,
+  theme: themeProp,
+}: {
+  showControls?: boolean;
+  theme?: "light" | "dark";
+} = {}) {
+  const { theme: appTheme } = useTheme();
+  const theme = themeProp || appTheme;
   const [buttonVariant, setButtonVariant] = useState<ButtonVariant>("default");
 
   return (
     <>
-      <Button variant={buttonVariant}>
+      <Button variant={buttonVariant} theme={theme}>
         <span>Continue</span>
         <ArrowRightIcon size={14} weight="bold" />
       </Button>
@@ -27,7 +37,6 @@ export function ButtonCardPreview({ showControls = false }: { showControls?: boo
       {showControls && (
         <div className="absolute inset-x-0 bottom-4 flex items-center justify-center gap-2">
           <SelectBar<ButtonVariant>
-            variant="swatches"
             size="xs"
             items={BUTTON_VARIANTS}
             value={buttonVariant}

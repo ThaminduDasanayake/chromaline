@@ -3,11 +3,14 @@ import { cn } from "@/lib/utils";
 
 export type ButtonVariant =
   | "default"
-  | "secondary"
   | "destructive"
+  | "outline"
+  | "secondary"
+  | "ghost"
+  | "link"
+  // Backward compatibility aliases
   | "success"
   | "accent"
-  // Backward compatibility aliases
   | "dark"
   | "orange"
   | "emerald";
@@ -16,6 +19,7 @@ export type ButtonSize = "sm" | "default" | "lg";
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant;
   size?: ButtonSize;
+  theme?: "light" | "dark";
   depth?: string;
   radius?: string;
   faceColor?: string;
@@ -40,39 +44,61 @@ const VARIANTS: Record<
   }
 > = {
   default: {
-    face: "#1e2024",
-    highlight: "#353840",
-    content: "#ffffff",
-    base: "#111215",
-    shadow: "#09090b",
-  },
-  secondary: {
-    face: "#4a4a46",
-    highlight: "#64645e",
-    content: "#eeeeec",
-    base: "#292926",
-    shadow: "#141412",
+    face: "var(--chroma-btn-default-face)",
+    highlight: "var(--chroma-btn-default-highlight)",
+    content: "var(--chroma-btn-default-content)",
+    base: "var(--chroma-btn-default-base)",
+    shadow: "var(--chroma-btn-default-shadow)",
   },
   destructive: {
-    face: "#dc2626",
-    highlight: "#ef4444",
-    content: "#ffffff",
-    base: "#991b1b",
-    shadow: "#7f1d1d",
+    face: "var(--chroma-btn-destructive-face)",
+    highlight: "var(--chroma-btn-destructive-highlight)",
+    content: "var(--chroma-btn-destructive-content)",
+    base: "var(--chroma-btn-destructive-base)",
+    shadow: "var(--chroma-btn-destructive-shadow)",
   },
+  outline: {
+    face: "var(--chroma-btn-outline-face)",
+    highlight: "var(--chroma-btn-outline-highlight)",
+    content: "var(--chroma-btn-outline-content)",
+    base: "var(--chroma-btn-outline-base)",
+    shadow: "var(--chroma-btn-outline-shadow)",
+  },
+  secondary: {
+    face: "var(--chroma-btn-secondary-face)",
+    highlight: "var(--chroma-btn-secondary-highlight)",
+    content: "var(--chroma-btn-secondary-content)",
+    base: "var(--chroma-btn-secondary-base)",
+    shadow: "var(--chroma-btn-secondary-shadow)",
+  },
+  ghost: {
+    face: "var(--chroma-btn-ghost-face)",
+    highlight: "var(--chroma-btn-ghost-highlight)",
+    content: "var(--chroma-btn-ghost-content)",
+    base: "var(--chroma-btn-ghost-base)",
+    shadow: "var(--chroma-btn-ghost-shadow)",
+  },
+  link: {
+    face: "var(--chroma-btn-link-face)",
+    highlight: "var(--chroma-btn-link-highlight)",
+    content: "var(--chroma-btn-link-content)",
+    base: "var(--chroma-btn-link-base)",
+    shadow: "var(--chroma-btn-link-shadow)",
+  },
+  // Backward compatibility aliases
   success: {
-    face: "#059669",
-    highlight: "#10b981",
-    content: "#ffffff",
-    base: "#047857",
-    shadow: "#064e3b",
+    face: "var(--chroma-btn-success-face)",
+    highlight: "var(--chroma-btn-success-highlight)",
+    content: "var(--chroma-btn-success-content)",
+    base: "var(--chroma-btn-success-base)",
+    shadow: "var(--chroma-btn-success-shadow)",
   },
   accent: {
-    face: "#e54f10",
-    highlight: "#fb713b",
-    content: "#ffffff",
-    base: "#9a3412",
-    shadow: "#7c2d12",
+    face: "var(--chroma-btn-accent-face)",
+    highlight: "var(--chroma-btn-accent-highlight)",
+    content: "var(--chroma-btn-accent-content)",
+    base: "var(--chroma-btn-accent-base)",
+    shadow: "var(--chroma-btn-accent-shadow)",
   },
 };
 
@@ -104,6 +130,7 @@ export const Button = React.forwardRef<HTMLButtonElement & HTMLAnchorElement, Bu
     {
       variant = "default",
       size = "default",
+      theme,
       depth,
       radius,
       faceColor,
@@ -157,6 +184,8 @@ export const Button = React.forwardRef<HTMLButtonElement & HTMLAnchorElement, Bu
         <span
           className={cn(
             "relative flex items-center justify-center rounded-(--tactile-radius) bg-(--tactile-face) font-medium text-(--tactile-content) shadow-[inset_0_1px_0_var(--tactile-face-highlight)] transition-transform duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] group-active/tactile:translate-y-(--tactile-depth) motion-reduce:transform-none motion-reduce:transition-none [@media(hover:hover)_and_(pointer:fine)]:group-hover/tactile:translate-y-0.5",
+            variant === "outline" &&
+              "shadow-[inset_0_0_0_1px_rgba(0,0,0,0.1),inset_0_1px_0_var(--tactile-face-highlight)] dark:shadow-[inset_0_0_0_1px_rgba(255,255,255,0.15)]",
             s.inner
           )}
         >
@@ -175,6 +204,7 @@ export const Button = React.forwardRef<HTMLButtonElement & HTMLAnchorElement, Bu
           style={combinedStyle}
           className={baseClasses}
           aria-disabled={disabled}
+          data-theme={theme || undefined}
         >
           {innerContent}
         </a>
@@ -188,6 +218,7 @@ export const Button = React.forwardRef<HTMLButtonElement & HTMLAnchorElement, Bu
         style={combinedStyle}
         className={baseClasses}
         disabled={disabled}
+        data-theme={theme || undefined}
         {...props}
       >
         {innerContent}

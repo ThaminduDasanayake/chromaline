@@ -187,17 +187,11 @@ export default function FolderPage() {
       {/* 1. Preview */}
       <ComponentPreview
         theme={theme}
-        canvasClassName={`min-h-[360px] p-8 transition-colors duration-300 ${
-          theme === "dark" ? "bg-[#0f0f0f]" : "bg-[#f7f7f6]"
-        }`}
+        canvasClassName="min-h-[360px] p-8"
         controls={
           <div className="flex flex-col gap-6">
             <div className="flex items-center justify-between">
-              <ThemeControl
-                value={theme}
-                onChange={setTheme}
-                ariaLabel="Select folder theme mode"
-              />
+              <ThemeControl value={theme} onChange={setTheme} ariaLabel="Select folder fill mode" />
             </div>
 
             <div className="flex flex-wrap items-center justify-between gap-6">

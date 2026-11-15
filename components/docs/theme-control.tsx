@@ -21,8 +21,8 @@ export function ThemeControl<T extends string = ThemeMode>({
   value,
   onChange,
   layout = "horizontal",
-  label = "Theme Mode",
-  ariaLabel = "Select theme mode",
+  label = "Fill",
+  ariaLabel = "Select fill mode",
   className,
 }: ThemeControlProps<T>) {
   if (layout === "vertical") {
@@ -30,7 +30,7 @@ export function ThemeControl<T extends string = ThemeMode>({
       <div className={className}>
         <label className="text-xs font-semibold text-slate-900 dark:text-zinc-100">{label}</label>
 
-        <div className="mt-2">
+        <div className="mt-2.5">
           <SelectBar<T>
             size="xs"
             items={[
@@ -64,3 +64,6 @@ export function ThemeControl<T extends string = ThemeMode>({
     </div>
   );
 }
+
+export const FillControl = ThemeControl;
+export type FillControlProps<T extends string = ThemeMode> = ThemeControlProps<T>;
