@@ -143,7 +143,7 @@ export function Folder({
 
   const isDark = theme === "dark" ? true : theme === "light" ? false : autoDark;
 
-  const effectiveBodyColor = bodyColor || (isDark ? "#1a1a1a" : "#E461F5");
+  const effectiveBodyColor = bodyColor || (isDark ? "#262626" : "#E461F5");
   const effectiveDarkOutline = darkOutline || (isDark ? "#d0d6e0" : "#232327");
   const effectiveLightOutline = lightOutline || (isDark ? "#3e3e44" : "#F9D8FD");
 
