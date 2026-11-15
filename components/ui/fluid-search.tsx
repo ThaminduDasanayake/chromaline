@@ -105,8 +105,28 @@ export const FluidSearch = React.forwardRef<HTMLInputElement, FluidSearchProps>(
     }
 
     // Determine fill color style if explicit override is passed
-    const shapeStyle: React.CSSProperties = fill ? { backgroundColor: fill } : {};
-    const shapeBgClass = !fill ? "bg-chroma-search-fill" : "";
+    const themeVars =
+      theme === "dark"
+        ? {
+            "--slab": "#262626",
+            "--on-slab": "#ffffff",
+            "--on-slab-rgb": "255, 255, 255",
+          }
+        : theme === "light"
+        ? {
+            "--slab": "#ffffff",
+            "--on-slab": "#17181a",
+            "--on-slab-rgb": "23, 24, 26",
+          }
+        : {
+            "--slab": "var(--fill-slab, #262626)",
+            "--on-slab": "var(--fill-on, #ffffff)",
+            "--on-slab-rgb": "var(--fill-on-rgb, var(--ink-rgb, 255, 255, 255))",
+          };
+
+    const shapeStyle: React.CSSProperties = fill
+      ? { backgroundColor: fill }
+      : { backgroundColor: "var(--slab)" };
 
     return (
       <div
@@ -119,7 +139,7 @@ export const FluidSearch = React.forwardRef<HTMLInputElement, FluidSearchProps>(
             "[&_:focus-visible]:outline-chroma-border [&_:focus-visible]:outline-2 [&_:focus-visible]:outline-offset-3",
           className
         )}
-        style={style}
+        style={{ ...themeVars, ...style }}
         onPointerDownCapture={() => setKeyboard(false)}
         onFocusCapture={(e) => {
           if (e.target !== host.current) setFocused(true);
@@ -159,7 +179,6 @@ export const FluidSearch = React.forwardRef<HTMLInputElement, FluidSearchProps>(
           <div
             className={cn(
               "absolute top-0 left-0 h-[52px] rounded-full transition-[width] duration-460 ease-[cubic-bezier(0.22,1,0.36,1)]",
-              shapeBgClass,
               open ? "w-[calc(100%-64px)]" : "w-full",
               reduced && "transition-none"
             )}
@@ -168,7 +187,6 @@ export const FluidSearch = React.forwardRef<HTMLInputElement, FluidSearchProps>(
           <div
             className={cn(
               "absolute top-0 right-0 h-[52px] w-[52px] rounded-full transition-transform duration-460 ease-[cubic-bezier(0.22,1,0.36,1)]",
-              shapeBgClass,
               open ? "translate-x-0 scale-100" : "-translate-x-[28px] scale-80",
               reduced && "transition-none"
             )}
@@ -191,7 +209,7 @@ export const FluidSearch = React.forwardRef<HTMLInputElement, FluidSearchProps>(
             stroke="currentColor"
             strokeWidth="1.8"
             aria-hidden="true"
-            className="text-chroma-text-secondary shrink-0"
+            className="text-[rgba(var(--on-slab-rgb),0.6)] shrink-0"
           >
             <circle cx="10.5" cy="10.5" r="6.5" />
             <path d="m16 16 4 4" />
@@ -202,13 +220,13 @@ export const FluidSearch = React.forwardRef<HTMLInputElement, FluidSearchProps>(
             placeholder={placeholder}
             value={value}
             onChange={(e) => handleValueChange(e.target.value)}
-            className="text-chroma-text-primary font-inherit w-full min-w-0 border-0 bg-transparent p-0 text-[14px] shadow-none outline-none"
+            className="text-[var(--on-slab)] placeholder:text-[rgba(var(--on-slab-rgb),0.45)] font-inherit w-full min-w-0 border-0 bg-transparent p-0 text-[14px] shadow-none outline-none"
           />
         </label>
 
         <button
           className={cn(
-            "text-chroma-text-primary absolute top-0 right-0 z-2 grid h-[52px] w-[52px] cursor-pointer place-items-center rounded-full border-0 bg-transparent p-0 shadow-none transition-[transform,opacity] duration-460 ease-[cubic-bezier(0.22,1,0.36,1)] outline-none",
+            "text-[var(--on-slab)] absolute top-0 right-0 z-2 grid h-[52px] w-[52px] cursor-pointer place-items-center rounded-full border-0 bg-transparent p-0 shadow-none transition-[transform,opacity] duration-460 ease-[cubic-bezier(0.22,1,0.36,1)] outline-none",
             open
               ? "pointer-events-auto translate-x-0 scale-100 opacity-100"
               : "pointer-events-none -translate-x-[28px] scale-80 opacity-0 duration-140",

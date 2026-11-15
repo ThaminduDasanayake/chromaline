@@ -47,11 +47,12 @@ html.dark [data-theme="light"],
   --lock: #adaca6;
   --on-ink: #fff;
   --on-ink-rgb: 255, 255, 255;
-  --slab: var(--board);
-  --on-slab: var(--ink);
-  --on-slab-rgb: var(--ink-rgb);
+  --slab: var(--fill-slab, var(--board));
+  --on-slab: var(--fill-on, var(--ink));
+  --on-slab-rgb: var(--fill-on-rgb, var(--ink-rgb));
   --fill-slab: #ffffff;
   --fill-on: #17181a;
+  --fill-on-rgb: 23, 24, 26;
 
   --color-canvas: #ffffff;
   --color-stone: #f8f8f9;
@@ -167,11 +168,12 @@ html.dark [data-theme="dark"],
   --lock: #525252;
   --on-ink: #000;
   --on-ink-rgb: 0, 0, 0;
-  --slab: var(--board);
-  --on-slab: var(--ink);
-  --on-slab-rgb: var(--ink-rgb);
+  --slab: var(--fill-slab, #262626);
+  --on-slab: var(--fill-on, var(--ink));
+  --on-slab-rgb: var(--fill-on-rgb, var(--ink-rgb));
   --fill-slab: #262626;
   --fill-on: #ffffff;
+  --fill-on-rgb: 255, 255, 255;
 
   --color-canvas: #000000;
   --color-stone: #0f0f0f;

@@ -290,16 +290,38 @@ export function TimeScrubber({
   const { time, mer } = formatLabel(pos, h24);
   const currentStep = parsedStep;
 
+  const themeVars =
+    theme === "dark"
+      ? {
+          "--slab": "#262626",
+          "--on-slab": "#ffffff",
+          "--on-slab-rgb": "255, 255, 255",
+        }
+      : theme === "light"
+      ? {
+          "--slab": "#ffffff",
+          "--on-slab": "#17181a",
+          "--on-slab-rgb": "23, 24, 26",
+        }
+      : {
+          "--slab": "var(--fill-slab, #262626)",
+          "--on-slab": "var(--fill-on, #ffffff)",
+          "--on-slab-rgb": "var(--fill-on-rgb, var(--ink-rgb, 255, 255, 255))",
+        };
+
   return (
     <div
       className={cn(
-        "bg-chroma-surface-elevated text-chroma-text-primary relative w-[375px] px-[25px] pt-[25px] pb-[20px] font-sans shadow-[0_0_0_1px_var(--chroma-border)] transition-colors duration-300 select-none",
+        "relative w-[375px] px-[25px] pt-[25px] pb-[20px] font-sans transition-colors duration-300 select-none",
         disabled && "pointer-events-none opacity-40",
         className
       )}
       data-theme={theme || undefined}
       style={{
         borderRadius: `${Math.max(0, corner)}px`,
+        backgroundColor: "var(--slab)",
+        color: "var(--on-slab)",
+        ...themeVars,
         ...style,
       }}
     >
