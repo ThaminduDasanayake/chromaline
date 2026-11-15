@@ -345,16 +345,35 @@ export function Palette({
   const slabR = r + PAD * Math.min(1, r / CORNER);
   const beat = 1 - 0.035 * swellOf(clamp(t, 0, 1));
 
+  const themeVars =
+    theme === "dark"
+      ? {
+          "--slab": "#262626",
+          "--on-slab": "#ffffff",
+          "--on-slab-rgb": "255, 255, 255",
+        }
+      : theme === "light"
+        ? {
+            "--slab": "#ffffff",
+            "--on-slab": "#17181a",
+            "--on-slab-rgb": "23, 24, 26",
+          }
+        : {
+            "--slab": "var(--fill-slab, #262626)",
+            "--on-slab": "var(--fill-on, #ffffff)",
+            "--on-slab-rgb": "var(--fill-on-rgb, var(--ink-rgb, 255, 255, 255))",
+          };
+
   return (
     <div
       className={cn("relative flex items-stretch font-sans select-none", className)}
       data-theme={theme || undefined}
-      style={{ width: W, gap: GAP, ...style }}
+      style={{ width: W, gap: GAP, ...themeVars, ...style }}
     >
       {/* Pill 1: Swatches Container */}
       <div
-        className="bg-chroma-surface-elevated flex items-center justify-center shadow-[0_0_0_1px_var(--chroma-border)] transition-colors duration-300"
-        style={{ padding: PAD, borderRadius: slabR, scale: beat }}
+        className="flex items-center justify-center transition-colors duration-300"
+        style={{ padding: PAD, borderRadius: slabR, scale: beat, backgroundColor: "var(--slab)" }}
       >
         <div className="relative flex-none" style={{ height: BAR_H, width: barW }}>
           <div className="absolute inset-0" aria-hidden="true" style={{ filter: gooUrl }}>
@@ -398,12 +417,12 @@ export function Palette({
 
       {/* Pill 2: Refresh Tool Button */}
       <div
-        className="bg-chroma-surface-elevated flex flex-none items-center justify-center shadow-[0_0_0_1px_var(--chroma-border)] transition-all duration-160 ease-[cubic-bezier(0.22,1,0.36,1)] has-active:scale-[0.96] motion-reduce:duration-160"
-        style={{ padding: PAD, borderRadius: slabR }}
+        className="flex flex-none items-center justify-center transition-all duration-160 ease-[cubic-bezier(0.22,1,0.36,1)] has-active:scale-[0.96] motion-reduce:duration-160"
+        style={{ padding: PAD, borderRadius: slabR, backgroundColor: "var(--slab)" }}
       >
         <button
           type="button"
-          className="text-chroma-text-primary hover:text-chroma-text-secondary focus-visible:ring-offset-chroma-surface-elevated grid flex-none cursor-pointer place-items-center border-0 bg-transparent transition-colors duration-160 outline-none focus-visible:ring-2 focus-visible:ring-current/30 focus-visible:ring-offset-2 motion-reduce:duration-160"
+          className="grid flex-none cursor-pointer place-items-center border-0 bg-transparent text-[var(--on-slab)] transition-opacity duration-160 outline-none hover:opacity-75 focus-visible:ring-2 focus-visible:ring-current/30 motion-reduce:duration-160"
           onClick={roll}
           aria-label="Generate a new palette"
           style={{ width: TOOL, height: BAR_H, borderRadius: r }}

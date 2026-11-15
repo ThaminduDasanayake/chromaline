@@ -14,10 +14,10 @@ export function ToggleCardPreview() {
         <Toggle
           checked={checked}
           onChange={setChecked}
-          stretch={42}
-          speed={52}
+          stretch={36}
+          speed={50}
           size="default"
-          variant={theme === "dark" ? "dark" : "light"}
+          theme={theme === "dark" ? "dark" : "light"}
         />
       </div>
     </div>

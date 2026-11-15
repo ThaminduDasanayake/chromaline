@@ -228,10 +228,29 @@ export function Checklist({
     updateItems([...items, { text, done: false }]);
   };
 
+  const themeVars =
+    theme === "dark"
+      ? {
+          "--slab": "#262626",
+          "--on-slab": "#ffffff",
+          "--on-slab-rgb": "255, 255, 255",
+        }
+      : theme === "light"
+        ? {
+            "--slab": "#ffffff",
+            "--on-slab": "#17181a",
+            "--on-slab-rgb": "23, 24, 26",
+          }
+        : {
+            "--slab": "var(--fill-slab, #262626)",
+            "--on-slab": "var(--fill-on, #ffffff)",
+            "--on-slab-rgb": "var(--fill-on-rgb, var(--ink-rgb, 255, 255, 255))",
+          };
+
   return (
     <div
       className={cn(
-        "bg-chroma-surface-elevated text-chroma-text-primary relative box-border overflow-hidden font-sans shadow-[0_0_0_1px_var(--chroma-border)] transition-[height,background-color,color,box-shadow] duration-420 ease-[cubic-bezier(0.22,1,0.36,1)] select-none",
+        "relative box-border overflow-hidden font-sans transition-[height,background-color,color] duration-420 ease-[cubic-bezier(0.22,1,0.36,1)] select-none",
         className
       )}
       data-theme={theme}
@@ -240,6 +259,9 @@ export function Checklist({
         height: padV * 2 + ROW * slots,
         padding: `${padV}px ${PAD}px`,
         borderRadius: r,
+        backgroundColor: "var(--slab)",
+        color: "var(--on-slab)",
+        ...themeVars,
         ...style,
       }}
     >
@@ -415,8 +437,8 @@ function Row({
       {fell && (
         <span
           aria-hidden="true"
-          className="bg-chroma-surface-elevated pointer-events-none absolute inset-x-0 -z-10 rounded-[10px]"
-          style={{ top: inset, bottom: inset }}
+          className="pointer-events-none absolute inset-x-0 -z-10 rounded-[10px]"
+          style={{ top: inset, bottom: inset, backgroundColor: "var(--slab)" }}
         />
       )}
 

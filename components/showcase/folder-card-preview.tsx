@@ -27,7 +27,7 @@ export const TAB_POSITIONS = [
 ];
 
 export function FolderCardPreview({ showControls = false }: { showControls?: boolean } = {}) {
-  const [selectedColorKey, setSelectedColorKey] = useState("purple");
+  const [selectedColorKey, setSelectedColorKey] = useState("dark");
   const [selectedFolderTab, setSelectedFolderTab] = useState<"left" | "center" | "right">("center");
 
   const activeColor =

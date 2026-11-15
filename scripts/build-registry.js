@@ -22,6 +22,7 @@ function buildRegistry() {
   const createMenuPath = path.join(__dirname, "../components/ui/create-menu.tsx");
   const fluidSearchPath = path.join(__dirname, "../components/ui/fluid-search.tsx");
   const stackPath = path.join(__dirname, "../components/ui/stack.tsx");
+  const likePath = path.join(__dirname, "../components/ui/like.tsx");
 
   if (!fs.existsSync(trayPath)) {
     console.error("Component not found:", trayPath);
@@ -67,6 +68,7 @@ function buildRegistry() {
     ? fs.readFileSync(fluidSearchPath, "utf8")
     : "";
   const stackContent = fs.existsSync(stackPath) ? fs.readFileSync(stackPath, "utf8") : "";
+  const likeContent = fs.existsSync(likePath) ? fs.readFileSync(likePath, "utf8") : "";
 
   // Chromaline centralized semantic tokens for shadcn CLI auto-injection
   const chromaCssVars = {
@@ -616,6 +618,27 @@ function buildRegistry() {
     ],
   };
 
+  // 19. Like Component
+  const likeRegistryItem = {
+    $schema: "https://ui.shadcn.com/schema/registry-item.json",
+    name: "like",
+    type: "registry:ui",
+    title: "Like",
+    description:
+      "A heart and rolling odometer count with expanding bloom ring, confetti bursts, firework kinematics, and direction-aware digits.",
+    dependencies: ["@phosphor-icons/react@^2.1.10", "framer-motion@^14.4.0"],
+    devDependencies: [],
+    registryDependencies: [],
+    files: [
+      {
+        path: "components/ui/like.tsx",
+        content: likeContent,
+        type: "registry:ui",
+        target: "components/ui/like.tsx",
+      },
+    ],
+  };
+
   const outDir = path.join(__dirname, "../public/r");
   fs.mkdirSync(outDir, { recursive: true });
 
@@ -639,6 +662,7 @@ function buildRegistry() {
     createMenuRegistryItem,
     fluidSearchRegistryItem,
     stackRegistryItem,
+    likeRegistryItem,
   ];
 
   for (const item of allRegistryItems) {
@@ -701,6 +725,7 @@ function buildRegistry() {
     JSON.stringify(fluidSearchRegistryItem, null, 2)
   );
   fs.writeFileSync(path.join(outDir, "stack.json"), JSON.stringify(stackRegistryItem, null, 2));
+  fs.writeFileSync(path.join(outDir, "like.json"), JSON.stringify(likeRegistryItem, null, 2));
 
   const indexRegistry = {
     $schema: "https://ui.shadcn.com/schema/registry.json",
@@ -1003,6 +1028,21 @@ function buildRegistry() {
             path: "components/ui/stack.tsx",
             type: "registry:ui",
             target: "components/ui/stack.tsx",
+          },
+        ],
+      },
+      {
+        name: "like",
+        type: "registry:ui",
+        title: "Like",
+        description:
+          "A heart and rolling odometer count with expanding bloom ring, confetti bursts, firework kinematics, and direction-aware digits.",
+        dependencies: ["@phosphor-icons/react@^2.1.10", "framer-motion@^14.4.0"],
+        files: [
+          {
+            path: "components/ui/like.tsx",
+            type: "registry:ui",
+            target: "components/ui/like.tsx",
           },
         ],
       },

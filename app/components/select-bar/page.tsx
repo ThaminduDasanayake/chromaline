@@ -196,7 +196,7 @@ export default function SelectBarDocumentationPage() {
 
   const [activePill, setActivePill] = useState("design");
   const [activeIcon, setActiveIcon] = useState("cursor");
-  const [activeSwatch, setActiveSwatch] = useState("purple");
+  const [activeSwatch, setActiveSwatch] = useState("dark");
 
   const currentItems =
     contentType === "pills" ? PILL_ITEMS : contentType === "icons" ? ICON_ITEMS : SWATCH_ITEMS;

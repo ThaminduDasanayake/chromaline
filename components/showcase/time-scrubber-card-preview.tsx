@@ -1,11 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { TimeScrubber } from "@/components/ui/time-scrubber";
 import { useTheme } from "@/components/providers/theme-provider";
 
 export function TimeScrubberCardPreview() {
-  const [time, setTime] = useState(570); // 9:30 AM
   const { theme } = useTheme();
 
   return (
@@ -15,8 +14,7 @@ export function TimeScrubberCardPreview() {
         momentum={50}
         format="12h"
         corner={20}
-        value={time}
-        onChange={setTime}
+        defaultValue={570}
         theme={theme}
       />
     </div>

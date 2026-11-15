@@ -47,9 +47,12 @@ html.dark [data-theme="light"],
   --lock: #adaca6;
   --on-ink: #fff;
   --on-ink-rgb: 255, 255, 255;
-  --slab: var(--board);
-  --on-slab: var(--ink);
-  --on-slab-rgb: var(--ink-rgb);
+  --slab: var(--fill-slab, var(--board));
+  --on-slab: var(--fill-on, var(--ink));
+  --on-slab-rgb: var(--fill-on-rgb, var(--ink-rgb));
+  --fill-slab: #ffffff;
+  --fill-on: #17181a;
+  --fill-on-rgb: 23, 24, 26;
 
   --color-canvas: #ffffff;
   --color-stone: #f8f8f9;
@@ -136,7 +139,7 @@ html.dark [data-theme="dark"],
 :root [data-theme="dark"],
 .dark {
   color-scheme: dark;
-  --wash: 0.09;
+  --wash: 0.053;
   --ink-rgb: 255, 255, 255;
   --surface-rgb: 15, 15, 15;
   --elev-rgb: 32, 32, 32;
@@ -165,9 +168,12 @@ html.dark [data-theme="dark"],
   --lock: #525252;
   --on-ink: #000;
   --on-ink-rgb: 0, 0, 0;
-  --slab: var(--board);
-  --on-slab: var(--ink);
-  --on-slab-rgb: var(--ink-rgb);
+  --slab: var(--fill-slab, #262626);
+  --on-slab: var(--fill-on, var(--ink));
+  --on-slab-rgb: var(--fill-on-rgb, var(--ink-rgb));
+  --fill-slab: #262626;
+  --fill-on: #ffffff;
+  --fill-on-rgb: 255, 255, 255;
 
   --color-canvas: #000000;
   --color-stone: #0f0f0f;
@@ -431,4 +437,300 @@ input[type="reset"] {
     filter: blur(3px);
     opacity: 0.5;
   }
+}
+
+/* Like Button Component & Kinematics */
+.lk-frame {
+  width: 240px;
+  height: 130px;
+  display: grid;
+  place-items: center;
+}
+
+.lk {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 20px 0 16px;
+  border: 0;
+  border-radius: var(--r, 22px);
+  background: var(--fill-slab, var(--card, #ffffff));
+  color: var(--fill-on, var(--ink, #17181a));
+  font: inherit;
+  font-family: var(--font-ui, var(--font-sans));
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
+  letter-spacing: -0.01em;
+}
+
+.lk[data-fill="dark"] {
+  background: #262626;
+  color: #ffffff;
+}
+
+.lk[data-fill="light"] {
+  background: #ffffff;
+  color: #17181a;
+}
+
+.lk:active {
+  transform: scale(0.96);
+}
+
+.lk:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 2px var(--fill-slab, #fff),
+    0 0 0 4px var(--signal, #2231dd);
+}
+
+.lk-heart {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+}
+
+.lk-glyph {
+  position: relative;
+  z-index: 1;
+  display: grid;
+}
+
+.lk-glyph[data-on] {
+  color: var(--lk-on, #e5484d);
+  animation: lk-pop 520ms cubic-bezier(0.3, 1.5, 0.4, 1) both;
+}
+
+.lk[data-fx="Bloom"] .lk-glyph[data-on] {
+  animation: lk-heart 760ms cubic-bezier(0.3, 1.6, 0.4, 1) both;
+}
+
+.lk-burst {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  pointer-events: none;
+}
+
+.lk-bloom {
+  position: absolute;
+  left: -17px;
+  top: -17px;
+  width: 34px;
+  height: 34px;
+  box-sizing: border-box;
+  border-radius: 50%;
+  border: 17px solid #cc8ef5;
+  animation: lk-bloom 560ms cubic-bezier(0.25, 0.8, 0.35, 1) both;
+}
+
+.lk[data-color="Ink"] .lk-bloom {
+  border-color: var(--lk-on, #17181a);
+  animation-name: lk-bloom-ink;
+}
+
+.lk-spoke {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform: rotate(var(--a));
+}
+
+.lk-spoke i {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  margin: -2.5px 0 0 -2.5px;
+  border-radius: 50%;
+  background: var(--c);
+  animation: lk-dot 620ms cubic-bezier(0.2, 0.8, 0.3, 1) 200ms both;
+}
+
+.lk-spoke i:first-child {
+  --side: -4px;
+  --far: 0px;
+}
+
+.lk-spoke i:last-child {
+  --side: 4px;
+  --far: -5px;
+  width: 4px;
+  height: 4px;
+  margin: -2px 0 0 -2px;
+}
+
+.lk-fw {
+  position: absolute;
+  left: 0;
+  top: 0;
+  animation: lk-fw-x 1000ms cubic-bezier(0.2, 0.7, 0.4, 1) var(--d) both;
+}
+
+.lk-fw i {
+  position: absolute;
+  left: -2px;
+  top: -2px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  animation: lk-fw-y 1000ms linear var(--d) both;
+}
+
+.lk-count {
+  display: flex;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.lk-wheel {
+  position: relative;
+  display: inline-block;
+  height: 1.25em;
+  overflow: hidden;
+}
+
+.lk-digit {
+  display: block;
+  line-height: 1.25em;
+}
+
+.lk-comma {
+  line-height: 1.25em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lk-glyph[data-on],
+  .lk-bloom,
+  .lk-spoke i,
+  .lk-fw,
+  .lk-fw i {
+    animation: none !important;
+  }
+  .lk-burst {
+    display: none !important;
+  }
+}
+
+@keyframes lk-pop {
+  0% {
+    transform: scale(0.6);
+  }
+  45% {
+    transform: scale(1.28);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes lk-heart {
+  0%,
+  28% {
+    transform: scale(0);
+  }
+  62% {
+    transform: scale(1.25);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes lk-bloom {
+  0% {
+    transform: scale(0.15);
+    border-width: 17px;
+    border-color: #e5484d;
+  }
+  40% {
+    transform: scale(1);
+    border-width: 17px;
+    border-color: #cc8ef5;
+  }
+  75% {
+    border-width: 2px;
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.12);
+    border-width: 0;
+    opacity: 0;
+    border-color: #cc8ef5;
+  }
+}
+
+@keyframes lk-bloom-ink {
+  0% {
+    transform: scale(0.15);
+    border-width: 17px;
+  }
+  40% {
+    transform: scale(1);
+    border-width: 17px;
+  }
+  75% {
+    border-width: 2px;
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.12);
+    border-width: 0;
+    opacity: 0;
+  }
+}
+
+@keyframes lk-dot {
+  0% {
+    transform: translate(12px, var(--side)) scale(1);
+    opacity: 0;
+  }
+  12% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(calc(18px + var(--fly) * 14px + var(--far)), calc(var(--side) * 1.6))
+      scale(0);
+    opacity: 1;
+  }
+}
+
+@keyframes lk-fw-x {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(var(--x));
+  }
+}
+
+@keyframes lk-fw-y {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+    animation-timing-function: cubic-bezier(0.2, 0.7, 0.4, 1);
+  }
+  45% {
+    transform: translateY(var(--y));
+    opacity: 1;
+    animation-timing-function: cubic-bezier(0.5, 0, 0.8, 0.5);
+  }
+  100% {
+    transform: translateY(calc(var(--y) + 30px));
+    opacity: 0;
+  }
+}
+
+/* Bencho-style Borderless Showcase Card */
+.bench-card {
+  cursor: pointer;
+  position: relative;
+  background: rgba(var(--ink-rgb), var(--wash));
+  border-radius: 28px;
+  overflow: hidden;
+  border: 0;
 }

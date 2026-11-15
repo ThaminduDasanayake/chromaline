@@ -131,6 +131,8 @@ export function TimeScrubber({
   const ruler = useRef<HTMLDivElement>(null);
   const lastStep = useRef(Math.floor(initialTime / parsedStep));
   const onChangeRef = useRef(onChange);
+  const lastEmittedValue = useRef<number | null>(null);
+  const drag = useRef<null | { x: number; t: number; v: number; k: number }>(null);
 
   useEffect(() => {
     knobs.current = { step: parsedStep, momentum };
@@ -151,7 +153,9 @@ export function TimeScrubber({
       hear(x);
       setPos(x);
       if (notify) {
-        onChangeRef.current?.(wrap(Math.round(x)));
+        const rounded = wrap(Math.round(x));
+        lastEmittedValue.current = rounded;
+        onChangeRef.current?.(rounded);
       }
     },
     [hear]
@@ -202,13 +206,15 @@ export function TimeScrubber({
 
   // Sync external controlled value
   useEffect(() => {
-    if (isControlled && Math.abs(controlledValue - p.current.x) > 0.01) {
+    if (!isControlled || drag.current) return;
+    if (controlledValue === lastEmittedValue.current) return;
+    if (Math.abs(controlledValue - p.current.x) > 0.5) {
+      lastEmittedValue.current = controlledValue;
       goTo(controlledValue, 0);
     }
   }, [controlledValue, isControlled, goTo]);
 
   /* ── Pointer Drag Handling ────────────────────────────── */
-  const drag = useRef<null | { x: number; t: number; v: number; k: number }>(null);
 
   const onDown = (e: React.PointerEvent<HTMLDivElement>) => {
     if (disabled) return;
@@ -290,16 +296,38 @@ export function TimeScrubber({
   const { time, mer } = formatLabel(pos, h24);
   const currentStep = parsedStep;
 
+  const themeVars =
+    theme === "dark"
+      ? {
+          "--slab": "#262626",
+          "--on-slab": "#ffffff",
+          "--on-slab-rgb": "255, 255, 255",
+        }
+      : theme === "light"
+        ? {
+            "--slab": "#ffffff",
+            "--on-slab": "#17181a",
+            "--on-slab-rgb": "23, 24, 26",
+          }
+        : {
+            "--slab": "var(--fill-slab, #262626)",
+            "--on-slab": "var(--fill-on, #ffffff)",
+            "--on-slab-rgb": "var(--fill-on-rgb, var(--ink-rgb, 255, 255, 255))",
+          };
+
   return (
     <div
       className={cn(
-        "bg-chroma-surface-elevated text-chroma-text-primary relative w-[375px] px-[25px] pt-[25px] pb-[20px] font-sans shadow-[0_0_0_1px_var(--chroma-border)] transition-colors duration-300 select-none",
+        "relative w-[375px] px-[25px] pt-[25px] pb-[20px] font-sans transition-colors duration-300 select-none",
         disabled && "pointer-events-none opacity-40",
         className
       )}
       data-theme={theme || undefined}
       style={{
         borderRadius: `${Math.max(0, corner)}px`,
+        backgroundColor: "var(--slab)",
+        color: "var(--on-slab)",
+        ...themeVars,
         ...style,
       }}
     >

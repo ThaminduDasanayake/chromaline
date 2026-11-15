@@ -172,7 +172,7 @@ const PROPS_DATA: PropItem[] = [
 
 export default function FolderPage() {
   const [theme, setTheme] = useComponentTheme<"light" | "dark">();
-  const [selectedColorKey, setSelectedColorKey] = useState("purple");
+  const [selectedColorKey, setSelectedColorKey] = useState("dark");
   const [selectedTabPos, setSelectedTabPos] = useState<"left" | "center" | "right">("center");
 
   const activeColor =

@@ -15,7 +15,7 @@ export interface FolderColorPreset {
  * Ordered from Dark and clean White through Gray, Red, Orange, Yellow, Green, Blue, to Purple.
  */
 export const FOLDER_COLOR_PRESETS: FolderColorPreset[] = [
-  { name: "Dark", body: "#1a1a1a", dark: "#d0d6e0", light: "#3e3e44" },
+  { name: "Dark", body: "#262626", dark: "#d0d6e0", light: "#3e3e44" },
   { name: "White", body: "#FFFFFF", dark: "#232327", light: "#E0E0E4" },
   { name: "Gray", body: "#ADACB0", dark: "#232327", light: "#E4E3E6" },
   { name: "Red", body: "#FF6C6C", dark: "#232327", light: "#FFD1D2" },
@@ -36,9 +36,9 @@ export const FOLDER_COLOR_SWATCHES: SelectBarItem[] = FOLDER_COLOR_PRESETS.map((
 }));
 
 export interface FolderColorSelectBarProps {
-  /** Selected color key ("white", "purple", etc.) or index (0 to 7) */
+  /** Selected color key ("dark", "white", "purple", etc.) or index (0 to 8) */
   value?: string | number;
-  /** Initial selected color key or index (default: "purple") */
+  /** Initial selected color key or index (default: "dark") */
   defaultValue?: string | number;
   /** Callback fired when a color swatch is clicked */
   onChange?: (key: string, preset: FolderColorPreset, index: number) => void;
@@ -51,26 +51,26 @@ export interface FolderColorSelectBarProps {
 /**
  * FolderColorSelectBar
  *
- * Reusable kinetic swatch dock showcasing the 8 reversed Chromaline folder colors
- * (White -> Gray -> Red -> Orange -> Yellow -> Green -> Blue -> Purple).
+ * Reusable kinetic swatch dock showcasing the 9 Chromaline folder colors
+ * (Dark -> White -> Gray -> Red -> Orange -> Yellow -> Green -> Blue -> Purple).
  * Supports controlled/uncontrolled state by color key or preset index.
  */
 export function FolderColorSelectBar({
   value,
-  defaultValue = "purple",
+  defaultValue = "dark",
   onChange,
   size = "xs",
   className = "",
   ariaLabel = "Select folder color",
 }: FolderColorSelectBarProps) {
   const resolveKey = (v?: string | number): string => {
-    if (v === undefined) return "purple";
+    if (v === undefined) return "dark";
     if (typeof v === "number") {
-      return FOLDER_COLOR_PRESETS[v]?.name.toLowerCase() || "purple";
+      return FOLDER_COLOR_PRESETS[v]?.name.toLowerCase() || "dark";
     }
     const num = Number(v);
     if (!isNaN(num) && num >= 0 && num < FOLDER_COLOR_PRESETS.length && String(num) === v) {
-      return FOLDER_COLOR_PRESETS[num]?.name.toLowerCase() || "purple";
+      return FOLDER_COLOR_PRESETS[num]?.name.toLowerCase() || "dark";
     }
     return v.toLowerCase();
   };

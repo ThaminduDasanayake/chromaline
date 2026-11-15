@@ -31,7 +31,7 @@ const TOOLBAR_ITEMS: SelectBarItem<"cursor" | "draw" | "text" | "shapes">[] = [
 export function SelectBarCardPreview() {
   const [activeTab, setActiveTab] = useState<"design" | "code" | "preview" | "motion">("design");
   const [activeTool, setActiveTool] = useState<"cursor" | "draw" | "text" | "shapes">("cursor");
-  const [activeSwatch, setActiveSwatch] = useState("purple");
+  const [activeSwatch, setActiveSwatch] = useState("dark");
 
   return (
     <div className="flex w-full flex-col items-center justify-center gap-4 p-4">
