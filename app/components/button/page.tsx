@@ -167,6 +167,7 @@ export default function ButtonDocumentationPage() {
     >
       {/* 1. Preview */}
       <ComponentPreview
+        theme={fill}
         separated
         noBorder
         className="mb-8"

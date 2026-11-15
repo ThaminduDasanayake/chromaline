@@ -6,6 +6,7 @@
 :root,
 html.light,
 [data-theme="light"],
+html.light [data-theme="light"],
 html.dark [data-theme="light"],
 .light {
   color-scheme: light;
@@ -131,6 +132,7 @@ html.dark [data-theme="light"],
 html.dark,
 [data-theme="dark"],
 html.light [data-theme="dark"],
+html.dark [data-theme="dark"],
 :root [data-theme="dark"],
 .dark {
   color-scheme: dark;

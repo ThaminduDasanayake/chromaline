@@ -47,7 +47,7 @@ export function ComponentPreview({
         {/* Canvas / Stage Card */}
         <div
           className={cn(
-            "relative flex min-h-[380px] sm:min-h-[420px] flex-col items-center justify-center overflow-hidden rounded-[28px] transition-colors duration-200",
+            "relative flex min-h-[380px] flex-col items-center justify-center overflow-hidden rounded-[28px] transition-colors duration-200 sm:min-h-[420px]",
             !hasCustomBg && "bg-[#f2f2f4] dark:bg-[#171717]",
             cleanCanvasClassName
           )}

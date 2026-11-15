@@ -191,11 +191,7 @@ export default function FolderPage() {
         controls={
           <div className="flex flex-col gap-6">
             <div className="flex items-center justify-between">
-              <ThemeControl
-                value={theme}
-                onChange={setTheme}
-                ariaLabel="Select folder fill mode"
-              />
+              <ThemeControl value={theme} onChange={setTheme} ariaLabel="Select folder fill mode" />
             </div>
 
             <div className="flex flex-wrap items-center justify-between gap-6">
