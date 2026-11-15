@@ -136,7 +136,7 @@ html.dark [data-theme="dark"],
 :root [data-theme="dark"],
 .dark {
   color-scheme: dark;
-  --wash: 0.09;
+  --wash: 0.053;
   --ink-rgb: 255, 255, 255;
   --surface-rgb: 15, 15, 15;
   --elev-rgb: 32, 32, 32;
@@ -639,4 +639,14 @@ input[type="reset"] {
   0% { transform: translateY(0); opacity: 1; animation-timing-function: cubic-bezier(0.2, 0.7, 0.4, 1); }
   45% { transform: translateY(var(--y)); opacity: 1; animation-timing-function: cubic-bezier(0.5, 0, 0.8, 0.5); }
   100% { transform: translateY(calc(var(--y) + 30px)); opacity: 0; }
+}
+
+/* Bencho-style Borderless Showcase Card */
+.bench-card {
+  cursor: pointer;
+  position: relative;
+  background: rgba(var(--ink-rgb), var(--wash));
+  border-radius: 28px;
+  overflow: hidden;
+  border: 0;
 }
