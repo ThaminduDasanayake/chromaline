@@ -131,6 +131,8 @@ export function TimeScrubber({
   const ruler = useRef<HTMLDivElement>(null);
   const lastStep = useRef(Math.floor(initialTime / parsedStep));
   const onChangeRef = useRef(onChange);
+  const lastEmittedValue = useRef<number | null>(null);
+  const drag = useRef<null | { x: number; t: number; v: number; k: number }>(null);
 
   useEffect(() => {
     knobs.current = { step: parsedStep, momentum };
@@ -151,7 +153,9 @@ export function TimeScrubber({
       hear(x);
       setPos(x);
       if (notify) {
-        onChangeRef.current?.(wrap(Math.round(x)));
+        const rounded = wrap(Math.round(x));
+        lastEmittedValue.current = rounded;
+        onChangeRef.current?.(rounded);
       }
     },
     [hear]
@@ -202,13 +206,15 @@ export function TimeScrubber({
 
   // Sync external controlled value
   useEffect(() => {
-    if (isControlled && Math.abs(controlledValue - p.current.x) > 0.01) {
+    if (!isControlled || drag.current) return;
+    if (controlledValue === lastEmittedValue.current) return;
+    if (Math.abs(controlledValue - p.current.x) > 0.5) {
+      lastEmittedValue.current = controlledValue;
       goTo(controlledValue, 0);
     }
   }, [controlledValue, isControlled, goTo]);
 
   /* ── Pointer Drag Handling ────────────────────────────── */
-  const drag = useRef<null | { x: number; t: number; v: number; k: number }>(null);
 
   const onDown = (e: React.PointerEvent<HTMLDivElement>) => {
     if (disabled) return;
