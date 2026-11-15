@@ -287,16 +287,16 @@ export function Counter({
           "--on-slab-rgb": "255, 255, 255",
         }
       : theme === "light"
-      ? {
-          "--slab": "#ffffff",
-          "--on-slab": "#17181a",
-          "--on-slab-rgb": "23, 24, 26",
-        }
-      : {
-          "--slab": "var(--fill-slab, #262626)",
-          "--on-slab": "var(--fill-on, #ffffff)",
-          "--on-slab-rgb": "var(--fill-on-rgb, var(--ink-rgb, 255, 255, 255))",
-        };
+        ? {
+            "--slab": "#ffffff",
+            "--on-slab": "#17181a",
+            "--on-slab-rgb": "23, 24, 26",
+          }
+        : {
+            "--slab": "var(--fill-slab, #262626)",
+            "--on-slab": "var(--fill-on, #ffffff)",
+            "--on-slab-rgb": "var(--fill-on-rgb, var(--ink-rgb, 255, 255, 255))",
+          };
 
   return (
     <div
@@ -340,7 +340,7 @@ export function Counter({
 
       <div
         className={cn(
-          "flex cursor-ns-resize touch-none justify-center rounded-lg [mask-image:linear-gradient(transparent,#000_20%,#000_80%,transparent)] px-3.5 text-[30px] font-medium tracking-[-0.02em] tabular-nums select-none [-webkit-mask-image:linear-gradient(transparent,#000_20%,#000_80%,transparent)] focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-[rgba(var(--on-slab-rgb),0.25)]"
+          "flex cursor-ns-resize touch-none justify-center rounded-lg [mask-image:linear-gradient(transparent,#000_20%,#000_80%,transparent)] px-3.5 text-[30px] font-medium tracking-[-0.02em] tabular-nums select-none [-webkit-mask-image:linear-gradient(transparent,#000_20%,#000_80%,transparent)] focus-visible:ring-2 focus-visible:ring-[rgba(var(--on-slab-rgb),0.25)] focus-visible:outline-none"
         )}
         style={{
           height: `${CELL}px`,

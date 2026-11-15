@@ -295,16 +295,16 @@ export const Seek = React.forwardRef<HTMLInputElement, SeekProps>(function Seek(
           "--on-slab-rgb": "255, 255, 255",
         }
       : theme === "light"
-      ? {
-          "--slab": "#ffffff",
-          "--on-slab": "#17181a",
-          "--on-slab-rgb": "23, 24, 26",
-        }
-      : {
-          "--slab": "var(--fill-slab, #262626)",
-          "--on-slab": "var(--fill-on, #ffffff)",
-          "--on-slab-rgb": "var(--fill-on-rgb, var(--ink-rgb, 255, 255, 255))",
-        };
+        ? {
+            "--slab": "#ffffff",
+            "--on-slab": "#17181a",
+            "--on-slab-rgb": "23, 24, 26",
+          }
+        : {
+            "--slab": "var(--fill-slab, #262626)",
+            "--on-slab": "var(--fill-on, #ffffff)",
+            "--on-slab-rgb": "var(--fill-on-rgb, var(--ink-rgb, 255, 255, 255))",
+          };
 
   return (
     <div
@@ -373,7 +373,7 @@ export const Seek = React.forwardRef<HTMLInputElement, SeekProps>(function Seek(
           onBlur={handleBlur}
           onKeyDown={handleKeyDown}
           className={cn(
-            "text-[var(--on-slab)] placeholder:text-[rgba(var(--on-slab-rgb),0.45)] absolute top-0 z-3 h-full border-0 bg-transparent font-sans font-medium tracking-tight transition-colors duration-220 outline-none"
+            "absolute top-0 z-3 h-full border-0 bg-transparent font-sans font-medium tracking-tight text-[var(--on-slab)] transition-colors duration-220 outline-none placeholder:text-[rgba(var(--on-slab-rgb),0.45)]"
           )}
           style={{
             left: `${inset + lens + (size === "sm" ? 8 : 11)}px`,
@@ -390,7 +390,7 @@ export const Seek = React.forwardRef<HTMLInputElement, SeekProps>(function Seek(
           <button
             type="button"
             className={cn(
-              "text-[rgba(var(--on-slab-rgb),0.75)] hover:text-[var(--on-slab)] absolute top-1/2 z-5 flex -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border-0 bg-[rgba(var(--on-slab-rgb),0.08)] transition-all duration-150 hover:bg-[rgba(var(--on-slab-rgb),0.14)]"
+              "absolute top-1/2 z-5 flex -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border-0 bg-[rgba(var(--on-slab-rgb),0.08)] text-[rgba(var(--on-slab-rgb),0.75)] transition-all duration-150 hover:bg-[rgba(var(--on-slab-rgb),0.14)] hover:text-[var(--on-slab)]"
             )}
             aria-label="Clear search"
             onClick={handleClear}

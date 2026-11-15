@@ -43,7 +43,7 @@ export default function ChromalineHomePage() {
         </div>
 
         {/* 3-Column Borderless Masonry Grid with Dynamic Non-Uniform Preview Shapes */}
-        <div className="columns-1 gap-5 md:columns-2 lg:columns-3 [column-fill:_balance]">
+        <div className="columns-1 gap-5 [column-fill:_balance] md:columns-2 lg:columns-3">
           {/* ── Column 1 Flow ── */}
           {/* Card 1: Folder Tray (Tall) */}
           <div className="mb-5 break-inside-avoid">
@@ -58,22 +58,14 @@ export default function ChromalineHomePage() {
 
           {/* Card 2: Button (Compact) */}
           <div className="mb-5 break-inside-avoid">
-            <ComponentCard
-              title="Button"
-              href="/components/button"
-              heightClassName="h-[260px]"
-            >
+            <ComponentCard title="Button" href="/components/button" heightClassName="h-[260px]">
               <ButtonCardPreview />
             </ComponentCard>
           </div>
 
           {/* Card 3: Palette (Medium) */}
           <div className="mb-5 break-inside-avoid">
-            <ComponentCard
-              title="Palette"
-              href="/components/palette"
-              heightClassName="h-[340px]"
-            >
+            <ComponentCard title="Palette" href="/components/palette" heightClassName="h-[340px]">
               <PaletteCardPreview />
             </ComponentCard>
           </div>
@@ -91,22 +83,14 @@ export default function ChromalineHomePage() {
 
           {/* Card 5: Seek (Compact) */}
           <div className="mb-5 break-inside-avoid">
-            <ComponentCard
-              title="Seek"
-              href="/components/seek"
-              heightClassName="h-[260px]"
-            >
+            <ComponentCard title="Seek" href="/components/seek" heightClassName="h-[260px]">
               <SeekCardPreview />
             </ComponentCard>
           </div>
 
           {/* Card 6: Counter (Medium) */}
           <div className="mb-5 break-inside-avoid">
-            <ComponentCard
-              title="Counter"
-              href="/components/counter"
-              heightClassName="h-[320px]"
-            >
+            <ComponentCard title="Counter" href="/components/counter" heightClassName="h-[320px]">
               <CounterCardPreview />
             </ComponentCard>
           </div>
@@ -114,33 +98,21 @@ export default function ChromalineHomePage() {
           {/* ── Column 2 Flow ── */}
           {/* Card 7: Folder (Medium) */}
           <div className="mb-5 break-inside-avoid">
-            <ComponentCard
-              title="Folder"
-              href="/components/folder"
-              heightClassName="h-[340px]"
-            >
+            <ComponentCard title="Folder" href="/components/folder" heightClassName="h-[340px]">
               <FolderCardPreview />
             </ComponentCard>
           </div>
 
           {/* Card 8: Toggle (Compact) */}
           <div className="mb-5 break-inside-avoid">
-            <ComponentCard
-              title="Toggle"
-              href="/components/toggle"
-              heightClassName="h-[260px]"
-            >
+            <ComponentCard title="Toggle" href="/components/toggle" heightClassName="h-[260px]">
               <ToggleCardPreview />
             </ComponentCard>
           </div>
 
           {/* Card 9: Heatmap (Tall) */}
           <div className="mb-5 break-inside-avoid">
-            <ComponentCard
-              title="Heatmap"
-              href="/components/heatmap"
-              heightClassName="h-[420px]"
-            >
+            <ComponentCard title="Heatmap" href="/components/heatmap" heightClassName="h-[420px]">
               <HeatmapCardPreview />
             </ComponentCard>
           </div>
@@ -158,11 +130,7 @@ export default function ChromalineHomePage() {
 
           {/* Card 11: Stack (Tall) */}
           <div className="mb-5 break-inside-avoid">
-            <ComponentCard
-              title="Stack"
-              href="/components/stack"
-              heightClassName="h-[440px]"
-            >
+            <ComponentCard title="Stack" href="/components/stack" heightClassName="h-[440px]">
               <StackCardPreview />
             </ComponentCard>
           </div>
@@ -214,11 +182,7 @@ export default function ChromalineHomePage() {
 
           {/* Card 16: Like (Medium/Square - Hero Micro-Interaction) */}
           <div className="mb-5 break-inside-avoid">
-            <ComponentCard
-              title="Like"
-              href="/components/like"
-              heightClassName="h-[350px]"
-            >
+            <ComponentCard title="Like" href="/components/like" heightClassName="h-[350px]">
               <LikeCardPreview />
             </ComponentCard>
           </div>

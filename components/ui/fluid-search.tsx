@@ -113,16 +113,16 @@ export const FluidSearch = React.forwardRef<HTMLInputElement, FluidSearchProps>(
             "--on-slab-rgb": "255, 255, 255",
           }
         : theme === "light"
-        ? {
-            "--slab": "#ffffff",
-            "--on-slab": "#17181a",
-            "--on-slab-rgb": "23, 24, 26",
-          }
-        : {
-            "--slab": "var(--fill-slab, #262626)",
-            "--on-slab": "var(--fill-on, #ffffff)",
-            "--on-slab-rgb": "var(--fill-on-rgb, var(--ink-rgb, 255, 255, 255))",
-          };
+          ? {
+              "--slab": "#ffffff",
+              "--on-slab": "#17181a",
+              "--on-slab-rgb": "23, 24, 26",
+            }
+          : {
+              "--slab": "var(--fill-slab, #262626)",
+              "--on-slab": "var(--fill-on, #ffffff)",
+              "--on-slab-rgb": "var(--fill-on-rgb, var(--ink-rgb, 255, 255, 255))",
+            };
 
     const shapeStyle: React.CSSProperties = fill
       ? { backgroundColor: fill }
@@ -209,7 +209,7 @@ export const FluidSearch = React.forwardRef<HTMLInputElement, FluidSearchProps>(
             stroke="currentColor"
             strokeWidth="1.8"
             aria-hidden="true"
-            className="text-[rgba(var(--on-slab-rgb),0.6)] shrink-0"
+            className="shrink-0 text-[rgba(var(--on-slab-rgb),0.6)]"
           >
             <circle cx="10.5" cy="10.5" r="6.5" />
             <path d="m16 16 4 4" />
@@ -220,13 +220,13 @@ export const FluidSearch = React.forwardRef<HTMLInputElement, FluidSearchProps>(
             placeholder={placeholder}
             value={value}
             onChange={(e) => handleValueChange(e.target.value)}
-            className="text-[var(--on-slab)] placeholder:text-[rgba(var(--on-slab-rgb),0.45)] font-inherit w-full min-w-0 border-0 bg-transparent p-0 text-[14px] shadow-none outline-none"
+            className="font-inherit w-full min-w-0 border-0 bg-transparent p-0 text-[14px] text-[var(--on-slab)] shadow-none outline-none placeholder:text-[rgba(var(--on-slab-rgb),0.45)]"
           />
         </label>
 
         <button
           className={cn(
-            "text-[var(--on-slab)] absolute top-0 right-0 z-2 grid h-[52px] w-[52px] cursor-pointer place-items-center rounded-full border-0 bg-transparent p-0 shadow-none transition-[transform,opacity] duration-460 ease-[cubic-bezier(0.22,1,0.36,1)] outline-none",
+            "absolute top-0 right-0 z-2 grid h-[52px] w-[52px] cursor-pointer place-items-center rounded-full border-0 bg-transparent p-0 text-[var(--on-slab)] shadow-none transition-[transform,opacity] duration-460 ease-[cubic-bezier(0.22,1,0.36,1)] outline-none",
             open
               ? "pointer-events-auto translate-x-0 scale-100 opacity-100"
               : "pointer-events-none -translate-x-[28px] scale-80 opacity-0 duration-140",

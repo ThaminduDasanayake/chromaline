@@ -304,16 +304,16 @@ export function TimeScrubber({
           "--on-slab-rgb": "255, 255, 255",
         }
       : theme === "light"
-      ? {
-          "--slab": "#ffffff",
-          "--on-slab": "#17181a",
-          "--on-slab-rgb": "23, 24, 26",
-        }
-      : {
-          "--slab": "var(--fill-slab, #262626)",
-          "--on-slab": "var(--fill-on, #ffffff)",
-          "--on-slab-rgb": "var(--fill-on-rgb, var(--ink-rgb, 255, 255, 255))",
-        };
+        ? {
+            "--slab": "#ffffff",
+            "--on-slab": "#17181a",
+            "--on-slab-rgb": "23, 24, 26",
+          }
+        : {
+            "--slab": "var(--fill-slab, #262626)",
+            "--on-slab": "var(--fill-on, #ffffff)",
+            "--on-slab-rgb": "var(--fill-on-rgb, var(--ink-rgb, 255, 255, 255))",
+          };
 
   return (
     <div

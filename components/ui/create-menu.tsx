@@ -189,16 +189,16 @@ export function Create({
           "--on-slab-rgb": "255, 255, 255",
         }
       : theme === "light"
-      ? {
-          "--slab": "#ffffff",
-          "--on-slab": "#17181a",
-          "--on-slab-rgb": "23, 24, 26",
-        }
-      : {
-          "--slab": "var(--fill-slab, #262626)",
-          "--on-slab": "var(--fill-on, #ffffff)",
-          "--on-slab-rgb": "var(--fill-on-rgb, var(--ink-rgb, 255, 255, 255))",
-        };
+        ? {
+            "--slab": "#ffffff",
+            "--on-slab": "#17181a",
+            "--on-slab-rgb": "23, 24, 26",
+          }
+        : {
+            "--slab": "var(--fill-slab, #262626)",
+            "--on-slab": "var(--fill-on, #ffffff)",
+            "--on-slab-rgb": "var(--fill-on-rgb, var(--ink-rgb, 255, 255, 255))",
+          };
 
   return (
     <motion.div
@@ -257,7 +257,7 @@ export function Create({
           "crt-pill absolute inset-0 z-20 m-auto",
           "h-[38px] w-[var(--pill-w)]",
           "flex items-center justify-center gap-2 border-0 bg-transparent",
-          "text-[var(--on-slab)] cursor-pointer text-[13px] font-normal tracking-normal",
+          "cursor-pointer text-[13px] font-normal tracking-normal text-[var(--on-slab)]",
           sink
             ? "scale-[0.94] opacity-100 duration-160 [transition-timing-function:cubic-bezier(0.22,1,0.36,1)]"
             : "scale-100 duration-[420ms] [transition-timing-function:cubic-bezier(0.22,1,0.36,1)]",
@@ -281,7 +281,7 @@ export function Create({
       <div
         className={cn(
           "crt-panel absolute inset-0 m-auto",
-          "text-[var(--on-slab)] z-30 box-border h-[166px] w-[212px] p-3",
+          "z-30 box-border h-[166px] w-[212px] p-3 text-[var(--on-slab)]",
           open ? "pointer-events-auto" : "pointer-events-none"
         )}
       >
@@ -311,7 +311,7 @@ export function Create({
                   "relative flex h-[34px] w-full items-center gap-3 px-4",
                   "rounded-[var(--crt-row-r,999px)] border-0 bg-transparent",
                   "isolate cursor-pointer text-left text-[13px] tracking-normal select-none",
-                  "text-[rgba(var(--on-slab-rgb),0.78)] hover:text-[var(--on-slab)] transition-colors duration-220",
+                  "text-[rgba(var(--on-slab-rgb),0.78)] transition-colors duration-220 hover:text-[var(--on-slab)]",
                   "before:absolute before:inset-0 before:-z-10 before:rounded-[inherit] before:content-['']",
                   "before:bg-[rgba(var(--on-slab-rgb),0.08)]",
                   "before:opacity-0 hover:before:opacity-100 focus-visible:before:opacity-100",

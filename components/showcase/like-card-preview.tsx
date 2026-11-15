@@ -15,14 +15,7 @@ export function LikeCardPreview({
 
   return (
     <>
-      <Like
-        start={1300}
-        effect={effect}
-        burst={50}
-        color="Red"
-        corner={22}
-        fill={fill}
-      />
+      <Like start={1300} effect={effect} burst={50} color="Red" corner={22} fill={fill} />
 
       {showControls && (
         <div className="absolute inset-x-0 bottom-4 flex items-center justify-center gap-2">

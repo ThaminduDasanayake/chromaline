@@ -59,7 +59,12 @@ export function Roll({ value, up, className }: RollProps) {
     <span className={cn("lk-count", className)} aria-hidden="true">
       {chars.map((c, i) => {
         const place = chars.length - 1 - i;
-        if (c === ",") return <span key={`c${place}`} className="lk-comma">,</span>;
+        if (c === ",")
+          return (
+            <span key={`c${place}`} className="lk-comma">
+              ,
+            </span>
+          );
         return (
           <span key={`p${place}`} className="lk-wheel">
             <AnimatePresence initial={false} mode="popLayout">
@@ -120,11 +125,7 @@ export function Burst({ fx, fly, ink }: BurstProps) {
     <>
       <span className="lk-bloom" />
       {Array.from({ length: 7 }, (_, k) => (
-        <span
-          key={k}
-          className="lk-spoke"
-          style={style({ "--a": `${k * (360 / 7) - 90}deg` })}
-        >
+        <span key={k} className="lk-spoke" style={style({ "--a": `${k * (360 / 7) - 90}deg` })}>
           <i style={style({ "--c": c(k) })} />
           <i style={style({ "--c": c(k + 3) })} />
         </span>
@@ -236,7 +237,8 @@ export function Like({
           "lk",
           fill === "light" && "!bg-white !text-[#17181a] shadow-xs",
           fill === "dark" && "!bg-[#262626] !text-white shadow-xs",
-          fill === "auto" && "bg-white text-[#17181a] dark:!bg-[#262626] dark:!text-white shadow-xs",
+          fill === "auto" &&
+            "bg-white text-[#17181a] shadow-xs dark:!bg-[#262626] dark:!text-white",
           buttonClassName
         )}
         data-liked={isLiked || undefined}
@@ -258,8 +260,8 @@ export function Like({
               ? fill === "dark"
                 ? "inset 0 0 0 1px rgba(255, 255, 255, 0.12)"
                 : fill === "light"
-                ? "inset 0 0 0 1px rgba(0, 0, 0, 0.08)"
-                : undefined
+                  ? "inset 0 0 0 1px rgba(0, 0, 0, 0.08)"
+                  : undefined
               : undefined,
             ...style,
           } as React.CSSProperties
