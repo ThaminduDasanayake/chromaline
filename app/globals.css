@@ -460,6 +460,16 @@ input[type="reset"] {
   letter-spacing: -0.01em;
 }
 
+.lk[data-fill="dark"] {
+  background: #262626;
+  color: #ffffff;
+}
+
+.lk[data-fill="light"] {
+  background: #ffffff;
+  color: #17181a;
+}
+
 .lk:active {
   transform: scale(0.96);
 }

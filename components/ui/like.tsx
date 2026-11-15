@@ -223,8 +223,8 @@ export function Like({
         className={cn(
           "lk",
           fill === "light" && "bg-white text-[#17181a] shadow-xs",
-          fill === "dark" && "bg-[#18181b] text-white shadow-xs",
-          fill === "auto" && "bg-white text-[#17181a] dark:bg-[#18181b] dark:text-white shadow-xs",
+          fill === "dark" && "bg-[#262626] text-white shadow-xs",
+          fill === "auto" && "bg-white text-[#17181a] dark:bg-[#262626] dark:text-white shadow-xs",
           buttonClassName
         )}
         data-liked={isLiked || undefined}
@@ -262,7 +262,7 @@ export function Like({
           >
             <HeartIcon
               size={20}
-              weight={isLiked ? "fill" : "bold"}
+              weight={isLiked ? "fill" : "light"}
               className="transition-colors duration-150"
             />
           </span>
