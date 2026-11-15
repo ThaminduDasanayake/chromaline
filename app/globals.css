@@ -50,6 +50,8 @@ html.dark [data-theme="light"],
   --slab: var(--board);
   --on-slab: var(--ink);
   --on-slab-rgb: var(--ink-rgb);
+  --fill-slab: #ffffff;
+  --fill-on: #17181a;
 
   --color-canvas: #ffffff;
   --color-stone: #f8f8f9;
@@ -168,6 +170,8 @@ html.dark [data-theme="dark"],
   --slab: var(--board);
   --on-slab: var(--ink);
   --on-slab-rgb: var(--ink-rgb);
+  --fill-slab: #262626;
+  --fill-on: #ffffff;
 
   --color-canvas: #000000;
   --color-stone: #0f0f0f;

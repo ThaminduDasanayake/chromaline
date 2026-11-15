@@ -146,7 +146,7 @@ export default function LikeDocumentationPage() {
   const [fill, setFill] = useState<"light" | "dark">("dark");
   const [stroke, setStroke] = useState<"off" | "on">("off");
   const [color, setColor] = useState<LikeColor>("Red");
-  const [effect, setEffect] = useState<LikeEffect>("Firework");
+  const [effect, setEffect] = useState<LikeEffect>("Bloom");
   const [burst, setBurst] = useState<number>(50);
   const [corner, setCorner] = useState<number>(22);
 

@@ -199,6 +199,18 @@ export function Like({
     return "var(--color-ink, #17181a)";
   };
 
+  const getPillBg = () => {
+    if (fill === "light") return "#ffffff";
+    if (fill === "dark") return "#262626";
+    return undefined;
+  };
+
+  const getPillColor = () => {
+    if (fill === "light") return "#17181a";
+    if (fill === "dark") return "#ffffff";
+    return undefined;
+  };
+
   const lkOnColor = ink ? getInkColor() : RED;
 
   const press = () => {
@@ -222,9 +234,9 @@ export function Like({
         type="button"
         className={cn(
           "lk",
-          fill === "light" && "bg-white text-[#17181a] shadow-xs",
-          fill === "dark" && "bg-[#262626] text-white shadow-xs",
-          fill === "auto" && "bg-white text-[#17181a] dark:bg-[#262626] dark:text-white shadow-xs",
+          fill === "light" && "!bg-white !text-[#17181a] shadow-xs",
+          fill === "dark" && "!bg-[#262626] !text-white shadow-xs",
+          fill === "auto" && "bg-white text-[#17181a] dark:!bg-[#262626] dark:!text-white shadow-xs",
           buttonClassName
         )}
         data-liked={isLiked || undefined}
@@ -240,6 +252,8 @@ export function Like({
             "--r": `${r}px`,
             "--lk-on": lkOnColor,
             borderRadius: `${r}px`,
+            backgroundColor: getPillBg(),
+            color: getPillColor(),
             boxShadow: stroke
               ? fill === "dark"
                 ? "inset 0 0 0 1px rgba(255, 255, 255, 0.12)"
@@ -262,7 +276,7 @@ export function Like({
           >
             <HeartIcon
               size={20}
-              weight={isLiked ? "fill" : "light"}
+              weight={isLiked ? "fill" : "regular"}
               className="transition-colors duration-150"
             />
           </span>

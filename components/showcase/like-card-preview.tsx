@@ -11,7 +11,7 @@ export function LikeCardPreview({
   showControls?: boolean;
   fill?: "light" | "dark" | "auto";
 } = {}) {
-  const [effect, setEffect] = useState<LikeEffect>("Firework");
+  const [effect, setEffect] = useState<LikeEffect>("Bloom");
 
   return (
     <>
