@@ -20,6 +20,7 @@ import {
   CreateMenuCardPreview,
   FluidSearchCardPreview,
   StackCardPreview,
+  LikeCardPreview,
 } from "@/components/showcase";
 
 export default function ChromalineHomePage() {
@@ -131,6 +132,11 @@ export default function ChromalineHomePage() {
           {/* Card 18: Stack */}
           <ComponentCard title="Stack" href="/components/stack">
             <StackCardPreview />
+          </ComponentCard>
+
+          {/* Card 19: Like */}
+          <ComponentCard title="Like" href="/components/like">
+            <LikeCardPreview />
           </ComponentCard>
         </div>
       </main>
