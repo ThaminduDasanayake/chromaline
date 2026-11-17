@@ -21,6 +21,7 @@ import {
   FluidSearchCardPreview,
   StackCardPreview,
   LikeCardPreview,
+  SaveCardPreview,
 } from "@/components/showcase";
 
 export default function ChromalineHomePage() {
@@ -184,6 +185,13 @@ export default function ChromalineHomePage() {
           <div className="mb-5 break-inside-avoid">
             <ComponentCard title="Like" href="/components/like" heightClassName="h-[350px]">
               <LikeCardPreview />
+            </ComponentCard>
+          </div>
+
+          {/* Card: Save (Medium/Square - Bookmark Micro-Interaction) */}
+          <div className="mb-5 break-inside-avoid">
+            <ComponentCard title="Save" href="/components/save" heightClassName="h-[350px]">
+              <SaveCardPreview />
             </ComponentCard>
           </div>
 
