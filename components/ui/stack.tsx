@@ -117,11 +117,11 @@ const BELOW = Math.max(CARD_H / 2, EXT_Y + DROP) + JIT;
 const STAGE_H = Math.ceil(ABOVE + BELOW);
 
 const DEFAULT_PHOTOS = [
-  "/lab/stack-flowers4.jpg",
-  "/lab/stack-flowers.jpg",
-  "/lab/stack-flowers5.jpg",
-  "/lab/stack-flowers3.jpg",
-  "/lab/stack-flowers2.jpg",
+  "/lab/stack-psychedelic-1.jpg",
+  "/lab/stack-psychedelic-2.jpg",
+  "/lab/stack-psychedelic-3.jpg",
+  "/lab/stack-psychedelic-4.jpg",
+  "/lab/stack-psychedelic-5.jpg",
 ];
 
 const VIEW_H = STAGE_H - 24;
