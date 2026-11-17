@@ -87,7 +87,7 @@ const PROPS_DATA: PropItem[] = [
     name: "effect",
     type: '"Bloom" | "Firework"',
     default: '"Bloom"',
-    desc: "Particle kinematics on save: expanding hollow ring with 6 spoke confetti or 12 ballistic firework sparks.",
+    desc: "Particle kinematics on save: expanding hollow amber/gold ring with 7 spoke confetti or 12 ballistic firework sparks.",
   },
   {
     name: "color",
@@ -150,7 +150,7 @@ export default function SaveDocumentationPage() {
   return (
     <DocsLayout
       title="Save"
-      description="Press the bookmark and it springs to life with a burst while the count rolls up a digit."
+      description="Press the bookmark and it pops with an amber burst while the count rolls up a digit."
     >
       {/* 1. Preview */}
       <ComponentPreview
