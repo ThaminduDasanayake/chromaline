@@ -4,15 +4,14 @@ import React, { useState } from "react";
 import { Stack } from "@/components/ui/stack";
 import { SelectBar } from "@/components/ui/select-bar";
 import { CardsIcon } from "@phosphor-icons/react";
-import { cn } from "@/lib/utils";
 import {
-  DocsLayout,
   ComponentPreview,
+  DocsLayout,
   InstallationSection,
-  UsageSection,
-  PropsTable,
   PropItem,
+  PropsTable,
   ThemeControl,
+  UsageSection,
   useComponentTheme,
 } from "@/components/docs";
 
