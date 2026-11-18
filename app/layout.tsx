@@ -6,6 +6,28 @@ export const metadata: Metadata = {
   title: "Chromaline · Line-Art Components for Modern React",
   description:
     "Vibrant line-art components and isometric figures with customizable colorways. Built for React, Next.js, and shadcn.",
+  icons: {
+    icon: [
+      {
+        url: "/logo-light.svg",
+        media: "(prefers-color-scheme: light)",
+      },
+      {
+        url: "/logo-dark.svg",
+        media: "(prefers-color-scheme: dark)",
+      },
+    ],
+    shortcut: [
+      {
+        url: "/logo-light.svg",
+        media: "(prefers-color-scheme: light)",
+      },
+      {
+        url: "/logo-dark.svg",
+        media: "(prefers-color-scheme: dark)",
+      },
+    ],
+  },
 };
 
 export default function RootLayout({

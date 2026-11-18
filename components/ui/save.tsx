@@ -7,27 +7,30 @@ import { cn } from "@/lib/utils";
 
 /* ══ Save ═════════════════════════════════════════════════
 A bookmark and a count. Press it and the bookmark vanishes,
-a disc blooms where it was and hollows out into a ring, six
-pairs of coloured dots burst off the ring, and the bookmark
-springs back filled and past its size — while the count
-rolls up one. Press again and it empties and the count
+a disc blooms where it was in amber and hollows out into a ring,
+seven pairs of coloured dots burst off the ring, and the
+bookmark springs back in amber and past its size — while the
+count rolls up one. Press again and it empties and the count
 rolls back down.
 
 ── ONLY THE DIGITS THAT CHANGE ROLL ────────────────────
-Same odometer mechanism as Like: 1,284 to 1,285 turns only
-the last wheel; a carry ripples right-to-left. Every digit
-is keyed by its place and value so unchanged digits never
-move.
+An odometer, not a number being replaced: 1,284 to 1,285
+turns the last wheel and leaves the rest where they are,
+and 1,299 to 1,300 turns three, each a beat after the one
+to its right, the way a carry travels. Every digit is keyed
+by its place and its value, so a digit that did not change
+is the same element and never moves.
 
 ── UP FOR MORE, DOWN FOR LESS ─────────────────────────
-Saving rolls the new digit in from below and the old one
-out the top; un-saving runs the other way. ═══════════════ */
+Saving rolls the new digit in from below and the old one out
+the top; un-saving runs the other way. Direction is the whole
+difference between a count going up and a count being
+replaced. ═════════════════════════════════════════════════ */
 
 const H = 44;
 const AMBER = "#f59e0b";
-
-/* Confetti palette: bookmark tones — ambers, purples, teals */
-const CONFETTI = ["#f59e0b", "#a78bfa", "#34d399", "#60a5fa", "#fb923c", "#e879f9", "#2dd4bf"];
+/* Confetti palette: amber and warm golden tones for bookmark */
+const CONFETTI = ["#f59e0b", "#fbbf24", "#fcd34d", "#d97706", "#fb923c", "#fde68a", "#f59e0b"];
 
 export const SAVE_EFFECTS = ["Bloom", "Firework"] as const;
 export type SaveEffect = (typeof SAVE_EFFECTS)[number];
@@ -37,12 +40,12 @@ export type SaveFill = "light" | "dark" | "auto";
 const clamp = (v: number, a: number, b: number) => Math.min(b, Math.max(a, v));
 const fmt = (n: number) => n.toLocaleString("en-US");
 
+/* A spread of fixed pseudo-random numbers, one per particle */
 const jit = (k: number, seed: number) => {
   const x = Math.sin(k * 12.9898 + seed * 78.233) * 43758.5453;
   return x - Math.floor(x);
 };
 
-/* ── Roll (odometer digit strip) ─────────────────────────── */
 export interface SaveRollProps {
   value: number;
   up: boolean;
@@ -51,6 +54,8 @@ export interface SaveRollProps {
 
 export function SaveRoll({ value, up, className }: SaveRollProps) {
   const chars = fmt(value).split("");
+  /* Places counted from the right, so a new leading digit does
+     not shift the keys of the ones already there */
   return (
     <span className={cn("sv-count", className)} aria-hidden="true">
       {chars.map((c, i) => {
@@ -82,7 +87,6 @@ export function SaveRoll({ value, up, className }: SaveRollProps) {
   );
 }
 
-/* ── Burst (particle effects) ─────────────────────────────── */
 export interface SaveBurstProps {
   fx: SaveEffect;
   fly: number;
@@ -94,6 +98,7 @@ export function SaveBurst({ fx, fly, ink }: SaveBurstProps) {
   const style = (o: Record<string, string | number>) => o as React.CSSProperties;
 
   if (fx === "Firework") {
+    /* Thrown up and out, then they fall: x is steady, y is its own element on a rise-then-drop curve */
     return (
       <>
         {Array.from({ length: 12 }, (_, k) => {
@@ -116,12 +121,12 @@ export function SaveBurst({ fx, fly, ink }: SaveBurstProps) {
     );
   }
 
-  /* Bloom: a disc that hollows into a ring, and pairs of confetti */
+  /* Bloom: an amber disc that hollows into a ring, and pairs of confetti */
   return (
     <>
       <span className="sv-bloom" />
-      {Array.from({ length: 6 }, (_, k) => (
-        <span key={k} className="sv-spoke" style={style({ "--a": `${k * (360 / 6) - 90}deg` })}>
+      {Array.from({ length: 7 }, (_, k) => (
+        <span key={k} className="sv-spoke" style={style({ "--a": `${k * (360 / 7) - 90}deg` })}>
           <i style={style({ "--c": c(k) })} />
           <i style={style({ "--c": c(k + 3) })} />
         </span>
@@ -130,7 +135,6 @@ export function SaveBurst({ fx, fly, ink }: SaveBurstProps) {
   );
 }
 
-/* ── Save component ───────────────────────────────────────── */
 export interface SaveProps {
   /** The count before you press (default: 840) */
   start?: number;

@@ -17,16 +17,28 @@ export function SiteHeader({ breadcrumb, className = "" }: SiteHeaderProps) {
   return (
     <header
       className={cn(
-        "sticky top-0 z-40 flex h-14 items-center justify-between border-b border-black/[0.08] bg-white/90 px-6 backdrop-blur-md transition-colors duration-200 md:px-12 dark:border-white/10 dark:bg-[#000000]/90",
+        "sticky top-0 z-40 flex h-14 items-center justify-between border-b border-black/8 bg-white/90 px-6 backdrop-blur-md transition-colors duration-200 md:px-12 dark:border-white/10 dark:bg-[#000000]/90",
         className
       )}
     >
       <div className="flex items-center gap-2.5">
-        <Link
-          href="/"
-          className="font-mono text-sm font-bold tracking-tight text-slate-950 transition-opacity hover:opacity-80 dark:text-white"
-        >
-          Chromaline
+        <Link href="/" className="flex items-center transition-opacity" aria-label="Chromaline">
+          <Image
+            src="/wordmark-light.svg"
+            alt="Chromaline"
+            width={140}
+            height={24}
+            className="h-6 w-auto dark:hidden"
+            priority
+          />
+          <Image
+            src="/wordmark-dark.svg"
+            alt="Chromaline"
+            width={140}
+            height={24}
+            className="hidden h-6 w-auto dark:block"
+            priority
+          />
         </Link>
 
         {breadcrumb ? (
