@@ -31,16 +31,16 @@ export function SiteHeader({ breadcrumb, className = "" }: SiteHeaderProps) {
             src="/wordmark-light.svg"
             alt="Chromaline"
             width={140}
-            height={16}
-            className="h-4 w-auto dark:hidden"
+            height={24}
+            className="h-6 w-auto dark:hidden"
             priority
           />
           <Image
             src="/wordmark-dark.svg"
             alt="Chromaline"
             width={140}
-            height={16}
-            className="hidden h-4 w-auto dark:block"
+            height={24}
+            className="hidden h-6 w-auto dark:block"
             priority
           />
         </Link>

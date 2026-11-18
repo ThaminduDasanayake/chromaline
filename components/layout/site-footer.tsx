@@ -21,15 +21,15 @@ export function SiteFooter({ className = "" }: { className?: string }) {
             src="/wordmark-light.svg"
             alt="Chromaline"
             width={122}
-            height={14}
-            className="h-3.5 w-auto dark:hidden"
+            height={24}
+            className="h-6 w-auto dark:hidden"
           />
           <Image
             src="/wordmark-dark.svg"
             alt="Chromaline"
             width={122}
-            height={14}
-            className="hidden h-3.5 w-auto dark:block"
+            height={24}
+            className="hidden h-6 w-auto dark:block"
           />
         </Link>
 
@@ -42,14 +42,16 @@ export function SiteFooter({ className = "" }: { className?: string }) {
           >
             Registry
           </a>
+          <span>By{" "}
           <a
-            href="https://github.com/lucasmarkes/hairline"
+            href="https://thamindu.runs-on.dev"
             target="_blank"
             rel="noreferrer"
             className="transition-colors hover:text-slate-900 dark:hover:text-white"
           >
-            GitHub
+            Thamindu Dasanayake
           </a>
+          </span>
           <span>© 2026</span>
         </div>
       </div>
