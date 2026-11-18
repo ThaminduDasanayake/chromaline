@@ -12,11 +12,7 @@ export function SiteFooter({ className = "" }: { className?: string }) {
       )}
     >
       <div className="mx-auto flex w-full max-w-5xl items-center justify-between px-6 py-6 sm:px-8">
-        <Link
-          href="/"
-          className="flex items-center transition-opacity"
-          aria-label="Chromaline"
-        >
+        <Link href="/" className="flex items-center transition-opacity" aria-label="Chromaline">
           <Image
             src="/wordmark-light.svg"
             alt="Chromaline"
@@ -42,15 +38,16 @@ export function SiteFooter({ className = "" }: { className?: string }) {
           >
             Registry
           </a>
-          <span>By{" "}
-          <a
-            href="https://thamindu.runs-on.dev"
-            target="_blank"
-            rel="noreferrer"
-            className="transition-colors hover:text-slate-900 dark:hover:text-white"
-          >
-            Thamindu Dasanayake
-          </a>
+          <span>
+            By{" "}
+            <a
+              href="https://thamindu.runs-on.dev"
+              target="_blank"
+              rel="noreferrer"
+              className="transition-colors hover:text-slate-900 dark:hover:text-white"
+            >
+              Thamindu Dasanayake
+            </a>
           </span>
           <span>© 2026</span>
         </div>

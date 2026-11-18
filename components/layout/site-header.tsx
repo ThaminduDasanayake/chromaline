@@ -22,11 +22,7 @@ export function SiteHeader({ breadcrumb, className = "" }: SiteHeaderProps) {
       )}
     >
       <div className="flex items-center gap-2.5">
-        <Link
-          href="/"
-          className="flex items-center transition-opacity"
-          aria-label="Chromaline"
-        >
+        <Link href="/" className="flex items-center transition-opacity" aria-label="Chromaline">
           <Image
             src="/wordmark-light.svg"
             alt="Chromaline"
